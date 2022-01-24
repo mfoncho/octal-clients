@@ -27,15 +27,6 @@
             "@workspace/*": ["src/workspace/*"]
         }
     },
-    "include": [
-        "src",
-        "src/.components",
-        "src/.emoji",
-        "src/.endpoint",
-        "src/.icons",
-        "src/.store",
-        "src/.tools",
-        "src/.app"
-    ],
+    "include": ["src"],
     "exclude": ["/node_modules/**/*"]
 }
