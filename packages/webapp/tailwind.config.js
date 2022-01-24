@@ -21,9 +21,8 @@ function palette(name) {
 
 module.exports = {
     mode: "jit",
-    purge: ["./src/**/*.{js,jsx,ts,tsx}"],
+    content: ["./src/**/*.{js,jsx,ts,tsx}", "../ui/lib/**/*.{js,jsx,ts,tsx}"],
     darkMode: "class", // or 'media' or 'class'
-    content: ["./src/**/*.{js,jsx,ts,tsx}"],
     theme: {
         extend: {
             colors: {
