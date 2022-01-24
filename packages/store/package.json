@@ -1,0 +1,28 @@
+{
+    "name": "@octal/store",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "typings": "lib/index.d.ts",
+    "license": "ICS",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "start": "yarn build --watch"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "jsxBracketSameLine": true
+    },
+    "dependencies": {
+        "@octal/markdown": "^1.0.0",
+        "@octal/calendar": "^1.0.0",
+        "@octal/common": "^1.0.0",
+        "@octal/client": "^1.0.0",
+        "immutable": "^4.0.0-rc.12",
+        "react": "^17.0.2",
+        "react-redux": "^7.2.1"
+    },
+    "devDependencies": {
+        "typescript": "^4.5.4"
+    }
+}

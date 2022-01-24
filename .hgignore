@@ -1,0 +1,7 @@
+node_modules
+cra
+/node_modules
+packages/[a-zA-Z].*/lib
+packages/[a-zA-Z].*/build
+.*/yarn-debug.log$
+.*/yarn-error.log$

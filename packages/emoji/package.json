@@ -1,0 +1,23 @@
+{
+    "name": "@octal/emoji",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "typings": "lib/index.d.ts",
+    "license": "ICS",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "start": "yarn build --watch"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "jsxBracketSameLine": true
+    },
+    "dependencies": {
+        "@octal/patterns": "^1.0.0",
+        "emoji-mart": "^2.11.1"
+    },
+    "devDependencies": {
+        "typescript": "^4.5.4"
+    }
+}

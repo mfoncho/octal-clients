@@ -1,0 +1,24 @@
+{
+    "name": "octal",
+    "version": "1.0.0",
+    "description": "octal packages",
+    "author": "MC-A",
+    "license": "ICS",
+    "private": true,
+    "workspaces": [
+        "packages/*",
+        "cra/packages/*"
+    ],
+    "prettier": {
+        "tabWidth": 4
+    },
+    "scripts": {
+        "start": "lerna run start --parallel",
+        "build": "lerna run build",
+        "install": "lerna run yarn"
+    },
+    "devDependencies": {
+        "lerna": "^4.0.0",
+        "typescript": "^4.5.4"
+    }
+}

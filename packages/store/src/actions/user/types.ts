@@ -1,0 +1,50 @@
+/* eslint-disable @typescript-eslint/no-redeclare */
+
+export const GET_USER = "GET_USER";
+export type GET_USER = typeof GET_USER;
+
+export const USER_LOADED = "USER_LOADED";
+export type USER_LOADED = typeof USER_LOADED;
+
+export const USERS_LOADED = "USERS_LOADED";
+export type USERS_LOADED = typeof USERS_LOADED;
+
+export const UPDATE_USER = "UPDATE_USER";
+export type UPDATE_USER = typeof UPDATE_USER;
+
+export const FETCH_USERS = "FETCH_USERS";
+export type FETCH_USERS = typeof FETCH_USERS;
+
+export const USER_UPDATED = "USER_UPDATED";
+export type USER_UPDATED = "USER_UPDATED";
+
+export const USER_STATUS_UPDATED = "USER_STATUS_UPDATED";
+export type USER_STATUS_UPDATED = typeof USER_STATUS_UPDATED;
+
+export const SET_USER_PRESENCE = "SET_USER_PRESENCE";
+export type SET_USER_PRESENCE = typeof SET_USER_PRESENCE;
+
+export const SET_USER_STATUS = "SET_USER_STATUS";
+export type SET_USER_STATUS = typeof SET_USER_STATUS;
+
+export const PRESENCE_LOADED = "PRESENCE_LOADED";
+export type PRESENCE_LOADED = typeof PRESENCE_LOADED;
+
+export const PRESENCE_LOST = "PRESENCE_LOST";
+export type PRESENCE_LOST = typeof PRESENCE_LOST;
+
+export const PRESENCE_UPDATED = "PRESENCE_UPDATED";
+export type PRESENCE_UPDATED = typeof PRESENCE_UPDATED;
+
+export const UPDATE_USER_PROFILE = "UPDATE_USER_PROFILE";
+export type UPDATE_USER_PROFILE = "UPDATE_USER_PROFILE";
+
+export const UPDATE_USER_PASSWORD = "UPDATE_USER_PASSWORD";
+export type UPDATE_USER_PASSWORD = "UPDATE_USER_PASSWORD";
+
+// PREFERENCES
+export const UPDATE_PREFERENCES = "UPDATE_PREFERENCES";
+export type UPDATE_PREFERENCES = typeof UPDATE_PREFERENCES;
+
+export const PREFERENCES_UPDATED = "PREFERENCES_UPDATED";
+export type PREFERENCES_UPDATED = typeof PREFERENCES_UPDATED;

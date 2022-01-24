@@ -1,0 +1,28 @@
+{
+    "name": "@octal/icons",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "license": "ICS",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "start": "yarn build --watch"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "jsxBracketSameLine": true
+    },
+    "dependencies": {
+        "react-icons": "^4.2.0",
+        "@fortawesome/fontawesome-svg-core": "^1.2.30",
+        "@fortawesome/free-brands-svg-icons": "^5.15.1",
+        "@fortawesome/free-regular-svg-icons": "^5.15.1",
+        "@fortawesome/free-solid-svg-icons": "^5.14.0",
+        "@fortawesome/react-fontawesome": "^0.1.11",
+        "@material-ui/icons": "^4.5.1"
+    },
+    "devDependencies": {
+        "typescript": "^4.5.4"
+    }
+}

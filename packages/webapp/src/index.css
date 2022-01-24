@@ -1,0 +1,195 @@
+html {
+    width: 100%;
+    height: 100%;
+}
+
+button:focus,
+button:active {
+    outline: none !important;
+    box-shadow: none;
+}
+
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Inter", "Helvetica Neue", sans-serif, "Apple Color Emoji";
+    /*
+     * font-weight: 400;
+     * line-height: 1.43;
+     * font-size: 0.875rem;
+     */
+    background-color: #fafafa;
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.inline-emoji {
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    max-width: 1.95ch;
+    max-height: 1em;
+    line-height: inherit;
+    margin: -0.2ex 0 0.2ex;
+    color: transparent;
+    min-width: 1em;
+}
+
+.emoji-wrapper {
+    display: inline-block;
+}
+
+body > div:first-child {
+    display: flex;
+    overflow: hidden;
+    max-height: 100%;
+    min-height: 100vh;
+}
+
+.toggle-checkbox:checked {
+    @apply right-0 border-green-400;
+    right: 0;
+    border-color: #68d391;
+}
+.toggle-checkbox:checked + .toggle-label {
+    @apply bg-green-400;
+    background-color: #68d391;
+}
+
+.sidebar {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.break-word {
+    word-break: break-word;
+}
+
+.flex-zeros-auto {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.text-msg {
+    font-size: 0.989rem;
+}
+
+.text-xs img.inline,
+.emoji {
+    width: 0.75rem;
+    height: 0.75rem;
+    top: -0.095rem;
+}
+
+.text-sm img.inline,
+.emoji {
+    width: 0.875rem;
+    height: 0.875rem;
+    top: -0.095rem;
+}
+
+.text-base img.inline,
+.emoji {
+    width: 1rem;
+    height: 1rem;
+    top: -0.095rem;
+}
+
+.text-msg img.inline,
+.emoji {
+    width: 1.1rem;
+    height: 1.1rem;
+    top: -0.095rem;
+}
+
+.text-lg img.inline,
+.emoji {
+    width: 1.125rem;
+    height: 1.125rem;
+    top: -0.095rem;
+}
+
+.text-xl img.inline,
+.emoji {
+    width: 1.25rem;
+    height: 1.25rem;
+    top: -0.095rem;
+}
+
+.text-2xl img.inline,
+.emoji {
+    width: 1.5rem;
+    height: 1.5rem;
+    top: -0.095rem;
+}
+
+.text-3xl img.inline,
+.emoji {
+    width: 1.875rem;
+    height: 1.875rem;
+    top: -0.095rem;
+}
+
+.text-4xl img.inline,
+.emoji {
+    width: 2.25rem;
+    height: 2.25rem;
+    top: -0.095rem;
+}
+
+.text-5xl img.inline,
+.emoji {
+    width: 3rem;
+    height: 3rem;
+    top: -0.095rem;
+}
+
+.text-6xl img.inline,
+.emoji {
+    width: 3.75rem;
+    height: 3.75rem;
+    top: -0.095rem;
+}
+
+.popper-arrow,
+.popper-arrow::before {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+}
+
+.popper-arrow {
+    visibility: hidden;
+}
+
+.popper-arrow::before {
+    visibility: visible;
+    content: "";
+    transform: rotate(45deg);
+}
+
+.popper[data-popper-placement^="top"] > .popper-arrow {
+    bottom: -4px;
+}
+
+.popper[data-popper-placement^="bottom"] > .popper-arrow {
+    top: -4px;
+}
+
+.popper[data-popper-placement^="left"] > .popper-arrow {
+    right: -4px;
+}
+
+.popper[data-popper-placement^="right"] > .popper-arrow {
+    left: -4px;
+}

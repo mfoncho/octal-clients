@@ -1,0 +1,35 @@
+import { io } from "../types";
+import BaseClient, { Params } from "../base";
+import * as Requests from "./types";
+
+export default class BoardClient extends BaseClient {
+    async createBoard(
+        request: Requests.CreateBoardRequest,
+        params?: Params
+    ): Promise<io.Board> {
+        const path = `/spaces/${request.space_id}/boards`;
+        let { data } = await this.endpoint.post(path, request.params, params);
+        return data;
+    }
+
+    async updateBoard(
+        request: Requests.UpdateBoardRequest,
+        params?: Params
+    ): Promise<io.Board> {
+        const path = `/boards/${request.board_id}`;
+        const { data } = await this.endpoint.patch(
+            path,
+            request.params,
+            params
+        );
+        return data;
+    }
+    async deleteBoard(
+        request: Requests.DeleteBoardRequest,
+        params?: Params
+    ): Promise<any> {
+        const path = `/boards/${request.board_id}`;
+        const { data } = await this.endpoint.delete(path, params);
+        return data;
+    }
+}

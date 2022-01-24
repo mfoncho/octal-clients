@@ -1,0 +1,23 @@
+{
+    "name": "@octal/patterns",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "license": "ICS",
+    "private": true,
+    "scripts": {
+        "build": "yarn build:emoji && tsc",
+        "start": "yarn build --watch",
+        "build:emoji": "node scripts/emoji.js"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "jsxBracketSameLine": true
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@unicode/unicode-14.0.0": "^1.2.1",
+        "emoji-test-regex-pattern": "^1.7.1",
+        "typescript": "^4.5.4"
+    }
+}

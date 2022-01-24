@@ -1,0 +1,23 @@
+{
+    "name": "@octal/common",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "typings": "lib/index.d.ts",
+    "license": "ICS",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "start": "yarn build --watch"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "jsxBracketSameLine": true
+    },
+    "dependencies": {
+        "lodash": "^4.17.20",
+        "lodash.flowright": "^3.5.0"
+    },
+    "devDependencies": {
+        "typescript": "^4.5.4"
+    }
+}

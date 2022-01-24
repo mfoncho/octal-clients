@@ -1,0 +1,17 @@
+import { Record } from "immutable";
+import { io } from "@octal/client";
+
+export class ConfigRecord extends Record<io.Config>({
+    locale: "en_US",
+    lpack: {},
+    user_invitation: false,
+    user_registration: false,
+    admin_api_version: "",
+    client_api_version: "",
+    socket_api_version: "",
+    admin_api_endpoint: "",
+    client_api_endpoint: "",
+    socket_api_endpoint: "",
+    socket_api_protocol: "",
+    auth_providers: [["email", "password"]],
+}) {}
