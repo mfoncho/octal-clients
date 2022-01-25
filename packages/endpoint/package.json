@@ -14,9 +14,11 @@
         "jsxBracketSameLine": true
     },
     "dependencies": {
+        "axios": "^0.24.0",
         "@octal/common": "^1.0.0"
     },
     "devDependencies": {
+        "@types/axios": "^0.14.0",
         "typescript": "^4.5.4"
     }
 }
