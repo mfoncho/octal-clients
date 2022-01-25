@@ -28,7 +28,6 @@
         "@popperjs/core": "^2.9.2",
         "axios": "^0.24.0",
         "babel-runtime": "^6.26.0",
-        "classnames": "^2.2.6",
         "color": "^4.2.0",
         "unified": "^10.1.0",
         "emoji-datasource": "^4.1.0",
