@@ -84,7 +84,7 @@ function Row({ member, space, onDelete }: IMember) {
     );
 
     return (
-        <div className="group flex px-4 py-1 flex-row items-center justify-between mb-2 hover:bg-cool-gray-50">
+        <div className="group flex px-4 py-1 flex-row items-center justify-between mb-2 hover:bg-gray-50">
             {userNode}
             <button
                 onClick={loading ? undefined : handleOpenWarning}

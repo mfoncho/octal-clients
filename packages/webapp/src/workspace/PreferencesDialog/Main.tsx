@@ -69,7 +69,7 @@ const ThemeMode = React.memo<IThemeMode>((props) => {
             <div
                 role="button"
                 key={mode}
-                className="flex my-1 flex-row p-2 rounded-md hover:bg-cool-gray-200 items-center cursor-pointer"
+                className="flex my-1 flex-row p-2 rounded-md hover:bg-gray-200 items-center cursor-pointer"
                 onClick={handleSetThemeMode(mode)}>
                 <input
                     type="checkbox"
@@ -86,7 +86,7 @@ const ThemeMode = React.memo<IThemeMode>((props) => {
     return (
         <div className="flex flex-col py-4">
             <span className="py-2 font-semibold text-gray-800">Mode</span>
-            <div className="flex flex-col bg-cool-gray-100 rounded-md p-2">
+            <div className="flex flex-col bg-gray-100 rounded-md p-2">
                 {renderMode("light")}
                 {renderMode("dark")}
             </div>
@@ -149,12 +149,12 @@ const MessageType = React.memo<IThemeMode>((props) => {
 
     return (
         <div className="flex flex-col py-6">
-            <div className="flex flex-col rounded-md my-1 p-2 bg-cool-gray-100">
+            <div className="flex flex-col rounded-md my-1 p-2 bg-gray-100">
                 {options.map((option) => (
                     <div
                         role="button"
                         key={option.value}
-                        className="flex my-1 flex-row p-2 rounded hover:bg-cool-gray-200 items-center cursor-pointer"
+                        className="flex my-1 flex-row p-2 rounded hover:bg-gray-200 items-center cursor-pointer"
                         onClick={handleSetMessageType(option.value)}>
                         <input
                             type="checkbox"

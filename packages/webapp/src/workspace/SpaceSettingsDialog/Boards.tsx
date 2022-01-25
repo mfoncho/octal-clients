@@ -57,7 +57,7 @@ function Row({ board, onDelete }: ITopic) {
     }
 
     return (
-        <div className="flex group px-4 py-2 hover:bg-cool-gray-50 flex-row p-2 items-center justify-between">
+        <div className="flex group px-4 py-2 hover:bg-gray-50 flex-row p-2 items-center justify-between">
             <div className="flex flex-row items-center">
                 <div className="mx-2">
                     <BoardIcon className="w-6 h-6 text-gray-500" />
@@ -114,7 +114,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col py-4 rounded-md bg-cool-gray-100">
+            <div className="flex flex-col py-4 rounded-md bg-gray-100">
                 {boards.map((board) => (
                     <Row
                         key={board.id}

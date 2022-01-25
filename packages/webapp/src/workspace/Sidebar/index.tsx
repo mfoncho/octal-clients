@@ -16,14 +16,14 @@ const Menu = React.memo<IMenu>((props) => {
     const screen = useScreen();
     if (screen.mobile) {
         return (
-            <div className="flex-1 flex flex-col w-72 bg-cool-gray-100">
+            <div className="flex-1 flex flex-col w-72 bg-gray-100">
                 <Header />
                 <div className="flex flex-grow flex-col">{props.children}</div>
             </div>
         );
     }
     return (
-        <div className="flex-zeros-auto flex-col w-72 bg-cool-gray-100">
+        <div className="flex-zeros-auto flex-col w-72 bg-gray-100">
             <Header />
             <div className="flex flex-grow flex-col">{props.children}</div>
         </div>

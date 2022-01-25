@@ -21,7 +21,7 @@ const Site = React.memo(() => {
 
 export default React.memo(() => {
     return (
-        <div className="flex flex-col w-16 items-center justify-between bg-cool-gray-200 flex-none">
+        <div className="flex flex-col w-16 items-center justify-between bg-gray-200 flex-none">
             <div className="flex flex-col py-4 items-center">
                 <Site />
                 <Link

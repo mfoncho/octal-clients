@@ -95,7 +95,7 @@ const MenuPopper = Popper.create<HTMLDivElement, IMenu>((props) => {
                                     ? (e) => props.onSelect!(e, role.id)
                                     : undefined
                             }
-                            className="hover:bg-cool-gray-100 flex py-2 px-4 flex-row items-center justify-between cursor-pointer">
+                            className="hover:bg-gray-100 flex py-2 px-4 flex-row items-center justify-between cursor-pointer">
                             <span className="font-bold text-gray-700">
                                 <Text>{role.name}</Text>
                             </span>
@@ -205,7 +205,7 @@ const Manager = React.memo(({ space }: IManager) => {
         return (
             <div
                 key={role.id}
-                className="group hover:bg-cool-gray-100 flex p-4 flex-row items-center justify-between">
+                className="group hover:bg-gray-100 flex p-4 flex-row items-center justify-between">
                 <span className="font-bold text-gray-700">
                     <Text>{role.name}</Text>
                 </span>
