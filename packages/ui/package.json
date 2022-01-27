@@ -7,15 +7,15 @@
     "private": true,
     "scripts": {
         "build": "tsc",
-        "start": "yarn build --watch"
+        "start": "yarn build --watch",
+        "storybook": "start-storybook -p 6006",
+        "build-storybook": "build-storybook"
     },
     "prettier": {
         "tabWidth": 4,
         "jsxBracketSameLine": true
     },
     "dependencies": {
-        "classnames": "^2.2.6",
-        "react": "^17.0.2",
         "@material-ui/core": "^4.11.0",
         "@material-ui/lab": "^4.0.0-alpha.56",
         "@material-ui/pickers": "^3.2.10",
@@ -26,10 +26,14 @@
         "@octal/icons": "^1.0.0",
         "@octal/markdown": "^1.0.0",
         "@popperjs/core": "^2.9.2",
+        "@tailwindcss/aspect-ratio": "^0.4.0",
+        "@tailwindcss/forms": "^0.4.0",
+        "@tailwindcss/line-clamp": "^0.3.1",
+        "@tailwindcss/typography": "^0.5.0",
         "axios": "^0.24.0",
         "babel-runtime": "^6.26.0",
+        "classnames": "^2.2.6",
         "color": "^4.2.0",
-        "unified": "^10.1.0",
         "emoji-datasource": "^4.1.0",
         "emoji-datasource-apple": "^4.1.0",
         "emoji-datasource-facebook": "^4.1.0",
@@ -39,16 +43,29 @@
         "emoji-js": "^3.5.0",
         "emoji-mart": "^2.11.1",
         "emoji-regex": "^8.0.0",
-        "faker": "^5.1.0",
+        "eslint": "^8.6.0",
         "moment": "^2.27.0",
+        "react": "^17.0.2",
         "react-easy-crop": "^4.0.1",
         "slate": "^0.66.0",
-        "slate-react": "^0.66.0"
+        "slate-react": "^0.66.0",
+        "tailwindcss": "^3.0.15",
+        "unified": "^10.1.0"
     },
     "devDependencies": {
+        "@babel/core": "^7.16.12",
+        "@storybook/addon-actions": "^6.4.14",
+        "@storybook/addon-essentials": "^6.4.14",
+        "@storybook/addon-links": "^6.4.14",
+        "@storybook/addon-postcss": "^2.0.0",
+        "@storybook/react": "^6.4.14",
         "@types/classnames": "^2.2.10",
         "@types/react": "^17.0.20",
         "@types/react-easy-crop": "^2.0.0",
+        "autoprefixer": "^10.4.2",
+        "babel-loader": "^8.2.3",
+        "faker": "^5.1.0",
+        "postcss": "^8.4.5",
         "typescript": "^4.5.4"
     }
 }
