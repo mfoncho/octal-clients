@@ -21,7 +21,7 @@ export const parse = (doc: string) => {
         return [{ type: "paragraph", children: [{ text: "" }] }];
     }
     const ast = fromMarkdown(doc, parserOptions as any);
-    const result = reslate(ast as any);
+    const result = reslate(ast as any, {});
     return result;
 };
 

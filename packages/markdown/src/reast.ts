@@ -97,10 +97,10 @@ export default function reast(node: SlateNode[] | SlateNode): INode {
             return { type: "blockquote", children: node.children!.map(reast) };
 
         case "mention": {
-            const { prefix, value } = node;
+            const { value } = node;
             return {
                 type: "text",
-                value: `${prefix}${value}`,
+                value: `${value}`,
             };
         }
 

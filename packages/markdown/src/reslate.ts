@@ -26,6 +26,10 @@ export interface IProps {
     [key: string]: any;
 }
 
+export interface IOpts {
+    paragraph?: boolean;
+}
+
 function lower(nodes: INode[]): any {
     nodes = nodes
         .map((val: any) => {
@@ -41,21 +45,32 @@ function lower(nodes: INode[]): any {
     return nodes;
 }
 
-export default function reslate(root: INode, props: IProps = {}): any {
+export default function reslate(
+    root: INode,
+    props: IProps = {},
+    opts: IOpts = {}
+): any {
     let children = root.children ?? [];
     switch (root.type) {
         case "root":
-            return root.children!.map((node) => reslate(node)).flat();
+            return root
+                .children!.map((node) => reslate(node, {}, { paragraph: true }))
+                .flat();
 
         case "paragraph":
-            children = children.map((node) => reslate(node));
-            props = { type: "paragraph", children: children.flat() };
-            break;
+            const { paragraph } = opts;
+            children = children.map((node) => reslate(node)).flat();
+            if (children.find((child) => child.type == "paragraph")) {
+            }
+            if (paragraph) {
+                return { type: "paragraph", children: children };
+            } else {
+                return children.flat();
+            }
 
         case "link":
-            children = children.map((node) => reslate(node)).flat();
-            props = { type: "link", url: root.url, children: lower(children) };
-            break;
+            children = children.map((node) => reslate(node, props)).flat();
+            return { type: "link", url: root.url, children: lower(children) };
 
         case "delete":
             props = { ...props, strike: true };
@@ -106,6 +121,7 @@ export default function reslate(root: INode, props: IProps = {}): any {
                 type: "list",
                 spread: root.spread ?? false,
                 ordered: root.ordered,
+
                 children: children,
             };
 
