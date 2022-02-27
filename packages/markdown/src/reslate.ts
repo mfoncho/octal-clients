@@ -18,7 +18,7 @@ export default function reslate(
     switch (root.type) {
         case "paragraph":
             children = children.map((node) => reslate(node));
-            return { type: "paragraph", children: children };
+            return { type: "paragraph", children: children.flat() };
 
         case "link":
             children = children.map((node) => reslate(node, props));
