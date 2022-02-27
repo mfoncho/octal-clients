@@ -9,7 +9,13 @@ export interface IButtonBase extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export interface IButton
     extends Omit<IButtonBase, "activeClass" | "disabledClass"> {
+    /*
+     * Button color
+     */
     color?: keyof typeof colors;
+    /*
+     * Button variant
+     */
     variant?: keyof typeof variants;
 }
 

@@ -17,16 +17,12 @@ function Mention({ selected, mention }: any) {
 
 function Table({ attributes, children, element }: any) {
     return (
-        <>
-            <br />
-            <table
-                {...attributes}
-                className="table-auto border-1 border-solid border-gray-500 border-collapse">
-                <thead className="bg-gray-50">{children.slice(0, 1)}</thead>
-                <tbody>{children.slice(1)}</tbody>
-            </table>
-            <br />
-        </>
+        <table
+            {...attributes}
+            className="table-auto border-1 border-solid border-gray-500 border-collapse">
+            <thead className="bg-gray-50">{children.slice(0, 1)}</thead>
+            <tbody>{children.slice(1)}</tbody>
+        </table>
     );
 }
 

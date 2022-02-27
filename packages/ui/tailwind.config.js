@@ -26,11 +26,8 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                ...colors,
-                white: "#fff",
-                black: "#000",
-                ["cool-gray"]: colors.gray,
-                primary: palette("primary"),
+                //...colors,
+                primary: colors.blue, //palette("primary"),
                 secondary: colors.red,
             },
         },
