@@ -1,7 +1,11 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
 const name = "paragraph";
+
+export function match(doc: string) {
+    return new RegExp(pattern).exec(doc);
+}
 
 export default class Component implements IComponent {
     readonly name = name;
@@ -15,13 +19,14 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(pattern).exec(doc);
+        let matched = match(doc);
+        if (matched) return { index: matched.index, length: matched[0].length };
     }
 
-    process(match: Match, markdown: IMarkdown) {
+    process(doc: string, _context: Context, markdown: IMarkdown) {
         return {
             type: name,
-            children: markdown.parse(match[0].trim(), markdown.spans),
+            children: markdown.parse(doc.trim(), markdown.spans),
         };
     }
 

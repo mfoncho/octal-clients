@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Match, Context } from "../../types";
 import * as patterns from "@octal/patterns";
 
 const name = "emoji";
@@ -15,13 +15,16 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(patterns.emoji).exec(doc);
+        let match = new RegExp(patterns.emoji).exec(doc);
+        if (match) {
+            return { index: match.index, length: match[0].length };
+        }
     }
 
-    process(match: Match, _markdown: IMarkdown) {
+    process(doc: string, _context: Context, _markdown: IMarkdown) {
         return {
             type: this.name,
-            emoji: match[0],
+            emoji: doc,
         };
     }
 

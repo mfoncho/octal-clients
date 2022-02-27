@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern, { task } from "./pattern";
 
 const name = "list";
@@ -36,6 +36,10 @@ export function parse(doc: string): [boolean, ListItem[]] {
     return [ordered, items];
 }
 
+export function match(doc: string) {
+    return new RegExp(pattern).exec(doc);
+}
+
 export default class Component implements IComponent {
     readonly name = name;
 
@@ -48,11 +52,13 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(pattern).exec(doc);
+        let matched = match(doc);
+        if (matched) return { index: matched.index, length: matched[0].length };
     }
 
-    process(match: Match, markdown: IMarkdown) {
-        const [ordered, items] = parse(match[1] ?? match[4] ?? match[0]);
+    process(doc: string, _context: Context, markdown: IMarkdown) {
+        let matched = match(doc)!;
+        const [ordered, items] = parse(matched[1] ?? matched[4] ?? matched[0]);
         return {
             type: name,
             ordered: ordered,

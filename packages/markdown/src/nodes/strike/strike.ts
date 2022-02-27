@@ -1,7 +1,7 @@
 import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
-const name = "inline-code";
+const name = "strike";
 
 export default class Component implements IComponent {
     readonly name = name;
@@ -16,20 +16,18 @@ export default class Component implements IComponent {
 
     match(doc: string) {
         let match = new RegExp(pattern).exec(doc);
-        if (match) {
-            return { index: match.index, length: match[0].length };
-        }
+        if (match) return { index: match.index, length: match[0].length };
     }
 
-    process(doc: string, _context: Context, markdown: IMarkdown) {
-        let match = new RegExp(pattern).exec(doc)!;
+    process(doc: string, { types }: Context, markdown: IMarkdown) {
+        const spans = types.filter((name) => name !== this.name);
         return {
             type: this.name,
-            children: markdown.parse(match[1], ["text"]),
+            children: markdown.parse(doc.substring(2, doc.length - 2), spans),
         };
     }
 
     serialize(block: any, markdown: IMarkdown): string {
-        return `\`${markdown.serialize(block.children, "")}\``;
+        return `~~${markdown.serialize(block.children, "")}~~`;
     }
 }

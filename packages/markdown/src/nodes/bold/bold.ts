@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
 const name = "bold";
@@ -15,12 +15,17 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(pattern).exec(doc);
+        let match = new RegExp(pattern).exec(doc);
+        if (match) {
+            let length = match[0].length;
+            return { index: match.index, length };
+        }
     }
 
-    process(match: Match, markdown: IMarkdown) {
-        const doc = match[2] ?? match[5];
-        const spans = match.types.filter((name) => name !== this.name);
+    process(match: string, { types }: Context, markdown: IMarkdown) {
+        const size = 2;
+        const doc = match.substring(size, match.length - size);
+        const spans = types.filter((name) => name !== this.name);
         return {
             type: this.name,
             children: markdown.parse(doc, spans),

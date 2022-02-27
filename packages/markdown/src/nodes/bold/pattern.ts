@@ -1,4 +1,3 @@
-export const star =
-    "(?<!\\*)\\*\\*([^\\s]([\\w\\s](?!\\*))+?[^\\s])\\*\\*(?!\\*)";
-export const underscore = "(?<!_)__([^\\s_]([\\w\\s](?!_))+?[^\\s])__(?!_)";
+export const star = "\\*\\*([\\S](.)+?[\\S])\\*\\*(?=[^\\*]|$)";
+export const underscore = "__([\\S](.)+?[\\S])__(?=[^_]|$)";
 export default `(${star})|(${underscore})`;

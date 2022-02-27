@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
 const name = "text";
@@ -15,11 +15,12 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(pattern).exec(doc);
+        let match = new RegExp(pattern).exec(doc);
+        if (match) return { index: match.index, length: match[0].length };
     }
 
-    process(match: Match, _markdown: IMarkdown) {
-        return { type: name, value: match[0] };
+    process(doc: string, _context: Context, _markdown: IMarkdown) {
+        return { type: name, value: doc };
     }
 
     serialize(node: any, _markdown: IMarkdown): string {

@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
 const name = "heading";
@@ -9,6 +9,10 @@ export function parse(match: RegExpExecArray): [number, string] {
     } else {
         return [match[13] === "=" ? 1 : 2, match[8]];
     }
+}
+
+export function match(doc: string) {
+    return new RegExp(pattern).exec(doc);
 }
 
 export default class Component implements IComponent {
@@ -23,15 +27,18 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(pattern).exec(doc);
+        let matched = match(doc);
+        if (matched) {
+            return { index: matched.index, length: matched[0].length };
+        }
     }
 
-    process(match: Match, markdown: IMarkdown) {
-        const [depth, doc] = parse(match);
+    process(doc: string, _context: Context, markdown: IMarkdown) {
+        const [depth, title] = parse(match(doc)!);
         return {
             type: name,
             depth: depth,
-            children: markdown.parse(doc, markdown.spans),
+            children: markdown.parse(title, markdown.spans),
         };
     }
 

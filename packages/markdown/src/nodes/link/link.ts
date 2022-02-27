@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
 const name = "link";
@@ -15,20 +15,20 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(pattern).exec(doc);
+        let match = new RegExp(pattern).exec(doc);
+        if (match) return { index: match.index, length: match[0].length };
     }
 
-    process(match: Match, markdown: IMarkdown) {
-        const doc = match[1];
-        const href = match[4];
+    process(doc: string, { types }: Context, markdown: IMarkdown) {
+        let match = new RegExp(pattern).exec(doc)!;
         return {
+            url: match[4],
             type: this.name,
-            href: href,
-            children: markdown.parse(doc, match.types),
+            children: markdown.parse(match[1], types),
         };
     }
 
     serialize(node: any, markdown: IMarkdown): string {
-        return `[${markdown.serialize(node.children, "")}](${node.href})`;
+        return `[${markdown.serialize(node.children, "")}](${node.url})`;
     }
 }

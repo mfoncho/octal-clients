@@ -1,6 +1,4 @@
-import List, { parse } from "./list";
-
-const list = new List();
+import { parse, match } from "./list";
 
 const sample2 = `1. one
 2)   two
@@ -15,10 +13,10 @@ const sample = `*   Red
 ${sample2}`;
 
 test("Parse heading", () => {
-    let match = list.match(sample);
-    expect(match).toBeTruthy();
-    if (match) {
-        const [ordered, items] = parse(match[1] ?? match[4] ?? match[0]);
+    let matched = match(sample);
+    expect(matched).toBeTruthy();
+    if (matched) {
+        const [ordered, items] = parse(matched[1] ?? matched[4] ?? matched[0]);
         expect(ordered).toBe(false);
         expect(items.length).toBe(6);
         expect(items[3].checked).toBe(true);

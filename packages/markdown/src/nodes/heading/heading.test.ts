@@ -1,4 +1,4 @@
-import Heading, { parse } from "./heading";
+import { parse, match } from "./heading";
 
 const hdepth = "####";
 
@@ -20,34 +20,31 @@ level title type;
 `;
 
 test("Heading match", () => {
-    const heading = new Heading();
-    const match = heading.match(sample);
-    expect(match).toBeTruthy();
-    if (match) {
-        expect(match[6]).toBe(title);
+    const matched = match(sample);
+    expect(matched).toBeTruthy();
+    if (matched) {
+        expect(matched[6]).toBe(title);
         expect(`${hdepth} ${title}\n`).toBe(
-            sample.substring(0, match[0].length)
+            sample.substring(0, matched[0].length)
         );
     }
 });
 
 test("Parse level one heading", () => {
-    const heading = new Heading();
-    const match = heading.match(levelone);
-    expect(match).toBeTruthy();
-    if (match) {
-        const [depth, substr] = parse(match);
+    const matched = match(levelone);
+    expect(matched).toBeTruthy();
+    if (matched) {
+        const [depth, substr] = parse(matched);
         expect(depth).toBe(1);
         expect(substr).toBe(title);
     }
 });
 
 test("Parse level two heading", () => {
-    const heading = new Heading();
-    const match = heading.match(leveltwo);
-    expect(match).toBeTruthy();
-    if (match) {
-        const [depth, substr] = parse(match);
+    const matched = match(leveltwo);
+    expect(matched).toBeTruthy();
+    if (matched) {
+        const [depth, substr] = parse(matched);
         expect(depth).toBe(2);
         expect(substr).toBe(title);
     }

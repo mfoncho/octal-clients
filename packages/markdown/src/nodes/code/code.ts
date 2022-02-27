@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
 const name = "code";
@@ -13,17 +13,21 @@ export default class Component implements IComponent {
 
     readonly type = "block";
 
-    readonly priority = -1;
+    readonly priority = 0;
 
     get pattern() {
         return pattern;
     }
 
     match(doc: string) {
-        return new RegExp(pattern).exec(doc);
+        let match = new RegExp(pattern).exec(doc);
+        if (match) {
+            return { index: match.index, length: match[0].length };
+        }
     }
 
-    process(match: Match, markdown: IMarkdown) {
+    process(doc: string, _context: Context, markdown: IMarkdown) {
+        let match = new RegExp(pattern).exec(doc)!;
         return {
             type: this.name,
             lang: match[3],

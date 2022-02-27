@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match } from "../../types";
+import type { IComponent, IMarkdown, Context } from "../../types";
 import * as patterns from "@octal/patterns";
 
 const name = "mention";
@@ -15,16 +15,16 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return new RegExp(patterns.mention).exec(doc);
+        let match = new RegExp(patterns.mention).exec(doc);
+        if (match) return { index: match.index, length: match[0].length };
     }
 
-    process(match: Match, _markdown: IMarkdown) {
-        const prefix = match[0][0];
+    process(doc: string, _context: Context, _markdown: IMarkdown) {
         return {
             type: this.name,
-            value: match[1],
-            mention: match[0],
-            prefix: prefix,
+            value: doc.substring(1, doc.length),
+            prefix: doc[0],
+            mention: doc,
         };
     }
 

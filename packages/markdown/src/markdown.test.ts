@@ -2,21 +2,23 @@ import Markdown from "./markdown";
 import Hr from "./nodes/hr";
 import List from "./nodes/list";
 import Text from "./nodes/text";
+import reslate from "./reslate";
 import Code from "./nodes/code";
 import Bold from "./nodes/bold";
 import Emoji from "./nodes/emoji";
 import Link from "./nodes/link";
 import Image from "./nodes/image";
 import Italic from "./nodes/italic";
+import Strike from "./nodes/strike";
 import Heading from "./nodes/heading";
 import Paragraph from "./nodes/paragraph";
 import Blockquote from "./nodes/blockquote";
 import Mention from "./nodes/mention";
 
-const sample = `### title here right
+const sample = `### title ~~here~~ right
 -------------
 [This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
-what do we do now *this* is a ___paragraph___
+what do we do now *this is a **paragraph*** _underscrore _one _two  _three __bold__ emphasis end_ test
 
 > blockquote
 > more blockquote #3a781606-a1ba-4d22-b014-f4471ef9569b
@@ -51,6 +53,7 @@ function build() {
     const mention = new Mention();
     const italic = new Italic();
     const code = new Code();
+    const strike = new Strike();
     const bold = new Bold();
     const image = new Image();
     markdown.plug(paragraph);
@@ -60,6 +63,7 @@ function build() {
     markdown.plug(image);
     markdown.plug(link);
     markdown.plug(list);
+    markdown.plug(strike);
     markdown.plug(bold);
     markdown.plug(text);
     markdown.plug(heading);
@@ -87,7 +91,6 @@ test("Markdown should be unpluggable", () => {
 test("Parse markdown sample", () => {
     const markdown = build();
     const parsed = markdown.parse(sample);
-    console.log(JSON.stringify(parsed[3], undefined, 2));
-    //console.log(markdown.serialize(parsed));
+    //console.log(JSON.stringify(parsed[3], null, 2));
     expect(parsed.length).toBe(13);
 });

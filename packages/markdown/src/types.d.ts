@@ -19,12 +19,6 @@ export interface Refs {
     [key: string]: string;
 }
 
-export interface Context {
-    refs: Refs;
-    spans: string[];
-    blocks: string[];
-}
-
 export interface IMarkdown {
     types: string[];
 
@@ -39,8 +33,14 @@ export interface IMarkdown {
 
 export type ComponentType = "block" | "span";
 
-export interface Match extends RegExpExecArray {
+export interface Match {
+    index: number;
+    length: number;
+}
+
+export interface Context {
     types: string[];
+    [key: string]: any;
 }
 
 export interface IComponent {
@@ -48,7 +48,7 @@ export interface IComponent {
     readonly type: ComponentType;
     readonly pattern: string;
     readonly priority: number;
-    match(doc: string): RegExpExecArray | null | undefined;
-    process(match: Match, markdown: IMarkdown): Node;
+    match(doc: string, index?: number): Match | null | undefined;
+    process(match: string, context: Context, markdown: IMarkdown): Node;
     serialize(doc: Node, markdown: IMarkdown): string;
 }

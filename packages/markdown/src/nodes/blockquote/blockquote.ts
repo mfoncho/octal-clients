@@ -1,4 +1,4 @@
-import type { IComponent, IMarkdown, Match, Node } from "../../types";
+import type { IComponent, Context, IMarkdown, Match, Node } from "../../types";
 import pattern from "./pattern";
 
 const name = "blockquote";
@@ -25,11 +25,14 @@ export default class Component implements IComponent {
     }
 
     match(doc: string) {
-        return regex.exec(doc);
+        let match = regex.exec(doc);
+        if (match) {
+            return { index: match.index, length: match[0].length };
+        }
     }
 
-    process(match: Match, markdown: IMarkdown) {
-        const subsrt = parse(match[0]);
+    process(match: string, _context: Context, markdown: IMarkdown) {
+        const subsrt = parse(match.trim());
         return {
             type: name,
             children: markdown.parse(subsrt),
