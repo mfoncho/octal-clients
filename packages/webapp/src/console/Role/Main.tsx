@@ -65,7 +65,7 @@ export default React.memo(() => {
     }, [Boolean(role)]);
 
     function getRole() {
-        client.getRole(params).then((data) => {
+        client.getRole(params as any).then((data) => {
             setRole(data);
         });
     }

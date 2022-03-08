@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import { Provider } from "react-redux";
-import { Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Screen } from "@octal/ui";
 import breakpoints from "./breakpoints";
 import store from "@octal/store";
-import history from "./history";
+//import history from "./history";
 import Judge from "./judge";
 import { useMediaQuery } from "src/hooks";
 
@@ -33,9 +33,9 @@ const Main = React.memo(() => {
 export default function App() {
     return (
         <Provider store={store}>
-            <Router history={history}>
+            <BrowserRouter>
                 <Main />
-            </Router>
+            </BrowserRouter>
         </Provider>
     );
 }

@@ -18,7 +18,7 @@ export default React.memo(() => {
 
     function getUserAccount() {
         return client
-            .getAccount({ user_id: params.user_id })
+            .getAccount({ user_id: params.user_id! })
             .then((data) => setUser(data))
             .catch(() => {});
     }
@@ -32,7 +32,7 @@ export default React.memo(() => {
             <div className="pb-8">
                 <Profile user={user} />
             </div>
-            <UserSpaces id={params.user_id} />
+            <UserSpaces id={params.user_id!} />
         </Layout>
     );
 });

@@ -24,7 +24,7 @@ export default React.memo<IThread>(({ id }) => {
     useEffect(() => {
         if (thread == null) {
             const action = ThreadActionFactory.loadThread({
-                space_id: params.space_id,
+                space_id: params.space_id!,
                 thread_id: id,
             });
             dispatch(action);

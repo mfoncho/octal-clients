@@ -8,7 +8,7 @@ function Lost() {
     return <Redirect to="/spaces">Wait where am i?</Redirect>;
 }
 
-const constilation = Object.values(paths)
+const constilation: string[] = Object.values(paths)
     .map((sector) => Object.values(sector))
     .reduce((acc, paths) => {
         return acc.concat(paths);
@@ -24,9 +24,19 @@ const constilation = Object.values(paths)
 export default function Routes() {
     return (
         <Switch>
-            <Route path="/" component={Home} />
-            <Route exact={true} path={constilation} component={Layout} />
-            <Route component={Lost} />
+            {/*
+            <Route path="/">
+                <Home />
+            </Route>
+            */}
+            {constilation.map((path) => (
+                <Route key={path} path={path}>
+                    <Layout />
+                </Route>
+            ))}
+            <Route>
+                <Lost />
+            </Route>
         </Switch>
     );
 }

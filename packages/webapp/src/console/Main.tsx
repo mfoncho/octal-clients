@@ -10,7 +10,7 @@ export default React.memo(() => {
             {routes.map((route) => {
                 const Main = route.main;
                 return (
-                    <Route exact key={route.path} path={route.path}>
+                    <Route key={route.path} path={route.path}>
                         <Module.Provider value={route}>
                             <Main />
                         </Module.Provider>

@@ -6,7 +6,7 @@ import { useTopic } from "@octal/store";
 
 export default React.memo(() => {
     const params = useParams<{ topic_id: string }>();
-    const topic = useTopic(params.topic_id);
+    const topic = useTopic(params.topic_id!);
     return (
         <div className="flex flex-grow flex-col">
             <Header />

@@ -38,8 +38,8 @@ export default function Main() {
                 <Header />
                 <Board />
             </div>
-            <Drawer id={params.board_id} />
-            {params.card_id && <Dialog id={params.card_id} />}
+            <Drawer id={params.board_id!} />
+            {params.card_id && <Dialog id={params.card_id!} />}
         </div>
     );
 }

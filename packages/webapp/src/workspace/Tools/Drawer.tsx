@@ -109,11 +109,11 @@ const Sideapp = React.memo<ISideapp>((props) => {
     const [[App, Props, id], setAppProps] = useState<[any, any, string]>([
         props.component,
         props.Props,
-        params.space_id,
+        params.space_id!,
     ]);
 
     useEffect(() => {
-        setAppProps([props.component, props.Props, params.space_id]);
+        setAppProps([props.component, props.Props, params.space_id!]);
     }, [props.component, props.Props]);
 
     return (

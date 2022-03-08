@@ -18,18 +18,18 @@ const elements = {
     Mentioned,
 };
 
-const workspacePaths = Object.values(paths.workspace).concat(
-    Object.values(paths.sections)
-);
+const workspacePaths = Object.values(paths.workspace);
+
+const sectionsPaths = Object.values(paths.sections);
 
 const RouteListener = React.memo(() => {
-    const params = useParams<RouterParams>();
+    const params = useParams<any>();
 
     const [navbar, navbarActions] = useNavigatorDrawer();
 
     const dispatch = useDispatch();
 
-    const location = useLocation<RouteLocation>();
+    const location = useLocation();
 
     useEffect(() => {
         let action = route({ ...location, params });
@@ -47,40 +47,36 @@ export default React.memo(function Layout() {
         <Elements.Provider value={elements}>
             <Sidebar>
                 <Switch>
-                    <Route
-                        exact={true}
-                        path={Console.paths}
-                        component={Console.Navigator}
-                    />
-                    <Route
-                        exact={true}
-                        path={workspacePaths}
-                        component={Workspace.Navigator}
-                    />
+                    {Console.paths.map((path) => (
+                        <Route key={path} path={path}>
+                            <Console.Navigator />
+                        </Route>
+                    ))}
+                    {workspacePaths.concat(sectionsPaths).map((path) => (
+                        <Route key={path} path={path}>
+                            <Workspace.Navigator />
+                        </Route>
+                    ))}
                 </Switch>
             </Sidebar>
             <main className="flex-grow flex overflow-hidden flex-row">
                 <Switch>
-                    <Route
-                        exact={true}
-                        path={paths.sections.home}
-                        component={Home}
-                    />
-                    <Route
-                        exact={true}
-                        path={paths.sections.calendar}
-                        component={Calendar}
-                    />
-                    <Route
-                        exact={true}
-                        path={workspacePaths}
-                        component={Workspace.Main}
-                    />
-                    <Route
-                        exact={true}
-                        path={Console.paths}
-                        component={Console.Main}
-                    />
+                    {workspacePaths.map((path) => (
+                        <Route key={path} path={path}>
+                            <Workspace.Main />
+                        </Route>
+                    ))}
+                    {Console.paths.map((path) => (
+                        <Route key={path} path={path}>
+                            <Console.Main />
+                        </Route>
+                    ))}
+                    <Route path={paths.sections.calendar}>
+                        <Calendar />
+                    </Route>
+                    <Route path={paths.sections.home}>
+                        <Home />
+                    </Route>
                 </Switch>
             </main>
             <RouteListener />

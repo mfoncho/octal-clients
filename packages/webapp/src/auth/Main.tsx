@@ -7,8 +7,12 @@ import { Route, Switch, Redirect } from "react-router-dom";
 export default React.memo(() => {
     return (
         <Switch>
-            <Route exact={true} path={path.login} component={Login} />
-            <Route exact={true} path={path.reset} component={ResetPassword} />
+            <Route path={path.login}>
+                <Login />
+            </Route>
+            <Route path={path.reset}>
+                <ResetPassword />
+            </Route>
             <Route>
                 <Redirect to={path.login} />
             </Route>

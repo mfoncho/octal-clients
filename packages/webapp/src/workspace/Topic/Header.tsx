@@ -14,7 +14,7 @@ export default React.memo(() => {
     const space = useSpace();
     const dialog = Dialog.useDialog();
     const params = useParams<{ topic_id: string }>();
-    const topic = useTopic(params.topic_id);
+    const topic = useTopic(params.topic_id!);
     return (
         <header className="flex flex-none border-b border-gray-200 flex-row items-center h-14 sm:h-20 justify-between">
             <div className="flex flex-row items-center pl-1 sm:pl-8 pr-2">

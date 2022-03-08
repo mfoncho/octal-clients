@@ -49,7 +49,9 @@ export function useSpaceUsers() {
 export function useTopics(): List<TopicRecord> {
     const params = useParams<{ space_id: string }>();
     const store = useStore("topics") as any;
-    return useSpaceTopicsIndex(params.space_id).map((id) => store.getTopic(id));
+    return useSpaceTopicsIndex(params.space_id!).map((id) =>
+        store.getTopic(id)
+    );
 }
 
 export function useUserMentionable() {
@@ -148,7 +150,7 @@ export function usePermissionsCombo(
                     }
                 }, permissions);
             }
-        }, (null as any) as PermissionsRecord);
+        }, null as any as PermissionsRecord);
     }, [roles, set]);
 }
 

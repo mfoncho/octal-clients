@@ -47,7 +47,7 @@ export default React.memo<any>(() => {
     const params = useParams<{ space_id: string }>();
 
     return (
-        <Context id={params.space_id} key={params.space_id}>
+        <Context id={params.space_id!} key={params.space_id}>
             <Main />
         </Context>
     );

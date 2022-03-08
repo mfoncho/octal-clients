@@ -36,13 +36,18 @@ export default React.memo(() => {
     return (
         <Textarea.Mention.Context.Provider value={mentionable as any}>
             <Switch>
-                <Route exact path={paths.topic} component={Topic} />
-                <Route
-                    exact
-                    path={[paths.board, paths.card]}
-                    component={Board}
-                />
-                <Route exact path={paths.space} component={Redirect} />
+                <Route path={paths.topic}>
+                    <Topic />
+                </Route>
+                <Route path={paths.card}>
+                    <Board />
+                </Route>
+                <Route path={paths.board}>
+                    <Board />
+                </Route>
+                <Route path={paths.space}>
+                    <Redirect />
+                </Route>
             </Switch>
         </Textarea.Mention.Context.Provider>
     );

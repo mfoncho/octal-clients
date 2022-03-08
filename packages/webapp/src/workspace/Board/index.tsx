@@ -11,20 +11,20 @@ export * from "./hooks";
 export default React.memo(() => {
     const params = useParams<{ space_id: string; board_id: string }>();
     const dispatch = useDispatch();
-    const board = useBoard(params.board_id);
-    const loaded = useBoardLoaded(params.board_id);
+    const board = useBoard(params.board_id!);
+    const loaded = useBoardLoaded(params.board_id!);
 
-    const cards = useBoardCards(params.board_id);
+    const cards = useBoardCards(params.board_id!);
 
-    const columns = useBoardColumns(params.board_id);
+    const columns = useBoardColumns(params.board_id!);
 
     useEffect(() => {
         if (!loaded.includes("columns")) {
-            const action = BoardAction.loadBoardColumns(params);
+            const action = BoardAction.loadBoardColumns(params as any);
             dispatch(action);
         }
         if (!loaded.includes("cards")) {
-            const action = BoardAction.loadBoardCards(params);
+            const action = BoardAction.loadBoardCards(params as any);
             dispatch(action);
         }
     }, [

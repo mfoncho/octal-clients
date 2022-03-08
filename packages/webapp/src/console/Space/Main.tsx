@@ -49,7 +49,7 @@ export default React.memo(() => {
 
     async function getSpace() {
         return client
-            .getSpace(params)
+            .getSpace(params as any)
             .then((data) => setSpace(data))
             .catch(() => {});
     }
@@ -59,7 +59,7 @@ export default React.memo(() => {
     async function handleDeleteSpace() {
         setLoading(true);
         return client
-            .deleteSpace(params)
+            .deleteSpace(params as any)
             .then(navigator.openSpaces)
             .catch(() => setLoading(false));
     }
@@ -67,7 +67,7 @@ export default React.memo(() => {
     async function handleRestoreSpace() {
         setLoading(true);
         return client
-            .restoreSpace(params)
+            .restoreSpace(params as any)
             .then((data) => setSpace(data))
             .catch(() => {})
             .finally(() => setLoading(false));

@@ -23,7 +23,6 @@ type IMention = IMentionTopic | IMentionUser;
 
 export function UserMentioned({ id }: IMentioned) {
     const user = useUser(id);
-
     return (
         <span className="px-1 pb-0.5 my-0.5 bg-primary-500 text-white rounded-full font-semibold text-sm">
             @<Text>{user.username}</Text>
@@ -41,9 +40,9 @@ export function TopicMentioned({ id }: IMentioned) {
 }
 
 export function Mentioned({ attributes, children, element }: any) {
-    const id = element.value.slice(1);
+    const id = element.value.substring(1);
     let mentioned: any = null;
-    switch (element.prefix) {
+    switch (element.value[0]) {
         case "@":
             mentioned = <UserMentioned id={id} />;
             break;
