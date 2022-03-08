@@ -24,20 +24,14 @@ export default function reslate(
             children = children.map((node) => reslate(node, props));
             return { type: "link", url: root.url, children: children };
 
-        case "delete":
-            props = { ...props, strike: true };
-            return children.map((node) => reslate(node, props)).flat();
-
         case "strike":
             props = { ...props, strike: true };
             return children.map((node) => reslate(node, props)).flat();
 
-        case "bold":
         case "strong":
             props = { ...props, bold: true };
             return children.map((node) => reslate(node, props)).flat();
 
-        case "italic":
         case "emphasis":
             props = { ...props, italic: true };
             return children.map((node) => reslate(node, props)).flat();
@@ -93,8 +87,6 @@ export default function reslate(
             return {
                 type: "mention",
                 value: root.value,
-                prefix: root.prefix,
-                mention: root.mention,
                 children: [{ text: "" }],
             };
 
