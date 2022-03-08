@@ -420,11 +420,9 @@ export function useMessage(id: string) {
 
 export function useSpace(id: string, defaultValue = defaultSpace) {
     const select = useCallback(
-        id
-            ? ({ spaces }: State) => {
-                  return spaces.entities.get(id, defaultValue);
-              }
-            : selector.space,
+        ({ spaces }: State) => {
+            return spaces.entities.get(id, defaultValue);
+        },
         [id]
     );
     return useSelector(select);
