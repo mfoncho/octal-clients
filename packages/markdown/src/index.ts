@@ -1,36 +1,21 @@
 import reslate from "./reslate";
 import reast from "./reast";
 
-import { fromMarkdown } from "mdast-util-from-markdown";
-import { toMarkdown } from "mdast-util-to-markdown";
-import { gfm } from "micromark-extension-gfm";
-import { gfmFromMarkdown, gfmToMarkdown } from "mdast-util-gfm";
-
 import Markdown from "./markdown";
 import Hr from "./nodes/hr";
 import List from "./nodes/list";
 import Text from "./nodes/text";
 import Code from "./nodes/code";
-import Bold from "./nodes/bold";
+import Bold from "./nodes/strong";
 import Emoji from "./nodes/emoji";
 import Link from "./nodes/link";
 import Image from "./nodes/image";
-import Italic from "./nodes/italic";
+import Italic from "./nodes/emphasis";
 import Strike from "./nodes/strike";
 import Heading from "./nodes/heading";
 import Paragraph from "./nodes/paragraph";
 import Blockquote from "./nodes/blockquote";
 import Mention from "./nodes/mention";
-
-const parserOptions = {
-    //@ts-ignore
-    extensions: [gfm()],
-    mdastExtensions: [gfmFromMarkdown()],
-};
-
-const serializerOptions = {
-    extensions: [gfmToMarkdown()],
-};
 
 function build() {
     const markdown = new Markdown();
@@ -74,8 +59,7 @@ export const parse = (doc: string) => {
 };
 
 export const serialize = (nodes: any) => {
-    //@ts-ignore
-    return toMarkdown(reast(nodes), serializerOptions);
+    return md.serialize(reast(nodes));
 };
 
 export default {
