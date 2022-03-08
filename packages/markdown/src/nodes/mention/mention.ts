@@ -22,13 +22,11 @@ export default class Component implements IComponent {
     process(doc: string, _context: Context, _markdown: IMarkdown) {
         return {
             type: this.name,
-            value: doc.substring(1, doc.length),
-            prefix: doc[0],
-            mention: doc,
+            value: doc,
         };
     }
 
     serialize(node: any, _markdown: IMarkdown): string {
-        return node.mention;
+        return node.value;
     }
 }

@@ -17,4 +17,3 @@ test("Emphasis match", () => {
         matched++;
     }
 });
-
