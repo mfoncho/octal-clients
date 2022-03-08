@@ -226,7 +226,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     useEffect(() => {
         const { value } = props;
         if (Boolean(value)) {
-            setValue(markdown.parse(value!) as any);
+            setValue(markdown.parse(value!));
         }
     }, []);
 
@@ -341,9 +341,9 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         }
     }
 
-    function handleMentionSelected({ prefix, subject, target, mention }: any) {
+    function handleMentionSelected({ target, mention }: any) {
         Transforms.select(editor, target as any);
-        insertMention(editor, { prefix, subject, target, mention });
+        insertMention(editor, mention.value);
     }
 
     function handleCloseUploadQueue() {

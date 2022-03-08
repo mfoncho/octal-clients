@@ -315,7 +315,10 @@ export function Popper(props: IPopper) {
     );
 }
 
-type TMention = typeof Portal & { Popper: typeof Popper, Context: typeof Context };
+type TMention = typeof Portal & {
+    Popper: typeof Popper;
+    Context: typeof Context;
+};
 
 Portal.Popper = Popper;
 Portal.Context = Context;

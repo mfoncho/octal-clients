@@ -14,7 +14,7 @@ function Mention({ selected, mention }: any) {
     );
 }
 
-function Table({ attributes, children, element }: any) {
+function Table({ attributes, children }: any) {
     return (
         <>
             <br />
@@ -29,7 +29,7 @@ function Table({ attributes, children, element }: any) {
     );
 }
 
-function TableRow({ attributes, children, element }: any) {
+function TableRow({ attributes, children }: any) {
     return <tr {...attributes}>{children}</tr>;
 }
 
@@ -299,9 +299,8 @@ export const defaultComponents = {
     Element: Element,
 };
 
-const Components = React.createContext<Partial<typeof defaultComponents>>(
-    defaultComponents
-);
+const Components =
+    React.createContext<Partial<typeof defaultComponents>>(defaultComponents);
 
 export function useComponents() {
     return { ...defaultComponents, ...React.useContext(Components) };

@@ -93,9 +93,9 @@ export default function Textarea(props: ITextarea) {
         }
     }, [props.value]);
 
-    function handleMentionSelected({ prefix, subject, target, mention }: any) {
+    function handleMentionSelected({ target, mention }: any) {
         Transforms.select(editor, target as any);
-        insertMention(editor, { prefix, subject, target, mention });
+        insertMention(editor, mention.value);
     }
 
     function handleChange(value: any) {

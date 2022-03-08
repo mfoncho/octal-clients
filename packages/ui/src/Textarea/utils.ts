@@ -120,12 +120,10 @@ export function isFormatActive(editor: any, format: string) {
     return !!match;
 }
 
-export function insertMention(editor: Editor, { prefix, mention }: any) {
-    const { value } = mention;
+export function insertMention(editor: Editor, value: string) {
     const mentioned = {
         value: value,
         type: "mention",
-        prefix: prefix,
         children: [{ text: "" }],
     };
     const nodes = [mentioned, { text: " " }];

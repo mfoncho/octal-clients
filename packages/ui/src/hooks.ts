@@ -1,4 +1,4 @@
-import breakpoints from "src/breakpoints";
+import breakpoints from "./breakpoints";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 export function useScreen() {

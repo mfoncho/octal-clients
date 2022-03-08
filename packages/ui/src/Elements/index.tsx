@@ -134,9 +134,9 @@ function Link({ attributes, children, element }: any) {
 
 function Paragraph({ attributes, children }: any) {
     return (
-        <span {...attributes} className="block">
+        <p {...attributes} className="min-h-[20px]">
             {children}
-        </span>
+        </p>
     );
 }
 
@@ -278,8 +278,11 @@ const Element = (props: any) => {
         case "code":
             return <Elements.Pre {...props} />;
 
-        default:
+        case "paragraph":
             return <Elements.Paragraph {...props} />;
+
+        default:
+            return <Elements.Span {...props} />;
     }
 };
 
