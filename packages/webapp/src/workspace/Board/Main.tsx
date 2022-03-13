@@ -4,15 +4,16 @@ import Header from "./Header";
 import Drawer from "./Drawer";
 import CardDialog from "@workspace/CardDialog";
 import { useCard } from "@octal/store";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Dialog = React.memo<{ id: string }>((props) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const card = useCard(props.id);
+    const params = useParams<{ board_id: string; space_id: string }>();
 
     function handleCloseDialog() {
         if (history.length > 0) {
-            history.goBack();
+            navigate(`/spaces/${params.space_id}/boards/${params.board_id}`);
         } else {
             console.log("Oops where to?");
         }

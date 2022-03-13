@@ -7,7 +7,7 @@ import { Page } from "src/types";
 import Layout from "@console/Layout";
 import client, { FetchUsersRequest } from "@console/client";
 import { io } from "@console/types";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useNavigator } from "@console/hooks";
 
 const defaultPage: Page<io.User> = {
@@ -19,7 +19,7 @@ const defaultPage: Page<io.User> = {
 };
 
 export default React.memo(() => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const location = useLocation();
     const [page, setPage] = useState(defaultPage);
     const search = useInput("");
@@ -58,7 +58,7 @@ export default React.memo(() => {
     function handlePageChange(event: any, page: number) {
         const query = new URLSearchParams(location.search);
         query.set("page", page as any);
-        history.push(`${location.pathname}?${query.toString()}`);
+        navigate(`${location.pathname}?${query.toString()}`);
     }
 
     function handleOpenUser(user: io.User) {

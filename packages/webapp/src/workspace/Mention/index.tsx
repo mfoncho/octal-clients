@@ -107,6 +107,7 @@ export default function Mention({ prefix, selected, mention }: IMention) {
             );
 
         default:
+            //@ts-ignore
             return <span>{mention.value}</span>;
     }
 }

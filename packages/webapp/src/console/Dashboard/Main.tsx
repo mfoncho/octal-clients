@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "@console/Layout";
 import { Link } from "react-router-dom";
 import { io } from "@console/types";
-import Icons from "@octal/icons";
+import * as Icons from "@octal/icons";
 import client from "@console/client";
 import paths from "@console/paths";
 import { useWorkspace } from "@octal/store";

@@ -1,25 +1,25 @@
 import React from "react";
 import routes from "@console/routes";
-import paths from "@console/paths";
 import Module from "@console/components/Module";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 export default React.memo(() => {
     return (
-        <Switch>
+        <Routes>
             {routes.map((route) => {
                 const Main = route.main;
                 return (
-                    <Route key={route.path} path={route.path}>
-                        <Module.Provider value={route}>
-                            <Main />
-                        </Module.Provider>
-                    </Route>
+                    <Route
+                        key={route.path}
+                        path={route.path.replace("/console", "")}
+                        element={
+                            <Module.Provider value={route}>
+                                <Main />
+                            </Module.Provider>
+                        }
+                    />
                 );
             })}
-            <Route>
-                <Redirect to={paths.dashboard} />
-            </Route>
-        </Switch>
+        </Routes>
     );
 });

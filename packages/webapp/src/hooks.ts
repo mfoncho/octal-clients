@@ -8,7 +8,7 @@ import {
     useCallback,
     useContext,
 } from "react";
-import { useHistory, generatePath } from "react-router-dom";
+import { useNavigate, generatePath } from "react-router-dom";
 import paths from "./paths";
 import { useDispatch } from "react-redux";
 import {
@@ -19,7 +19,10 @@ import {
 } from "@octal/store";
 import calutils from "@octal/calendar";
 import { openDrawer, closeDrawer } from "@octal/store/lib/actions/drawer";
-import { updateCalendar, ICalendarParams } from "@octal/store/lib/actions/calendar";
+import {
+    updateCalendar,
+    ICalendarParams,
+} from "@octal/store/lib/actions/calendar";
 
 export function useMediaQuery(query: string) {
     const [matches, setMatches] = useState(false);
@@ -254,21 +257,19 @@ export function useNavigatorDrawer() {
 }
 
 export function useNavigator() {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const boards = useBoardStore();
 
     function openHome() {
-        if (history.location.pathname != "/spaces") {
-            history.push("/spaces/1");
-        }
+        navigate("/spaces");
     }
 
     const openSpace = useCallback((params: { id: string }) => {
         const path = generatePath(paths.workspace.space, {
             space_id: params.id,
         });
-        history.push(path);
+        navigate(path);
     }, []);
 
     const openTopic = useCallback(
@@ -277,7 +278,7 @@ export function useNavigator() {
                 topic_id: params.id,
                 space_id: params.space_id,
             });
-            history.push(path);
+            navigate(path);
         },
         []
     );
@@ -286,7 +287,7 @@ export function useNavigator() {
         const path = generatePath(paths.workspace.board, {
             space_id: params.id,
         });
-        history.push(path);
+        navigate(path);
     }, []);
 
     const openCard = useCallback((params: { id: string; board_id: string }) => {
@@ -297,7 +298,7 @@ export function useNavigator() {
                 space_id: board.space_id,
                 board_id: params.board_id,
             });
-            history.push(path);
+            navigate(path);
         }
     }, []);
 

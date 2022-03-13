@@ -1,11 +1,10 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import paths from "src/paths";
-import Home from "../Home";
 import Layout from "@workspace/Layout";
 
 function Lost() {
-    return <Redirect to="/spaces">Wait where am i?</Redirect>;
+    return <div>Wait where am i?</div>;
 }
 
 const constilation: string[] = Object.values(paths)
@@ -21,22 +20,6 @@ const constilation: string[] = Object.values(paths)
         return 0;
     });
 
-export default function Routes() {
-    return (
-        <Switch>
-            {/*
-            <Route path="/">
-                <Home />
-            </Route>
-            */}
-            {constilation.map((path) => (
-                <Route key={path} path={path}>
-                    <Layout />
-                </Route>
-            ))}
-            <Route>
-                <Lost />
-            </Route>
-        </Switch>
-    );
+export default function Main() {
+    return <Layout />;
 }

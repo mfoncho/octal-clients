@@ -5,7 +5,7 @@ import { Dialog } from "@octal/ui";
 import Avatar from "@material-ui/core/Avatar";
 import ListItem from "@material-ui/core/ListItem";
 import { makeStyles } from "@material-ui/core/styles";
-import { useHistory, generatePath } from "react-router-dom";
+import { useNavigate, generatePath } from "react-router-dom";
 import ListItemText from "@material-ui/core/ListItemText";
 import DialogContent from "@material-ui/core/DialogContent";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -42,7 +42,7 @@ interface IDialog {
 }
 
 export default React.memo<IDialog>((props) => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const classes = useStyles();
 
@@ -72,7 +72,7 @@ export default React.memo<IDialog>((props) => {
             dispatch(action)
                 .then(() => {
                     const path = generatePath(paths.space, params);
-                    history.push(path);
+                    navigate(path);
                     props.onClose();
                 })
                 .catch(() => setJoining(false));

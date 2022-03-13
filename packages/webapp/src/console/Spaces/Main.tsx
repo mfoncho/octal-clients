@@ -8,7 +8,7 @@ import { Page } from "src/types";
 import Layout from "@console/Layout";
 import client, { FetchBoardsRequest } from "@console/client";
 import { io } from "@console/types";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useNavigator } from "@console/hooks";
 
 const defaultPage: Page<io.Space> = {
@@ -21,7 +21,7 @@ const defaultPage: Page<io.Space> = {
 
 export default React.memo(() => {
     const search = useInput("");
-    const history = useHistory();
+    const navigate = useNavigate();
     const location = useLocation();
     const navigator = useNavigator();
     const [page, setPage] = useState(defaultPage);
@@ -55,7 +55,7 @@ export default React.memo(() => {
     function handlePageChange(event: any, page: number) {
         const query = new URLSearchParams(location.search);
         query.set("page", page as any);
-        history.push(`${location.pathname}?${query.toString()}`);
+        navigate(`${location.pathname}?${query.toString()}`);
     }
 
     function handleOpenSpace(board: io.Space) {

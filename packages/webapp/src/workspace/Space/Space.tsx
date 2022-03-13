@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Textarea } from "@octal/ui";
 import Board from "../Board";
 import Topic from "../Topic";
 import { useSpace, useMentionable } from "./hooks";
 import { clearSpace } from "@octal/store/lib/actions/space";
-import paths from "src/paths/workspace";
 import { useNavigator, useUnmount } from "src/hooks";
 
 function Redirect() {
@@ -35,20 +34,13 @@ export default React.memo(() => {
 
     return (
         <Textarea.Mention.Context.Provider value={mentionable as any}>
-            <Switch>
-                <Route path={paths.topic}>
-                    <Topic />
+            <Routes>
+                <Route path="/topics/:topic_id" element={<Topic />} />
+                <Route path="/boards/:board_id" element={<Board />}>
+                    <Route path=":card_id" element={<Board />} />
                 </Route>
-                <Route path={paths.card}>
-                    <Board />
-                </Route>
-                <Route path={paths.board}>
-                    <Board />
-                </Route>
-                <Route path={paths.space}>
-                    <Redirect />
-                </Route>
-            </Switch>
+                <Route path="/" element={<Redirect />} />
+            </Routes>
         </Textarea.Mention.Context.Provider>
     );
 });

@@ -1,45 +1,45 @@
 import { useCallback, useState, useRef } from "react";
-import { useHistory, generatePath } from "react-router-dom";
+import { useNavigate, generatePath } from "react-router-dom";
 import paths from "./paths";
 
 export function useNavigator() {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const openRoles = useCallback(() => {
-        history.push(paths.roles, {});
+        navigate(paths.roles);
     }, []);
 
     const openUsers = useCallback(() => {
-        history.push(paths.users, {});
+        navigate(paths.users);
     }, []);
 
     const openSpaces = useCallback(() => {
-        history.push(paths.spaces, {});
+        navigate(paths.spaces);
     }, []);
 
     const openWorkspace = useCallback(() => {
-        history.push(paths.workspace, {});
+        navigate(paths.workspace);
     }, []);
 
     const openSpace = useCallback((params: { id: string }) => {
         const path = generatePath(paths.space, {
             space_id: params.id,
         });
-        history.push(path, params);
+        navigate(path);
     }, []);
 
     const openUser = useCallback((params: { id: string }) => {
         const path = generatePath(paths.user, {
             user_id: params.id,
         });
-        history.push(path, params);
+        navigate(path);
     }, []);
 
     const openRole = useCallback((params: { id: string }) => {
         const path = generatePath(paths.role, {
             role_id: params.id,
         });
-        history.push(path, params);
+        navigate(path);
     }, []);
 
     return {
