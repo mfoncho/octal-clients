@@ -1,8 +1,8 @@
 import React from "react";
 import Dialog from "../Dialog";
-import Icons from "@octal/icons";
 import Button from "../Button";
 import { IFileItem } from "./types";
+import * as Icons from "@octal/icons";
 
 interface IDialog {
     files: IFileItem[];
