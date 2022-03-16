@@ -3,7 +3,7 @@ import { Unique, Id } from "@octal/client";
 
 export class TopicRecord
     extends Record({
-        id: "0" as Id,
+        id: "" as Id,
         icon: "",
         name: "",
         type: "",

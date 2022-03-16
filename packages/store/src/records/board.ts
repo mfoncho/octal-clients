@@ -3,9 +3,10 @@ import { Unique, Id } from "@octal/client";
 
 export class LabelRecord
     extends Record({
-        id: "0" as Id,
-        name: "label",
-        color: "blue",
+        id: "" as Id,
+        icon: "",
+        name: "",
+        color: "",
         board_id: "" as Id,
     })
     implements Unique
@@ -20,7 +21,7 @@ export class LabelRecord
 
 export class BoardRecord
     extends Record({
-        id: "0" as Id,
+        id: "" as Id,
         icon: "",
         name: "",
         space_id: "",
