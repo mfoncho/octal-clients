@@ -3,7 +3,7 @@ import { Unique, Positioned, BelongsToBoard } from "@octal/client";
 import { sort, keyStingFromDate } from "@octal/common";
 import calendar from "@octal/calendar";
 
-const sortCreated = sort("created_at", "dec");
+const sortCreated = sort("created_at", "asc");
 
 const positionSort = sort("position", "asc");
 
@@ -169,7 +169,7 @@ export class CardFieldRecord extends Record<ICardField>({
                 data.values.map((value: any) =>
                     CardFieldRecord.createFieldValue(value, data.type)
                 )
-            );
+            ).sort(sortCreated);
             data = { ...data, values };
         }
         if (Array.isArray(data.users)) {
@@ -293,7 +293,7 @@ export class CardRecord
         if (field) return this;
         const fields = this.fields
             .push(CardFieldRecord.make(params))
-            .sort(sort("position", "asc"));
+            .sort(sort("position", "desc"));
         return this.setIn(["fields"], fields);
     }
 
