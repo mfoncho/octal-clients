@@ -3,9 +3,9 @@ import { Unique, Positioned, BelongsToBoard } from "@octal/client";
 import { sort, keyStingFromDate } from "@octal/common";
 import calendar from "@octal/calendar";
 
-const sortCreated = sort("created_at", "asc");
+const createAtAsc = sort("created_at", "asc");
 
-const positionSort = sort("position", "asc");
+const positionAsc = sort("position", "asc");
 
 export class CardTaskValueRecord extends Record({
     id: "",
@@ -101,13 +101,13 @@ export class CardFieldRecord extends Record<ICardField>({
         }
         return this.update("values", (values: any) => {
             if (Record.isRecord(vdata)) {
-                return values.concat([vdata]).sort(sortCreated);
+                return values.concat([vdata]).sort(createAtAsc);
             } else {
                 return values
                     .concat([
                         CardFieldRecord.createFieldValue(vdata, this.type),
                     ])
-                    .sort(sortCreated);
+                    .sort(createAtAsc);
             }
         });
     }
@@ -169,7 +169,7 @@ export class CardFieldRecord extends Record<ICardField>({
                 data.values.map((value: any) =>
                     CardFieldRecord.createFieldValue(value, data.type)
                 )
-            ).sort(sortCreated);
+            ).sort(createAtAsc);
             data = { ...data, values };
         }
         if (Array.isArray(data.users)) {
@@ -372,7 +372,7 @@ export class CardRecord
         if (data.fields) {
             let fields = List(
                 data.fields
-                    .sort(positionSort)
+                    .sort(positionAsc)
                     .map((field: any) => new CardFieldRecord(field))
             );
             data = { ...data, fields };
