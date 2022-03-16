@@ -50,7 +50,11 @@ export default function LabelField({ field, handle }: ILabelField) {
     function renderLabel(label: LabelRecord) {
         return (
             <div key={label.id} className="mr-1.5 mb-1.5">
-                <Label name={label.name} color={label.color} />
+                <Label
+                    icon={label.icon}
+                    name={label.name}
+                    color={label.color}
+                />
             </div>
         );
     }

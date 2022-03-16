@@ -24,6 +24,7 @@ interface IFormPayload {
 
 interface ILabelForm {
     name?: string;
+    icon?: string;
     color?: string;
     disabled?: boolean;
     onClose: (e: React.MouseEvent) => void;
@@ -96,9 +97,8 @@ const Warning = Dialog.create<IDialog>((props) => {
 });
 
 function LabelForm(props: ILabelForm) {
-    const [iconPart, namePart] = nameParts(props.name ?? "");
-    const icon = useInput(iconPart);
-    const name = useInput(namePart);
+    const icon = useInput(props.icon ?? "");
+    const name = useInput(props.name ?? "");
     const color = useInput(props.color ?? "");
     const iconBtnRef = useRef<HTMLButtonElement>(null);
     const [epicker, setEpicker] = useState<boolean>(false);
@@ -110,6 +110,8 @@ function LabelForm(props: ILabelForm) {
     }
 
     function handleSubmit(e: React.MouseEvent) {
+        e.stopPropagation();
+        e.preventDefault();
         props.onSubmit({
             icon: icon.value,
             name: name.value.trim(),
@@ -236,6 +238,16 @@ function Labels(props: ILabels) {
         }
     }
 
+    function handleLabelClick(label: LabelRecord) {
+        return (e: React.MouseEvent) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (props.onSelect) {
+                props.onSelect(label);
+            }
+        };
+    }
+
     if (warned) {
         return (
             <Warning
@@ -250,6 +262,7 @@ function Labels(props: ILabels) {
         return (
             <LabelForm
                 name={label.name}
+                icon={label.icon}
                 color={label.color}
                 onClose={closeEditor}
                 onSubmit={handleUpdateLabel}
@@ -265,9 +278,7 @@ function Labels(props: ILabels) {
                     <div
                         key={label.id}
                         role="button"
-                        onClick={(e) =>
-                            props.onSelect ? props.onSelect(label) : null
-                        }
+                        onClick={handleLabelClick(label)}
                         className="group flex cursor-pointer hover:bg-primary-50 rounded-md  my-1 flex-row items-center justify-between">
                         <div className="flex flex-row items-center">
                             <input
@@ -280,6 +291,7 @@ function Labels(props: ILabels) {
                                     borderColor: label.color,
                                 }}
                             />
+                            {label.icon && <Text>{label.icon!}</Text>}
                             <span className="p-1 font-semibold text-sm text-gray-700">
                                 <Text>{label.name}</Text>
                             </span>
