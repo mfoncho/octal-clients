@@ -56,7 +56,7 @@ export const CardDialog = React.memo<ICardDialog>(({ card, onClose, open }) => {
                 thread_id: card.thread_id,
             });
         }
-    }, [card.id]);
+    }, [card.id, screen.tablet, screen.desktop]);
 
     useEffect(() => {
         if (card.id) {
