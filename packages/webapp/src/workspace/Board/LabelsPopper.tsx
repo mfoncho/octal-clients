@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import Label from "@workspace/Board/Label";
 import * as Icons from "@octal/icons";
+import { useInput } from "src/utils";
 import { LabelRecord } from "@octal/store/lib/records";
 import { Popper, Emoji, Text, Button, Dialog } from "@octal/ui";
-import { useInput, nameParts } from "src/utils";
 import { useLabels, useBoardActions } from "@workspace/Board/hooks";
 
 interface ILabelsPopper {
