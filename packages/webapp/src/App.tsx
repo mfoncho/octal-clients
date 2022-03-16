@@ -2,21 +2,9 @@ import React, { useMemo } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { Screen } from "@octal/ui";
-import breakpoints from "./breakpoints";
 import store from "@octal/store";
-//import history from "./history";
 import Judge from "./judge";
-import { useMediaQuery } from "src/hooks";
-
-function useScreen() {
-    const mobile = useMediaQuery(breakpoints.down("sm"));
-    const tablet = useMediaQuery(breakpoints.only("md"));
-    const desktop = useMediaQuery(breakpoints.up("lg"));
-
-    return useMemo(() => {
-        return { mobile, tablet, desktop };
-    }, [mobile, tablet, desktop]);
-}
+import { useScreen } from "@octal/ui";
 
 const Main = React.memo(() => {
     const screen = useScreen();
