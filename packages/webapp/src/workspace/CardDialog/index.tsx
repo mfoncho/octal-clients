@@ -8,7 +8,7 @@ import { useDrawer } from "./hooks";
 import ActionsField from "./ActionsField";
 import { Context } from "@workspace/Board/Card";
 import { useAuthId, useCard } from "@octal/store";
-import { useScreen } from "@octal/ui";
+import { useScreen } from "src/hooks";
 import { CardRecord } from "@octal/store";
 
 export * from "./hooks";
