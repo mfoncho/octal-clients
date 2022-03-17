@@ -265,7 +265,6 @@ export class CardRecord
 
         const indexed = users
             .concat(assinged)
-            .push(this.user_id)
             .toMap()
             .mapKeys((_index, val) => val)
             .toList()
