@@ -4,10 +4,9 @@ import * as Icons from "@octal/icons";
 import { CardRecord } from "@octal/store/lib/records";
 import { useAuthId } from "@octal/store";
 import { useInput } from "src/utils";
-import { Button, useScreen } from "@octal/ui";
+import { Button, Text, useScreen } from "@octal/ui";
 import { KeyboardInputEvent } from "src/types";
 import { usePermissions, useSpace } from "@workspace/Space";
-import { useUser } from "@octal/store";
 import { useActions } from "@workspace/Board/Card";
 
 interface IHeader {
@@ -38,7 +37,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
             autoFocus
             onBlur={onClose}
             disabled={disabled}
-            className="px-2 focus:outline-none focus:text-gray-800 text-left text-xl text-gray-700 font-black"
+            className="px-2 focus:outline-none focus:text-gray-800 text-left text-2xl text-gray-700 font-black"
             onKeyPress={handleKeyPress}
         />
     );
@@ -48,8 +47,6 @@ export default function Header({ card, ...props }: IHeader) {
     const authId = useAuthId();
 
     const screen = useScreen();
-
-    const user = useUser(card.user_id);
 
     const [updating, setUpdating] = useState(false);
 
@@ -77,13 +74,8 @@ export default function Header({ card, ...props }: IHeader) {
     }
 
     return (
-        <div className="flex px-4  py-2 flex-row justify-between">
+        <div className="flex px-4  py-4 flex-row justify-between">
             <div className="flex flex-row items-start sm:items-center">
-                <img
-                    src={user.avatar}
-                    alt={user.name}
-                    className="h-8 w-8 rounded-full hidden sm:flex"
-                />
                 {owner && editing && !board.is_archived ? (
                     <Edit
                         value={card.name}
@@ -93,15 +85,16 @@ export default function Header({ card, ...props }: IHeader) {
                     />
                 ) : (
                     <div className="flex px-2 flex-col justify-center">
-                        <button
+                        <span
+                            role="button"
                             onClick={
                                 owner && !board.is_archived
                                     ? handleSetEditingMode
                                     : undefined
                             }
-                            className="text-left text-xl text-gray-800 font-black">
-                            {card.name}
-                        </button>
+                            className="text-left text-2xl text-gray-800 font-black">
+                            <Text>{card.name}</Text>
+                        </span>
                     </div>
                 )}
             </div>
