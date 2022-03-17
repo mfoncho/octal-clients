@@ -9,7 +9,8 @@ export type Require<T, K extends keyof T> = T &
 
 export type Optional<T, K extends keyof T> = {
     [P in K]?: Diff<T[P], undefined>;
-} & Omit<T, K>;
+} &
+    Omit<T, K>;
 
 export interface Thenable<T = any> {
     then<S, E>(
@@ -57,7 +58,7 @@ export function difference(object: object, base: object) {
     return changes(object, base);
 }
 
-export function sort<T = any>(field: string, order: "asc" | "dec" = "asc") {
+export function sort<T = any>(field: string, order: "asc" | "desc" = "asc") {
     return (a: T, b: T) => {
         const avalue = (a as any)[field];
         const bvalue = (b as any)[field];
