@@ -159,7 +159,7 @@ const FieldCards = React.memo<{ date: string }>(({ date }) => {
                         return fcards;
                     }, fcards);
             }, defaultList)
-            .sort(sort("value", "dec"));
+            .sort(sort("value", "desc"));
     }, [cards]);
 
     return (

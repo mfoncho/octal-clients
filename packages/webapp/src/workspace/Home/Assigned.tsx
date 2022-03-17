@@ -29,7 +29,7 @@ interface IUserAvatar {
     users: List<UserRecord>;
 }
 
-const createdAtSort = sort("created_at", "dec");
+const createdAtSort = sort("created_at", "desc");
 
 export const UserAvatar = React.memo<IUserAvatar>(({ users }) => {
     const avatars = users.map((user) => (
