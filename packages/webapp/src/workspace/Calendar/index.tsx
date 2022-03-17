@@ -3,7 +3,7 @@ import clx from "classnames";
 import Header from "./Header";
 import { List } from "immutable";
 import { MdOutlineArrowBackIosNew as BackIcon } from "react-icons/md";
-import { Calendar, Button, Popper } from "@octal/ui";
+import { Calendar, Button, Popper, Text } from "@octal/ui";
 import { UseCards } from "@workspace/Records";
 import moment from "moment";
 import cal from "@octal/calendar";
@@ -111,10 +111,9 @@ function CardField(props: ICardField) {
                 role="button"
                 onClick={() => setOpen(true)}
                 className="flex-none flex flex-row items-center rounded-lg overflow-hidden pl-1 border border-gray-300 hover:bg-gray-200 cursor-pointer">
-                <UserIcon user={card.user_id} />
                 <div className="flex flex-col py-0.5 px-1 font-semibold">
                     <span className="text-sm whitespace-nowrap font-semibold text-gray-800">
-                        {card.name}
+                        <Text>{card.name}</Text>
                     </span>
                     <span className="text-xs whitespace-nowrap text-gray-600">
                         {field.name}
