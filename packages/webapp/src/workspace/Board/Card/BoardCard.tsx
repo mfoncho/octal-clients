@@ -2,7 +2,7 @@ import React from "react";
 import { List } from "immutable";
 import DoneIcon from "@material-ui/icons/CheckCircle";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import { Tooltip } from "@octal/ui";
+import { Tooltip, Text } from "@octal/ui";
 import Label from "@workspace/Board/Label";
 import { CardRecord, useUser, useBoard } from "@octal/store";
 
@@ -101,8 +101,6 @@ export default React.memo<ICard>(({ card, ...props }) => {
         .filter((field) => field.type == "checklist")
         .map((field) => field.name);
 
-    const users = card.users.filter((id) => card.user_id !== id);
-
     return (
         <div
             className="flex bg-white rounded-lg ring-2 ring-gray-200 flex-col justify-between"
@@ -110,12 +108,9 @@ export default React.memo<ICard>(({ card, ...props }) => {
             <div
                 {...props.dragHandle}
                 className="flex flex-row p-2 justify-between">
-                <div className="flex flex-row">
-                    <UserAvatar tooltip={true} id={card.user_id} />
-                    <div className="flex flex-col justify-center">
-                        <span className="px-2 font-semibold">{card.name}</span>
-                    </div>
-                </div>
+                <span className="pr-2 font-semibold">
+                    <Text>{card.name}</Text>
+                </span>
                 <Complete complete={card.complete} />
             </div>
             {!labels.isEmpty() && (
@@ -131,7 +126,7 @@ export default React.memo<ICard>(({ card, ...props }) => {
                     ))}
                 </div>
             )}
-            {(!checklists.isEmpty() || !users.isEmpty()) && (
+            {(!checklists.isEmpty() || !card.users.isEmpty()) && (
                 <div className="flex flex-row px-4 py-1 rounded-b-lg bg-gray-100 items-center justify-between">
                     <div className="flex flex-row items-center">
                         {!checklists.isEmpty() && (
@@ -139,7 +134,7 @@ export default React.memo<ICard>(({ card, ...props }) => {
                         )}
                     </div>
                     <div className="flex -space-x-2 overflow-hidden">
-                        {users.take(3).map((uid) => (
+                        {card.users.take(3).map((uid) => (
                             <UserAvatar
                                 key={uid}
                                 id={uid}
