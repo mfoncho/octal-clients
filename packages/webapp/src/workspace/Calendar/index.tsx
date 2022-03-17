@@ -206,8 +206,10 @@ export default React.memo(function Main() {
                     onClick={() => actions.setDay(day > -1 ? -1 : dayi)}>
                     <div
                         className={clx(
-                            "flex flex-row justify-center items-center text-sm rounded-full w-5 h-5",
-                            isToday(date) ? "text-white bg-primary-500" : ""
+                            "flex flex-row justify-center items-center text-xs font-semibold rounded-full w-5 h-5",
+                            isToday(date)
+                                ? "text-white bg-primary-500"
+                                : "text-gray-700"
                         )}>
                         <span>{date.getDate()}</span>
                     </div>
