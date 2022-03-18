@@ -7,12 +7,8 @@ import { Route, Routes } from "react-router-dom";
 export default React.memo(() => {
     return (
         <Routes>
-            <Route path={path.login}>
-                <Login />
-            </Route>
-            <Route path={path.reset}>
-                <ResetPassword />
-            </Route>
+            <Route path={path.login} element={<Login />} />
+            <Route path={path.reset} element={<ResetPassword />} />
         </Routes>
     );
 });
