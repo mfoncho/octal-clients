@@ -56,35 +56,35 @@ function build() {
     const strike = new Strike();
     const bold = new Bold();
     const image = new Image();
-    markdown.plug(paragraph);
-    markdown.plug(mention);
-    markdown.plug(hr);
-    markdown.plug(emoji);
-    markdown.plug(image);
-    markdown.plug(link);
-    markdown.plug(list);
-    markdown.plug(strike);
-    markdown.plug(bold);
-    markdown.plug(text);
-    markdown.plug(heading);
-    markdown.plug(italic);
-    markdown.plug(code);
-    markdown.plug(blockquote);
+    markdown.add(paragraph);
+    markdown.add(mention);
+    markdown.add(hr);
+    markdown.add(emoji);
+    markdown.add(image);
+    markdown.add(link);
+    markdown.add(list);
+    markdown.add(strike);
+    markdown.add(bold);
+    markdown.add(text);
+    markdown.add(heading);
+    markdown.add(italic);
+    markdown.add(code);
+    markdown.add(blockquote);
     return markdown;
 }
 
 test("Markdown should be pluggable", () => {
     const markdown = new Markdown();
     const paragraph = new Paragraph();
-    markdown.plug(paragraph);
+    markdown.add(paragraph);
     expect(markdown.component(paragraph.name)).toBe(paragraph);
 });
 
 test("Markdown should be unpluggable", () => {
     const markdown = new Markdown();
     const paragraph = new Paragraph();
-    markdown.plug(paragraph);
-    markdown.unplug(paragraph.name);
+    markdown.add(paragraph);
+    markdown.remove(paragraph.name);
     expect(markdown.component(paragraph.name)).toBe(undefined);
 });
 

@@ -33,7 +33,7 @@ export default class Markdown implements IMarkdown {
         return [...this.blocks, ...this.spans];
     }
 
-    plug(cmp: IComponent) {
+    add(cmp: IComponent) {
         let index = this.components.findIndex(
             (comp) => comp.type === cmp.type && comp.name === cmp.name
         );
@@ -53,7 +53,7 @@ export default class Markdown implements IMarkdown {
         return cmp;
     }
 
-    unplug(name: string, type?: string) {
+    remove(name: string, type?: string) {
         let index = -1;
         if (type) {
             index = this.components.findIndex(
