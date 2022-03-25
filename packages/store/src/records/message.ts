@@ -1,6 +1,8 @@
 import { Record, List, fromJS } from "immutable";
 import { Unique, Id, Timestamped, BelongsToThread } from "@octal/client";
-import markdown from "@octal/markdown";
+import { Slater } from "@octal/markdown";
+
+const slater = Slater.create();
 
 export class UsersReactionRecord extends Record({
     reaction: "love",
@@ -58,7 +60,7 @@ export class MessageRecord
             return this._parsed;
         }
         if (Boolean(this.content)) {
-            (this as any)._parsed = markdown.parse(this.content);
+            (this as any)._parsed = slater.parse(this.content);
             return this._parsed;
         }
         return this._parsed;
