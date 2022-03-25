@@ -5,7 +5,7 @@ import {
     Point,
     Transforms,
 } from "slate";
-import markdown from "@octal/markdown";
+import { Slater } from "@octal/markdown";
 
 import { BaseEditor } from "slate";
 import { ReactEditor } from "slate-react";
@@ -25,6 +25,8 @@ declare module "slate" {
         children: TextNode[];
     };
 }
+
+const slater = Slater.create();
 
 const MENTION_TYPE = "mention";
 
@@ -49,31 +51,33 @@ export const wrap = (editor: Editor, plugins: TWrapper[]): Editor => {
     return plugins.reduce((editor, plug) => plug(editor), editor);
 };
 
-export const withEmoji = (editor: any) => {
-    const { insertData, isInline, isVoid } = editor;
+export const withPaste = (slater: Slater) => {
+    return (editor: any) => {
+        const { insertData, isInline, isVoid } = editor;
 
-    editor.isInline = (element: any) => {
-        return element.type === EMOJI_TYPE ? true : isInline(element);
-    };
+        editor.isInline = (element: any) => {
+            return element.type === EMOJI_TYPE ? true : isInline(element);
+        };
 
-    editor.isVoid = (element: any) => {
-        return element.type === EMOJI_TYPE ? true : isVoid(element);
-    };
+        editor.isVoid = (element: any) => {
+            return element.type === EMOJI_TYPE ? true : isVoid(element);
+        };
 
-    editor.insertData = (data: any) => {
-        const text = data.getData("text/plain");
-        if (Boolean(text)) {
-            let parsed = markdown.parse(text);
-            if (parsed.length > 0) {
-                if (Boolean(parsed[parsed.length - 1].emoji))
-                    parsed.push({ text: "" });
-                return Transforms.insertNodes(editor, parsed);
+        editor.insertData = (data: any) => {
+            const text = data.getData("text/plain");
+            if (Boolean(text)) {
+                let parsed = slater.parse(text);
+                if (parsed.length > 0) {
+                    if (Boolean(parsed[parsed.length - 1].emoji))
+                        parsed.push({ text: "" });
+                    return Transforms.insertNodes(editor, parsed);
+                }
             }
-        }
-        insertData(data);
-    };
+            insertData(data);
+        };
 
-    return editor;
+        return editor;
+    };
 };
 
 export const withMention = (editor: Editor) => {

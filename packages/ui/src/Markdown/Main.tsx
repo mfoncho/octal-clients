@@ -1,7 +1,9 @@
 import React from "react";
 import { Node } from "unist";
-import markdown from "@octal/markdown";
+import { Slater } from "@octal/markdown";
 import Elements from "../Elements";
+
+const slater = Slater.create();
 
 type TableAlignT =
     | "-moz-initial"
@@ -105,7 +107,7 @@ export default React.memo<any>((props: any) => {
     const Components = Elements.useElements();
     let parsed: any[] = [];
     if (typeof props.children == "string") {
-        parsed = markdown.parse(props.children);
+        parsed = slater.parse(props.children);
     } else if (Array.isArray(props.children)) {
         parsed = props.children;
     }

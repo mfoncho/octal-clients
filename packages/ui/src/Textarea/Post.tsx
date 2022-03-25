@@ -12,7 +12,7 @@ import Emoji from "../Emoji";
 import { IFileItem } from "./types";
 import {
     wrap,
-    withEmoji,
+    withPaste,
     withMention,
     withTables,
     withShortcuts,
@@ -40,7 +40,13 @@ import { Slate, Editable, withReact } from "slate-react";
 
 const slater = Slater.create();
 
-const wrappers = [withReact, withEmoji, withMention, withTables, withShortcuts];
+const wrappers = [
+    withReact,
+    withPaste(slater),
+    withMention,
+    withTables,
+    withShortcuts,
+];
 
 export interface IPostInputState {
     text: string;

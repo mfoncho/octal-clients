@@ -4,12 +4,11 @@ import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import isHotkey from "is-hotkey";
 import Toolbar from "./Toolbar";
-import markdown from "@octal/markdown";
 import Mention from "./Mention";
 import { Slater } from "@octal/markdown";
 import {
+    withPaste,
     wrap,
-    withEmoji,
     withMention,
     withTables,
     withShortcuts,
@@ -24,7 +23,13 @@ import { Transforms, Editor, createEditor, Descendant } from "slate";
 
 const slater = Slater.create();
 
-const wrappers = [withReact, withEmoji, withMention, withTables, withShortcuts];
+const wrappers = [
+    withReact,
+    withPaste(slater),
+    withMention,
+    withTables,
+    withShortcuts,
+];
 
 export interface IMention {
     value: string;
