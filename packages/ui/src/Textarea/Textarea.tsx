@@ -6,6 +6,7 @@ import isHotkey from "is-hotkey";
 import Toolbar from "./Toolbar";
 import markdown from "@octal/markdown";
 import Mention from "./Mention";
+import { Slater } from "@octal/markdown";
 import {
     wrap,
     withEmoji,
@@ -20,6 +21,8 @@ import {
     toggleMark,
 } from "./utils";
 import { Transforms, Editor, createEditor, Descendant } from "slate";
+
+const slater = Slater.create();
 
 const wrappers = [withReact, withEmoji, withMention, withTables, withShortcuts];
 
@@ -89,7 +92,7 @@ export default function Textarea(props: ITextarea) {
     useEffect(() => {
         const { value } = props;
         if (Boolean(value)) {
-            setValue(markdown.parse(value!) as any);
+            setValue(slater.parse(value!) as any);
         }
     }, [props.value]);
 
@@ -100,7 +103,7 @@ export default function Textarea(props: ITextarea) {
 
     function handleChange(value: any) {
         setValue(value);
-        const text = markdown.serialize(value).trim();
+        const text = slater.serialize(value).trim();
         if (text != value && props.onChange) {
             props.onChange(text);
         }

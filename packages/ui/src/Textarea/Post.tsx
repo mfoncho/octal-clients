@@ -7,7 +7,7 @@ import emoji from "@octal/emoji";
 import Mention from "./Mention";
 import Button, { Base as ButtonBase } from "../Button";
 import UploadQueue from "./UploadQueue";
-import markdown from "@octal/markdown";
+import { Slater } from "@octal/markdown";
 import Emoji from "../Emoji";
 import { IFileItem } from "./types";
 import {
@@ -37,6 +37,8 @@ import {
 
 // Import the Slate components and React plugin.
 import { Slate, Editable, withReact } from "slate-react";
+
+const slater = Slater.create();
 
 const wrappers = [withReact, withEmoji, withMention, withTables, withShortcuts];
 
@@ -226,7 +228,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     useEffect(() => {
         const { value } = props;
         if (Boolean(value)) {
-            setValue(markdown.parse(value!));
+            setValue(slater.parse(value!));
         }
     }, []);
 
@@ -257,7 +259,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     }, []);
 
     function handleSubmit() {
-        const text = markdown.serialize(value).trim();
+        const text = slater.serialize(value).trim();
         if (text.length > 0 && props.onSubmit) {
             if (file) {
                 props.onSubmit({ text, file: file.file });
