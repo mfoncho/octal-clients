@@ -66,7 +66,7 @@ export interface IUpload {
 export interface IPostInput {
     onChange?: (state: IPostInputState) => void;
     onSubmit?: (state: IMessagePost) => void;
-    value?: string;
+    value: string;
     // SOR is acronym for
     // Submit On Return
     rows?: number;
@@ -233,10 +233,12 @@ export default React.memo<IPostInput>((props: IPostInput) => {
 
     useEffect(() => {
         const { value } = props;
-        if (Boolean(value)) {
+        if (props.value.trim() == "") {
+            setValue(initialValue);
+        } else if (Boolean(value)) {
             setValue(slater.parse(value!));
         }
-    }, []);
+    }, [props.value]);
 
     useEffect(() => {
         if (props.upload?.accept) {
@@ -265,8 +267,8 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     }, []);
 
     function handleSubmit() {
-        const text = slater.serialize(value).trim();
-        if (text.length > 0 && props.onSubmit) {
+        if (props.onSubmit) {
+            const text = slater.serialize(value).trim();
             props.onSubmit({ text, file: file?.file });
             if (file) {
                 setFiles((files) => files.slice(1));
