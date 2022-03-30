@@ -26,8 +26,6 @@ declare module "slate" {
     };
 }
 
-const slater = Slater.create();
-
 const MENTION_TYPE = "mention";
 
 const EMOJI_TYPE = "emoji";
@@ -73,7 +71,7 @@ export const withPaste = (slater: Slater) => {
                     return Transforms.insertNodes(editor, parsed);
                 }
             }
-            insertData(data);
+            return insertData(data);
         };
 
         return editor;

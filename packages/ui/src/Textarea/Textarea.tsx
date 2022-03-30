@@ -48,8 +48,10 @@ export interface IMentionable {
 
 export interface ITextarea {
     onChange?: (value: string) => void;
+    onSubmit?: (value: string) => void;
     className?: string;
-    onBlur?: (event: any) => void;
+    onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
+    onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
     autoFocus?: boolean;
     placeholder?: string;
     value: string;
@@ -106,11 +108,14 @@ export default function Textarea(props: ITextarea) {
         insertMention(editor, mention.value);
     }
 
-    function handleChange(value: any) {
-        setValue(value);
-        const text = slater.serialize(value).trim();
-        if (text != value && props.onChange) {
-            props.onChange(text);
+    function handleChange(val: any) {
+        setValue(val);
+        if (props.onChange) {
+            const text = slater.serialize(val).trim();
+            const prev = slater.serialize(value).trim();
+            if (text != prev) {
+                props.onChange(text);
+            }
         }
     }
 
@@ -130,6 +135,10 @@ export default function Textarea(props: ITextarea) {
         // Submit if mention dialog is closed
         if (event.key == "Enter") {
             event.preventDefault();
+            if (props.onSubmit) {
+                const text = slater.serialize(value).trim();
+                props.onSubmit(text);
+            }
             return;
         }
 

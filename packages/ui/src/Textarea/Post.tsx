@@ -267,11 +267,9 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     function handleSubmit() {
         const text = slater.serialize(value).trim();
         if (text.length > 0 && props.onSubmit) {
+            props.onSubmit({ text, file: file?.file });
             if (file) {
-                props.onSubmit({ text, file: file.file });
                 setFiles((files) => files.slice(1));
-            } else {
-                props.onSubmit({ text });
             }
             clearEditor(editor);
         }
@@ -305,8 +303,15 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         setPopup(null);
     }
 
-    function handleChange(value: any) {
-        setValue(value);
+    function handleChange(val: any) {
+        setValue(val);
+        if (props.onChange) {
+            const text = slater.serialize(val).trim();
+            const prev = slater.serialize(val).trim();
+            if (text != prev) {
+                props.onChange({ text, file: file?.file });
+            }
+        }
     }
 
     function handleKeyDown(event: React.KeyboardEvent) {

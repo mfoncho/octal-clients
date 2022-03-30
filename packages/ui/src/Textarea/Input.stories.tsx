@@ -1,23 +1,24 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import TextareaInput from "./Textarea";
+import TextInput from "./Input";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-    title: "UI/Input/Textarea",
-    component: TextareaInput,
+    title: "UI/Input/Input",
+    component: TextInput,
     // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
-} as ComponentMeta<typeof TextareaInput>;
+} as ComponentMeta<typeof TextInput>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof TextareaInput> = (args) => (
-    <TextareaInput {...args} />
+const Template: ComponentStory<typeof TextInput> = (args) => (
+    <TextInput {...args} />
 );
 
-const text = "";
+const text = ``;
 
-export const Textarea = Template.bind({});
-Textarea.args = {
+export const Input = Template.bind({});
+Input.args = {
+    placeholder: "Input text",
     value: text,
 };
