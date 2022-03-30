@@ -11,6 +11,7 @@ import {
     wrap,
     withMention,
     withTables,
+    withLink,
     withShortcuts,
 } from "./wrappers";
 import {
@@ -26,6 +27,7 @@ const slater = Slater.create();
 const wrappers = [
     withReact,
     withPaste(slater),
+    withLink,
     withMention,
     withTables,
     withShortcuts,
@@ -99,7 +101,8 @@ export default function Textarea(props: ITextarea) {
     useEffect(() => {
         const { value } = props;
         if (Boolean(value)) {
-            setValue(slater.parse(value!) as any);
+            const slated = slater.parse(value!);
+            setValue(slated as any);
         }
     }, [props.value]);
 

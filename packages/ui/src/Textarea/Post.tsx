@@ -15,6 +15,7 @@ import {
     withPaste,
     withMention,
     withTables,
+    withLink,
     withShortcuts,
 } from "./wrappers";
 import Tooltip from "../Tooltip";
@@ -43,6 +44,7 @@ const slater = Slater.create();
 const wrappers = [
     withReact,
     withPaste(slater),
+    withLink,
     withMention,
     withTables,
     withShortcuts,

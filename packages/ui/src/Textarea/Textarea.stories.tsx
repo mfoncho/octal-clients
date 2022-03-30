@@ -15,7 +15,9 @@ const Template: ComponentStory<typeof TextareaInput> = (args) => (
     <TextareaInput {...args} />
 );
 
-const text = "";
+const text = `Markdown is a lightweight markup language based on the formatting conventions
+that people naturally use in email [Link text Here](https://link-url-here.org).
+As [John Gruber] writes on the _link http://sample.com_`;
 
 export const Textarea = Template.bind({});
 Textarea.args = {

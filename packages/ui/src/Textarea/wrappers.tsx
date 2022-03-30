@@ -28,6 +28,8 @@ declare module "slate" {
 
 const MENTION_TYPE = "mention";
 
+const LINK_TYPE = "link";
+
 const EMOJI_TYPE = "emoji";
 
 const SHORTCUTS = {
@@ -87,6 +89,20 @@ export const withMention = (editor: Editor) => {
 
     editor.isVoid = (element: any) => {
         return MENTION_TYPE == element.type ? true : isVoid(element);
+    };
+
+    return editor;
+};
+
+export const withLink = (editor: Editor) => {
+    const { isInline, isVoid } = editor;
+
+    editor.isInline = (element: any) => {
+        return LINK_TYPE == element.type ? true : isInline(element);
+    };
+
+    editor.isVoid = (element: any) => {
+        return LINK_TYPE == element.type ? false : isVoid(element);
     };
 
     return editor;
