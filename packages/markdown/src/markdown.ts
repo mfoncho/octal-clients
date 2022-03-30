@@ -24,9 +24,13 @@ export default class Markdown implements IMarkdown {
     }
 
     get blocks() {
-        return this.components
+        let blocks = this.components
             .filter((cmp) => cmp.type === "block")
             .map((cmp) => cmp.name);
+        if (blocks.length == 0) {
+            blocks = this.spans;
+        }
+        return blocks;
     }
 
     get types() {
