@@ -22,7 +22,12 @@ export default function reslate(
 
         case "link":
             children = children.map((node) => reslate(node, props));
-            return { type: "link", url: root.url, children: children };
+            return {
+                type: "link",
+                url: root.url,
+                pure: root.pure,
+                children: children,
+            };
 
         case "strike":
             props = { ...props, strike: true };

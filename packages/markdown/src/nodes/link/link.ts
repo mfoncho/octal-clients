@@ -22,21 +22,22 @@ export default class Component implements IComponent {
     process(doc: string, { types }: Context, markdown: IMarkdown) {
         let match = new RegExp(pattern).exec(doc)!;
         return {
-            ref: match[4],
-            url: match[4] ?? match[6],
+            url: match[5] ?? match[6],
             type: this.name,
+            pure:
+                (match[5] ?? match[6]).trim() == (match[2] ?? match[6]).trim(),
             children: markdown.parse(
-                match[1] ?? match[6],
+                match[2] ?? match[6],
                 types.filter((type) => type !== this.name)
             ),
         };
     }
 
     serialize(node: any, markdown: IMarkdown): string {
-        if (node.ref === undefined && node.children.length == 1) {
+        if (node.pure && node.children.length == 1) {
             const [child] = node.children;
-            if (child.type === "text" && child.value === "") {
-                return node.url;
+            if (child.type === "text" && child.value.trim() === "") {
+                return child.text;
             }
         }
         return `[${markdown.serialize(node.children, "")}](${node.url})`;
