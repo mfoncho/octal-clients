@@ -1,10 +1,16 @@
-import Input from "./Textarea";
+import Textarea from "./Textarea";
 import Mention from "./Mention";
 import Post from "./Post";
+import Input from "./Input";
 
-export type Textarea = typeof Input & { Post: typeof Post, Mention: typeof Mention };
+export type TextAreaType = typeof Textarea & {
+    Post: typeof Post;
+    Input: typeof Input;
+    Mention: typeof Mention;
+};
 
-(Input as Textarea).Post = Post;
-(Input as Textarea).Mention = Mention;
+(Textarea as TextAreaType).Post = Post;
+(Textarea as TextAreaType).Input = Input;
+(Textarea as TextAreaType).Mention = Mention;
 
-export default Input as Textarea;
+export default Textarea as TextAreaType;
