@@ -4,7 +4,7 @@ import * as Icons from "@octal/icons";
 import { CardRecord } from "@octal/store/lib/records";
 import { useAuthId } from "@octal/store";
 import { useInput } from "src/utils";
-import { Button, Text, useScreen } from "@octal/ui";
+import { Button, Text, useScreen, Textarea } from "@octal/ui";
 import { KeyboardInputEvent } from "src/types";
 import { usePermissions, useSpace } from "@workspace/Space";
 import { useActions } from "@workspace/Board/Card";
@@ -21,24 +21,23 @@ interface IEdit {
     onSubmit: (value: string) => void;
 }
 
-function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
+function Edit({ value, onSubmit, onClose }: IEdit) {
     const name = useInput(value);
 
-    function handleKeyPress(e: KeyboardInputEvent) {
-        if (e.key == "Enter" && name.valid) {
-            onSubmit(name.value);
-            onClose();
-        }
+    function handleKeyPress() {
+        onSubmit(name.value);
+        onClose();
     }
 
     return (
-        <input
+        <Textarea.Input
             {...name.props}
             autoFocus
+            value={name.props.value}
+            onChange={name.setValue}
             onBlur={onClose}
-            disabled={disabled}
-            className="px-2 focus:outline-none focus:text-gray-800 text-left text-2xl text-gray-700 font-black"
-            onKeyPress={handleKeyPress}
+            className="w-full max-w-full px-2 sm:py-0 focus:ring focus:text-gray-800 text-left text-2xl text-gray-700 font-black"
+            onSubmit={handleKeyPress}
         />
     );
 }
@@ -75,7 +74,7 @@ export default function Header({ card, ...props }: IHeader) {
 
     return (
         <div className="flex px-4  py-4 flex-row justify-between">
-            <div className="flex flex-row items-start sm:items-center">
+            <div className="flex-1 flex flex-row items-start sm:items-center">
                 {owner && editing && !board.is_archived ? (
                     <Edit
                         value={card.name}
@@ -92,20 +91,22 @@ export default function Header({ card, ...props }: IHeader) {
                                     ? handleSetEditingMode
                                     : undefined
                             }
-                            className="text-left text-2xl text-gray-800 font-black">
+                            className="overflow-wrap-anywhere text-left text-2xl text-gray-800 font-black">
                             <Text>{card.name}</Text>
                         </span>
                     </div>
                 )}
             </div>
-            <div className="flex flex-row justify-end items-start sm:items-center">
-                {(screen.tablet || screen.desktop) && (
-                    <Actions card={card} onClose={props.onClose} />
-                )}
+            <div className="md:flex-1 flex flex-col items-end justify-start">
+                <div className="flex flex-row">
+                    {(screen.tablet || screen.desktop) && (
+                        <Actions card={card} onClose={props.onClose} />
+                    )}
 
-                <Button variant="icon" onClick={props.onClose}>
-                    <Icons.Close className="text-gray-500" />
-                </Button>
+                    <Button variant="icon" onClick={props.onClose}>
+                        <Icons.Close className="text-gray-500" />
+                    </Button>
+                </div>
             </div>
         </div>
     );

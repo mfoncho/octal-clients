@@ -29,6 +29,10 @@ body {
     display: flex;
 }
 
+.overflow-wrap-anywhere {
+    overflow-wrap: anywhere
+}
+
 .inline-emoji {
     background-position: 50%;
     background-repeat: no-repeat;
