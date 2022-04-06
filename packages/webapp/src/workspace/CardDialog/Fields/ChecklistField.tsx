@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { List } from "immutable";
 import InfoIcon from "@material-ui/icons/Info";
 import Field, { IField } from "./Field";
+import * as Icons from "@octal/icons";
 import { BiTrash as DeleteTaskIcon } from "react-icons/bi";
 import { MdCancel as CancelIcon } from "react-icons/md";
 import { useFieldAction } from "@workspace/Board/hooks";
@@ -222,7 +223,7 @@ export default function ChecklistField({ field, handle }: IField) {
     return (
         <Field
             handle={handle}
-            icon={InfoIcon}
+            icon={Icons.Field.Checklist}
             field={field}
             buttonRef={fieldRef}
             onClick={handleTogglePopper}>

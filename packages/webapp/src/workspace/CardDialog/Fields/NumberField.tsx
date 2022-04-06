@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
 import { Textarea, Markdown } from "@octal/ui";
-import InfoIcon from "@material-ui/icons/Info";
+import * as Icons from "@octal/icons";
 import { useInput } from "src/utils";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { CardTextValueRecord, CardNumberValueRecord } from "@octal/store";
@@ -64,7 +64,7 @@ export default function NumberField({ field, handle }: IField) {
     return (
         <Field
             handle={handle}
-            icon={InfoIcon}
+            icon={Icons.Field.Number}
             onClick={handleToggleEditMode}
             field={field}>
             {editing ? (

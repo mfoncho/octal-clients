@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import InfoIcon from "@material-ui/icons/Info";
+import * as Icons from "@octal/icons";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { CardDatetimeValueRecord } from "@octal/store";
 import Field, { IField } from "./Field";
@@ -64,7 +64,7 @@ export default function DateTimeField({ field, handle }: IField) {
     return (
         <Field
             handle={handle}
-            icon={InfoIcon}
+            icon={Icons.Field.DateTime}
             buttonRef={fieldRef}
             onClick={handleOpenDatePicker}
             field={field}>

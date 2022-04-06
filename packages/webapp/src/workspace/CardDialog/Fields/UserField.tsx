@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import InfoIcon from "@material-ui/icons/Info";
+import * as Icons from "@octal/icons";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import { useFieldAction } from "@workspace/Board/hooks";
 import {
@@ -75,7 +75,7 @@ export default function UserField({ field, handle }: IUserField) {
 
     return (
         <Field
-            icon={InfoIcon}
+            icon={Icons.Field.Users}
             handle={handle}
             field={field}
             buttonRef={fieldRef}

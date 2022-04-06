@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import InfoIcon from "@material-ui/icons/Info";
 import { useFieldAction } from "@workspace/Board/hooks";
 import {
     CardLabelValueRecord,
@@ -7,6 +6,7 @@ import {
     LabelRecord,
 } from "@octal/store";
 import Field from "./Field";
+import * as Icons from "@octal/icons";
 import Label from "@workspace/Board/Label";
 import { useLabels } from "@workspace/Board";
 import LabelsPopper from "@workspace/Board/LabelsPopper";
@@ -74,7 +74,7 @@ export default function LabelField({ field, handle }: ILabelField) {
 
     return (
         <Field
-            icon={InfoIcon}
+            icon={Icons.Field.Label}
             handle={handle}
             field={field}
             buttonRef={fieldRef}
