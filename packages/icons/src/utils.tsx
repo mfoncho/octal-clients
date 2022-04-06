@@ -6,7 +6,7 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import SvgIcon from "@material-ui/core/SvgIcon";
 
-library.add(fab as any, fas, far as any);
+library.add(fab as any, fas as any, far as any);
 
 export function createFontAwesomeIcon({ icon }: IconDefinition) {
     const [vwidth, vheight, _sa, _snull, path] = icon;
