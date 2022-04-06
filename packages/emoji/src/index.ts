@@ -20,6 +20,8 @@ export default {
     },
 
     test(emoticon: string) {
-        return new RegExp(`^${pattern}$`, "g").test(emoticon);
+        if (emoticon.length <= 4)
+            return new RegExp(`^${pattern}$`, "g").test(emoticon);
+        return false;
     },
 };
