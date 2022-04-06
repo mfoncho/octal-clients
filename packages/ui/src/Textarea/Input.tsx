@@ -86,10 +86,11 @@ export default function Input(props: IInput) {
     const [value, setValue] = useState<Descendant[]>(initialValue);
 
     useEffect(() => {
-        let { value } = props;
-        value = value.split("\n").join(" ").trim();
-        if (Boolean(value)) {
-            setValue(slater.parse(value!) as any);
+        let pvalue = props.value.split("\n").join(" ").trim();
+        let ivalue = slater.serialize(value).trim();
+        if (pvalue != ivalue) {
+            let parsed = slater.parse(pvalue!);
+            setValue(parsed as any);
         }
     }, [props.value]);
 
@@ -181,6 +182,7 @@ export default function Input(props: IInput) {
                     "border py-1.5 px-2 rounded-md min-h-11"
                 )}>
                 <Editable
+                    style={{ overflowWrap: "anywhere" }}
                     onBlur={handleUnfocused}
                     onFocus={handleFocused}
                     autoFocus={props.autoFocus}
