@@ -451,7 +451,6 @@ export interface LoadCardsPayload {
 
 export interface CreateLabelParams {
     name: string;
-    icon: string;
     color: string;
 }
 
@@ -470,12 +469,11 @@ export interface UpdateLabelPayload {
     label_id: string;
     params: {
         name?: string;
-        icon?: string;
         color?: string;
     };
 }
 
-export interface RemoveChecklistPayload extends Unique { }
+export interface RemoveChecklistPayload extends Unique {}
 
 export type BoardPartial = Require<Partial<io.Board>, "id" | "space_id">;
 
@@ -489,7 +487,7 @@ export type ChecklistDeletedPayload = Require<
     "id" | "card_id"
 >;
 
-export interface UnarchiveColumnPayload extends ArchiveColumnPayload { }
+export interface UnarchiveColumnPayload extends ArchiveColumnPayload {}
 
 export type RemoveLabelPayload = Require<Partial<io.Label>, "id" | "board_id">;
 
