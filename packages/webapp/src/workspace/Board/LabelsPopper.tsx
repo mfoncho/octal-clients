@@ -3,7 +3,7 @@ import Label from "@workspace/Board/Label";
 import * as Icons from "@octal/icons";
 import { useInput } from "src/utils";
 import { LabelRecord } from "@octal/store/lib/records";
-import { Popper, Emoji, Text, Button, Dialog } from "@octal/ui";
+import { Popper, Emoji, Text, Button, Dialog, Textarea } from "@octal/ui";
 import { useLabels, useBoardActions } from "@workspace/Board/hooks";
 
 interface ILabelsPopper {
@@ -18,13 +18,11 @@ interface ILabels {
 
 interface IFormPayload {
     name: string;
-    icon: string;
     color: string;
 }
 
 interface ILabelForm {
     name?: string;
-    icon?: string;
     color?: string;
     disabled?: boolean;
     onClose: (e: React.MouseEvent) => void;
@@ -97,7 +95,6 @@ const Warning = Dialog.create<IDialog>((props) => {
 });
 
 function LabelForm(props: ILabelForm) {
-    const icon = useInput(props.icon ?? "");
     const name = useInput(props.name ?? "");
     const color = useInput(props.color ?? "");
     const iconBtnRef = useRef<HTMLButtonElement>(null);
@@ -113,37 +110,19 @@ function LabelForm(props: ILabelForm) {
         e.stopPropagation();
         e.preventDefault();
         props.onSubmit({
-            icon: icon.value,
             name: name.value.trim(),
             color: color.value,
         });
     }
 
-    function handleKeyPress(e: React.KeyboardEvent) {
-        if (e.key == "Backspace" && name.value.length == 0) {
-            icon.setValue("");
-        }
-    }
-
     return (
         <div className="flex flex-col">
-            <div className="relative flex flex-row">
-                <input
-                    disabled={props.disabled}
-                    className="form-input font-semibold text-gray-800 pl-10 m-2 rounded-md border-gray-400"
-                    {...name.props}
-                    onKeyDown={handleKeyPress}
+            <div className="relative flex flex-row overflow-hidden">
+                <Textarea.Input
+                    value={name.value}
+                    onChange={name.setValue}
+                    className="form-input w-full max-w-full font-semibold text-gray-800 m-2 rounded-md focus:ring border-1.5 focus:border-primary-400 text-base"
                 />
-                <div className="absolute h-full py-2 px-3 flex items-center justify-center">
-                    <Button
-                        ref={iconBtnRef}
-                        disabled={props.disabled}
-                        className="text-lg"
-                        onClick={(e) => setEpicker(true)}
-                        variant="icon">
-                        <Text>{icon.value}</Text>
-                    </Button>
-                </div>
             </div>
             <div className="grid grid-flow-row grid-cols-7 p-2">
                 {colors.map((col) => {
@@ -174,10 +153,8 @@ function LabelForm(props: ILabelForm) {
                 <Button
                     onClick={handleSubmit}
                     disabled={
-                        (Boolean(props.name)
-                            ? !(name.valid || icon.valid) && !color.valid
-                            : (!name.valid && !icon.valid) || !color.valid) ||
-                        props.disabled
+                        props.name === name.value.trim() &&
+                        color.value === props.color
                     }
                     color="primary">
                     Save
@@ -187,7 +164,7 @@ function LabelForm(props: ILabelForm) {
                 open={epicker}
                 anchorEl={iconBtnRef.current}
                 onSelect={(val) => {
-                    icon.setValue(val);
+                    name.setValue((name) => name + val);
                     setEpicker(false);
                 }}
                 onHoverAway={() => setEpicker(false)}
@@ -262,7 +239,6 @@ function Labels(props: ILabels) {
         return (
             <LabelForm
                 name={label.name}
-                icon={label.icon}
                 color={label.color}
                 onClose={closeEditor}
                 onSubmit={handleUpdateLabel}
@@ -291,7 +267,6 @@ function Labels(props: ILabels) {
                                     borderColor: label.color,
                                 }}
                             />
-                            {label.icon && <Text>{label.icon!}</Text>}
                             <span className="p-1 font-semibold text-sm text-gray-700">
                                 <Text>{label.name}</Text>
                             </span>
@@ -350,7 +325,7 @@ export default Popper.create<HTMLDivElement, ILabelsPopper>((props) => {
             anchorEl={props.anchorEl}
             placement="bottom-start"
             onClickAway={props.onClickAway}
-            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 min-w-[256px] pt-4 bg-white shadow-md">
+            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 min-w-[256px] max-w-[256px] overflow-hidden pt-4 bg-white shadow-md">
             {form ? (
                 <LabelForm onClose={closeForm} onSubmit={handleCreateLabel} />
             ) : (
