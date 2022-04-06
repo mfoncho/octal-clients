@@ -40,6 +40,7 @@ export default React.memo<IThread>(({ id }) => {
             <div className="flex flex-col flex-none p-1 sm:p-4">
                 <Textarea.Post
                     {...postInput}
+                    value=""
                     upload={undefined}
                     placeholder=""
                 />

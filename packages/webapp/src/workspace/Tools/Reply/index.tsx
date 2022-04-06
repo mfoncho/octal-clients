@@ -40,7 +40,13 @@ export const icon = Icons.Reply;
 
 const Input = React.memo<{ placeholder?: string; id: string }>((props) => {
     const postInput = usePostInput(props.id);
-    return <Textarea.Post {...postInput} placeholder={props.placeholder} />;
+    return (
+        <Textarea.Post
+            {...postInput}
+            value=""
+            placeholder={props.placeholder}
+        />
+    );
 });
 
 export default React.memo<IReply>((props) => {
