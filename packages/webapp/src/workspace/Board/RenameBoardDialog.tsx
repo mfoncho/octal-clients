@@ -15,7 +15,7 @@ export default Dialog.create<IRenameTopicDialog>((props) => {
 
     const name = useInput(props.board.name);
 
-    function handleCreateTopic(e: React.MouseEvent) {
+    function handleRenameBoard(e: React.MouseEvent) {
         e.stopPropagation();
         e.preventDefault();
         setLoading(true);
@@ -65,7 +65,7 @@ export default Dialog.create<IRenameTopicDialog>((props) => {
                     disabled={
                         name.value.trim() === props.board.name.trim() || loading
                     }
-                    onClick={handleCreateTopic}
+                    onClick={handleRenameBoard}
                     color="primary">
                     Save
                 </Button>
