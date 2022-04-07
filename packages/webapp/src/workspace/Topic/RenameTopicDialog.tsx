@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import * as Icons from "@octal/icons";
-import { Dialog, Text, Emoji, Button } from "@octal/ui";
+import { Dialog, Text, Button, Textarea } from "@octal/ui";
 import { TopicRecord } from "@octal/store/lib/records";
-import { useInput, nameParts } from "src/utils";
+import { useInput } from "src/utils";
 import { useActions } from "./hooks";
 
 interface IRenameTopicDialog {
@@ -12,34 +12,21 @@ interface IRenameTopicDialog {
 export default Dialog.create<IRenameTopicDialog>((props) => {
     const actions = useActions(props.topic);
     const [loading, setLoading] = useState(false);
-    const iconBtnRef = useRef<HTMLButtonElement>(null);
-    const [picker, setPicker] = useState<boolean>(false);
-    const [iconPart, namePart] = nameParts(props.topic.name);
 
-    const name = useInput(namePart);
+    const name = useInput(props.topic.name);
 
-    const icon = useInput(iconPart);
-
-    const namePreview = `${icon.value} ${name.value}`.trim();
-
-    function handleCreateTopic(e: React.MouseEvent) {
+    function handleRenameTopic(e: React.MouseEvent) {
         e.stopPropagation();
         e.preventDefault();
         setLoading(true);
         actions
             .updateTopic({
-                name: namePreview,
+                name: name.value.trim(),
             })
             .then(() => {
                 props.onClose(e);
             })
             .catch(() => setLoading(false));
-    }
-
-    function handleKeyPress(e: React.KeyboardEvent) {
-        if (e.key == "Backspace" && (e.target as any).selectionStart == 0) {
-            icon.setValue("");
-        }
     }
 
     return (
@@ -54,11 +41,7 @@ export default Dialog.create<IRenameTopicDialog>((props) => {
                 <div className="flex flex-row items-center overflow-hidden">
                     <Icons.Topic className="h-6 w-6 text-gray-500" />
                     <span className="font-extrabold truncate text-xl px-2 text-gray-800">
-                        <Text>
-                            {namePreview.length > 0
-                                ? namePreview
-                                : "Create a new topic"}
-                        </Text>
+                        <Text>{name.value.trim()}</Text>
                     </span>
                 </div>
                 <button
@@ -69,46 +52,22 @@ export default Dialog.create<IRenameTopicDialog>((props) => {
             </div>
             <Dialog.Content className="flex flex-col">
                 <div className="relative flex flex-row">
-                    <input
+                    <Textarea.Input
                         disabled={loading}
-                        className="form-input font-semibold w-full text-gray-800 pl-11 rounded-md border-gray-400"
-                        {...name.props}
-                        onKeyUp={handleKeyPress}
+                        className="form-input focus:ring text-base font-semibold w-full text-gray-800 rounded-md border-gray-400"
+                        value={name.value}
+                        onChange={name.setValue}
                     />
-                    <div className="absolute h-full py-2 px-1.5 flex items-center justify-center">
-                        <Button
-                            ref={iconBtnRef}
-                            disabled={loading}
-                            className="text-lg"
-                            onClick={() => setPicker(true)}
-                            variant="icon">
-                            <Text>{icon.value}</Text>
-                        </Button>
-                    </div>
                 </div>
-                <Emoji.Picker.Popper
-                    open={picker}
-                    anchorEl={iconBtnRef.current}
-                    placement="top-start"
-                    onSelect={(val) => {
-                        icon.setValue(val);
-                        setPicker(false);
-                    }}
-                    onClickAway={() => setPicker(false)}
-                />
             </Dialog.Content>
             <Dialog.Actions className="rounded-b-lg">
                 <Button
                     disabled={
-                        name.value.trim().length == 0 ||
-                        (!name.valid && !icon.valid) ||
-                        namePreview.length == 0 ||
-                        namePreview == props.topic.name ||
-                        loading
+                        name.value.trim() === props.topic.name.trim() || loading
                     }
-                    onClick={handleCreateTopic}
+                    onClick={handleRenameTopic}
                     color="primary">
-                    Update
+                    Save
                 </Button>
             </Dialog.Actions>
         </Dialog.Base>
