@@ -117,11 +117,7 @@ export default React.memo<ICard>(({ card, ...props }) => {
                 <div className="py-1 px-2 flex flex-row items-center flex-wrap">
                     {labels.map((label) => (
                         <div key={label.id} className="pr-1.5 pb-1.5">
-                            <Label
-                                icon={label.icon}
-                                name={label.name}
-                                color={label.color}
-                            />
+                            <Label name={label.name} color={label.color} />
                         </div>
                     ))}
                 </div>

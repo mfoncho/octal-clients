@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import * as Icons from "@octal/icons";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import { useFieldAction } from "@workspace/Board/hooks";

@@ -37,26 +37,31 @@ export default function LabelField({ field, handle }: ILabelField) {
     const actions = useFieldAction(field);
 
     const selected = field.values
-        .map((value: any) => value.label_id)
+        .map((value: any) => (value as CardLabelValueRecord).label_id)
         .toList()
         .toJS() as string[];
 
-    const labels = boardlabels.filter((label) => selected.includes(label.id));
+    const labels = boardlabels.toMap().mapKeys((_index, val) => val.id);
 
     function handleToggleEditMode() {
         setEditing((editing) => !editing);
     }
 
-    function renderLabel(label: LabelRecord) {
-        return (
-            <div key={label.id} className="mr-1.5 mb-1.5">
-                <Label
-                    icon={label.icon}
-                    name={label.name}
-                    color={label.color}
-                />
-            </div>
-        );
+    function renderLabel(id: string) {
+        const label = labels.get(id);
+        if (label) {
+            const onClose = () => handleLabelInput(label);
+            return (
+                <div key={label.id} className="mr-1.5 mb-1.5">
+                    <Label
+                        name={label.name}
+                        color={label.color}
+                        onClose={onClose}
+                    />
+                </div>
+            );
+        }
+        return null;
     }
 
     function handleLabelInput(label: LabelRecord) {
@@ -80,7 +85,7 @@ export default function LabelField({ field, handle }: ILabelField) {
             buttonRef={fieldRef}
             onClick={handleToggleEditMode}>
             <div className="flex flex-row flex-wrap items-center">
-                {labels.map(renderLabel)}
+                {selected.map(renderLabel)}
             </div>
             <LabelsPopper
                 open={editing}
