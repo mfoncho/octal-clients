@@ -5,7 +5,6 @@ export interface CreateLabelRequest {
     board_id: string;
     params: {
         name: string;
-        icon: string;
         color: string;
     };
 }
@@ -19,7 +18,6 @@ export interface UpdateLabelRequest {
     board_id: string;
     label_id: string;
     params: {
-        icon?: string;
         name?: string;
         color?: string;
     };
