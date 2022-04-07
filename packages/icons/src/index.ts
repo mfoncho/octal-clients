@@ -26,6 +26,7 @@ export { default as Public } from "./Public";
 export { default as Workspace } from "./Workspace";
 export { default as VerifiedBadge } from "./VerifiedBadge";
 export { default as Field } from "./Field";
+export { default as CloseCircleSolid } from "./CloseCircleSolid";
 
 export { default as Forum } from "./Forum";
 export { default as MoveCard } from "./LeftRight";
