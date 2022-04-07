@@ -40,7 +40,7 @@ function UserValue({ value, onClose }: IUserValue) {
         setDisabled(true);
     }
     return (
-        <div className="group relative flex flex-row p-2 rounded-lg bg-gray-100 items-center">
+        <div className="group hover:relative flex flex-row p-2 rounded-lg bg-gray-100 items-center">
             <img
                 alt={user.username}
                 className="h-6 w-6 rounded-full"
