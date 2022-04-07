@@ -426,6 +426,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
                         className="p-2 flex-1 break-all"
                         placeholder="Post message"
                         onKeyDown={handleKeyDown}
+                        disabled={props.disabled}
                         renderLeaf={renderLeaf}
                         renderElement={renderElement}
                     />

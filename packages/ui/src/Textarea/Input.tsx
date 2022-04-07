@@ -28,6 +28,7 @@ export interface IInput {
     autoFocus?: boolean;
     placeholder?: string;
     value: string;
+    disabled?: boolean;
 }
 
 interface InputClasses {
@@ -182,6 +183,7 @@ export default function Input(props: IInput) {
                     "border py-1.5 px-2 rounded-md min-h-11"
                 )}>
                 <Editable
+                    disabled={props.disabled}
                     style={{ overflowWrap: "anywhere" }}
                     onBlur={handleUnfocused}
                     onFocus={handleFocused}

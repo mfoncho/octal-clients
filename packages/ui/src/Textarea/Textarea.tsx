@@ -57,6 +57,7 @@ export interface ITextarea {
     autoFocus?: boolean;
     placeholder?: string;
     value: string;
+    disabled?: boolean;
 }
 
 export const Mentionable = React.createContext<IMentionable>({});
@@ -171,6 +172,7 @@ export default function Textarea(props: ITextarea) {
             <div ref={rootRef} className={props.className}>
                 <Toolbar />
                 <Editable
+                    disabled={props.disabled}
                     onBlur={props.onBlur}
                     onKeyDown={handleKeyDown}
                     renderLeaf={renderLeaf}
