@@ -56,19 +56,14 @@ export function Mention({ attributes, children, element }: any) {
     );
 }
 
-export default function Suggestion({
-    suggestion,
-    term,
-    selected,
-    value,
-}: IMention) {
+export default function Suggestion({ suggestion, selected, value }: IMention) {
     switch (suggestion) {
         case "user":
             const { user } = value as any;
             return (
                 <div
                     className={clx(
-                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white p-2",
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-200 hover:text-white p-2",
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <div className="font-bold flex flex-row items-center">
@@ -93,7 +88,7 @@ export default function Suggestion({
             return (
                 <div
                     className={clx(
-                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white p-2",
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-200 hover:text-white p-2",
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <span className="font-bold flex flex-row items-center">
@@ -109,7 +104,7 @@ export default function Suggestion({
             return (
                 <div
                     className={clx(
-                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white p-2",
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-100 hover:text-white p-2",
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <span className="font-bold flex flex-row items-center">
