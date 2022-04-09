@@ -1,16 +1,16 @@
 import Textarea from "./Textarea";
-import Mention from "./Mention";
+import Suggestions from "./Suggestion";
 import Post from "./Post";
 import Input from "./Input";
 
 export type TextAreaType = typeof Textarea & {
     Post: typeof Post;
     Input: typeof Input;
-    Mention: typeof Mention;
+    Suggestions: typeof Suggestions;
 };
 
 (Textarea as TextAreaType).Post = Post;
 (Textarea as TextAreaType).Input = Input;
-(Textarea as TextAreaType).Mention = Mention;
+(Textarea as TextAreaType).Suggestions = Suggestions;
 
 export default Textarea as TextAreaType;

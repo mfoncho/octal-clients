@@ -4,7 +4,7 @@ import Elements from "../Elements";
 import Popover from "@material-ui/core/Popover";
 import * as Icons from "@octal/icons";
 import emoji from "@octal/emoji";
-import Mention from "./Mention";
+import Suggestions from "./Suggestion";
 import Button, { Base as ButtonBase } from "../Button";
 import UploadQueue from "./UploadQueue";
 import { Slater } from "@octal/markdown";
@@ -432,7 +432,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
                     />
                 </div>
 
-                <Mention.Popper
+                <Suggestions.Popper
                     onSelect={handleMentionSelected}
                     anchorEl={rootRef.current}
                 />

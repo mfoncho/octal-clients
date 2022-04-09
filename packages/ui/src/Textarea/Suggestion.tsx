@@ -1,45 +1,55 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
 import { Range, Editor } from "slate";
 import { ReactEditor, useSlate } from "slate-react";
 import ReactPortal from "./Portal";
 import ReactPopper from "../Popper";
 import Elements from "../Elements";
+import emoji from "@octal/emoji";
 
-export interface IMention {
+export interface ISuggestion {
     value: string;
     [key: string]: any;
 }
 
-export interface IMentions {
-    prefix: string;
+export interface ArrayLike<T = any> {
+    map: <S = any>(cb: (val: T, index: number) => S) => ArrayLike<S>;
+}
+
+export interface ISuggestions {
+    term: string;
+    type: string;
+    suggestion: string;
     selected?: number;
-    mentions: IMention[];
+    values: ISuggestion[];
     onSelect?: (e: any) => void;
     onClose?: (e: KeyboardEvent) => void;
 }
 
-export interface IMentionCollection<T = IMention> {
-    sort?: (a: T, b: T) => 1 | -1 | 0;
-    filter?: (value: T, search: string) => boolean;
-    mentions: T[] | any;
+export interface ISuggestable<T = any> {
+    type: string;
+    pattern: string;
+    suggest: (query: string) => Promise<T[]>;
+}
+export interface ISuggestables<T = any> {
+    [key: string]: ISuggestable<T>;
 }
 
-export interface IMentionables {
-    [key: string]: IMentionCollection;
+export interface ISubject {
+    type: string;
+    term: string;
+    suggestion: string;
+    target: Range | null;
 }
 
 export interface IBasePortal {
-    prefix: string;
-    subject: string;
+    subject: ISubject;
     selected?: number;
     onSelect?: (e: any) => void;
     onClose?: (e: KeyboardEvent) => void;
-    target: Range;
 }
 
 export interface IBasePopper {
-    prefix: string;
-    subject: string;
+    subject: ISubject;
     onSelect?: (e: any) => void;
     onClose?: (e: KeyboardEvent) => void;
 }
@@ -53,31 +63,40 @@ export interface IPortal {
     onSelect?: (e: any) => void;
 }
 
-export const Context = React.createContext<IMentionables>({});
+export const Context = React.createContext<ISuggestables>({
+    emoji: emoji.suggestable,
+});
+
+const subjectDefault: ISubject = {
+    suggestion: "",
+    type: "",
+    target: null,
+    term: "",
+};
+
+const nomatch = new RegExp("$^");
 
 function useSubject() {
     const editor = useSlate();
-    const [target, setTarget] = useState<Range | null>(null);
-    const [prefix, setPrefix] = useState<string>("");
-    const [subject, setSubject] = useState<string>("");
-    const mentionable = useContext(Context);
-    const { selection } = editor;
+    const context = useContext(Context);
+    const [subject, setSubject] = useState<ISubject>(subjectDefault);
 
     function clear() {
-        if (Boolean(target)) {
-            setTarget(null);
-        }
-        if (Boolean(prefix)) {
-            setPrefix("");
-        }
-        if (Boolean(subject)) {
-            setSubject("");
+        if (Boolean(subject.target) || Boolean(subject.term)) {
+            setSubject(subjectDefault);
         }
     }
+
     useEffect(() => {
+        const { selection } = editor;
         if (selection && Range.isCollapsed(selection)) {
-            const prefixes = Object.keys(mentionable);
-            const preregexp = new RegExp(`^[${prefixes.join("")}](\\w+)$`);
+            const patterns = Object.keys(context).map((key) => {
+                return `(?<${key}>${context[key].pattern})`;
+            });
+            const pattern =
+                patterns.length > 0
+                    ? new RegExp(`^${patterns.join("|")}$`)
+                    : nomatch;
 
             const [start] = Range.edges(selection);
             const wordBefore = Editor.before(editor, start, { unit: "word" });
@@ -85,19 +104,27 @@ function useSubject() {
             const beforeRange = before && Editor.range(editor, before, start);
             const beforeText =
                 beforeRange && Editor.string(editor, beforeRange);
-            const beforeMatch = beforeText && beforeText.match(preregexp);
+            const beforeMatch = beforeText && beforeText.match(pattern);
             const after = Editor.after(editor, start);
             const afterRange = Editor.range(editor, start, after);
             const afterText = Editor.string(editor, afterRange);
             const afterMatch = afterText.match(/^(\s|$)/);
 
-            if (beforeMatch && afterMatch && prefixes.length > 0) {
-                const pre = beforeMatch[0][0];
-                const word = beforeMatch[1];
-                if (word != subject || pre != prefix) {
-                    setSubject(word);
-                    setPrefix(pre);
-                    setTarget(beforeRange as any);
+            if (beforeMatch && afterMatch) {
+                const groups = beforeMatch.groups ?? {};
+                const suggestion = Object.keys(groups).find((key) =>
+                    Boolean(groups[key])
+                )!;
+                const target = beforeRange;
+                const term = groups[suggestion];
+                if (term != subject.term) {
+                    const type = context[suggestion].type;
+                    setSubject({
+                        type,
+                        term,
+                        target,
+                        suggestion,
+                    });
                 }
             } else {
                 clear();
@@ -105,54 +132,46 @@ function useSubject() {
         }
     });
 
-    return { subject, prefix, target };
+    return subject;
 }
 
-function useMemtions(prefix: string, subject: string = "") {
-    const mentionable = useContext(Context);
-    const collection = mentionable[prefix];
+function useSuggestions(subject: ISubject) {
+    const suggestionable = useContext(Context);
+    const search = suggestionable[subject.suggestion];
 
-    if (collection && Boolean(subject)) {
-        let mentions: IMention[] = [];
-        if (collection.filter) {
-            mentions = (collection.mentions as any).filter((mention: any) =>
-                // This looks nasty but its
-                // typescript
-                collection.filter!(mention, subject)
-            );
+    return useMemo(() => {
+        if (search && subject.term.length > 0) {
+            return search.suggest(subject.term);
         }
-        if (collection.sort) {
-            mentions = mentions.sort(collection.sort);
-        }
-        return mentions;
-    }
+        return Promise.resolve([]);
+    }, [search, subject.term, subject.type]);
 }
 
 function useControls(props: IPortal) {
     const [open, setOpen] = useState<boolean>(true);
-    const { subject, target, prefix } = useSubject();
+    const subject = useSubject();
 
     useEffect(() => {
-        if (subject === "") {
+        if (subject.term === "") {
             setOpen(true);
         }
-    }, [subject]);
+    }, [subject.term]);
 
     function handleClose() {
         setOpen(false);
     }
 
-    // Close mentions before/after select or ***CRASH***
-    function handleSelect(mention: IMention) {
+    // Close suggestions before/after select or ***CRASH***
+    function handleSelect(suggestion: ISuggestion) {
         handleClose();
-        props.onSelect!({ target, mention, subject, prefix });
+        props.onSelect!({ ...subject, suggestion });
     }
 
-    return { open, handleSelect, handleClose, subject, target, prefix };
+    return { open, handleSelect, handleClose, subject };
 }
 
-export function Mentions(props: IMentions) {
-    const { mentions, prefix } = props;
+export function Suggestions(props: ISuggestions) {
+    const { values } = props;
     const [selected, setSelected] = React.useState<number>(-1);
 
     const Components = Elements.useElements();
@@ -179,7 +198,7 @@ export function Mentions(props: IMentions) {
             if (selected < 0) {
                 setSelected(0);
             } else if (selected > -1 && props.onSelect) {
-                props.onSelect(props.mentions[selected]);
+                props.onSelect(props.values[selected]);
             }
         } else if (event.key == "Escape") {
             calmEvent(event);
@@ -191,24 +210,26 @@ export function Mentions(props: IMentions) {
             setSelected((val) => (val > 0 ? val - 1 : val));
         } else if (event.key == "ArrowDown") {
             calmEvent(event);
-            setSelected((val) => (val >= mentions.length - 1 ? 0 : val + 1));
+            setSelected((val) => (val >= values.length - 1 ? 0 : val + 1));
         }
     }
 
     return (
         <React.Fragment>
-            {mentions.map((mention, index) => {
+            {values.map((value, index) => {
                 return (
                     <div
                         role="button"
                         key={String(index)}
                         onClick={() =>
-                            props.onSelect ? props.onSelect(mention) : null
+                            props.onSelect ? props.onSelect(value) : null
                         }
                         className="flex flex-col">
-                        <Components.Mention
-                            prefix={prefix}
-                            mention={mention}
+                        <Components.Suggestion
+                            value={value}
+                            term={props.term}
+                            type={props.term}
+                            suggestion={props.suggestion}
                             selected={selected == index}
                         />
                     </div>
@@ -218,16 +239,17 @@ export function Mentions(props: IMentions) {
     );
 }
 
-export function BasePortal({ target, ...props }: IBasePortal) {
+export function BasePortal({ subject, ...props }: IBasePortal) {
     const ref = useRef<HTMLDivElement | null>(null);
     const editor = useSlate();
+    const [values, setValues] = useState<any>([]);
 
-    const mentions = useMemtions(props.prefix, props.subject);
+    const suggestions = useSuggestions(subject);
 
     useEffect(() => {
         const el = ref.current;
-        if (el && target && mentions && mentions.length > 0) {
-            const domRange = ReactEditor.toDOMRange(editor, target);
+        if (el && subject.target && suggestions && values.length > 0) {
+            const domRange = ReactEditor.toDOMRange(editor, subject.target);
             const rect = domRange.getBoundingClientRect();
             if (
                 rect.top + el.getBoundingClientRect().height + 24 >
@@ -247,26 +269,36 @@ export function BasePortal({ target, ...props }: IBasePortal) {
                 el.style.left = `${rect.left + window.pageXOffset}px`;
             }
         }
-    }, [mentions?.length, target, ref.current]);
+        suggestions.then(setValues);
+    }, [values, suggestions, subject.target, ref.current]);
 
     return (
         <ReactPortal>
             <div
                 ref={ref}
                 className="absolute flex min-w-[150px] flex-col max-h-56 p-2 border border-gray-200 shadow-lg rounded-md z-[2000] bg-white overflow-y-auto">
-                <Mentions {...props} mentions={mentions!} />
+                <Suggestions
+                    term={subject.term}
+                    type={subject.type}
+                    values={values}
+                    suggestion={subject.suggestion}
+                />
             </div>
         </ReactPortal>
     );
 }
 
 export const BasePopper = ReactPopper.create<HTMLDivElement, IBasePopper>(
-    (props) => {
-        const mentions = useMemtions(props.prefix, props.subject);
-        if (mentions && mentions.length > 0) {
+    ({ subject, ...props }) => {
+        const [values, setValues] = useState<any>([]);
+        const suggestions = useSuggestions(subject);
+        useEffect(() => {
+            suggestions.then(setValues);
+        }, [suggestions]);
+        if (values.length > 0) {
             return (
                 <ReactPopper
-                    as={"ul"}
+                    as={"div"}
                     placement="top-start"
                     distance={10}
                     tabIndex={-1}
@@ -274,7 +306,12 @@ export const BasePopper = ReactPopper.create<HTMLDivElement, IBasePopper>(
                     onClickAway={props.onClickAway}
                     style={{ width: props.anchorEl?.clientWidth }}
                     className="z-10 flex w-full flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 p-2 bg-white shadow-md  overflow-x-hidden overflow-y-auto">
-                    <Mentions {...props} mentions={mentions!} />
+                    <Suggestions
+                        term={subject.term}
+                        type={subject.type}
+                        values={values}
+                        suggestion={subject.suggestion}
+                    />
                 </ReactPopper>
             );
         }
@@ -283,14 +320,11 @@ export const BasePopper = ReactPopper.create<HTMLDivElement, IBasePopper>(
 );
 
 export function Portal(props: IPortal) {
-    const { open, target, prefix, subject, handleClose, handleSelect } =
-        useControls(props);
+    const { open, subject, handleClose, handleSelect } = useControls(props);
 
-    if (target && open) {
+    if (subject.target && open) {
         return (
             <BasePortal
-                target={target}
-                prefix={prefix}
                 subject={subject}
                 onClose={handleClose}
                 onSelect={handleSelect}
@@ -301,21 +335,19 @@ export function Portal(props: IPortal) {
 }
 
 export function Popper(props: IPopper) {
-    const { open, prefix, subject, handleClose, handleSelect } =
-        useControls(props);
+    const { open, subject, handleClose, handleSelect } = useControls(props);
     return (
         <BasePopper
-            open={open && Boolean(subject.trim()) && Boolean(prefix)}
-            prefix={prefix}
-            onClose={handleClose}
+            open={open && Boolean(subject.term)}
             subject={subject}
+            onClose={handleClose}
             onSelect={handleSelect}
             anchorEl={props.anchorEl}
         />
     );
 }
 
-type TMention = typeof Portal & {
+type TSuggest = typeof Portal & {
     Popper: typeof Popper;
     Context: typeof Context;
 };
@@ -323,4 +355,4 @@ type TMention = typeof Portal & {
 Portal.Popper = Popper;
 Portal.Context = Context;
 
-export default Portal as TMention;
+export default Portal as TSuggest;

@@ -1,16 +1,18 @@
 import React from "react";
 import Icons from "@octal/icons";
+import Text from "../Text";
 import clx from "classnames";
 
-function Mention({ selected, mention }: any) {
-    const { value } = mention as any;
+function Suggestion({ selected, value }: any) {
     return (
         <div
             className={clx(
-                "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white p-2",
+                "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white text-base p-2",
                 { ["bg-primary-500 text-white"]: selected }
             )}>
-            <span>{value}</span>
+            <span>
+                <Text>{value.value}</Text>
+            </span>
         </div>
     );
 }
@@ -46,7 +48,7 @@ function TableCell({ attributes, children, element }: any) {
     }
 }
 
-function Mentioned({ attributes, children, element }: any) {
+function Mention({ attributes, children, element }: any) {
     return (
         <span {...attributes} contentEditable={false}>
             <span className="px-1 pb-0.5 my-0.5 bg-primary-500 text-white rounded-full font-semibold text-sm">
@@ -252,7 +254,7 @@ const Element = (props: any) => {
             return <Elements.TableCell {...props} />;
 
         case "mention":
-            return <Elements.Mentioned {...props} />;
+            return <Elements.Mention {...props} />;
 
         case "emoji":
             return <Elements.Emoji {...props} />;
@@ -287,8 +289,8 @@ const Element = (props: any) => {
 };
 
 export const defaultElements = {
-    Mentioned: Mentioned,
     Mention: Mention,
+    Suggestion: Suggestion,
     Emoji: Emoji,
     Leaf: Leaf,
     Span: Span,

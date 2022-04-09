@@ -4,7 +4,7 @@ import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import isHotkey from "is-hotkey";
 import Toolbar from "./Toolbar";
-import Mention from "./Mention";
+import Suggestions from "./Suggestion";
 import { Slater } from "@octal/markdown";
 import {
     withPaste,
@@ -20,6 +20,7 @@ import {
     insertMention,
     toggleMark,
 } from "./utils";
+
 import { Transforms, Editor, createEditor, Descendant } from "slate";
 
 const slater = Slater.create();
@@ -33,21 +34,6 @@ const wrappers = [
     withShortcuts,
 ];
 
-export interface IMention {
-    value: string;
-    [key: string]: any;
-}
-
-export interface IMentionCollection<T = IMention> {
-    sort?: (a: T, b: T) => 1 | -1 | 0;
-    filter?: (value: T, search: string) => boolean;
-    mentions: T[] | any;
-}
-
-export interface IMentionable {
-    [key: string]: IMentionCollection;
-}
-
 export interface ITextarea {
     onChange?: (value: string) => void;
     onSubmit?: (value: string) => void;
@@ -59,8 +45,6 @@ export interface ITextarea {
     value: string;
     disabled?: boolean;
 }
-
-export const Mentionable = React.createContext<IMentionable>({});
 
 const HOTKEYS = {
     "mod+b": "bold",
@@ -193,7 +177,7 @@ export default function Textarea(props: ITextarea) {
                         }
                     }}
                 />
-                <Mention onSelect={handleMentionSelected} />
+                <Suggestions onSelect={handleMentionSelected} />
             </div>
         </Slate>
     );
