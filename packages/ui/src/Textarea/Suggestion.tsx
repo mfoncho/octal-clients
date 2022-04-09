@@ -174,6 +174,9 @@ export function Suggestions(props: ISuggestions) {
     const { values } = props;
     const [selected, setSelected] = React.useState<number>(-1);
 
+    const [selectedEl, setSelectedEl] =
+        React.useState<HTMLDivElement | null>(null);
+
     const Components = Elements.useElements();
 
     React.useEffect(() => {
@@ -186,6 +189,14 @@ export function Suggestions(props: ISuggestions) {
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, [selected]);
+
+    React.useEffect(() => {
+        if (props.term && values.length > 0 && selectedEl) {
+            selectedEl.scrollIntoView({ behavior: "smooth", block: "end" });
+        } else if (selectedEl) {
+            setSelectedEl(null);
+        }
+    }, [selectedEl]);
 
     function calmEvent(event: KeyboardEvent) {
         event.preventDefault();
@@ -220,6 +231,7 @@ export function Suggestions(props: ISuggestions) {
                 values.map((value, index) => {
                     return (
                         <div
+                            ref={selected == index ? setSelectedEl : undefined}
                             role="button"
                             key={String(index)}
                             onClick={() =>
