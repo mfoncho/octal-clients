@@ -3,8 +3,9 @@ import { Slate, Editable, withReact } from "slate-react";
 import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import cls from "classnames";
+import Suggestions from "./Suggestion";
 import Markdown, { Slater, nodes } from "@octal/markdown";
-import { isEmojiActive } from "./utils";
+import { isEmojiActive, insertEmoji } from "./utils";
 import { withPaste, wrap } from "./wrappers";
 import { Transforms, createEditor, Descendant } from "slate";
 
@@ -137,6 +138,13 @@ export default function Input(props: IInput) {
         }
     }
 
+    function handleSuggestionSelected(selected: any) {
+        if (selected.type == "emoji") {
+            Transforms.select(editor, selected.target);
+            insertEmoji(editor, selected.value.native);
+        }
+    }
+
     function handleFocused(event: React.FocusEvent<HTMLDivElement>) {
         setFocused(true);
         if (props.onFocus) {
@@ -193,6 +201,7 @@ export default function Input(props: IInput) {
                     placeholder={props.placeholder}
                     renderElement={renderElement}
                 />
+                <Suggestions onSelect={handleSuggestionSelected} />
             </div>
         </Slate>
     );

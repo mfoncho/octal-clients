@@ -17,6 +17,7 @@ import {
 import {
     toggleFormat,
     isEmojiActive,
+    insertEmoji,
     insertMention,
     toggleMark,
 } from "./utils";
@@ -91,9 +92,14 @@ export default function Textarea(props: ITextarea) {
         }
     }, [props.value]);
 
-    function handleMentionSelected({ target, mention }: any) {
-        Transforms.select(editor, target as any);
-        insertMention(editor, mention.value);
+    function handleSuggestionSelected(selected: any) {
+        if (selected.type == "mention") {
+            Transforms.select(editor, selected.target);
+            insertMention(editor, selected.value.value);
+        } else if (selected.type == "emoji") {
+            Transforms.select(editor, selected.target);
+            insertEmoji(editor, selected.value.native);
+        }
     }
 
     function handleChange(val: any) {
@@ -177,7 +183,7 @@ export default function Textarea(props: ITextarea) {
                         }
                     }}
                 />
-                <Suggestions onSelect={handleMentionSelected} />
+                <Suggestions onSelect={handleSuggestionSelected} />
             </div>
         </Slate>
     );
