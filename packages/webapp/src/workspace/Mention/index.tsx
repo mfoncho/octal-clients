@@ -56,7 +56,12 @@ export function Mention({ attributes, children, element }: any) {
     );
 }
 
-export default function Suggestion({ suggestion, selected, value }: IMention) {
+export default function Suggestion({
+    suggestion,
+    term,
+    selected,
+    value,
+}: IMention) {
     switch (suggestion) {
         case "user":
             const { user } = value as any;
@@ -100,12 +105,21 @@ export default function Suggestion({ suggestion, selected, value }: IMention) {
                 </div>
             );
 
-        default:
-            //@ts-ignore
+        case "emoji":
             return (
-                <span>
-                    <Text>{(value as any).native}</Text>
-                </span>
+                <div
+                    className={clx(
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white p-2",
+                        { ["bg-primary-500 text-white"]: selected }
+                    )}>
+                    <span className="font-bold flex flex-row items-center">
+                        <Text>{(value as any).native}</Text>
+                    </span>
+                </div>
             );
+
+        default:
+            //should never reach here
+            return <span />;
     }
 }
