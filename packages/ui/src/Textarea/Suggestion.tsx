@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
 import { Range, Editor } from "slate";
+import emoji from "@octal/emoji";
 import { ReactEditor, useSlate } from "slate-react";
+import Elements from "../Elements";
 import ReactPortal from "./Portal";
 import ReactPopper from "../Popper";
-import Elements from "../Elements";
-import emoji from "@octal/emoji";
 
 export interface ISuggestion {
     value: string;
@@ -19,8 +19,8 @@ export interface ISuggestions {
     term: string;
     type: string;
     suggestion: string;
-    selected?: number;
     values: ISuggestion[];
+    selected?: number;
     onSelect?: (e: any) => void;
     onClose?: (e: KeyboardEvent) => void;
 }
@@ -162,9 +162,9 @@ function useControls(props: IPortal) {
     }
 
     // Close suggestions before/after select or ***CRASH***
-    function handleSelect(suggestion: ISuggestion) {
+    function handleSelect(selected: any) {
         handleClose();
-        props.onSelect!({ ...subject, suggestion });
+        props.onSelect!({ ...subject, selected });
     }
 
     return { open, handleSelect, handleClose, subject };
@@ -278,6 +278,9 @@ export function BasePortal({ subject, ...props }: IBasePortal) {
                 ref={ref}
                 className="absolute flex min-w-[150px] flex-col max-h-56 p-2 border border-gray-200 shadow-lg rounded-md z-[2000] bg-white overflow-y-auto">
                 <Suggestions
+                    onClose={props.onClose}
+                    onSelect={props.onSelect}
+                    selected={props.selected}
                     term={subject.term}
                     type={subject.type}
                     values={values}
@@ -310,6 +313,8 @@ export const BasePopper = ReactPopper.create<HTMLDivElement, IBasePopper>(
                         term={subject.term}
                         type={subject.type}
                         values={values}
+                        onClose={props.onClose}
+                        onSelect={props.onSelect}
                         suggestion={subject.suggestion}
                     />
                 </ReactPopper>

@@ -358,9 +358,10 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         }
     }
 
-    function handleMentionSelected({ target, mention }: any) {
+    function handleMentionSelected({ target, selected, ...args }: any) {
         Transforms.select(editor, target as any);
-        insertMention(editor, mention.value);
+        insertMention(editor, selected.value);
+        console.log(args);
     }
 
     function handleCloseUploadQueue() {
