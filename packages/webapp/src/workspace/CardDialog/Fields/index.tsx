@@ -11,8 +11,8 @@ import FieldCreator from "./FieldCreator";
 import { CardRecord, CardFieldRecord } from "@octal/store";
 import { Elements } from "@octal/ui";
 import { useActions } from "../hooks";
-import Mention from "./Mention";
-import { Mentioned } from "@workspace/Mention";
+import Suggestion from "./Suggestion";
+import { Mention } from "@workspace/Mention";
 import TextField from "./TextField";
 import UserField from "./UserField";
 import LabelField from "./LabelField";
@@ -26,8 +26,8 @@ interface IFields {
 }
 
 const components = {
+    Suggestion,
     Mention,
-    Mentioned,
 };
 
 export default React.memo<IFields>((props) => {

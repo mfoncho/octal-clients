@@ -7,19 +7,13 @@ interface IMentioned {
     id: string;
 }
 
-interface IMentionUser {
-    prefix: "@";
+interface IMention<T = TopicRecord | UserRecord> {
+    type: string;
+    term: string;
+    suggestion: string;
     selected: boolean;
-    mention: { value: string; user: UserRecord };
+    value: { value: string; topic: T };
 }
-
-interface IMentionTopic {
-    prefix: "#";
-    selected: boolean;
-    mention: { value: string; topic: TopicRecord };
-}
-
-type IMention = IMentionTopic | IMentionUser;
 
 export function UserMentioned({ id }: IMentioned) {
     const user = useUser(id);
@@ -39,7 +33,7 @@ export function TopicMentioned({ id }: IMentioned) {
     );
 }
 
-export function Mentioned({ attributes, children, element }: any) {
+export function Mention({ attributes, children, element }: any) {
     const id = element.value.substring(1);
     let mentioned: any = null;
     switch (element.value[0]) {
@@ -62,10 +56,10 @@ export function Mentioned({ attributes, children, element }: any) {
     );
 }
 
-export default function Mention({ prefix, selected, mention }: IMention) {
-    switch (prefix) {
-        case "@":
-            const { user } = mention as any;
+export default function Suggestion({ suggestion, selected, value }: IMention) {
+    switch (suggestion) {
+        case "user":
+            const { user } = value as any;
             return (
                 <div
                     className={clx(
@@ -79,7 +73,7 @@ export default function Mention({ prefix, selected, mention }: IMention) {
                             className="inline-block h-8 w-8 rounded-full mr-2"
                         />
                         <span className="font-bold flex flex-row items-center">
-                            <span>{prefix}</span>
+                            <span>@</span>
                             <span>
                                 <Text>{user.username}</Text>
                             </span>
@@ -89,8 +83,8 @@ export default function Mention({ prefix, selected, mention }: IMention) {
                 </div>
             );
 
-        case "#":
-            const { topic } = mention as any;
+        case "topic":
+            const { topic } = value as any;
             return (
                 <div
                     className={clx(
@@ -98,7 +92,7 @@ export default function Mention({ prefix, selected, mention }: IMention) {
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <span className="font-bold flex flex-row items-center">
-                        <span className="px">{prefix}</span>
+                        <span className="px">#</span>
                         <span>
                             <Text>{topic.name}</Text>
                         </span>
@@ -108,6 +102,10 @@ export default function Mention({ prefix, selected, mention }: IMention) {
 
         default:
             //@ts-ignore
-            return <span>{mention.value}</span>;
+            return (
+                <span>
+                    <Text>{(value as any).native}</Text>
+                </span>
+            );
     }
 }

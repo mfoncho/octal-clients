@@ -119,7 +119,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
     function makeReactionClickHandler(reaction: any) {
         return () => {
-            let data = emoji.data(reaction.reaction);
+            let data = emoji.query(reaction.reaction);
             handleReaction(data);
         };
     }

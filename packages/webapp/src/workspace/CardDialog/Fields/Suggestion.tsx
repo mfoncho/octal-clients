@@ -6,21 +6,21 @@ import { UserRecord, TopicRecord } from "@octal/store";
 interface IMentionUser {
     prefix: "@";
     selected: boolean;
-    mention: { value: string; user: UserRecord };
+    value: { value: string; user: UserRecord };
 }
 
 interface IMentionTopic {
     prefix: "#";
     selected: boolean;
-    mention: { value: string; topic: TopicRecord };
+    value: { value: string; topic: TopicRecord };
 }
 
 type IMention = IMentionTopic | IMentionUser;
 
-export default function Mention({ prefix, selected, mention }: IMention) {
+export default function Suggestion({ prefix, selected, value }: IMention) {
     switch (prefix) {
         case "@":
-            const { user } = mention as any;
+            const { user } = value as any;
             return (
                 <div
                     className={clx(
@@ -44,7 +44,7 @@ export default function Mention({ prefix, selected, mention }: IMention) {
             );
 
         case "#":
-            const { topic } = mention as any;
+            const { topic } = value as any;
             return (
                 <div
                     className={clx(
@@ -61,7 +61,10 @@ export default function Mention({ prefix, selected, mention }: IMention) {
             );
 
         default:
-            //@ts-ignore
-            return <span>{mention.value}</span>;
+            return (
+                <span>
+                    <Text>{(value as any).value}</Text>
+                </span>
+            );
     }
 }

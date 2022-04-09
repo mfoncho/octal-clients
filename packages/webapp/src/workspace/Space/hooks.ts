@@ -9,6 +9,7 @@ import {
     CreateTopicPayload,
 } from "@octal/store/lib/actions/topic";
 import { createBoard as createSpaceBoard } from "@octal/store/lib/actions/board";
+import emoji from "@octal/emoji";
 import {
     useThread,
     usePermissionsSet,
@@ -54,47 +55,66 @@ export function useTopics(): List<TopicRecord> {
     );
 }
 
-export function useUserMentionable() {
+export function useUserSuggestable() {
     const users = useSpaceUsers();
 
     return useMemo(() => {
-        const filter = ({ user }: IMentionUser, name: string) => {
-            return user.name.includes(name) || user.username.includes(name);
+        let suggest = (name: string) => {
+            name = name.substring(1);
+            return new Promise((resolve) => {
+                let values = users
+                    .toList()
+                    .filter((user) => {
+                        return (
+                            user.name.includes(name) ||
+                            user.username.includes(name)
+                        );
+                    })
+                    .toList()
+                    .map((user) => {
+                        let value = "@" + user.id;
+                        return { value, user };
+                    })
+                    .toJS();
+                resolve(values);
+            });
         };
-        const mentions: IMentionUser[] = users
-            .map((user) => ({ value: "@" + user.id, user: user }))
-            .toList()
-            .toArray();
-        return {
-            filter,
-            mentions,
-        };
+        return { suggest, pattern: "@\\w+", type: "mention" };
     }, [users]);
 }
 
-export function useTopicMentionable() {
+export function useTopicSuggestable() {
     const topics = useTopics() ?? List<TopicRecord>();
     return useMemo(() => {
-        const filter = ({ topic }: IMentionTopic, name: string) => {
-            return topic.name.includes(name);
+        let suggest = (name: string) => {
+            name = name.substring(1);
+            return new Promise((resolve) => {
+                let values = topics
+                    .filter((topic) => {
+                        return topic.name.includes(name);
+                    })
+                    .map((topic) => {
+                        let value = "#" + topic.id;
+                        return { value, topic };
+                    })
+                    .toJS();
+                resolve(values);
+            });
         };
-        const mentions: IMentionTopic[] = topics
-            .map((topic) => ({ value: "#" + topic.id, topic: topic }))
-            .toList()
-            .toArray();
-        return {
-            filter,
-            mentions,
-        };
+        return { suggest, pattern: "#\\w+", type: "mention" };
     }, [topics]);
 }
 
-export function useMentionable() {
-    const users = useUserMentionable();
-    const topics = useTopicMentionable();
+export function useSuggestable() {
+    const user = useUserSuggestable();
+    const topic = useTopicSuggestable();
     return useMemo(() => {
-        return { "@": users, "#": topics };
-    }, [users, topics]);
+        return {
+            user,
+            topic,
+            emoji: emoji.suggestable,
+        };
+    }, [user, topic]);
 }
 
 export function useTool() {

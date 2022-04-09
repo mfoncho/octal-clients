@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useParams, Route, Routes } from "react-router-dom";
-import Mention, { Mentioned } from "../Mention";
+import Suggestion, { Mention } from "../Mention";
 import Home from "../Home";
 import Calendar from "../Calendar";
 import Workspace from "../Workspace";
@@ -13,8 +13,8 @@ import Sidebar from "@workspace/Sidebar";
 import { useNavigatorDrawer } from "src/hooks";
 
 const elements = {
+    Suggestion,
     Mention,
-    Mentioned,
 };
 
 const workspacePaths = Object.values(paths.workspace);

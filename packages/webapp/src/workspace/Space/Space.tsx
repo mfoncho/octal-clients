@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Textarea } from "@octal/ui";
 import Board from "../Board";
 import Topic from "../Topic";
-import { useSpace, useMentionable } from "./hooks";
+import { useSpace, useSuggestable } from "./hooks";
 import { clearSpace } from "@octal/store/lib/actions/space";
 import { useNavigator, useUnmount } from "src/hooks";
 
@@ -24,7 +24,7 @@ export default React.memo(() => {
 
     const dispatch = useDispatch();
 
-    const mentionable = useMentionable();
+    const mentionable = useSuggestable();
 
     useUnmount(() => {
         if (space.is_archived) {
@@ -33,7 +33,7 @@ export default React.memo(() => {
     }, [space.is_archived]);
 
     return (
-        <Textarea.Mention.Context.Provider value={mentionable as any}>
+        <Textarea.Suggestions.Context.Provider value={mentionable as any}>
             <Routes>
                 <Route path="/topics/:topic_id" element={<Topic />} />
                 <Route path="/boards/:board_id" element={<Board />}>
@@ -41,6 +41,6 @@ export default React.memo(() => {
                 </Route>
                 <Route path="/" element={<Redirect />} />
             </Routes>
-        </Textarea.Mention.Context.Provider>
+        </Textarea.Suggestions.Context.Provider>
     );
 });
