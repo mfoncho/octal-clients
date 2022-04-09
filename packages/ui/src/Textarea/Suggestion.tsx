@@ -216,25 +216,26 @@ export function Suggestions(props: ISuggestions) {
 
     return (
         <React.Fragment>
-            {values.map((value, index) => {
-                return (
-                    <div
-                        role="button"
-                        key={String(index)}
-                        onClick={() =>
-                            props.onSelect ? props.onSelect(value) : null
-                        }
-                        className="flex flex-col">
-                        <Components.Suggestion
-                            value={value}
-                            term={props.term}
-                            type={props.term}
-                            suggestion={props.suggestion}
-                            selected={selected == index}
-                        />
-                    </div>
-                );
-            })}
+            {Boolean(props.term) &&
+                values.map((value, index) => {
+                    return (
+                        <div
+                            role="button"
+                            key={String(index)}
+                            onClick={() =>
+                                props.onSelect ? props.onSelect(value) : null
+                            }
+                            className="flex flex-col">
+                            <Components.Suggestion
+                                value={value}
+                                type={props.type}
+                                term={props.term}
+                                suggestion={props.suggestion}
+                                selected={selected == index}
+                            />
+                        </div>
+                    );
+                })}
         </React.Fragment>
     );
 }
