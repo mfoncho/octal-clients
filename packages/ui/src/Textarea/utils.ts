@@ -1,4 +1,5 @@
 import { Transforms, Text, Element as SlateElement, Editor } from "slate";
+import emoji from "@octal/emoji";
 import { IFileItem } from "./types";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
@@ -118,6 +119,17 @@ export function isFormatActive(editor: any, format: string) {
         mode: "all",
     });
     return !!match;
+}
+
+export function insertEmoji(editor: Editor, value: any) {
+    const node = {
+        src: emoji.image(value),
+        type: "emoji",
+        emoji: value,
+        children: [{ text: "" }],
+    };
+    Transforms.insertNodes(editor, [node, { text: "" }] as any);
+    Transforms.move(editor);
 }
 
 export function insertMention(editor: Editor, value: string) {

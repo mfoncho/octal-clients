@@ -162,9 +162,9 @@ function useControls(props: IPortal) {
     }
 
     // Close suggestions before/after select or ***CRASH***
-    function handleSelect(selected: any) {
+    function handleSelect(value: any) {
         handleClose();
-        props.onSelect!({ ...subject, selected });
+        props.onSelect!({ ...subject, value });
     }
 
     return { open, handleSelect, handleClose, subject };

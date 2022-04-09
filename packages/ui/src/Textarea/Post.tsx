@@ -27,6 +27,7 @@ import { Transforms, Editor, createEditor, Descendant } from "slate";
 
 import {
     fileItem,
+    insertEmoji,
     isBlockActive,
     insertMention,
     isMarkActive,
@@ -358,10 +359,14 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         }
     }
 
-    function handleMentionSelected({ target, selected, ...args }: any) {
-        Transforms.select(editor, target as any);
-        insertMention(editor, selected.value);
-        console.log(args);
+    function handleMentionSelected(selected: any) {
+        if (selected.type == "mention") {
+            Transforms.select(editor, selected.target);
+            insertMention(editor, selected.value.value);
+        } else if (selected.type == "emoji") {
+            Transforms.select(editor, selected.target);
+            insertEmoji(editor, selected.value.native);
+        }
     }
 
     function handleCloseUploadQueue() {
