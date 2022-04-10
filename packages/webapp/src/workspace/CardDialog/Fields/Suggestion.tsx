@@ -3,24 +3,29 @@ import { Text } from "@octal/ui";
 import clx from "classnames";
 import { UserRecord, TopicRecord } from "@octal/store";
 
-interface IMentionUser {
-    prefix: "@";
-    selected: boolean;
-    value: { value: string; user: UserRecord };
+interface IValue {
+    value: string;
+    topic: TopicRecord;
+    user: UserRecord;
+    native: string;
 }
 
-interface IMentionTopic {
-    prefix: "#";
+interface ISuggestion {
+    type: string;
+    term: string;
+    suggestion: string;
     selected: boolean;
-    value: { value: string; topic: TopicRecord };
+    value: IValue;
 }
 
-type IMention = IMentionTopic | IMentionUser;
-
-export default function Suggestion({ prefix, selected, value }: IMention) {
-    switch (prefix) {
-        case "@":
-            const { user } = value as any;
+export default function Suggestion({
+    suggestion,
+    selected,
+    value,
+}: ISuggestion) {
+    switch (suggestion) {
+        case "user":
+            const { user } = value;
             return (
                 <div
                     className={clx(
@@ -34,7 +39,7 @@ export default function Suggestion({ prefix, selected, value }: IMention) {
                             className="inline-block h-5 w-5 rounded-full mr-2"
                         />
                         <span className="font-bold text-sm flex flex-row items-center">
-                            <span>{prefix}</span>
+                            <span>@</span>
                             <span>
                                 <Text>{user.username}</Text>
                             </span>
@@ -43,8 +48,8 @@ export default function Suggestion({ prefix, selected, value }: IMention) {
                 </div>
             );
 
-        case "#":
-            const { topic } = value as any;
+        case "topic":
+            const { topic } = value;
             return (
                 <div
                     className={clx(
@@ -52,7 +57,7 @@ export default function Suggestion({ prefix, selected, value }: IMention) {
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <span className="font-bold flex flex-row items-center">
-                        <span className="px">{prefix}</span>
+                        <span className="px">#</span>
                         <span>
                             <Text>{topic.name}</Text>
                         </span>
@@ -60,11 +65,21 @@ export default function Suggestion({ prefix, selected, value }: IMention) {
                 </div>
             );
 
-        default:
+        case "emoji":
             return (
-                <span>
-                    <Text>{(value as any).value}</Text>
-                </span>
+                <div
+                    className={clx(
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-100 hover:text-white p-2",
+                        { ["bg-primary-500 text-white"]: selected }
+                    )}>
+                    <span className="font-bold flex flex-row items-center">
+                        <Text>{value.native}</Text>
+                    </span>
+                </div>
             );
+
+        default:
+            // Should never reach here
+            return <span />;
     }
 }
