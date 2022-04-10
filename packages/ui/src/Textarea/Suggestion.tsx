@@ -198,9 +198,18 @@ export function Suggestions(props: ISuggestions) {
         }
     }, [selectedEl]);
 
-    function calmEvent(event: KeyboardEvent) {
+    function calmEvent(event: KeyboardEvent | React.MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
+    }
+
+    function handleSelect(value: any) {
+        return (event: React.MouseEvent) => {
+            if (props.onSelect) {
+                calmEvent(event);
+                props.onSelect(value);
+            }
+        };
     }
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -234,10 +243,9 @@ export function Suggestions(props: ISuggestions) {
                             ref={selected == index ? setSelectedEl : undefined}
                             role="button"
                             key={String(index)}
-                            onClick={() =>
-                                props.onSelect ? props.onSelect(value) : null
-                            }
-                            className="flex flex-col">
+                            onClick={handleSelect(value)}
+                            className="flex flex-col"
+                            data-suggestion-type={props.type}>
                             <Components.Suggestion
                                 value={value}
                                 type={props.type}
@@ -316,12 +324,14 @@ export const BasePopper = ReactPopper.create<HTMLDivElement, IBasePopper>(
                 <ReactPopper
                     as={"div"}
                     placement="top-start"
+                    portal={true}
                     distance={10}
                     tabIndex={-1}
                     anchorEl={props.anchorEl}
                     onClickAway={props.onClickAway}
+                    data-suggestion={true}
                     style={{ width: props.anchorEl?.clientWidth }}
-                    className="z-10 flex w-full flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 p-2 bg-white shadow-md  overflow-x-hidden overflow-y-auto">
+                    className="z-[2000] flex w-full flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 p-2 bg-white shadow-md  overflow-x-hidden overflow-y-auto">
                     <Suggestions
                         term={subject.term}
                         type={subject.type}
