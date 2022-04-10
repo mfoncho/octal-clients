@@ -172,6 +172,7 @@ function useControls(props: IPortal) {
 
 export function Suggestions(props: ISuggestions) {
     const { values } = props;
+    const [shift, setShift] = React.useState(false);
     const [selected, setSelected] = React.useState<number>(-1);
 
     const [selectedEl, setSelectedEl] =
@@ -184,11 +185,13 @@ export function Suggestions(props: ISuggestions) {
     }, [props.selected]);
 
     React.useEffect(() => {
+        window.addEventListener("keyup", handleKeyUp);
         window.addEventListener("keydown", handleKeyDown);
         return () => {
+            window.removeEventListener("keyup", handleKeyUp);
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [selected]);
+    }, [shift, selected]);
 
     React.useEffect(() => {
         if (props.term && values.length > 0 && selectedEl) {
@@ -212,8 +215,17 @@ export function Suggestions(props: ISuggestions) {
         };
     }
 
+    function handleKeyUp(event: KeyboardEvent) {
+        calmEvent(event);
+        if (event.key == "Shift") {
+            setShift(false);
+        }
+    }
+
     function handleKeyDown(event: KeyboardEvent) {
-        if (["Enter", "Tab"].includes(event.key)) {
+        if (event.key == "Shift") {
+            setShift(true);
+        } else if (event.key == "Enter") {
             calmEvent(event);
             if (selected < 0) {
                 setSelected(0);
@@ -225,10 +237,10 @@ export function Suggestions(props: ISuggestions) {
             if (props.onClose) {
                 props.onClose(event);
             }
-        } else if (event.key == "ArrowUp") {
+        } else if (event.key == "ArrowUp" || (shift && event.key == "Tab")) {
             calmEvent(event);
             setSelected((val) => (val > 0 ? val - 1 : val));
-        } else if (event.key == "ArrowDown") {
+        } else if (event.key == "ArrowDown" || event.key == "Tab") {
             calmEvent(event);
             setSelected((val) => (val >= values.length - 1 ? 0 : val + 1));
         }
