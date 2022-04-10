@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useImperativeHandle } from "react";
 import Flow from "../Flow";
 import Transition from "@material-ui/core/Fade";
+import Portal from "./Portal";
 import { usePopper } from "react-popper";
 
 export interface Openable {
     open: boolean;
 }
 
-export interface Anchored<T> {
+export interface Anchored<T = any> {
     anchorEl?: HTMLElement | null;
-    onClickAway?: (e: MouseEvent) => void;
-    onHoverAway?: (e: MouseEvent) => void;
+    onClickAway?: (e: React.MouseEvent | MouseEvent) => void;
+    onHoverAway?: (e: React.MouseEvent | MouseEvent) => void;
 }
 
 export type PlacementType =
@@ -39,6 +40,7 @@ export interface IBasePopper<S, T> extends React.HTMLAttributes<T> {
     anchorEl?: HTMLElement | null;
     arrow?: boolean;
     distance?: number;
+    portal?: boolean;
     flip?: FlipOptionsType;
     skidding?: number;
     strategy?: "fixed" | "absolute";
@@ -73,6 +75,7 @@ const Popper = React.forwardRef<HTMLElement, IPopper>((props, ref) => {
         anchorEl,
         children = null,
         arrow = false,
+        portal = false,
         distance,
         open = true,
         as: asComponent = "div",
@@ -198,6 +201,31 @@ const Popper = React.forwardRef<HTMLElement, IPopper>((props, ref) => {
         }
     }
 
+    function createElement() {
+        return React.createElement(
+            asComponent,
+            {
+                ...rootProps,
+                ref: setPopperEl,
+                style: { ...rootStyle, ...styles.popper },
+                className: className + " popper",
+                ...attributes.popper,
+            } as any,
+            [
+                <React.Fragment key="children">{children}</React.Fragment>,
+                arrow && (
+                    <div
+                        key="popper-arrow"
+                        className={arrowClassName + " popper-arrow"}
+                        ref={setArrowEl}
+                        style={styles.arrow}
+                        data-popper-arrow
+                    />
+                ),
+            ]
+        );
+    }
+
     return (
         <TransitionComponent
             in={open}
@@ -205,28 +233,7 @@ const Popper = React.forwardRef<HTMLElement, IPopper>((props, ref) => {
             timeout={transitionDuration}
             role="none presentation"
             {...TransitionProps}>
-            {React.createElement(
-                asComponent,
-                {
-                    ...rootProps,
-                    ref: setPopperEl,
-                    style: { ...rootStyle, ...styles.popper },
-                    className: className + " popper",
-                    ...attributes.popper,
-                } as any,
-                [
-                    <React.Fragment key="children">{children}</React.Fragment>,
-                    arrow && (
-                        <div
-                            key="popper-arrow"
-                            className={arrowClassName + " popper-arrow"}
-                            ref={setArrowEl}
-                            style={styles.arrow}
-                            data-popper-arrow
-                        />
-                    ),
-                ]
-            )}
+            {portal ? <Portal>{createElement()}</Portal> : createElement()}
         </TransitionComponent>
     );
 });
