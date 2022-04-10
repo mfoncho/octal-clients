@@ -316,6 +316,18 @@ export default Popper.create<HTMLDivElement, ILabelsPopper>((props) => {
         actions.createLabel(params).then(() => setForm(false));
     }
 
+    function handlePopperClickAway(e: MouseEvent) {
+        let suggestion = e.composedPath().find((el: any) => {
+            if (el.getAttribute) {
+                return el.getAttribute("data-suggestion-type") === "emoji";
+            }
+            return false;
+        });
+        if (!Boolean(suggestion) && props.onClickAway) {
+            props.onClickAway(e);
+        }
+    }
+
     return (
         <Popper
             as="div"
@@ -324,7 +336,7 @@ export default Popper.create<HTMLDivElement, ILabelsPopper>((props) => {
             tabIndex={-1}
             anchorEl={props.anchorEl}
             placement="bottom-start"
-            onClickAway={props.onClickAway}
+            onClickAway={handlePopperClickAway}
             className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 min-w-[256px] max-w-[256px] overflow-hidden pt-4 bg-white shadow-md">
             {form ? (
                 <LabelForm onClose={closeForm} onSubmit={handleCreateLabel} />
