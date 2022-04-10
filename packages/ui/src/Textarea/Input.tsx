@@ -201,7 +201,10 @@ export default function Input(props: IInput) {
                     placeholder={props.placeholder}
                     renderElement={renderElement}
                 />
-                <Suggestions onSelect={handleSuggestionSelected} />
+                <Suggestions.Popper
+                    anchorEl={rootRef.current}
+                    onSelect={handleSuggestionSelected}
+                />
             </div>
         </Slate>
     );
