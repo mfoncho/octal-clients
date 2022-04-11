@@ -6,6 +6,7 @@ import { MdCancel as CancelIcon } from "react-icons/md";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { useInput } from "src/utils";
 import { KeyboardInputEvent } from "src/types";
+import { Text, Textarea } from "@octal/ui";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import {
     CardTaskValueRecord,
@@ -49,10 +50,8 @@ function Task({ task, ...props }: ITask) {
         name.setValue(task.name);
     }, [task.name]);
 
-    function handleKeyPress(e: KeyboardInputEvent) {
-        if (e.key == "Enter" && name.valid) {
-            handleSubmit();
-        }
+    function handleKeyPress(e: any) {
+        handleSubmit();
     }
 
     function handleDelete() {
@@ -75,9 +74,6 @@ function Task({ task, ...props }: ITask) {
     }
 
     function handleBlur() {
-        if (name.valid) {
-            handleSubmit();
-        }
         setEdit(false);
     }
 
@@ -91,31 +87,34 @@ function Task({ task, ...props }: ITask) {
                     onChange={handleToggleTask}
                 />
                 {edit ? (
-                    <input
-                        {...name.props}
+                    <Textarea.Input
+                        value={name.value}
+                        onChange={name.setValue}
                         onBlur={handleBlur}
                         autoFocus={true}
-                        className="rounded px-2 focus:outline-none font-semibold text-gray-700 text-sm"
-                        onKeyPress={handleKeyPress}
+                        className="flex-1 rounded mx-1 px-1 py-0 focus:outline-none font-semibold text-gray-700 text-sm"
+                        onSubmit={handleKeyPress}
                     />
                 ) : (
                     <span className="rounded px-2 focus:outline-none font-semibold text-gray-700 text-sm">
-                        {task.name}
+                        <Text>{task.name}</Text>
                     </span>
                 )}
             </div>
-            <div className="flex-row items-center">
-                <button
-                    onClick={() => setEdit(true)}
-                    className="group-hover:visible invisible mr-2">
-                    <Icons.Edit className="h-4 w-4 text-gray-500" />
-                </button>
-                <button
-                    className="group-hover:visible invisible"
-                    onClick={handleDelete}>
-                    <Icons.CloseCircleSolid className="h-4 w-4 text-gray-500" />
-                </button>
-            </div>
+            {!edit && (
+                <div className="flex flex-row items-center">
+                    <button
+                        onClick={() => setEdit(true)}
+                        className="group-hover:visible invisible mr-2">
+                        <Icons.Edit className="h-4 w-4 text-gray-500" />
+                    </button>
+                    <button
+                        className="group-hover:visible invisible"
+                        onClick={handleDelete}>
+                        <Icons.CloseCircleSolid className="h-4 w-4 text-gray-500" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
@@ -124,14 +123,9 @@ function AddTask({ onSubmit }: ITaskCreator) {
     const [open, setOpen] = useState(false);
     const name = useInput("");
 
-    function handleSubmit() {}
-
-    function handleKeyPress(e: KeyboardInputEvent) {
-        if (e.key == "Enter" && name.valid) {
-            handleSubmit();
-            onSubmit({ done: false, name: name.value });
-            name.setValue("");
-        }
+    function handleSubmit() {
+        onSubmit({ done: false, name: name.value });
+        name.setValue("");
     }
 
     function handleClose() {
@@ -156,12 +150,13 @@ function AddTask({ onSubmit }: ITaskCreator) {
                         defaultChecked={false}
                     />
 
-                    <input
-                        {...name.props}
+                    <Textarea.Input
+                        value={name.value}
                         onBlur={handleBlur}
                         autoFocus={true}
-                        className="rounded px-2 focus:outline-none font-semibold text-gray-700 text-sm"
-                        onKeyPress={handleKeyPress}
+                        onSubmit={handleSubmit}
+                        onChange={name.setValue}
+                        className="flex-1 rounded mx-1 px-1 py-0  focus:outline-none font-semibold text-gray-700 text-sm"
                     />
                 </div>
                 <button onClick={handleClose}>
