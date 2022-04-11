@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { List } from "immutable";
-import InfoIcon from "@material-ui/icons/Info";
 import Field, { IField } from "./Field";
 import * as Icons from "@octal/icons";
-import { BiTrash as DeleteTaskIcon } from "react-icons/bi";
 import { MdCancel as CancelIcon } from "react-icons/md";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { useInput } from "src/utils";
@@ -101,18 +99,23 @@ function Task({ task, ...props }: ITask) {
                         onKeyPress={handleKeyPress}
                     />
                 ) : (
-                    <span
-                        onClick={() => setEdit(true)}
-                        className="rounded px-2 focus:outline-none font-semibold text-gray-700 text-sm">
+                    <span className="rounded px-2 focus:outline-none font-semibold text-gray-700 text-sm">
                         {task.name}
                     </span>
                 )}
             </div>
-            <button
-                className="group-hover:visible invisible"
-                onClick={handleDelete}>
-                <DeleteTaskIcon className="h-4 w-4 text-gray-500" />
-            </button>
+            <div className="flex-row items-center">
+                <button
+                    onClick={() => setEdit(true)}
+                    className="group-hover:visible invisible mr-2">
+                    <Icons.Edit className="h-4 w-4 text-gray-500" />
+                </button>
+                <button
+                    className="group-hover:visible invisible"
+                    onClick={handleDelete}>
+                    <Icons.CloseCircleSolid className="h-4 w-4 text-gray-500" />
+                </button>
+            </div>
         </div>
     );
 }
