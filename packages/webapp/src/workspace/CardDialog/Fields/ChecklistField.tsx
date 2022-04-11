@@ -80,12 +80,13 @@ function Task({ task, ...props }: ITask) {
     return (
         <div className="group flex py-0.5 flex-row items-center rounded-md hover:bg-gray-100">
             <div className="flex flex-grow flex-row items-center">
-                <input
-                    type="checkbox"
-                    checked={task.done}
-                    className="focus:ring-transparent focus:outline-none form-checkbox h-4 w-4 text-primary-500 rounded"
-                    onChange={handleToggleTask}
-                />
+                <button onClick={handleToggleTask}>
+                    {task.done ? (
+                        <Icons.Task.DoneSolid className="h-5 w-5 text-primary-500" />
+                    ) : (
+                        <Icons.Task.Undone className="h-5 w-5 text-primary-500" />
+                    )}
+                </button>
                 {edit ? (
                     <Textarea.Input
                         value={name.value}
@@ -141,14 +142,9 @@ function AddTask({ onSubmit }: ITaskCreator) {
 
     if (open) {
         return (
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center mb-1">
                 <div className="flex flex-grow flex-row items-center">
-                    <input
-                        type="checkbox"
-                        className="form-checkbox h-4 w-4 text-primary-500 rounded"
-                        disabled={true}
-                        defaultChecked={false}
-                    />
+                    <Icons.Task.Undone className="h-5 w-5 text-primary-500" />
 
                     <Textarea.Input
                         value={name.value}
@@ -166,11 +162,14 @@ function AddTask({ onSubmit }: ITaskCreator) {
         );
     }
     return (
-        <button
-            onClick={() => setOpen(true)}
-            className="rounded-md bg-gray-100 text-sm font-semibold text-gray-700">
-            add task
-        </button>
+        <div>
+            <button
+                onClick={() => setOpen(true)}
+                className="group rounded-md bg-gray-100 text-sm font-semibold text-gray-700">
+                <Icons.Task.Add className="group-hover:hidden h-5 w-5 text-primary-500" />
+                <Icons.Task.AddSolid className="group-hover:block h-5 w-5 text-primary-500 hidden" />
+            </button>
+        </div>
     );
 }
 
@@ -239,7 +238,7 @@ export default function ChecklistField({ field, handle }: IField) {
                         onDelete={handleDeleteTask}
                     />
                 ))}
-                <div className="py-2 flex flex-col">
+                <div className="py-1 flex flex-col">
                     <AddTask field={field} onSubmit={handleCreateTask} />
                 </div>
             </div>
