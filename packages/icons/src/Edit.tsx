@@ -1,1 +1,1 @@
-export { default } from "@material-ui/icons/EditRounded";
+export { MdEdit as default } from "react-icons/md";
