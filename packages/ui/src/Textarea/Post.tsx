@@ -4,7 +4,7 @@ import Elements from "../Elements";
 import Popover from "@material-ui/core/Popover";
 import * as Icons from "@octal/icons";
 import emoji from "@octal/emoji";
-import Suggestions from "./Suggestion";
+import Suggestions, { useSuggesting } from "./Suggestion";
 import Button, { Base as ButtonBase } from "../Button";
 import UploadQueue from "./UploadQueue";
 import { Slater } from "@octal/markdown";
@@ -195,6 +195,8 @@ const initialValue: any = [
 export default React.memo<IPostInput>((props: IPostInput) => {
     const Component = Elements.useElements();
 
+    const suggesting = useSuggesting();
+
     const [popup, setPopup] = useState<string | null>(null);
 
     const [queue, setQueue] = useState<boolean>(false);
@@ -333,7 +335,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         }
 
         // Submit if mention dialog is closed
-        if (event.key == "Enter") {
+        if (event.key == "Enter" && suggesting[0] === false) {
             event.preventDefault();
             return handleSubmit();
         }
@@ -439,6 +441,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
                 </div>
 
                 <Suggestions.Popper
+                    suggesting={suggesting}
                     onSelect={handleMentionSelected}
                     anchorEl={rootRef.current}
                 />

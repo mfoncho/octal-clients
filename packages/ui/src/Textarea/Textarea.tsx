@@ -4,7 +4,7 @@ import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import isHotkey from "is-hotkey";
 import Toolbar from "./Toolbar";
-import Suggestions from "./Suggestion";
+import Suggestions, { useSuggesting } from "./Suggestion";
 import { Slater } from "@octal/markdown";
 import {
     withPaste,
@@ -70,6 +70,8 @@ export default function Textarea(props: ITextarea) {
 
     const rootRef = React.useRef<HTMLDivElement | null>(null);
 
+    const suggesting = useSuggesting();
+
     const renderLeaf = useCallback(
         (props) => <Component.Leaf {...props} />,
         [Component.Leaf]
@@ -127,7 +129,7 @@ export default function Textarea(props: ITextarea) {
         }
 
         // Submit if mention dialog is closed
-        if (event.key == "Enter") {
+        if (event.key == "Enter" && suggesting[0] === false) {
             event.preventDefault();
             if (props.onSubmit) {
                 const text = slater.serialize(value).trim();
@@ -183,7 +185,7 @@ export default function Textarea(props: ITextarea) {
                         }
                     }}
                 />
-                <Suggestions onSelect={handleSuggestionSelected} />
+                <Suggestions onSelect={handleSuggestionSelected} suggesting={suggesting} />
             </div>
         </Slate>
     );

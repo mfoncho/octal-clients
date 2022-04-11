@@ -54,14 +54,23 @@ export interface IBasePopper {
     onClose?: (e: KeyboardEvent) => void;
 }
 
-export interface IPopper {
-    anchorEl?: HTMLElement | null;
+export interface ISuggestionBase {
+    suggesting?: ReturnType<typeof useSuggesting>;
     onSelect?: (e: any) => void;
 }
 
-export interface IPortal {
-    onSelect?: (e: any) => void;
+export interface IPopper extends ISuggestionBase {
+    anchorEl?: HTMLElement | null;
 }
+
+export interface IPortal extends ISuggestionBase {}
+
+type Dispatch<T> = [T, (val: T) => void | ((val: () => T) => void)];
+
+export const Suggesting = React.createContext<Dispatch<boolean>>([
+    false,
+    null,
+] as any);
 
 export const Context = React.createContext<ISuggestables>({
     emoji: emoji.suggestable,
@@ -75,6 +84,10 @@ const subjectDefault: ISubject = {
 };
 
 const nomatch = new RegExp("$^");
+
+export function useSuggesting() {
+    return React.useState<boolean>(false);
+}
 
 function useSubject() {
     const editor = useSlate();
@@ -172,6 +185,7 @@ function useControls(props: IPortal) {
 
 export function Suggestions(props: ISuggestions) {
     const { values } = props;
+    const suggesting = useContext(Suggesting);
     const [shift, setShift] = React.useState(false);
     const [selected, setSelected] = React.useState<number>(-1);
 
@@ -179,6 +193,16 @@ export function Suggestions(props: ISuggestions) {
         React.useState<HTMLDivElement | null>(null);
 
     const Components = Elements.useElements();
+
+    React.useEffect(() => {
+        const callback = suggesting[1];
+        if (callback) {
+            callback(true);
+            return () => {
+                callback(false);
+            };
+        }
+    });
 
     React.useEffect(() => {
         setSelected(props.selected ?? -1);
@@ -361,14 +385,17 @@ export const BasePopper = ReactPopper.create<HTMLDivElement, IBasePopper>(
 
 export function Portal(props: IPortal) {
     const { open, subject, handleClose, handleSelect } = useControls(props);
+    const suggesting = useSuggesting();
 
     if (subject.target && open) {
         return (
-            <BasePortal
-                subject={subject}
-                onClose={handleClose}
-                onSelect={handleSelect}
-            />
+            <Suggesting.Provider value={props.suggesting ?? suggesting}>
+                <BasePortal
+                    subject={subject}
+                    onClose={handleClose}
+                    onSelect={handleSelect}
+                />
+            </Suggesting.Provider>
         );
     }
     return null;
@@ -376,14 +403,17 @@ export function Portal(props: IPortal) {
 
 export function Popper(props: IPopper) {
     const { open, subject, handleClose, handleSelect } = useControls(props);
+    const suggesting = useSuggesting();
     return (
-        <BasePopper
-            open={open && Boolean(subject.term)}
-            subject={subject}
-            onClose={handleClose}
-            onSelect={handleSelect}
-            anchorEl={props.anchorEl}
-        />
+        <Suggesting.Provider value={props.suggesting ?? suggesting}>
+            <BasePopper
+                open={open && Boolean(subject.term)}
+                subject={subject}
+                onClose={handleClose}
+                onSelect={handleSelect}
+                anchorEl={props.anchorEl}
+            />
+        </Suggesting.Provider>
     );
 }
 

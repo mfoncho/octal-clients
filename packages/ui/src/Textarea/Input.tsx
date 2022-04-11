@@ -3,7 +3,7 @@ import { Slate, Editable, withReact } from "slate-react";
 import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import cls from "classnames";
-import Suggestions from "./Suggestion";
+import Suggestions, { useSuggesting } from "./Suggestion";
 import Markdown, { Slater, nodes } from "@octal/markdown";
 import { isEmojiActive, insertEmoji } from "./utils";
 import { withPaste, wrap } from "./wrappers";
@@ -73,6 +73,8 @@ export default function Input(props: IInput) {
 
     const [focused, setFocused] = useState(false);
 
+    const suggesting = useSuggesting();
+
     const renderLeaf = useCallback(
         (props) => <Component.Leaf {...props} />,
         [Component.Leaf]
@@ -108,7 +110,7 @@ export default function Input(props: IInput) {
     }
 
     function handleKeyDown(event: React.KeyboardEvent) {
-        if (event.key == "Enter") {
+        if (event.key == "Enter" && suggesting[0] === false) {
             event.preventDefault();
             if (props.onSubmit) {
                 const text = slater.serialize(value).trim();
@@ -203,6 +205,7 @@ export default function Input(props: IInput) {
                 />
                 <Suggestions.Popper
                     anchorEl={rootRef.current}
+                    suggesting={suggesting}
                     onSelect={handleSuggestionSelected}
                 />
             </div>
