@@ -34,6 +34,9 @@ export interface IInput {
 
 interface InputClasses {
     focus?: string | null;
+    height?: string | null;
+    boarder?: string | null;
+    padding?: string | null;
     classname?: string;
 }
 
@@ -94,7 +97,9 @@ export default function Input(props: IInput) {
         let ivalue = slater.serialize(value).trim();
         if (pvalue != ivalue) {
             let parsed = slater.parse(pvalue!);
+            Transforms.deselect(editor);
             setValue(parsed as any);
+            Transforms.select(editor, { path: [0, 0], offset: 0 });
         }
     }, [props.value]);
 
@@ -164,8 +169,10 @@ export default function Input(props: IInput) {
     const classes = useMemo<InputClasses>(() => {
         let classes: InputClasses = {};
         let [out, rest] = filterout(
-            (props.className ?? "").split(" "),
-            (classname) => classname.includes("focus:")
+            (props.className ?? "")
+                .split(" ")
+                .map((classname) => classname.trim()),
+            (classname) => classname.startsWith("focus:")
         );
         classes.focus =
             out.length > 0
@@ -175,6 +182,47 @@ export default function Input(props: IInput) {
                       )
                       .join(" ")
                 : "";
+        [out, rest] = filterout(rest, (classname) => {
+            return classname.includes("p-");
+        });
+
+        if (out.length === 0) {
+            [out, rest] = filterout(rest, (classname) => {
+                return classname.includes("px");
+            });
+            if (out.length === 0) {
+                classes.padding = "px-2";
+            } else {
+                classes.padding = out.join(" ");
+            }
+            [out, rest] = filterout(rest, (classname) => {
+                return classname.includes("py");
+            });
+            if (out.length === 0) {
+                classes.padding = [classes.padding ?? "", "py-1.5"].join(" ");
+            }
+        } else {
+            classes.padding = out.join(" ");
+        }
+
+        [out, rest] = filterout(rest, (classname) => {
+            return classname.includes("border");
+        });
+        if (out.length === 0) {
+            classes.boarder = "border";
+        } else {
+            classes.boarder = out.join(" ");
+        }
+
+        [out, rest] = filterout(rest, (classname) => {
+            return classname.includes("min-h");
+        });
+        if (out.length === 0) {
+            classes.height = "min-h-11";
+        } else {
+            classes.height = out.join(" ");
+        }
+
         classes.classname = rest.join(" ");
         return classes;
     }, [props.className]);
@@ -184,13 +232,16 @@ export default function Input(props: IInput) {
             <div
                 ref={rootRef}
                 className={cls(
+                    classes.boarder,
+                    classes.padding,
+                    classes.height,
                     {
                         [`${classes.focus} border-primary-400`]: focused,
                     },
                     {
                         [classes.classname ?? ""]: Boolean(classes.classname),
                     },
-                    "border py-1.5 px-2 rounded-md min-h-11"
+                    "rounded-md"
                 )}>
                 <Editable
                     disabled={props.disabled}
