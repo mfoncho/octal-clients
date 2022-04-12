@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import clx from "classnames";
+import { Text, Textarea } from "@octal/ui";
+import * as Icons from "@octal/icons";
 import { CardFieldRecord } from "@octal/store";
 import { useInput } from "src/utils";
 import { useFieldAction } from "@workspace/Board/hooks";
@@ -33,31 +36,28 @@ function Rename({ field, onClose }: IRname) {
     function handleOnBlur(e: React.FocusEvent) {
         e.preventDefault();
         e.stopPropagation();
-        handleSubmit(e);
-    }
-
-    function handleKeyPress(e: React.KeyboardEvent) {
-        if (e.key == "Enter") {
-            handleSubmit(e);
+        if (!name.valid && onClose) {
+            onClose(e);
         }
     }
 
-    function handleSubmit(event: React.FocusEvent | React.KeyboardEvent) {
+    function handleSubmit() {
         if (name.valid) {
             actions.updateField({ name: name.value });
         }
         if (onClose) {
-            onClose(event);
+            onClose({});
         }
     }
 
     return (
-        <input
-            {...name.props}
+        <Textarea.Input
             autoFocus={true}
-            className="rounded px-2 focus:outline-none font-semibold text-gray-700"
-            onKeyPress={handleKeyPress}
+            value={name.value}
             onBlur={handleOnBlur}
+            onChange={name.setValue}
+            className="rounded px-2 py-0 min-w-[128px] focus:outline-none font-semibold text-gray-700 text-base"
+            onSubmit={handleSubmit}
         />
     );
 }
@@ -71,7 +71,7 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
         const [rename, setRename] = useState(false);
 
         return (
-            <div ref={rootRef} className="flex flex-col py-2">
+            <div ref={rootRef} className="flex flex-col py-2 mb-2">
                 <div
                     {...props.handle}
                     className="group flex flex-row justify-between items-center">
@@ -89,18 +89,27 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                                 onClose={() => setRename(false)}
                             />
                         ) : (
-                            <button onClick={() => setRename(true)}>
-                                <span className="text-gray-700 px-2 font-semibold">
-                                    {field.name}
-                                </span>
-                            </button>
+                            <span className="text-gray-700 px-2 font-semibold">
+                                <Text>{field.name}</Text>
+                            </span>
                         )}
                     </div>
-                    <button
-                        onClick={() => actions.deleteField()}
-                        className="flex flex-row group-hover:visible invisible">
-                        <DeleteIcon className="text-gray-500 h-5 w-5" />
-                    </button>
+                    <div
+                        className={clx(
+                            "flex flex-row items-center group-hover:visible invisible",
+                            { hidden: rename }
+                        )}>
+                        <button
+                            onClick={() => setRename(true)}
+                            className="group-hover:visible invisible mr-2">
+                            <Icons.Edit className="h-5 w-5 text-gray-500" />
+                        </button>
+                        <button
+                            onClick={() => actions.deleteField()}
+                            className="flex flex-row ">
+                            <DeleteIcon className="text-gray-500 h-5 w-5" />
+                        </button>
+                    </div>
                 </div>
                 <div className="flex flex-row py-1 pl-8">{props.children}</div>
             </div>

@@ -5,7 +5,6 @@ import * as Icons from "@octal/icons";
 import { MdCancel as CancelIcon } from "react-icons/md";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { useInput } from "src/utils";
-import { KeyboardInputEvent } from "src/types";
 import { Text, Textarea } from "@octal/ui";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import {
