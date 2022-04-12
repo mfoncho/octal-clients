@@ -218,17 +218,20 @@ export default function ChecklistField({ field, handle }: IField) {
     }
 
     return (
-        <Field
-            handle={handle}
-            icon={Icons.Field.Checklist}
-            field={field}
-            buttonRef={fieldRef}
-            onClick={handleTogglePopper}>
+        <Field handle={handle} icon={Icons.Field.Checklist} field={field}>
             <div className="flex-1 flex flex-col">
-                <div className="flex flex-row pb-1">
-                    {users.map((id) => (
-                        <User key={id} id={id} />
-                    ))}
+                <div className="relative flex flex-row">
+                    <button
+                        ref={fieldRef}
+                        onClick={handleTogglePopper}
+                        className="-left-0.5 relative p-1 rounded-md hover:bg-gray-200 bg-gray-100">
+                        <Icons.Field.Users className="text-gray-500 hover:text-primary-500" />
+                    </button>
+                    <div className="flex mx-1 flex-row pb-1">
+                        {users.map((id) => (
+                            <User key={id} id={id} />
+                        ))}
+                    </div>
                 </div>
                 {tasks.map((task) => (
                     <Task
