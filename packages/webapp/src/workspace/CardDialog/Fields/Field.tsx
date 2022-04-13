@@ -11,10 +11,11 @@ export interface IField {
     handle?: any;
     field: CardFieldRecord;
     index?: number;
-    draging?: boolean;
+    dragging?: boolean;
 }
 
 interface ICardField {
+    dragging?: boolean;
     handle?: any;
     icon?: any; //React.FunctionComponent<IIcon> | React.ComponentClass<IIcon>;
     onClick?: (event: any) => void;
@@ -71,7 +72,12 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
         const [rename, setRename] = useState(false);
 
         return (
-            <div ref={rootRef} className="flex flex-col py-2 mb-2">
+            <div
+                ref={rootRef}
+                className={clx(
+                    "flex flex-col py-2 mb-2 rounded-md",
+                    props.dragging && "bg-primary-50"
+                )}>
                 <div
                     {...props.handle}
                     className="group flex flex-row justify-between items-center">

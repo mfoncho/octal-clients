@@ -181,7 +181,7 @@ const User = React.memo<{ id: string }>((props) => {
     );
 });
 
-export default function ChecklistField({ field, handle }: IField) {
+export default function ChecklistField({ field, handle, ...props }: IField) {
     const fieldRef = useRef<HTMLButtonElement>(null);
 
     const [popper, setPopper] = useState<boolean>(false);
@@ -217,7 +217,11 @@ export default function ChecklistField({ field, handle }: IField) {
     }
 
     return (
-        <Field handle={handle} icon={Icons.Field.Checklist} field={field}>
+        <Field
+            dragging={props.dragging}
+            handle={handle}
+            icon={Icons.Field.Checklist}
+            field={field}>
             <div className="flex-1 flex flex-col">
                 <div className="relative flex flex-row">
                     <button

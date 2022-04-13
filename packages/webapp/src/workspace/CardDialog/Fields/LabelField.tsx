@@ -5,7 +5,7 @@ import {
     CardFieldRecord,
     LabelRecord,
 } from "@octal/store";
-import Field from "./Field";
+import Field, { IField } from "./Field";
 import * as Icons from "@octal/icons";
 import Label from "@workspace/Board/Label";
 import { useLabels } from "@workspace/Board";
@@ -18,7 +18,7 @@ export interface IEdit {
     onSubmit: (value: string) => void;
 }
 
-export interface ILabelField {
+export interface ILabelField extends IField {
     handle?: any;
     field: CardFieldRecord;
 }
@@ -27,7 +27,7 @@ export interface IUserValue {
     value: CardLabelValueRecord;
 }
 
-export default function LabelField({ field, handle }: ILabelField) {
+export default function LabelField({ field, handle, ...props }: ILabelField) {
     const boardlabels = useLabels();
 
     const [editing, setEditing] = useState<boolean>(false);
@@ -81,6 +81,7 @@ export default function LabelField({ field, handle }: ILabelField) {
         <Field
             icon={Icons.Field.Label}
             handle={handle}
+            dragging={props.dragging}
             field={field}
             buttonRef={fieldRef}
             onClick={handleToggleEditMode}>

@@ -68,6 +68,9 @@ export default React.memo<IFields>((props) => {
             const fieldProps = {
                 field,
                 index,
+                dragging: dragged
+                    ? dragged.draggableId.split(":").pop() === field.id
+                    : false,
                 handle: provided.dragHandleProps,
             };
             switch (field.type) {

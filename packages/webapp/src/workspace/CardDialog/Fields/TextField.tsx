@@ -40,7 +40,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
                 onSubmit={handleChange}
                 className="bg-primary-50 p-2 rounded-md break-word w-full text-gray-800 text-base"
             />
-            <div className="flex flex-row justify-end pt-4 px-3">
+            <div className="flex flex-row justify-end pt-2 px-3">
                 <button
                     onClick={onClose}
                     className="text-primary-500 font-bold text-xs">
@@ -51,7 +51,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
     );
 }
 
-export default function TextField({ field, handle }: IField) {
+export default function TextField({ field, handle, ...props }: IField) {
     const [editing, setEditing] = useState<boolean>(false);
 
     const actions = useFieldAction(field);
@@ -80,6 +80,7 @@ export default function TextField({ field, handle }: IField) {
         <Field
             handle={handle}
             icon={Icons.Field.Text}
+            dragging={props.dragging}
             onClick={handleToggleEditMode}
             field={field}>
             {editing ? (
@@ -102,7 +103,7 @@ export default function TextField({ field, handle }: IField) {
                             {text}
                         </Markdown>
                     </div>
-                    <div className="flex flex-row justify-end pt-4 px-3">
+                    <div className="flex flex-row justify-end pt-2 px-3">
                         <button className="text-primary-500 font-bold text-xs">
                             edit
                         </button>

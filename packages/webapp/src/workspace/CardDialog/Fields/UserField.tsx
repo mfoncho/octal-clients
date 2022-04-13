@@ -8,7 +8,7 @@ import {
     useUser,
     MemberRecord,
 } from "@octal/store";
-import Field from "./Field";
+import Field, { IField } from "./Field";
 
 export interface IEdit {
     value: string;
@@ -17,7 +17,7 @@ export interface IEdit {
     onSubmit: (value: string) => void;
 }
 
-export interface IUserField {
+export interface IUserField extends IField {
     handle?: any;
     field: CardFieldRecord;
 }
@@ -63,7 +63,7 @@ function UserValue({ value, onClose }: IUserValue) {
     );
 }
 
-export default function UserField({ field, handle }: IUserField) {
+export default function UserField({ field, handle, ...props }: IUserField) {
     const [editing, setEditing] = useState<boolean>(false);
 
     const fieldRef = useRef<HTMLButtonElement>(null);
@@ -103,6 +103,7 @@ export default function UserField({ field, handle }: IUserField) {
 
     return (
         <Field
+            dragging={props.dragging}
             icon={Icons.Field.Users}
             handle={handle}
             field={field}

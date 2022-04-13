@@ -36,7 +36,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
     );
 }
 
-export default function NumberField({ field, handle }: IField) {
+export default function NumberField({ field, handle, ...props }: IField) {
     const [editing, setEditing] = useState<boolean>(false);
 
     const actions = useFieldAction(field);
@@ -64,6 +64,7 @@ export default function NumberField({ field, handle }: IField) {
     return (
         <Field
             handle={handle}
+            dragging={props.dragging}
             icon={Icons.Field.Number}
             onClick={handleToggleEditMode}
             field={field}>

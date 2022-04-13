@@ -7,7 +7,7 @@ import Popover from "@material-ui/core/Popover";
 import { Datepicker } from "@octal/ui";
 import moment, { Moment } from "moment";
 
-export default function DateTimeField({ field, handle }: IField) {
+export default function DateTimeField({ field, handle, ...props }: IField) {
     const [popper, setPopper] = useState<boolean>(false);
 
     const fieldRef = useRef<HTMLButtonElement>(null);
@@ -63,11 +63,12 @@ export default function DateTimeField({ field, handle }: IField) {
 
     return (
         <Field
-            handle={handle}
             icon={Icons.Field.DateTime}
-            buttonRef={fieldRef}
+            field={field}
+            handle={handle}
             onClick={handleOpenDatePicker}
-            field={field}>
+            dragging={props.dragging}
+            buttonRef={fieldRef}>
             {value ? (
                 <span
                     role="button"
