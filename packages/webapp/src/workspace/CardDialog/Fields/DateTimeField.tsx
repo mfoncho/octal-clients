@@ -72,7 +72,7 @@ export default function DateTimeField({ field, handle, ...props }: IField) {
             {value ? (
                 <span
                     role="button"
-                    className="cursor-pointer font-semibold text-gray-700 p-1 bg-gray-50 rounded-md hover:bg-gray-100"
+                    className="cursor-pointer font-bold text-gray-700 py-1 px-2 bg-gray-50 rounded-md hover:bg-gray-100 text-sm"
                     onClick={handleOpenDatePicker}>
                     {moment(value.value).format("MMMM Do YYYY, h:mm")}
                 </span>
