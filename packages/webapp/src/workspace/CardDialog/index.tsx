@@ -31,6 +31,11 @@ interface ICardDialog {
     onClose: (e: any, reason: string) => void;
 }
 
+const scrollerOptions = {
+    suppressScrollX: true,
+    suppressScrollY: false,
+};
+
 export const CardDialog = React.memo<ICardDialog>(({ card, onClose, open }) => {
     const screen = useScreen();
 
@@ -79,7 +84,9 @@ export const CardDialog = React.memo<ICardDialog>(({ card, onClose, open }) => {
 
             <div className="flex flex-row flex-grow overflow-hidden">
                 <div className="flex flex-1 flex-col pb-8">
-                    <PerfectScrollbar className="flex px-4 sm:px-8 flex-grow flex-col">
+                    <PerfectScrollbar
+                        options={scrollerOptions}
+                        className="flex px-4 sm:px-8 flex-grow flex-col">
                         <ActionsField card={card} onClose={handleCloseDialog} />
                         <Fields key={card.id} card={card} />
                     </PerfectScrollbar>
