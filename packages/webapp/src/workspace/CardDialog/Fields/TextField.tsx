@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import clx from "classnames";
 import * as Icons from "@octal/icons";
 import { Textarea, Markdown } from "@octal/ui";
-import { useInput } from "src/utils";
 import { useFieldAction } from "@workspace/Board/hooks";
-import { CardTextValueRecord, CardFieldRecord } from "@octal/store";
+import { CardTextValueRecord } from "@octal/store";
 import Field, { IField } from "./Field";
 
 interface IEdit {
@@ -15,23 +14,40 @@ interface IEdit {
 }
 
 function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
-    const description = useInput(value);
+    const [desc, setDesc] = useState(value);
 
-    function handleOnBlur() {
-        if (description.valid || description.value == "") {
-            onSubmit(description.value);
+    function handleChange(des: string) {
+        if (des !== value) {
+            onSubmit(des);
         }
         onClose();
     }
 
+    function handleBlur() {
+        if (desc == value) {
+            onClose();
+        }
+    }
+
     return (
-        <Textarea
-            value={value}
-            autoFocus={true}
-            onBlur={handleOnBlur}
-            onChange={description.setValue}
-            className="break-word w-full text-gray-800 text-base"
-        />
+        <div className="flex flex-col w-full">
+            <Textarea
+                value={value}
+                disabled={disabled}
+                onChange={setDesc}
+                autoFocus={true}
+                onBlur={handleBlur}
+                onSubmit={handleChange}
+                className="bg-primary-50 p-2 rounded-md break-word w-full text-gray-800 text-base"
+            />
+            <div className="flex flex-row justify-end pt-4 px-3">
+                <button
+                    onClick={onClose}
+                    className="text-primary-500 font-bold text-xs">
+                    cancel
+                </button>
+            </div>
+        </div>
     );
 }
 
@@ -76,14 +92,21 @@ export default function TextField({ field, handle }: IField) {
                 <div
                     onClick={handleToggleEditMode}
                     className={clx(
-                        "break-word w-full text-gray-800 rounded-lg text-base",
+                        "flex flex-col break-word w-full text-gray-800 rounded-lg text-base",
                         {
                             ["h-8 bg-gray-100"]: !Boolean(text),
                         }
                     )}>
-                    <Markdown image={false} table={true}>
-                        {text}
-                    </Markdown>
+                    <div className="p-2 bg-gray-50 rounded-md">
+                        <Markdown image={false} table={true}>
+                            {text}
+                        </Markdown>
+                    </div>
+                    <div className="flex flex-row justify-end pt-4 px-3">
+                        <button className="text-primary-500 font-bold text-xs">
+                            edit
+                        </button>
+                    </div>
                 </div>
             )}
         </Field>
