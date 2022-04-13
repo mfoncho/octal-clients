@@ -79,6 +79,7 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                         {Boolean(icon) && (
                             <button
                                 onClick={props.onClick}
+                                className="p-2 rounded-md hover:bg-gray-100"
                                 ref={props.buttonRef}>
                                 <Icon className="text-gray-500" />
                             </button>
@@ -111,7 +112,7 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                         </button>
                     </div>
                 </div>
-                <div className="flex flex-row py-1 pl-8">{props.children}</div>
+                <div className="flex flex-row py-1 pl-10">{props.children}</div>
             </div>
         );
     }
