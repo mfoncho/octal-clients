@@ -5,7 +5,6 @@ import { CardRecord } from "@octal/store/lib/records";
 import { useAuthId } from "@octal/store";
 import { useInput } from "src/utils";
 import { Button, Text, useScreen, Textarea } from "@octal/ui";
-import { KeyboardInputEvent } from "src/types";
 import { usePermissions, useSpace } from "@workspace/Space";
 import { useActions } from "@workspace/Board/Card";
 
@@ -74,7 +73,7 @@ export default function Header({ card, ...props }: IHeader) {
 
     return (
         <div className="flex px-4  py-4 flex-row justify-between">
-            <div className="flex-1 flex flex-row items-start sm:items-center">
+            <div className="relative group flex-1 flex flex-row items-start sm:items-center">
                 {owner && editing && !board.is_archived ? (
                     <Edit
                         value={card.name}
@@ -86,14 +85,20 @@ export default function Header({ card, ...props }: IHeader) {
                     <div className="flex px-2 flex-col justify-center">
                         <span
                             role="button"
-                            onClick={
-                                owner && !board.is_archived
-                                    ? handleSetEditingMode
-                                    : undefined
-                            }
                             className="overflow-wrap-anywhere text-left text-2xl text-gray-800 font-black">
                             <Text>{card.name}</Text>
                         </span>
+                        <div className="absolute -top-1 -right-1.5 group-hover:visible invisible">
+                            <button
+                                onClick={
+                                    owner && !board.is_archived
+                                        ? handleSetEditingMode
+                                        : undefined
+                                }
+                                className="hover:bg-primary-500 hover:text-white px-1  rounded-full">
+                                <Icons.Edit className="h-6 h-6" />
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
