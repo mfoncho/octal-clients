@@ -35,7 +35,7 @@ function Edit({ value, onSubmit, onClose }: IEdit) {
             value={name.props.value}
             onChange={name.setValue}
             onBlur={onClose}
-            className="w-full max-w-full px-2 sm:py-0 focus:ring focus:text-gray-800 text-left text-2xl text-gray-700 font-black"
+            className="w-full max-w-full px-2 sm:py-0 focus:ring focus:text-gray-900 text-left text-2xl text-gray-700 font-black"
             onSubmit={handleKeyPress}
         />
     );
@@ -95,7 +95,7 @@ export default function Header({ card, ...props }: IHeader) {
                                         ? handleSetEditingMode
                                         : undefined
                                 }
-                                className="hover:bg-primary-500 hover:text-white px-1  rounded-full">
+                                className="group-hover:bg-gray-200 hover:text-white px-1  rounded-full">
                                 <Icons.Edit className="h-6 h-6" />
                             </button>
                         </div>
