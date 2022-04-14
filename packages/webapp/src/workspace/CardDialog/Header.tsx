@@ -95,7 +95,7 @@ export default function Header({ card, ...props }: IHeader) {
                                         ? handleSetEditingMode
                                         : undefined
                                 }
-                                className="group-hover:bg-gray-200 hover:text-white px-1  rounded-full">
+                                className="hover:bg-primary-600 hover:text-white px-1  rounded-full">
                                 <Icons.Edit className="h-6 h-6" />
                             </button>
                         </div>
