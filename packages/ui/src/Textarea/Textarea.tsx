@@ -86,7 +86,6 @@ export default function Textarea(props: ITextarea) {
 
     const [value, setValue] = useState<Descendant[]>(initialValue);
 
-    console.log(value);
     useEffect(() => {
         const { value } = props;
         if (Boolean(value)) {
@@ -133,9 +132,9 @@ export default function Textarea(props: ITextarea) {
         }
 
         // Submit if mention dialog is closed
-        if (event.key == "Enter" && suggesting[0] === false) {
+        if (event.key == "Enter") {
             event.preventDefault();
-            if (props.onSubmit) {
+            if (suggesting[0] === false && props.onSubmit) {
                 const text = slater.serialize(value).trim();
                 props.onSubmit(text);
             }

@@ -335,9 +335,10 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         }
 
         // Submit if mention dialog is closed
-        if (event.key == "Enter" && suggesting[0] === false) {
+        if (event.key == "Enter") {
             event.preventDefault();
-            return handleSubmit();
+            if (suggesting[0] === false) return handleSubmit();
+            return;
         }
 
         if (emoji.test(event.key)) {
