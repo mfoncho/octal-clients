@@ -86,11 +86,15 @@ export default function Textarea(props: ITextarea) {
 
     const [value, setValue] = useState<Descendant[]>(initialValue);
 
+    console.log(value);
     useEffect(() => {
         const { value } = props;
         if (Boolean(value)) {
             const slated = slater.parse(value!);
             setValue(slated as any);
+            Transforms.deselect(editor);
+            setValue(slated as any);
+            Transforms.select(editor, { path: [0, 0], offset: 0 });
         }
     }, [props.value]);
 
@@ -185,7 +189,10 @@ export default function Textarea(props: ITextarea) {
                         }
                     }}
                 />
-                <Suggestions onSelect={handleSuggestionSelected} suggesting={suggesting} />
+                <Suggestions
+                    onSelect={handleSuggestionSelected}
+                    suggesting={suggesting}
+                />
             </div>
         </Slate>
     );

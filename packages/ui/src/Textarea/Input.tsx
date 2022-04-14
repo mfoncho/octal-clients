@@ -115,12 +115,15 @@ export default function Input(props: IInput) {
     }
 
     function handleKeyDown(event: React.KeyboardEvent) {
-        if (event.key == "Enter" && suggesting[0] === false) {
+        if (event.key == "Enter") {
             event.preventDefault();
-            if (props.onSubmit) {
-                const text = slater.serialize(value).trim();
-                props.onSubmit(text);
+            if (suggesting[0] == false) {
+                if (props.onSubmit) {
+                    const text = slater.serialize(value).trim();
+                    props.onSubmit(text);
+                }
             }
+
             return;
         }
 

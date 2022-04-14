@@ -1,4 +1,10 @@
-import { Transforms, Text, Element as SlateElement, Editor } from "slate";
+import {
+    Transforms,
+    Text,
+    Element as SlateElement,
+    Editor,
+    Range,
+} from "slate";
 import emoji from "@octal/emoji";
 import { IFileItem } from "./types";
 
@@ -113,6 +119,21 @@ export function toggleFormat(editor: any, format: string) {
     );
 }
 
+export function isActiveElement(editor: any, type: string) {
+    const [nodes] = Editor.nodes(editor, {
+        match: (n) =>
+            !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === type,
+    });
+    return !!nodes;
+}
+
+export function unwrapElement(editor: any, type: string) {
+    Transforms.unwrapNodes(editor, {
+        match: (n) =>
+            !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === type,
+    });
+}
+
 export function isFormatActive(editor: any, format: string) {
     const [match] = Editor.nodes(editor, {
         match: (n: any) => n[format] === true,
@@ -122,13 +143,26 @@ export function isFormatActive(editor: any, format: string) {
 }
 
 export function insertEmoji(editor: Editor, value: any) {
+    if (isActiveElement(editor, "emoji")) {
+        unwrapElement(editor, "emoji");
+    }
+
+    const { selection } = editor;
+    const isCollapsed = selection && Range.isCollapsed(selection);
+
     const node = {
         src: emoji.image(value),
         type: "emoji",
         emoji: value,
         children: [{ text: "" }],
     };
-    Transforms.insertNodes(editor, [node, { text: "" }] as any);
+    if (isCollapsed) {
+        Transforms.insertNodes(editor, node as any);
+    } else {
+        Transforms.wrapNodes(editor, node as any, { split: true });
+        Transforms.collapse(editor, { edge: "end" });
+    }
+
     Transforms.move(editor);
 }
 
