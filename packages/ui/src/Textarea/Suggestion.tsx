@@ -5,6 +5,7 @@ import { ReactEditor, useSlate } from "slate-react";
 import Elements from "../Elements";
 import ReactPortal from "./Portal";
 import ReactPopper from "../Popper";
+import { useDebounce } from "../hooks";
 
 export interface ISuggestion {
     value: string;
@@ -164,11 +165,16 @@ function useControls(props: IPortal) {
     const [open, setOpen] = useState<boolean>(true);
     const subject = useSubject();
 
+    const term = useDebounce(
+        subject.term,
+        subject.term.length > 2 ? 700 : 1200
+    );
+
     useEffect(() => {
-        if (subject.term === "") {
+        if (term === "") {
             setOpen(true);
         }
-    }, [subject.term]);
+    }, [term]);
 
     function handleClose() {
         setOpen(false);
@@ -180,7 +186,9 @@ function useControls(props: IPortal) {
         props.onSelect!({ ...subject, value });
     }
 
-    return { open, handleSelect, handleClose, subject };
+    return useMemo(() => {
+        return { open, handleSelect, handleClose, subject };
+    }, [term, subject.type]);
 }
 
 export function Suggestions(props: ISuggestions) {
