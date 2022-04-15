@@ -177,7 +177,7 @@ function useControls(props: IPortal) {
     }, [term]);
 
     function handleClose() {
-        setOpen(false);
+        setOpen(() => false);
     }
 
     // Close suggestions before/after select or ***CRASH***
