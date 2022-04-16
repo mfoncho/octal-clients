@@ -101,10 +101,9 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
             <div
                 className={
                     isDragging
-                        ? "flex flex-col overflow-hidden bg-gray-50 shadow-md"
-                        : "flex flex-col overflow-hidden"
-                }
-                style={{ width: "315px" }}>
+                        ? "w-[315px] flex flex-col overflow-hidden bg-gray-50 shadow-md"
+                        : "w-[315px] flex flex-col overflow-hidden"
+                }>
                 <div
                     {...handle}
                     className="flex px-3 py-2 flex-row items-center justify-between">
