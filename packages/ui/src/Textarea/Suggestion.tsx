@@ -5,7 +5,7 @@ import { ReactEditor, useSlate } from "slate-react";
 import Elements from "../Elements";
 import ReactPortal from "./Portal";
 import ReactPopper from "../Popper";
-import { useDebounce } from "../hooks";
+import { useDebounce } from "@octal/hooks";
 
 export interface ISuggestion {
     value: string;
