@@ -104,10 +104,8 @@ export default function Input(props: IInput) {
     }, [props.value]);
 
     useEffect(() => {
-        if (props.autoFocus) {
-            const el = ReactEditor.toDOMNode(editor, editor);
-            setRootEl(el as any);
-        }
+        const el = ReactEditor.toDOMNode(editor, editor);
+        setRootEl(el as any);
     }, []);
 
     function handleChange(val: any) {
