@@ -184,12 +184,12 @@ export default function Input(props: IInput) {
         classes.focus = "";
 
         [out, rest] = filterout(rest, (classname) => {
-            return classname.includes("p-");
+            return classname.startsWith("p-");
         });
 
         if (out.length === 0) {
             [out, rest] = filterout(rest, (classname) => {
-                return classname.includes("px");
+                return classname.startsWith("px");
             });
             if (out.length === 0) {
                 classes.padding = "px-2";
@@ -197,17 +197,19 @@ export default function Input(props: IInput) {
                 classes.padding = out.join(" ");
             }
             [out, rest] = filterout(rest, (classname) => {
-                return classname.includes("py");
+                return classname.startsWith("py");
             });
             if (out.length === 0) {
                 classes.padding = [classes.padding ?? "", "py-1.5"].join(" ");
+            } else {
+                classes.padding = [classes.padding, ...out].join(" ");
             }
         } else {
             classes.padding = out.join(" ");
         }
 
         [out, rest] = filterout(rest, (classname) => {
-            return classname.includes("border");
+            return classname.startsWith("border");
         });
         if (out.length === 0) {
             classes.boarder = "border";
@@ -216,7 +218,7 @@ export default function Input(props: IInput) {
         }
 
         [out, rest] = filterout(rest, (classname) => {
-            return classname.includes("min-h");
+            return classname.startsWith("min-h");
         });
         if (out.length === 0) {
             classes.height = "min-h-11";
