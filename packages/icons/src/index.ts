@@ -27,6 +27,7 @@ export { default as Workspace } from "./Workspace";
 export { default as VerifiedBadge } from "./VerifiedBadge";
 export { default as Field } from "./Field";
 export { default as Task } from "./Task";
+export { default as DropdownArrows } from "./DropdownArrows";
 export { default as CloseCircleSolid } from "./CloseCircleSolid";
 
 export { default as Forum } from "./Forum";
