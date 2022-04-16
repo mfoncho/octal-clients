@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { Slate, Editable, withReact } from "slate-react";
+import { Slate, Editable, withReact, ReactEditor } from "slate-react";
 import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import cls from "classnames";
@@ -72,7 +72,7 @@ function filterout<T>(
 export default function Input(props: IInput) {
     const Component = Elements.useElements();
 
-    const rootRef = React.useRef<HTMLDivElement | null>(null);
+    const [rootEl, setRootEl] = React.useState<HTMLDivElement | null>(null);
 
     const [focused, setFocused] = useState(false);
 
@@ -102,6 +102,13 @@ export default function Input(props: IInput) {
             Transforms.select(editor, { path: [0, 0], offset: 0 });
         }
     }, [props.value]);
+
+    useEffect(() => {
+        if (props.autoFocus) {
+            const el = ReactEditor.toDOMNode(editor, editor);
+            setRootEl(el as any);
+        }
+    }, []);
 
     function handleChange(val: any) {
         setValue(val);
@@ -171,20 +178,13 @@ export default function Input(props: IInput) {
 
     const classes = useMemo<InputClasses>(() => {
         let classes: InputClasses = {};
-        let [out, rest] = filterout(
-            (props.className ?? "")
-                .split(" ")
-                .map((classname) => classname.trim()),
-            (classname) => classname.startsWith("focus:")
-        );
-        classes.focus =
-            out.length > 0
-                ? out
-                      .map((classname) =>
-                          classname.replace("focus:", "").trim()
-                      )
-                      .join(" ")
-                : "";
+        let classnames = (props.className ?? "")
+            .split(" ")
+            .map((classname) => classname.trim());
+        let [out, rest]: [string[], string[]] = [[], classnames];
+
+        classes.focus = "";
+
         [out, rest] = filterout(rest, (classname) => {
             return classname.includes("p-");
         });
@@ -232,37 +232,31 @@ export default function Input(props: IInput) {
 
     return (
         <Slate editor={editor} value={value} onChange={handleChange}>
-            <div
-                ref={rootRef}
+            <Editable
                 className={cls(
+                    "rounded-md w-full",
                     classes.boarder,
                     classes.padding,
                     classes.height,
                     {
-                        [`${classes.focus} border-primary-400`]: focused,
-                    },
-                    {
                         [classes.classname ?? ""]: Boolean(classes.classname),
-                    },
-                    "rounded-md"
-                )}>
-                <Editable
-                    disabled={props.disabled}
-                    style={{ overflowWrap: "anywhere" }}
-                    onBlur={handleUnfocused}
-                    onFocus={handleFocused}
-                    autoFocus={props.autoFocus}
-                    onKeyDown={handleKeyDown}
-                    renderLeaf={renderLeaf}
-                    placeholder={props.placeholder}
-                    renderElement={renderElement}
-                />
-                <Suggestions.Popper
-                    anchorEl={rootRef.current}
-                    suggesting={suggesting}
-                    onSelect={handleSuggestionSelected}
-                />
-            </div>
+                    }
+                )}
+                disabled={props.disabled}
+                style={{ overflowWrap: "anywhere" }}
+                onBlur={handleUnfocused}
+                onFocus={handleFocused}
+                autoFocus={props.autoFocus}
+                onKeyDown={handleKeyDown}
+                renderLeaf={renderLeaf}
+                placeholder={props.placeholder}
+                renderElement={renderElement}
+            />
+            <Suggestions.Popper
+                anchorEl={rootEl}
+                suggesting={suggesting}
+                onSelect={handleSuggestionSelected}
+            />
         </Slate>
     );
 }
