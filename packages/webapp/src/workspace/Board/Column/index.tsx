@@ -107,7 +107,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                 style={{ width: "315px" }}>
                 <div
                     {...handle}
-                    className="flex pl-2 pr-1 py-3 flex-row items-center justify-between">
+                    className="flex px-3 py-2 flex-row items-center justify-between">
                     <button
                         onClick={canManageBoard ? handleOpenMenu : undefined}
                         className="flex flex-row items-center">
