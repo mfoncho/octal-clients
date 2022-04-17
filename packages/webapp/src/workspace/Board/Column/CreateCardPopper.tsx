@@ -17,8 +17,6 @@ const flip = { flipVariations: false };
 
 const TemplateDropdown = Popper.create<HTMLDivElement, IDropdownPopper>(
     (props) => {
-        const [loading, setLoading] = useState<boolean>(false);
-
         function handleTemplateClick(event: React.MouseEvent) {
             event.preventDefault();
             event.stopPropagation();
@@ -35,7 +33,7 @@ const TemplateDropdown = Popper.create<HTMLDivElement, IDropdownPopper>(
                 placement="bottom-end"
                 data-popper="template-dropdown"
                 style={{ width: props.anchorEl?.offsetWidth }}
-                onClickAway={loading ? undefined : props.onClickAway}
+                onClickAway={props.onClickAway}
                 className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 py-2 bg-white shadow-md overflow-x-hidden">
                 <div
                     onClick={handleTemplateClick}
