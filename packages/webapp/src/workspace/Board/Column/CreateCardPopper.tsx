@@ -59,8 +59,13 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
 
         const name = useInput("", (val) => val.length >= 2);
 
-        function handleToggleDropdown(e: MouseEvent | React.MouseEvent) {
-            if (e.target === dropdownRef.current && e.type === "click") {
+        function isDropdownBtn(e: MouseEvent) {
+            let btn = e.composedPath().find((el) => el === e.target);
+            return Boolean(btn);
+        }
+
+        function handleToggleDropdown(e: React.MouseEvent) {
+            if (isDropdownBtn(e.nativeEvent) && e.type === "click") {
                 setDropdown((value) => !value);
             }
         }
@@ -68,8 +73,19 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
         function handleTemplateDropdownClickAway(
             e: MouseEvent | React.MouseEvent
         ) {
-            if (e.target !== dropdownRef.current) {
-                setDropdown(false);
+            /*
+             *  Only close dropdown if click event
+             *  was outside the root dropdown
+             *  button element
+             */
+            if (dropdown) {
+                let node = e.target as (Node & ParentNode) | null;
+                while (node && node != dropdownRef.current) {
+                    node = node.parentNode;
+                }
+                if (!Boolean(node)) {
+                    setDropdown(false);
+                }
             }
         }
 
