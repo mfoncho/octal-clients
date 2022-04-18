@@ -149,7 +149,6 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
                 <div className="flex flex-col py-2 px-4 items-center">
                     <button
                         onClick={handleSubmit}
-                        disabled={name.valid!}
                         className={`${
                             name.valid ? "bg-primary-500" : "bg-primary-200"
                         } cursor-pointer py-2 px-2.5 border-slate-200 w-full rounded-md mx-2 font-semibold text-sm text-white shadow hover:shadow-md`}>
