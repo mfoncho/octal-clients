@@ -145,12 +145,12 @@ export function useColumnActions(column: ColumnRecord) {
         return dispatch(action);
     }, []);
 
-    const createCard = useCallback((name: string) => {
+    const createCard = useCallback((name: string, template?: string) => {
         const action = BoardAction.createCard({
             name: name,
-            description: "",
-            column_id: column.id,
+            template_id: template,
             board_id: column.board_id,
+            column_id: column.id,
         });
         return dispatch(action);
     }, []);
