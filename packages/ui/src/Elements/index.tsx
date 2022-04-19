@@ -1,7 +1,7 @@
 import React from "react";
-import Icons from "@octal/icons";
-import Text from "../Text";
 import clx from "classnames";
+import * as Icons from "@octal/icons";
+import Text from "../Text";
 
 function Suggestion({ selected, value }: any) {
     return (
