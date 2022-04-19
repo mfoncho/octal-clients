@@ -373,16 +373,14 @@ export interface ColumnPosition {
 export interface UpdateCardPayload {
     name?: string;
     card_id: string;
-    deadline?: string | null;
     board_id: string;
-    description?: string | null;
 }
 
 export interface CreateCardPayload {
     name: string;
-    column_id: string;
     board_id: string;
-    description: string;
+    column_id: string;
+    template_id?: string;
 }
 
 export interface ArchiveCardPayload {
