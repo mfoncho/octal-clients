@@ -7,17 +7,7 @@ export interface JoinSpaceRequest {
 
 export interface CreateSpaceRequest {
     name: string;
-    topics: { name: string }[];
-    board?: {
-        name: string;
-        columns: {
-            name: string;
-            type: string;
-            origin: boolean;
-            capacity: number;
-        }[];
-    };
-    purpose?: string;
+    topic: string;
     access: "private" | "public";
 }
 
