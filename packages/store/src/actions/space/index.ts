@@ -1,4 +1,4 @@
-import type { io, SpaceType, Unique } from "@octal/client";
+import type { io, Unique } from "@octal/client";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedSpace } from "../../schemas";
@@ -33,20 +33,9 @@ export interface SendInvitationsPayload {
 }
 
 export interface CreateSpacePayload {
-    icon?: File;
     name: string;
-    board?: {
-        name: string;
-        columns: {
-            name: string;
-            origin: boolean;
-            type: "column" | "stack";
-            capacity: number;
-        }[];
-    };
-    type: SpaceType;
+    topic: string;
     access: "public" | "private";
-    topics: { name: string }[];
 }
 
 export interface LoadSpacePayload {
@@ -65,7 +54,7 @@ export interface JoinSpacePayload {
     space_id: string;
 }
 
-export interface LoadSpacesPayload { }
+export interface LoadSpacesPayload {}
 
 export interface UpdateSpaceParams {
     name?: string;
