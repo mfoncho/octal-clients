@@ -26,7 +26,7 @@ function* init(): Iterable<any> {
         const data = (yield client.fetchSpaces({})) as any;
         const normalized = yield* normalize(data);
         yield put(SpaceActions.spacesLoaded(normalized));
-    } catch (e: any) { }
+    } catch (e: any) {}
 }
 
 function* load({
@@ -86,9 +86,9 @@ function* join({
 
 function* subscribe({
     payload,
-}: SpaceActions.SpaceLoadedAction | SpaceActions.SpacesLoadedAction): Iterable<
-    any
-> {
+}:
+    | SpaceActions.SpaceLoadedAction
+    | SpaceActions.SpacesLoadedAction): Iterable<any> {
     if (!Array.isArray(payload)) {
         payload = [payload];
     }
@@ -146,8 +146,8 @@ function* subscribe({
         });
 
         ch.subscribe()
-            .receive("ok", () => { })
-            .receive("error", () => { });
+            .receive("ok", () => {})
+            .receive("error", () => {});
     }
 }
 
@@ -157,7 +157,8 @@ function* create({
 }: SpaceActions.CreateSpaceAction): Iterable<any> {
     try {
         const data = (yield client.createSpace(payload)) as any;
-        yield put(SpaceActions.spaceCreated(data));
+        const normalized = yield* normalize(data);
+        yield put(SpaceActions.spaceCreated(normalized));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -170,7 +171,8 @@ function* update({
 }: SpaceActions.UpdateSpaceAction): Iterable<any> {
     try {
         const data = (yield client.updateSpace(payload as any)) as any;
-        yield put(SpaceActions.spaceUpdated(data));
+        const normalized = yield* normalize(data);
+        yield put(SpaceActions.spaceUpdated(normalized));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);

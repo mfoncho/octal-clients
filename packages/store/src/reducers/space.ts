@@ -60,6 +60,9 @@ export class SpacesStore extends Record({
 export const state = new SpacesStore({});
 
 export const reducers = {
+    [Actions.SPACE_CREATED]: (store: SpacesStore, { payload }: any) => {
+        return store.putSpace(payload);
+    },
     [Actions.SPACE_LOADED]: (store: SpacesStore, { payload }: any) => {
         return store.putSpace(payload);
     },
