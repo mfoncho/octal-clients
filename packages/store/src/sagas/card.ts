@@ -5,14 +5,14 @@ import * as BoardActions from "../actions/board";
 import { relatedLoaded, RelatedLoadedAction } from "../actions/app";
 import Client, { io } from "@octal/client";
 
-function* serialize(payload: io.Card | io.Card[]): Iterable<any> {
+function* normalize(payload: io.Card | io.Card[]): Iterable<any> {
     let [card, related] = CardSchema.normalize(payload);
     yield put(relatedLoaded(related as any) as any);
     return card;
 }
 
 function* updated(payload: io.Card | io.Card[]) {
-    let card = yield* serialize(payload);
+    let card = yield* normalize(payload);
     if (Array.isArray(card)) {
         yield put(BoardActions.cardsUpdated(card as any));
     } else {
@@ -21,7 +21,7 @@ function* updated(payload: io.Card | io.Card[]) {
 }
 
 function* loaded(payload: io.Card | io.Card[], metadata?: any) {
-    let card = yield* serialize(payload);
+    let card = yield* normalize(payload);
     if (Array.isArray(card)) {
         yield put(BoardActions.cardsLoaded(card as any, metadata));
     } else {
@@ -64,7 +64,7 @@ function* create({
 }: BoardActions.CreateCardAction): Iterable<any> {
     try {
         const data = (yield Client.createCard(payload)) as any;
-        let card = yield* serialize(data);
+        let card = yield* normalize(data);
         yield put(BoardActions.cardCreated(card));
 
         resolve.success(data);
@@ -137,7 +137,7 @@ function* archive({
 }: BoardActions.ArchiveCardAction): Iterable<any> {
     try {
         const data = (yield Client.archiveCard(payload)) as any;
-        let card = yield* serialize(data);
+        let card = yield* normalize(data);
         yield put(BoardActions.cardArchived(card));
         resolve.success(data);
     } catch (e) {
@@ -177,7 +177,7 @@ function* unarchive({
 }: BoardActions.UnarchiveCardAction): Iterable<any> {
     try {
         const data = (yield Client.unarchiveCard(payload)) as any;
-        let card = yield* serialize(data);
+        let card = yield* normalize(data);
         yield put(BoardActions.cardUnarchived(card));
         resolve.success(data);
     } catch (e) {
