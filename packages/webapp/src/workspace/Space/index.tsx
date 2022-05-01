@@ -21,13 +21,13 @@ export const Context = React.memo<{ id: string; children?: any }>((props) => {
     const permissions = usePermissionsCombo(space);
 
     useEffect(() => {
-        if (space && members.size == 0) {
+        if (space.id && members.size == 0) {
             const params = { space_id: props.id };
             dispatch(loadMembers(params));
         }
-    }, [space ? space.id : null]);
+    }, [space.id ? space.id : null]);
 
-    if (!space) return <React.Fragment />;
+    if (space.id.length == 0) return <React.Fragment />;
 
     return (
         <Space.Provider value={space}>
