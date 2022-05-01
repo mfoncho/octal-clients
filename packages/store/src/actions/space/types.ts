@@ -6,7 +6,7 @@ export type SEND_INVITATIONS = typeof SEND_INVITATIONS;
 export const CLEAR_SPACE = "CLEAR_SPACE";
 export type CLEAR_SPACE = typeof CLEAR_SPACE;
 
-export const CREATE_SPACE = "SPACE_CREATED";
+export const CREATE_SPACE = "CREATE_SPACE";
 export type CREATE_SPACE = typeof CREATE_SPACE;
 
 export const SPACE_JOINED = "SPACE_JOINED";
