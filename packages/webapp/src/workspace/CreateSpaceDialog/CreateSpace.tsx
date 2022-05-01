@@ -62,10 +62,14 @@ export default React.memo<ISpaceCreator>((props) => {
             topic: topic.value,
         };
         const action = createSpace(payload);
-        dispatch(action).then((space) => {
-            setCreating(false);
-            nav.openSpace(space);
-        });
+        dispatch(action)
+            .then((space) => {
+                setCreating(false);
+                nav.openSpace(space);
+                name.setValue("");
+                topic.setValue("");
+            })
+            .then(props.onClose);
         setCreating(true);
     }
 
