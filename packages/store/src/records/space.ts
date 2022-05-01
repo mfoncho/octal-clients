@@ -18,14 +18,14 @@ export class SpaceRoleRecord
 
 export class SpaceRecord
     extends Record({
-        id: "0" as Id,
+        id: "" as Id,
         icon: "",
-        name: "colab",
+        name: "",
         users: List<Id>(),
-        type: "discuss" as SpaceType,
-        access: "public" as AccessType,
-        topic_id: null as string | null,
-        member_id: "0" as Id,
+        type: "" as SpaceType,
+        access: "" as AccessType,
+        topic_id: "",
+        member_id: "" as Id,
         roles: Map<string, SpaceRoleRecord>(),
         joined_at: "",
         created_at: "",
