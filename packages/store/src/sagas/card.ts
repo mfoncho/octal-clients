@@ -64,8 +64,8 @@ function* create({
 }: BoardActions.CreateCardAction): Iterable<any> {
     try {
         const data = (yield Client.createCard(payload)) as any;
-
-        yield put(BoardActions.cardCreated(data));
+        let card = yield* serialize(data);
+        yield put(BoardActions.cardCreated(card));
 
         resolve.success(data);
     } catch (e) {
