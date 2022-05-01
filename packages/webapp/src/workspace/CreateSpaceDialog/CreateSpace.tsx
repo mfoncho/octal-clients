@@ -42,6 +42,7 @@ function Input(props: IInput) {
 }
 
 export default React.memo<ISpaceCreator>((props) => {
+    const nav = useNavigator();
     const dispatch = useDispatch();
 
     const [access, setAccess] = useState<"public" | "private">("public");
@@ -61,7 +62,10 @@ export default React.memo<ISpaceCreator>((props) => {
             topic: topic.value,
         };
         const action = createSpace(payload);
-        dispatch(action).then(() => setCreating(false));
+        dispatch(action).then((space) => {
+            setCreating(false);
+            nav.openSpace(space);
+        });
         setCreating(true);
     }
 
