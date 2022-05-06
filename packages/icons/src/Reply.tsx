@@ -1,1 +1,1 @@
-export { default } from "@material-ui/icons/ReplyRounded";
+export { BsReplyFill as default } from "react-icons/bs";

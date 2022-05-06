@@ -1,1 +1,1 @@
-export { default } from "@material-ui/icons/Delete";
+export { MdDelete as default } from "react-icons/md";

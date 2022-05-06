@@ -1,3 +1,1 @@
-import { faHashtag } from "@fortawesome/free-solid-svg-icons";
-import { createFontAwesomeIcon } from "./utils";
-export default createFontAwesomeIcon(faHashtag);
+export { FaHashtag as default } from "react-icons/fa";

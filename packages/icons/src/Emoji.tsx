@@ -1,1 +1,1 @@
-export { default } from "@material-ui/icons/SentimentVerySatisfied";
+export { BsEmojiWinkFill as default } from "react-icons/bs";
