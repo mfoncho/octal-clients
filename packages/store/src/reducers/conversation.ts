@@ -178,10 +178,31 @@ export const reducers = {
 
                 state.setIn(
                     ["messages", message.id],
-                    new MessageRecord(payload)
+                    new MessageRecord(message)
                 );
             });
         });
+    },
+
+    [Actions.RELATED_LOADED]: (
+        state: Conversations,
+        { payload: { messages } }: any
+    ) => {
+        if (messages) {
+            return state.withMutations((state) => {
+                Object.values(messages).forEach((message: any) => {
+                    let conversation = state.entities.get(message.thread_id!);
+
+                    if (conversation == null) return;
+
+                    state.setIn(
+                        ["messages", message.id],
+                        new MessageRecord(message)
+                    );
+                });
+            });
+        }
+        return state;
     },
 
     [Actions.MESSAGE_DELETED]: (state: Conversations, { payload }: any) => {

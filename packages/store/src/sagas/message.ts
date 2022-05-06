@@ -42,10 +42,7 @@ import {
 } from "../actions/thread";
 import { relatedLoaded } from "../actions/app";
 
-function* fetch({
-    payload,
-    resolve,
-}: FetchMessagesAction): Iterable<any> {
+function* fetch({ payload, resolve }: FetchMessagesAction): Iterable<any> {
     try {
         const data = (yield client.fetchMessages(payload)) as any;
         resolve.success(data);
@@ -96,10 +93,7 @@ function* pin({ payload, resolve }: PinMessageAction): Iterable<any> {
     }
 }
 
-function* unflag({
-    payload,
-    resolve,
-}: UnflagMessageAction): Iterable<any> {
+function* unflag({ payload, resolve }: UnflagMessageAction): Iterable<any> {
     try {
         const data = (yield client.unflagMessage(payload)) as any;
         yield put(messageUpdated(data));
@@ -129,13 +123,10 @@ function* react({ payload, resolve }: ReactMessageAction): Iterable<any> {
     }
 }
 
-function* unreact({
-    payload,
-    resolve,
-}: UnreactMessageAction): Iterable<any> {
+function* unreact({ payload, resolve }: UnreactMessageAction): Iterable<any> {
     try {
         const data = (yield client.unreactMessage(payload)) as any;
-        const { auth } = ((yield select()) as any) as State;
+        const { auth } = (yield select()) as any as State;
         const partial = {
             user_id: auth.id,
             reaction: payload.reaction,
@@ -149,10 +140,7 @@ function* unreact({
     }
 }
 
-function* trash({
-    payload,
-    resolve,
-}: DeleteMessageAction): Iterable<any> {
+function* trash({ payload, resolve }: DeleteMessageAction): Iterable<any> {
     try {
         const data = (yield client.deleteMessage(payload)) as any;
         yield put(
@@ -167,10 +155,7 @@ function* trash({
     }
 }
 
-function* update({
-    payload,
-    resolve,
-}: UpdateMessageAction): Iterable<any> {
+function* update({ payload, resolve }: UpdateMessageAction): Iterable<any> {
     try {
         const data = (yield client.updateMessage(payload)) as any;
         yield put(messageUpdated(data));
