@@ -373,9 +373,10 @@ export namespace io {
         author: Author;
         pinned: boolean;
         content: string;
-        embedded: [];
+        embeds: [];
         attachement: any;
-        reply_id: string;
+        reply?: Message;
+        reply_id?: string;
         reactions: UsersReaction[];
     }
 
