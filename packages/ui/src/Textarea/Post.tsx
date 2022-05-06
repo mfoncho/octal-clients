@@ -52,12 +52,7 @@ const wrappers = [
 ];
 
 export interface IPostInputState {
-    text: string;
-    file?: File;
-}
-
-export interface IMessagePost {
-    text: string;
+    value: string;
     file?: File;
 }
 
@@ -68,7 +63,7 @@ export interface IUpload {
 
 export interface IPostInput {
     onChange?: (state: IPostInputState) => void;
-    onSubmit?: (state: IMessagePost) => void;
+    onSubmit?: (state: IPostInputState) => void;
     value: string;
     // SOR is acronym for
     // Submit On Return
@@ -273,8 +268,9 @@ export default React.memo<IPostInput>((props: IPostInput) => {
 
     function handleSubmit() {
         if (props.onSubmit) {
-            const text = slater.serialize(value).trim();
-            props.onSubmit({ text, file: file?.file });
+            const val = slater.serialize(value).trim();
+            props.onSubmit({ value: val, file: file?.file });
+
             if (file) {
                 setFiles((files) => files.slice(1));
             }
@@ -313,10 +309,10 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     function handleChange(val: any) {
         setValue(val);
         if (props.onChange) {
-            const text = slater.serialize(val).trim();
+            const value = slater.serialize(val).trim();
             const prev = slater.serialize(val).trim();
-            if (text != prev) {
-                props.onChange({ text, file: file?.file });
+            if (value != prev) {
+                props.onChange({ value, file: file?.file });
             }
         }
     }
