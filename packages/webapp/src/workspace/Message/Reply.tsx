@@ -20,10 +20,10 @@ export default React.memo<IMessage>(({ id }) => {
 
         return (
             <div className="flex flex-row relative rounded-t-md pr-2">
-                <div className="flex flex-row items-end pl-8 w-16 h-[20px]">
-                    <div className="border-l-2 border-gray-500 rounded-tl border-t-2 w-[25px] h-[10px]" />
+                <div className="flex flex-row items-end justify-end pl-8 w-16 h-[20px]">
+                    <div className="border-l-2 border-gray-500 rounded-tl-md border-t-2 w-[34px] h-[10px]" />
                 </div>
-                <div className="flex flex-row items-center space-x-3">
+                <div className="flex flex-row items-center space-x-1">
                     <div className="w-max flex flex-row items-center justify-between">
                         <img
                             alt={author.name}
