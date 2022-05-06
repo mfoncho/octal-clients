@@ -5,7 +5,7 @@ import { useThread, useMessage } from "@octal/store";
 import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
 import { Textarea } from "@octal/ui";
 import Menu from "@workspace/Message/Menu";
-import ReplyPreview from "@workspace/Message/ReplyPreview";
+import ReplyPreview from "./ReplyPreview";
 import { usePostInput, usePermissions } from "../Space/hooks";
 import Conversation from "../Conversation";
 

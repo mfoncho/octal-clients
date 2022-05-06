@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import Message from "../Message";
-import { ActionT } from "../Message/Menu";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import LoadingRings from "../Animated/Rings";
 import immutable, { Map, OrderedMap } from "immutable";
@@ -15,6 +14,7 @@ window.immutable = immutable;
 interface IChatMsg {
     id: string;
     user_id: string;
+    reply_id: string;
     timestamp: string;
 }
 
@@ -80,7 +80,7 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
 
         previous = message;
 
-        const extra = !sameday || !sameauthor;
+        const extra = !sameday || !sameauthor || Boolean(message.reply_id);
 
         if (!sameday) {
             block.push(
