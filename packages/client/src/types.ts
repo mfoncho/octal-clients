@@ -375,6 +375,7 @@ export namespace io {
         content: string;
         embedded: [];
         attachement: any;
+        reply_id: string;
         reactions: UsersReaction[];
     }
 

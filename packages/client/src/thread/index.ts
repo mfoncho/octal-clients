@@ -27,7 +27,7 @@ export interface PostMessageRequest {
     content: string;
     attachemnt?: File;
     embeds: any;
-    markdown?: boolean;
+    reply_id?: string;
     thread_id: string;
 }
 
@@ -72,7 +72,9 @@ export default class ThreadClient extends BaseClient {
         request: PostMessageRequest,
         params?: Params
     ): Promise<io.Message> {
-        const path = `/threads/${request.thread_id}/messages`;
+        const path = request.reply_id
+            ? `/threads/${request.thread_id}/messages/${request.reply_id}/reply`
+            : `/threads/${request.thread_id}/messages`;
         const form = new FormData();
         form.append("content", request.content);
         if (request.attachemnt) {
