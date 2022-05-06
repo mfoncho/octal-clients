@@ -2,44 +2,49 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Textarea } from "@octal/ui";
 import { Dialog } from "@octal/ui";
+import { useMessage } from "@octal/store";
 import { updateMessage } from "@octal/store/lib/actions/thread";
 
-export default React.memo((props: any) => {
+export interface IEditor {
+    id: string;
+    onClose: () => void;
+}
+
+export default React.memo<IEditor>((props: any) => {
     const dispatch = useDispatch();
+    const message = useMessage(props.id);
 
     const [loading, setLoading] = useState<boolean>(false);
 
-    function handleSavePost({ text }: { text: string }) {
-        let value = text.trim();
-        if (value.length > 0) {
+    function handleSavePost({ value }: { value: string }) {
+        if (value.trim().length < 1) {
             const params = {
-                content: text.trim(),
-                thread_id: props.message.thread_id,
-                message_id: props.message.id,
-                space_id: props.message.space_id,
+                content: value.trim(),
+                thread_id: message!.thread_id,
+                message_id: message!.id,
+                space_id: message!.space_id,
             };
 
-            dispatch(updateMessage(params))
+            setLoading(true);
+            return dispatch(updateMessage(params))
                 .then(props.onClose)
                 .catch(() => {
                     setLoading(false);
                 });
-            setLoading(true);
         }
     }
 
     return (
         <Dialog.Base
-            open
+            open={Boolean(message)}
             fullWidth
             maxWidth="sm"
             onClose={loading ? undefined : props.onClose}>
             <Textarea.Post
-                autoFocus
+                value={message!.content}
                 rows={3}
+                autoFocus={true}
                 disabled={loading}
-                value={props.message.content}
-                multiline={props.message.markdown}
                 onSubmit={handleSavePost}
             />
         </Dialog.Base>

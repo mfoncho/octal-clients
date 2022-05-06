@@ -16,6 +16,7 @@ import {
     PermissionsRecord,
     SpaceRecord,
     UserRecord,
+    ThreadRecord,
     useUsers,
     useSpaceTopicsIndex,
     TopicRecord,
@@ -183,9 +184,7 @@ export function useSettings() {
     return permissions.manage_space;
 }
 
-export function usePostInput(id: string) {
-    const thread = useThread(id);
-
+export function usePostInput(thread?: ThreadRecord) {
     const dispatch = useDispatch();
 
     const permissions = usePermissions();
@@ -205,19 +204,19 @@ export function usePostInput(id: string) {
             thread_id: thread!.id,
             space_id: thread!.space_id,
         });
-        dispatch(action);
+        return dispatch(action);
     }, [thread?.id]);
 
     const onSubmit = useCallback(
-        (payload: any) => {
+        (payload: any, reply_id?: string) => {
             const params = {
-                thread_id: thread?.id,
-                markdown: permissions.use_markdown.value,
+                content: payload.value,
+                reply_id: reply_id!,
                 space_id: thread?.space_id,
-                content: payload.text,
+                thread_id: thread?.id,
                 attachment: payload.file,
             };
-            dispatch(postMessage(params));
+            return dispatch(postMessage(params));
         },
         [thread?.id]
     );
@@ -226,7 +225,6 @@ export function usePostInput(id: string) {
         onChange,
         onSubmit,
         upload,
-        multiline: permissions.use_markdown.value,
         disabled: !permissions.post_message.value,
     };
 }

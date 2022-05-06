@@ -1,112 +1,56 @@
 import React, { useState, useRef } from "react";
 import clx from "classnames";
 import moment from "moment";
-import { useDispatch } from "react-redux";
 import Avatar from "@material-ui/core/Avatar";
-import FlagIcon from "@material-ui/icons/Flag";
-import PinIcon from "@material-ui/icons/FiberPin";
-import Menu from "./Menu";
-import Edit from "./Edit";
+import * as Icons from "@octal/icons";
+import Menu, { ActionT } from "./Menu";
 import ReplyButton from "./ReplyButton";
 import Reaction from "./Reaction";
 import emoji from "@octal/emoji";
-import { useTool } from "../Space/hooks";
 import { Markdown, Text } from "@octal/ui";
 
 import UserCard from "../UserCard";
-import { useUser, useAuthId } from "@octal/store";
+import { useUser } from "@octal/store";
+import { useActions } from "./hooks";
 import { MessageRecord } from "@octal/store/lib/records";
-import {
-    flagMesssag,
-    unflagMesssag,
-    pinMesssag,
-    unpinMesssag,
-    reactMessage,
-    deleteMessage,
-    unreactMessage,
-} from "@octal/store/lib/actions/thread";
 
 export interface IMessage {
+    authid: string;
     extra?: boolean;
+    menu?: boolean;
     tsformat?: string;
     selected?: boolean;
     previews?: boolean;
     message: MessageRecord;
 }
 
+const viewerMessageActions: ActionT[] = [
+    "react",
+    "edit",
+    "reply",
+    "flag",
+    "pin",
+    "delete",
+];
+const userMessageActions: ActionT[] = [
+    "react",
+    "reply",
+    "edit",
+    "flag",
+    "pin",
+    "delete",
+];
+
 export default React.memo<IMessage>(({ message, ...props }) => {
-    const tool = useTool();
-
-    const authId = useAuthId();
-
-    const dispatch = useDispatch();
-
     const anchor = useRef<HTMLDivElement>(null);
+
+    const actions = useActions(message, props.authid);
 
     const author = useUser(message.user_id)!;
 
     const [popover, setPopover] = useState<JSX.Element | null>(null);
 
     const [hovering, setHovering] = useState<boolean>(false);
-
-    function handleReaction(reaction: any) {
-        const params = {
-            space_id: message.space_id,
-            message_id: message.id,
-            thread_id: message.thread_id,
-            reaction: reaction.native,
-        };
-        const rtx = message.reactions.find(
-            (rtx) => rtx.reaction == reaction.native
-        );
-        if (rtx && rtx.users.includes(authId)) {
-            dispatch(unreactMessage(params));
-        } else {
-            dispatch(reactMessage(params));
-        }
-    }
-
-    function handleFlag() {
-        const params = {
-            message_id: message.id,
-            thread_id: message.thread_id,
-            space_id: message.space_id,
-        };
-        const action = message.flagged
-            ? unflagMesssag(params)
-            : flagMesssag(params);
-        return dispatch(action);
-    }
-
-    function handlePin() {
-        const params = {
-            thread_id: message.thread_id,
-            message_id: message.id,
-            space_id: message.space_id,
-        };
-        const action = message.pinned
-            ? unpinMesssag(params)
-            : pinMesssag(params);
-        return dispatch(action);
-    }
-
-    function handleDelete() {
-        const params = {
-            message_id: message.id,
-            space_id: message.space_id,
-            thread_id: message.thread_id,
-        };
-        dispatch(deleteMessage(params));
-    }
-
-    function handleReply() {
-        tool.open("reply", { id: message.id });
-    }
-
-    function handleEdit() {
-        const node = <Edit message={message} onClose={closePopover} />;
-        setPopover(node);
-    }
 
     function closePopover() {
         setPopover(null);
@@ -119,8 +63,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
     function makeReactionClickHandler(reaction: any) {
         return () => {
-            let data = emoji.query(reaction.reaction);
-            handleReaction(data);
+            actions.onReact(reaction.reaction);
         };
     }
 
@@ -132,23 +75,6 @@ export default React.memo<IMessage>(({ message, ...props }) => {
         setPopover(
             <UserCard id={author.id} anchor={target} onClose={closePopover} />
         );
-    }
-
-    function handleHighlightClicked(e: React.MouseEvent, node: any) {
-        if (node.type === "user" || node.type === "bot") {
-            setPopover(
-                <UserCard
-                    id={node.type_id}
-                    anchor={e.currentTarget}
-                    onClose={closePopover}
-                />
-            );
-        } else if (node.type === "space") {
-            dispatch({
-                type: "OPEN_CHANNEL",
-                payload: node.type_id,
-            });
-        }
     }
 
     return (
@@ -192,9 +118,13 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                 )}
 
                 <div className="flex flex-col" ref={anchor}>
-                    <div className="flex flex-row">
-                        {message.flagged && <FlagIcon />}
-                        {message.pinned && <PinIcon />}
+                    <div className="flex flex-row text-gray-600 space-x-2">
+                        {message.pinned && (
+                            <Icons.Pin className="h-2.5 w-2.5" />
+                        )}
+                        {message.flagged && (
+                            <Icons.Bookmark className="h-2.5 w-2.5" />
+                        )}
                     </div>
                     {emoji.test(message.content) ? (
                         <div className="text-6xl">
@@ -222,7 +152,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             key={reaction.reaction}
                             name={reaction.reaction}
                             count={reaction.users.size}
-                            highlight={reaction.users.includes(authId)}
+                            highlight={reaction.users.includes(props.authid)}
                             onClick={makeReactionClickHandler(reaction)}
                         />
                     ))}
@@ -232,17 +162,20 @@ export default React.memo<IMessage>(({ message, ...props }) => {
             </div>
 
             <Menu
+                id={message.id}
                 open={hovering}
+                onPin={actions.onPin}
+                onFlag={actions.onFlag}
+                onReact={actions.onReact}
+                onDelete={actions.onDelete}
                 anchor={anchor.current!}
-                onPin={message.pinned ? undefined : handlePin}
-                onUnpin={message.pinned ? handlePin : undefined}
-                onFlag={message.flagged ? undefined : handleFlag}
-                onUnflag={message.flagged ? handleFlag : undefined}
-                onEdit={authId == message.user_id ? handleEdit : undefined}
-                onReact={handleReaction}
-                onReply={message.reply_thread_id ? handleReply : undefined}
-                onDelete={handleDelete}
-                onClose={() => setHovering(false)}
+                buttons={
+                    message.user_id == props.authid
+                        ? viewerMessageActions
+                        : userMessageActions
+                }
+                pinned={message.pinned}
+                flagged={message.flagged}
             />
             {popover && popover}
         </div>

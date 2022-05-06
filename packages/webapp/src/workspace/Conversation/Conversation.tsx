@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import Message from "../Message";
-import { Context as MenuContext, ActionT } from "../Message/Menu";
+import { ActionT } from "../Message/Menu";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import LoadingRings from "../Animated/Rings";
 import immutable, { Map, OrderedMap } from "immutable";
 import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
-import { ThreadRecord, MessageRecord } from "@octal/store";
+import { ThreadRecord, MessageRecord, useAuthId } from "@octal/store";
 import { useUnmount, useCurPrev, useDebouncedCallback } from "src/hooks";
 
 window.immutable = immutable;
@@ -19,6 +19,7 @@ interface IChatMsg {
 }
 
 interface IConversation {
+    authid: string;
     messages: OrderedMap<string, IChatMsg>;
 }
 
@@ -40,16 +41,28 @@ const scrollerOptions = {
     suppressScrollY: false,
 };
 
-const Msg = React.memo<{ id: string; extra: boolean }>(({ id, extra }) => {
-    const message = React.useContext(Context).get(id);
-    if (message) {
-        return <Message message={message} tsformat="h:mm A" extra={extra} />;
-    } else {
-        return <></>;
+const Msg = React.memo<{ id: string; extra: boolean; authid: string }>(
+    ({ id, extra, authid }) => {
+        const message = React.useContext(Context).get(id);
+        if (message) {
+            return (
+                <Message
+                    message={message}
+                    authid={authid}
+                    menu={true}
+                    tsformat="h:mm A"
+                    extra={extra}
+                />
+            );
+        } else {
+            return <></>;
+        }
     }
-});
+);
 
-export const Messages = React.memo<IConversation>(({ messages }) => {
+Msg.displayName = "Msg";
+
+export const Messages = React.memo<IConversation>(({ messages, authid }) => {
     let sameday = false;
     let sameauthor = false;
 
@@ -86,11 +99,18 @@ export const Messages = React.memo<IConversation>(({ messages }) => {
         if (extra) {
             block.push(
                 <div key="extra-space" className="pt-2">
-                    <Msg extra={extra} id={message.id} />
+                    <Msg authid={authid} extra={extra} id={message.id} />
                 </div>
             );
         } else {
-            block.push(<Msg extra={false} id={message.id} key={message.id} />);
+            block.push(
+                <Msg
+                    authid={authid}
+                    extra={false}
+                    id={message.id}
+                    key={message.id}
+                />
+            );
         }
 
         return <React.Fragment key={message.id}>{block}</React.Fragment>;
@@ -101,7 +121,7 @@ export const Messages = React.memo<IConversation>(({ messages }) => {
     );
 });
 
-const actions: ActionT[] = ["react", "reply", "flag", "pin", "edit", "delete"];
+Messages.displayName = "Messages";
 
 const defaultPosition = {
     mid: "",
@@ -114,11 +134,11 @@ type PositionType = typeof defaultPosition;
 export default React.memo<IThread>(function ({ thread }) {
     const dispatch = useDispatch();
 
+    const authid = useAuthId();
+
     const [scrollPercentage, setScrollPercentage] = useState<number>(100);
 
     const [, prevScrollPercentage] = useCurPrev(scrollPercentage);
-
-    const [menuContext] = useState({ actions });
 
     const [page, setPage] = useState<PositionType>(() => {
         return thread ? (thread.view.toJS() as PositionType) : defaultPosition;
@@ -354,7 +374,7 @@ export default React.memo<IThread>(function ({ thread }) {
         if (conversation == null) return <LoadingBars />;
         **/
 
-        return <Messages messages={thread.history} />;
+        return <Messages authid={authid} messages={thread.history} />;
     }
 
     return (
@@ -365,11 +385,9 @@ export default React.memo<IThread>(function ({ thread }) {
                     onScrollY={handleScrollY}
                     containerRef={setContainer}
                     className="h-full w-full">
-                    <MenuContext.Provider value={menuContext}>
-                        <div className="flex py-12 flex-col min-h-full justify-end">
-                            {renderConversation()}
-                        </div>
-                    </MenuContext.Provider>
+                    <div className="flex py-12 flex-col min-h-full justify-end">
+                        {renderConversation()}
+                    </div>
                 </PerfectScrollbar>
             </div>
         </Context.Provider>

@@ -1,16 +1,11 @@
 import React, { useState, useContext } from "react";
 import Popover from "@material-ui/core/Popover";
-import FlagIcon from "@material-ui/icons/Flag";
-import EditIcon from "@material-ui/icons/Edit";
-import ReplyIcon from "@material-ui/icons/Reply";
-import PinIcon from "@material-ui/icons/FiberPin";
-import ReactionIcon from "@material-ui/icons/Mood";
-import DeleteIcon from "@material-ui/icons/Delete";
 import JumpIcon from "@material-ui/icons/KeyboardReturn";
 import { Picker as EmojiPicker, EmojiData } from "emoji-mart";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Tooltip } from "@octal/ui";
-import { usePermissions } from "../Space/hooks";
+import * as Icons from "@octal/icons";
+import Editor from "./Editor";
 
 export type ActionT =
     | "react"
@@ -19,6 +14,7 @@ export type ActionT =
     | "reply"
     | "edit"
     | "delete"
+    | "manage"
     | "jump";
 
 interface IButtonIcon {
@@ -32,12 +28,8 @@ interface IButton {
         | React.ComponentClass<IButtonIcon>
         | React.FunctionComponent<IButtonIcon>;
     classes?: string;
-    onClick: (e: React.MouseEvent) => void;
+    onClick: any;
 }
-
-export const Context = React.createContext({
-    actions: [] as ActionT[],
-});
 
 interface IEmojiPopover {
     anchor: Element;
@@ -45,19 +37,32 @@ interface IEmojiPopover {
     onSelect: (emoji: EmojiData, event: React.MouseEvent) => void;
 }
 
-interface IMenu {
+export interface IMenu {
+    id: string;
     open?: boolean;
+    pinned: boolean;
+    buttons: ActionT[];
+    flagged: boolean;
     anchor: HTMLElement;
     onPin?: () => void;
-    onFlag?: () => void;
     onEdit?: () => void;
-    onUnpin?: () => void;
-    onReact?: (emoji: EmojiData, event: React.MouseEvent) => void;
+    onFlag?: () => void;
     onReply?: () => void;
-    onClose?: () => void;
-    onUnflag?: () => void;
+    onReact?: (reaction: string) => void;
     onDelete?: () => void;
 }
+
+enum PopupType {
+    CLOSE,
+    EMOJI,
+    EDITOR,
+}
+
+export const Context = React.createContext<string[]>([]);
+
+export const Reply = React.createContext<
+    (id: string, e: React.MouseEvent) => void
+>(() => {});
 
 function EmojiPopover(props: IEmojiPopover) {
     return (
@@ -84,37 +89,34 @@ function EmojiPopover(props: IEmojiPopover) {
 
 const present = 2;
 
-export default React.memo<IMenu>(({ open, ...props }: any) => {
-    const { actions } = useContext(Context);
+const Menu = React.memo<IMenu>(({ open, ...props }) => {
+    const actions = useContext(Context);
 
-    const permissions = usePermissions();
+    const onReply = useContext(Reply);
 
-    const [popup, setPopup] = useState<JSX.Element | null>(null);
+    const [popup, setPopup] = useState<PopupType>(PopupType.CLOSE);
 
     const [expanded, setExpanded] = useState<boolean>(false);
 
-    function handleClosePopup() {
-        setPopup(null);
-        props.onClose();
+    function handleClosePopover() {
+        setPopup(PopupType.CLOSE);
     }
 
     function handleReact() {
-        const node = (
-            <EmojiPopover
-                anchor={props.anchor}
-                onClose={handleClosePopup}
-                onSelect={handleReaction}
-            />
-        );
-        setPopup(node);
+        setPopup(PopupType.EMOJI);
     }
 
-    function handleReaction(reaction: any, e: any) {
-        props.onReact(reaction, e);
-        setPopup(null);
+    function handleReaction(reaction: any) {
+        if (props.onReact) {
+            props.onReact(reaction.native);
+        }
     }
 
     function handleJump() {}
+
+    function handleEdit() {
+        setPopup(PopupType.EDITOR);
+    }
 
     function renderButton(btn: IButton, index: number) {
         const Icon: any = btn.icon;
@@ -129,78 +131,55 @@ export default React.memo<IMenu>(({ open, ...props }: any) => {
                 placement="top">
                 <button
                     onClick={btn.onClick}
-                    className="flex items-center p-2 text-gray-600 justify-center hover:bg-gray-200">
-                    <Icon fontSize="small" className="w-5 h-5" />
+                    className="flex items-center p-1 rounded-md my-0.5 text-gray-600 justify-center hover:bg-slate-200">
+                    <Icon className="w-4 h-4" />
                 </button>
             </Tooltip>
         );
     }
 
-    const buttons: Array<IButton> = actions
+    const buttons: Array<IButton> = props.buttons
         .filter((action: ActionT) => {
-            switch (action) {
-                case "edit":
-                    return permissions.edit_message.value && props.onEdit;
-
-                case "reply":
-                    return permissions.post_reply.value && props.onReply;
-
-                case "flag":
-                    return props.onFlag || props.onUnflag;
-
-                case "pin":
-                    return (
-                        permissions.pin_message.value &&
-                        (props.onPin || props.onUnpin)
-                    );
-
-                case "delete":
-                    return (
-                        permissions.manage_messages.value ||
-                        (permissions.delete_message.value && props.onEdit)
-                    );
-
-                default:
-                    return true;
-            }
+            const active = actions.includes(action);
+            if (action === "delete" && active === false)
+                return action.includes("destroy");
+            return active;
         })
         .map((button: ActionT): IButton => {
             switch (button) {
                 case "react":
                     return {
                         name: "React",
-                        icon: ReactionIcon,
+                        icon: Icons.Emoji,
                         onClick: handleReact,
                     };
 
                 case "flag":
                     return {
-                        name: props.onUnflag
-                            ? "Unflag Message"
-                            : "Flag Message",
-                        icon: FlagIcon,
-                        onClick: props.onUnflag || props.onFlag,
+                        name: props.flagged ? "Unflag Message" : "Flag Message",
+                        icon: Icons.Bookmark,
+                        onClick: props.onFlag,
                     };
 
                 case "pin":
                     return {
-                        name: props.onUnpin ? "Unpin Message" : "Pin Message",
-                        icon: PinIcon,
-                        onClick: props.onUnpin || props.onPin,
+                        name: props.pinned ? "Unpin Message" : "Pin Message",
+                        icon: Icons.Pin,
+                        onClick: props.onPin,
                     };
 
                 case "reply":
                     return {
                         name: "Reply",
-                        icon: ReplyIcon,
-                        onClick: props.onReply,
+                        icon: Icons.Reply,
+                        onClick: (e: any) => onReply(props.id, e),
                     };
 
                 case "edit":
                     return {
                         name: "Edit Message",
-                        icon: EditIcon,
-                        onClick: props.onEdit,
+                        icon: Icons.Edit,
+                        onClick: handleEdit,
                     };
 
                 case "jump":
@@ -213,13 +192,13 @@ export default React.memo<IMenu>(({ open, ...props }: any) => {
                 case "delete":
                     return {
                         name: "Delete Message",
-                        icon: DeleteIcon,
+                        icon: Icons.Delete,
                         onClick: props.onDelete,
                     };
                 default:
                     return {
                         name: "unknown",
-                        icon: DeleteIcon,
+                        icon: ((props: any) => ({})) as any,
                         onClick: () => {},
                     };
             }
@@ -228,7 +207,7 @@ export default React.memo<IMenu>(({ open, ...props }: any) => {
     const collapsable = buttons.length > present;
 
     return (
-        <div className="absolute invisible group-hover:visible hover:shadow-md bg-white rounded-md -top-8 right-4 flex flex-row items-center border border-gray-400 first-child:rounded-l-md last-child:rounded-r-md">
+        <div className="absolute invisible group-hover:visible hover:shadow-md bg-white rounded-md -top-8 right-4 flex flex-row items-center border border-gray-100 first-child:rounded-l-md last-child:rounded-r-md bg-slate-100 space-x-1 pl-2">
             {buttons
                 .slice(0, expanded ? buttons.length : present)
                 .map(renderButton)}
@@ -236,7 +215,7 @@ export default React.memo<IMenu>(({ open, ...props }: any) => {
             {collapsable && (
                 <button
                     aria-label="Show more"
-                    className="p-2 text-gray-600 flex items-center justify-center hover:bg-gray-200"
+                    className="p-1 text-gray-600 flex items-center justify-center hover:bg-slate-200 rounded-md my-0.5 "
                     onClick={() => setExpanded(!expanded)}>
                     <ExpandMoreIcon
                         fontSize="small"
@@ -248,7 +227,23 @@ export default React.memo<IMenu>(({ open, ...props }: any) => {
                     />
                 </button>
             )}
-            {popup}
+            {popup === PopupType.EMOJI && (
+                <EmojiPopover
+                    anchor={props.anchor}
+                    onClose={handleClosePopover}
+                    onSelect={handleReaction}
+                />
+            )}
+            {popup === PopupType.EDITOR && (
+                <Editor id={props.id} onClose={handleClosePopover} />
+            )}
         </div>
     );
 });
+
+type FCMenu = typeof Menu & { Context: typeof Context; Reply: typeof Reply };
+
+(Menu as FCMenu).Context = Context;
+(Menu as FCMenu).Reply = Reply;
+
+export default Menu as FCMenu;

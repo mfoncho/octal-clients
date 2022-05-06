@@ -169,7 +169,12 @@ const MessageType = React.memo<IThemeMode>((props) => {
                 ))}
             </div>
             <div className="flex flex-col my-4 py-4 hover:bg-gray-100 rounded-md border-2 border-gray-100 overflow-hidden">
-                <Message extra={true} tsformat="LT" message={sampleMessage} />
+                <Message
+                    authid=""
+                    extra={true}
+                    tsformat="LT"
+                    message={sampleMessage}
+                />
             </div>
         </div>
     );
