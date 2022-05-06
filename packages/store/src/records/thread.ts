@@ -2,7 +2,7 @@ import { Record, fromJS, Map, OrderedMap } from "immutable";
 import { Unique, BelongsToSpace, Id, ThreadType } from "@octal/client";
 import { MessageRecord } from "./message";
 
-class Loading extends Record({
+export class ConversationLoading extends Record({
     top: false,
     bottom: false,
 }) {}
@@ -10,6 +10,7 @@ class Loading extends Record({
 export class ChatMessage extends Record({
     id: "",
     user_id: "",
+    reply_id: null as any as string,
     timestamp: "",
 }) {}
 
@@ -44,7 +45,7 @@ export class ThreadRecord
 
         // Virtual fields
         highlight: "0",
-        loading: new Loading(),
+        loading: new ConversationLoading(),
         view: new ThreadView(),
         messages: Map<string, MessageRecord>(),
         hcache: OrderedMap<string, ChatMessage>(),

@@ -47,9 +47,9 @@ function* load({
     metadata,
 }: BoardActions.LoadCardsAction): Iterable<any> {
     try {
-        const data = ((yield yield put(
+        const data = (yield yield put(
             BoardActions.fetchCards(payload)
-        )) as any) as io.Card[];
+        )) as any as io.Card[];
 
         yield* loaded(data, metadata);
         resolve.success(data);
@@ -111,7 +111,7 @@ function* move({
 }
 
 function* related({ payload }: RelatedLoadedAction): Iterable<any> {
-    let cards = CardSchema.getCollection(payload);
+    let cards = CardSchema.getCollection(payload as any);
 
     if (cards.length > 0) {
         yield put(BoardActions.cardsLoaded(cards));

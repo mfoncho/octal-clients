@@ -124,7 +124,7 @@ export function shutdownSpace(
     return createIOAction<SHUTDOWN_SPACE>(SHUTDOWN_SPACE, payload);
 }
 
-export function spaceCreated(payload: io.Space): SpaceCreatedAction {
+export function spaceCreated(payload: NormalizedSpace): SpaceCreatedAction {
     return createAction(SPACE_CREATED, payload);
 }
 
@@ -132,15 +132,15 @@ export function spaceUpdated(payload: NormalizedSpace): SpaceUpdatedAction {
     return createAction(SPACE_UPDATED, payload);
 }
 
-export function spaceShutdown(payload: io.Space): SpaceShutdownAction {
+export function spaceShutdown(payload: NormalizedSpace): SpaceShutdownAction {
     return createAction(SPACE_SHUTDOWN, payload);
 }
 
-export function spaceRestored(payload: io.Space): SpaceRestoredAction {
+export function spaceRestored(payload: NormalizedSpace): SpaceRestoredAction {
     return createAction(SPACE_RESTORED, payload);
 }
 
-export function spaceJoined(payload: io.Space): SpaceJoinedAction {
+export function spaceJoined(payload: NormalizedSpace): SpaceJoinedAction {
     return createAction(SPACE_JOINED, payload);
 }
 

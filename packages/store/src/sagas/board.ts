@@ -55,9 +55,9 @@ function* trash({
 
 function* subscribe({
     payload,
-}: BoardActions.BoardLoadedAction | BoardActions.BoardsLoadedAction): Iterable<
-    any
-> {
+}:
+    | BoardActions.BoardLoadedAction
+    | BoardActions.BoardsLoadedAction): Iterable<any> {
     if (!Array.isArray(payload)) {
         payload = [payload];
     }
@@ -113,15 +113,15 @@ function* subscribe({
         });
 
         ch.on("column.updated", (payload: io.Column) => {
-            dispatch(BoardActions.columnUpdated(payload));
+            dispatch(BoardActions.columnUpdated(payload as any));
         });
 
         ch.on("column.archived", (payload: io.Column) => {
-            dispatch(BoardActions.columnUpdated(payload));
+            dispatch(BoardActions.columnUpdated(payload as any));
         });
 
         ch.on("column.unarchived", (payload: io.Column) => {
-            dispatch(BoardActions.columnUpdated(payload));
+            dispatch(BoardActions.columnUpdated(payload as any));
         });
 
         ch.on("column.deleted", (payload: io.Column) => {
@@ -149,8 +149,8 @@ function* subscribe({
         });
 
         ch.subscribe()
-            .receive("ok", () => { })
-            .receive("error", () => { });
+            .receive("ok", () => {})
+            .receive("error", () => {});
     }
 }
 

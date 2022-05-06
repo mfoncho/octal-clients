@@ -59,7 +59,7 @@ function* move({
 }
 
 function* related({ payload }: RelatedLoadedAction): Iterable<any> {
-    let columns = ColumnSchema.getCollection(payload);
+    let columns = ColumnSchema.getCollection(payload as any);
     if (columns.length > 0) {
         yield put(BoardActions.columnsLoaded(columns));
     }

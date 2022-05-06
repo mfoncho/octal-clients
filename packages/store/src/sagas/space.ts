@@ -109,7 +109,7 @@ function* subscribe({
         });
 
         ch.on("space.shutdown", (payload: io.Space) => {
-            dispatch(SpaceActions.spaceShutdown(payload));
+            dispatch(SpaceActions.spaceShutdown(payload as any));
         });
 
         ch.on("topic.created", (payload: io.Topic) => {
@@ -138,11 +138,11 @@ function* subscribe({
         });
 
         ch.on("member.left", (payload: io.Member) => {
-            dispatch(MemberActions.memberLeft(payload));
+            dispatch(MemberActions.memberLeft(payload as any));
         });
 
         ch.on("member.joined", (payload: io.Member) => {
-            dispatch(MemberActions.memberJoined(payload));
+            dispatch(MemberActions.memberJoined(payload as any));
         });
 
         ch.subscribe()

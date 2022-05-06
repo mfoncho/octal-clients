@@ -12,7 +12,7 @@ function* getPreferences(): Iterable<any> {
     try {
         const data = (yield client.getPreferences()) as any;
         yield put(UserActions.preferencesUpdated(data));
-    } catch (e) { }
+    } catch (e) {}
 }
 
 function* preferences({
@@ -43,7 +43,7 @@ function* presence({
     resolve: meta,
 }: UserActions.SetUserPresenceAction): Iterable<any> {
     try {
-        const { auth } = ((yield select()) as any) as State;
+        const { auth } = (yield select()) as any as State;
         const data = (yield client.setUserPresence(
             payload.presence as any
         )) as any;
@@ -65,7 +65,7 @@ function* update({
 }: UserActions.UpdateUserProfileAction): Iterable<any> {
     try {
         const data = (yield client.updateUserProfile(payload as any)) as any;
-        const { auth } = ((yield select()) as any) as State;
+        const { auth } = (yield select()) as any as State;
         yield put(UserActions.userUpdated({ id: auth.id, ...data } as any));
         resolve.success(data);
     } catch (e) {
@@ -103,12 +103,12 @@ function* subscribe({ payload }: any): Iterable<any> {
     if (client.topic(topic)) {
         let channel = client.channel(topic);
         channel.on("space.joined", (space: io.Space) => {
-            dispatch(SpaceActions.spaceJoined(space));
+            dispatch(SpaceActions.spaceJoined(space as any));
         });
         channel
             .subscribe()
-            .receive("ok", () => { })
-            .receive("error", () => { });
+            .receive("ok", () => {})
+            .receive("error", () => {});
     }
 }
 
@@ -148,8 +148,8 @@ function* syncPresence(): Iterable<any> {
 
     channel
         .subscribe()
-        .receive("ok", () => { })
-        .receive("error", () => { });
+        .receive("ok", () => {})
+        .receive("error", () => {});
 }
 
 export const tasks = [

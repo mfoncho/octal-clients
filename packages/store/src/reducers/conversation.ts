@@ -9,7 +9,12 @@ import {
     TrimConversationAction,
 } from "../actions/thread";
 import * as Actions from "../actions/types";
-import { MessageRecord } from "../records";
+import {
+    MessageRecord,
+    ThreadView,
+    ConversationLoading as Loading,
+    ChatMessage,
+} from "../records";
 import { Id, Timestamped, Unique } from "@octal/client";
 
 const sort = (a: Timestamped & Unique, b: Timestamped & Unique) => {
@@ -20,31 +25,10 @@ const sort = (a: Timestamped & Unique, b: Timestamped & Unique) => {
     return 0;
 };
 
-export class Loading extends Record({
-    top: true,
-    bottom: true,
-}) {}
-
-export class ChatMessage extends Record({
-    id: "",
-    user_id: "",
-    timestamp: "",
-}) {}
-
-export class Page extends Record({
-    // Message scrollTop
-    top: 0,
-    // Middle message id
-    mid: "",
-    // Follow new messages by
-    // auto scroll bottom
-    follow: true,
-}) {}
-
 export class Conversation extends Record({
     id: "" as Id,
     view: Map(),
-    page: new Page(),
+    page: new ThreadView(),
     highlight: "0",
     loading: new Loading(),
     chat: OrderedMap<string, ChatMessage>(),
