@@ -23,18 +23,18 @@ export class UsersReactionRecord extends Record({
 
 export class MessageRecord
     extends Record({
-        id: "0" as Id,
+        id: "" as Id,
         content: "",
         pinned: false,
         attachement: null as any,
         embedded: [],
         flagged: false,
-        user_id: "0" as Id,
+        user_id: "" as Id,
         markdown: false,
         timestamp: "",
-        thread_id: "0" as Id,
-        space_id: "0" as Id,
-        reply_thread_id: null as string | null,
+        thread_id: "" as Id,
+        space_id: "" as Id,
+        reply_id: null as string | null,
         reactions: List<UsersReactionRecord>(),
         last_reply: null as MessageRecord | null,
     })
