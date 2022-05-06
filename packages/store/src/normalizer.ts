@@ -29,6 +29,7 @@ class Schemas {
 export interface Relation<T = undefined, Ts = never> {
     ts?: Ts;
     as?: T;
+    field: string;
     by: "belongsto" | "hasone" | "hasmany" | "mapmany" | "belongstomany";
     type: string;
 }
@@ -38,7 +39,7 @@ export interface Structure {
 }
 
 type NormalizedExtra<R extends Structure> = {
-    [T in R[keyof R]["as"]]: T extends string ? R[keyof R]["ts"] : never;
+    [T in R[keyof R]["field"]]: T extends string ? R[keyof R]["ts"] : never;
 };
 
 export type Normalized<T, S extends Structure> = Partial<
@@ -122,24 +123,24 @@ export class Schema<
         }
     }
 
-    static hasOne<T>(type: string, as?: T): Relation<T> {
-        return { as, type, by: "hasone" };
+    static hasOne<T>(type: string, field: string, as?: T): Relation<T> {
+        return { as, type, field, by: "hasone" };
     }
 
-    static hasMany<T>(type: string, as?: T): Relation<T> {
-        return { as, type, by: "hasmany" };
+    static hasMany<T>(type: string, field: string, as?: T): Relation<T> {
+        return { as, type, field, by: "hasmany" };
     }
 
-    static belongsTo<T>(type: string, as?: T): Relation<T> {
-        return { as, type, by: "belongsto" };
+    static belongsTo<T>(type: string, field: string, as?: T): Relation<T> {
+        return { as, type, field, by: "belongsto" };
     }
 
-    static belongsToMany<T>(type: string, as?: T): Relation<T> {
-        return { as, type, by: "belongstomany" };
+    static belongsToMany<T>(type: string, field: string, as?: T): Relation<T> {
+        return { as, type, field, by: "belongstomany" };
     }
 
-    static mapMany<T>(type: string, as?: T): Relation<T> {
-        return { as, type, by: "mapmany" };
+    static mapMany<T>(type: string, field: string, as?: T): Relation<T> {
+        return { as, type, field, by: "mapmany" };
     }
 
     static of(name: string) {
@@ -159,9 +160,9 @@ export class Schema<
                 let schema = schemas.get(related.type);
 
                 let relation = {} as Data;
-                let object = (data as any)[key];
+                let object = (data as any)[related.field];
 
-                if (object != null) {
+                if (Boolean(object)) {
                     switch (related.by) {
                         case "mapmany":
                             {

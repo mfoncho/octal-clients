@@ -1,52 +1,59 @@
 import { io } from "@octal/client";
 import { Relation, Schema } from "./normalizer";
 
-const cards: Relation<undefined> = Schema.hasMany("card");
+const cards: Relation<undefined> = Schema.hasMany("card", "cards");
 
-const boards: Relation<undefined> = Schema.hasMany("board");
+const boards: Relation<undefined> = Schema.hasMany("board", "boards");
 
-const topics: Relation<undefined> = Schema.hasMany("topic");
+const topics: Relation<undefined> = Schema.hasMany("topic", "topics");
 
-const user: Relation<"user_id", string> = Schema.belongsTo("user", "user_id");
+const user: Relation<"user_id", string> = Schema.belongsTo(
+    "user",
+    "user",
+    "user_id"
+);
 
 const label: Relation<"label_id", string> = Schema.belongsTo(
+    "label",
     "label",
     "label_id"
 );
 
-const author: Relation<"user_id", string> = Schema.belongsTo("user", "user_id");
-
-const board: Relation<"board_id", string> = Schema.belongsTo(
-    "board",
-    "board_id"
+const author: Relation<"user_id", string> = Schema.belongsTo(
+    "user",
+    "author",
+    "user_id"
 );
 
-const topic: Relation<"topic_id", string> = Schema.belongsTo(
-    "topic",
-    "topic_id"
-);
-
-const status: Relation<"status_id", string> = Schema.belongsTo(
-    "status",
-    "status_id"
+const reply: Relation<"reply_id", string> = Schema.belongsTo(
+    "message",
+    "reply",
+    "reply_id"
 );
 
 const reactions: Relation<"reactions", string> = Schema.mapMany(
+    "reactions",
     "reactions",
     "reactions"
 );
 
 const card_fields: Relation<"fields", string> = Schema.mapMany(
     "field",
+    "fields",
     "fields"
 );
 
 const card_field_values: Relation<"values", string> = Schema.mapMany(
     "values",
+    "values",
     "values"
 );
 
-const users: Relation<"users", string> = Schema.belongsToMany("user", "users");
+const users: Relation<"users", string> = Schema.belongsToMany(
+    "user",
+    "users",
+    "users"
+);
 
 const BoardStruct = {};
 
@@ -67,9 +74,7 @@ const ReactionStruct = {
     user: user,
 };
 
-const UserStruct = {
-    status: status,
-};
+const UserStruct = {};
 
 const CardFieldValueStruct = {
     user: user,
@@ -79,6 +84,7 @@ const CardFieldValueStruct = {
 const ThreadStruct = {};
 
 const MessageStruct = {
+    reply: reply,
     author: author,
     reactions: reactions,
 };
