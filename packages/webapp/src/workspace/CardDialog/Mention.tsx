@@ -29,6 +29,7 @@ export default function Mention({ prefix, selected, mention }: IMention) {
                     )}>
                     <div className="font-bold flex flex-row items-center">
                         <img
+                            alt={user.username}
                             src={user.avatar}
                             className="inline-block h-5 w-5 rounded-full mr-2"
                         />

@@ -91,7 +91,6 @@ export default function TextField({ field, handle, ...props }: IField) {
                 />
             ) : (
                 <div
-                    onClick={handleToggleEditMode}
                     className={clx(
                         "flex flex-col break-word w-full text-gray-800 rounded-lg text-base",
                         {
@@ -104,7 +103,9 @@ export default function TextField({ field, handle, ...props }: IField) {
                         </Markdown>
                     </div>
                     <div className="flex flex-row justify-end pt-2 px-3">
-                        <button className="text-primary-500 font-bold text-xs">
+                        <button
+                            onClick={handleToggleEditMode}
+                            className="text-primary-500 font-bold text-xs">
                             edit
                         </button>
                     </div>
