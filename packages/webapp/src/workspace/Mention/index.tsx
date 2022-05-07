@@ -1,7 +1,8 @@
 import React from "react";
 import clx from "classnames";
 import { Text } from "@octal/ui";
-import { UserRecord, TopicRecord, useTopic, useUser } from "@octal/store";
+import Username from "@workspace/Username";
+import { UserRecord, TopicRecord, useTopic } from "@octal/store";
 
 interface IMentioned {
     id: string;
@@ -13,15 +14,6 @@ interface IMention<T = TopicRecord | UserRecord> {
     suggestion: string;
     selected: boolean;
     value: { value: string; topic: T };
-}
-
-export function UserMentioned({ id }: IMentioned) {
-    const user = useUser(id);
-    return (
-        <span className="px-1 pb-0.5 my-0.5 bg-primary-500 text-white rounded-full font-semibold text-sm">
-            @<Text>{user.username}</Text>
-        </span>
-    );
 }
 
 export function TopicMentioned({ id }: IMentioned) {
@@ -38,7 +30,7 @@ export function Mention({ attributes, children, element }: any) {
     let mentioned: any = null;
     switch (element.value[0]) {
         case "@":
-            mentioned = <UserMentioned id={id} />;
+            mentioned = <Username id={id} />;
             break;
 
         case "#":

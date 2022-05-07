@@ -4,7 +4,6 @@ import Popover from "@material-ui/core/Popover";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
-import Typography from "@material-ui/core/Typography";
 import { Text } from "@octal/ui";
 import PresenceAvatar from "../PresenceAvatar";
 import { useUser, useViewer } from "@octal/store";
@@ -213,8 +212,8 @@ function useCard(
 
     let node = null;
     const handle = React.useCallback(
-        ({ target }: React.MouseEvent<HTMLElement>) => {
-            setAnchor(() => target as any);
+        (e: React.MouseEvent<HTMLElement>) => {
+            setAnchor(() => e.target as any);
         },
         [id]
     );
