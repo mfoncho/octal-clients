@@ -89,7 +89,7 @@ interface IUserCard {
     onClose: (event: any, reason: string) => void;
 }
 
-export default React.memo((props: IUserCard) => {
+const Card = React.memo((props: IUserCard) => {
     const viewer = useViewer();
 
     const classes = useStyles();
@@ -201,3 +201,34 @@ export default React.memo((props: IUserCard) => {
         </Popover>
     );
 });
+
+type HandleCb = (e: React.MouseEvent<HTMLElement>) => void;
+
+type AnchorSetState = React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+
+function useCard(
+    id: string | null | undefined
+): [React.ReactNode, HandleCb, AnchorSetState] {
+    const [anchor, setAnchor] = React.useState<HTMLElement | null>(null);
+
+    let node = null;
+    const handle = React.useCallback(
+        ({ target }: React.MouseEvent<HTMLElement>) => {
+            setAnchor(() => target as any);
+        },
+        [id]
+    );
+
+    if (anchor && id) {
+        node = <Card id={id} anchor={anchor} onClose={() => setAnchor(null)} />;
+    }
+    return [node, handle, setAnchor];
+}
+
+type CardType = typeof Card & {
+    useCard: typeof useCard;
+};
+
+(Card as CardType).useCard = useCard;
+
+export default Card as CardType;

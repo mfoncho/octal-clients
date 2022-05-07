@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import clx from "classnames";
 import moment from "moment";
-import Avatar from "@material-ui/core/Avatar";
 import * as Icons from "@octal/icons";
 import Reply from "./Reply";
 import Menu, { ActionT } from "./Menu";
@@ -9,7 +8,7 @@ import ReplyButton from "./ReplyButton";
 import Reaction from "./Reaction";
 import emoji from "@octal/emoji";
 import { Markdown, Text } from "@octal/ui";
-import UserCard from "../UserCard";
+import UserCard from "@workspace/UserCard";
 import { useUser } from "@octal/store";
 import { useActions } from "./hooks";
 import { MessageRecord } from "@octal/store/lib/records";
@@ -48,14 +47,9 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
     const author = useUser(message.user_id)!;
 
-    const [popover, setPopover] = useState<JSX.Element | null>(null);
+    const [card, handleOpenCard] = UserCard.useCard(author?.id);
 
     const [hovering, setHovering] = useState<boolean>(false);
-
-    function closePopover() {
-        setPopover(null);
-        handleNotHovering();
-    }
 
     function handleHovering() {
         if (!hovering) setHovering(true);
@@ -69,12 +63,6 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
     function handleNotHovering() {
         if (hovering) setHovering(false);
-    }
-
-    function handleOpenUserCard({ target }: any) {
-        setPopover(
-            <UserCard id={author.id} anchor={target} onClose={closePopover} />
-        );
     }
 
     return (
@@ -91,12 +79,13 @@ export default React.memo<IMessage>(({ message, ...props }) => {
             <div className="flex flex-row">
                 <div className="flex flex-none justify-center flex-row w-16">
                     {props.extra ? (
-                        <Avatar
+                        <img
+                            role="button"
                             alt={author.name}
                             src={author.avatar}
-                            onClick={handleOpenUserCard}>
-                            {author.name}
-                        </Avatar>
+                            className="rounded-full w-[40px] h-[40px]"
+                            onClick={handleOpenCard}
+                        />
                     ) : (
                         <span className="group-hover:visible select-none invisible text-xs pt-1 font-semibold text-gray-500">
                             {moment(message.timestamp).format("LT")}
@@ -108,7 +97,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                     {props.extra && (
                         <div className="flex flex-row items-center">
                             <button
-                                onClick={handleOpenUserCard}
+                                onClick={handleOpenCard}
                                 className="text-base font-bold">
                                 {author.username}
                             </button>
@@ -143,15 +132,6 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                         )}
                     </div>
 
-                    {/**
-                {props.message.resource && (
-                    <File
-                        preview={props.preview}
-                        resource={props.message.resource}
-                    />
-                )}
-                **/}
-
                     <div className="flex flex-row flex-wrap ">
                         {message.reactions.map((reaction) => (
                             <Reaction
@@ -185,7 +165,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                     pinned={message.pinned}
                     flagged={message.flagged}
                 />
-                {popover && popover}
+                {card}
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
 import React from "react";
+import UserCard from "@workspace/UserCard";
 import { Markdown } from "@octal/ui";
 import { useUser, useMessage } from "@octal/store";
 
@@ -9,6 +10,7 @@ export interface IMessage {
 export default React.memo<IMessage>(({ id }) => {
     const message = useMessage(id);
     const author = useUser(message?.user_id)!;
+    const [card, handleOpenCard] = UserCard.useCard(message?.user_id);
 
     if (message) {
         let content = message.parsed;
@@ -16,7 +18,6 @@ export default React.memo<IMessage>(({ id }) => {
         if (content.length > 1) {
             content = [content[0]];
         }
-        //console.log(content);
 
         return (
             <div className="flex flex-row relative rounded-t-md pr-2">
@@ -24,7 +25,10 @@ export default React.memo<IMessage>(({ id }) => {
                     <div className="border-l-2 border-gray-500 rounded-tl-md border-t-2 w-[34px] h-[10px]" />
                 </div>
                 <div className="flex flex-row items-center space-x-1">
-                    <div className="w-max flex flex-row items-center justify-between">
+                    <div
+                        role="button"
+                        onClick={handleOpenCard}
+                        className="w-max flex flex-row items-center justify-between">
                         <img
                             alt={author.name}
                             src={author.avatar}
@@ -38,6 +42,7 @@ export default React.memo<IMessage>(({ id }) => {
                         <Markdown>{content}</Markdown>
                     </span>
                 </div>
+                {card}
             </div>
         );
     }

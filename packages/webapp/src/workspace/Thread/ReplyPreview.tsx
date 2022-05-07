@@ -1,9 +1,9 @@
 import React from "react";
-import clx from "classnames";
 import * as Icons from "@octal/icons";
 import { Markdown } from "@octal/ui";
 import { useUser } from "@octal/store";
 import ReplyIcon from "@material-ui/icons/Reply";
+import UserCard from "@workspace/UserCard";
 import { MessageRecord } from "@octal/store/lib/records";
 
 export interface IMessage {
@@ -14,12 +14,13 @@ export interface IMessage {
 export default React.memo<IMessage>(({ message, onClose }) => {
     const author = useUser(message.user_id)!;
 
+    const [card, handleOpenCard] = UserCard.useCard(author?.id);
+
     let content = message.parsed;
 
     if (content.length > 1) {
         content = [content[0]];
     }
-    //console.log(content);
 
     return (
         <div className="flex flex-row relative group bg-gray-100 rounded-t-md pr-2">
@@ -28,7 +29,9 @@ export default React.memo<IMessage>(({ message, onClose }) => {
             </div>
             <div className="flex flex-grow flex-col">
                 <div className="flex flex-row items-center justify-between">
-                    <button className="text-base font-bold">
+                    <button
+                        onClick={handleOpenCard}
+                        className="text-base font-bold">
                         {author.username}
                     </button>
                     <button onClick={onClose}>
@@ -40,6 +43,7 @@ export default React.memo<IMessage>(({ message, onClose }) => {
                     <Markdown>{content}</Markdown>
                 </span>
             </div>
+            {card}
         </div>
     );
 });
