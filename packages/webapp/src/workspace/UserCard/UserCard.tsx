@@ -1,157 +1,53 @@
-import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import Popover from "@material-ui/core/Popover";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import InputBase from "@material-ui/core/InputBase";
+import React from "react";
+import { Popper, Textarea } from "@octal/ui";
 import { Text } from "@octal/ui";
 import PresenceAvatar from "../PresenceAvatar";
+import { useInput } from "src/utils";
 import { useUser, useViewer } from "@octal/store";
 import { useDispatch } from "react-redux";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: 256,
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: theme.palette.background.default,
-    },
-    glass: {
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-    },
-    header: {
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        justifyContent: "center",
-    },
-    statusIcon: {
-        margin: theme.spacing(1, 0, 0, 0),
-        width: theme.spacing(3),
-        height: theme.spacing(3),
-    },
-    padded: {
-        padding: theme.spacing(2),
-    },
-    textarea: {
-        padding: theme.spacing(2),
-    },
-    avatar: {
-        width: theme.spacing(10),
-        height: theme.spacing(10),
-    },
-    content: {
-        display: "flex",
-        flexDirection: "column",
-    },
-    submit: {
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-    },
-    info: {
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: theme.spacing(1, 1),
-        backgroundColor: "rgba(0,0,0,0.8)",
-    },
-    status: {
-        fontSize: "0.9rem",
-        fontWeight: 600,
-        margin: theme.spacing(0.1),
-        color: theme.palette.common.white,
-    },
-    names: {
-        fontSize: "0.9rem",
-        fontWeight: 600,
-        margin: theme.spacing(0.1),
-        color: theme.palette.common.white,
-    },
-    name: {
-        borderRadius: theme.spacing(1),
-        color: theme.palette.common.white,
-        fontSize: "0.9rem",
-        fontWeight: 600,
-        margin: theme.spacing(0.1),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
-        backgroundColor: theme.palette.primary["A700"],
-    },
-}));
-
 interface IUserCard {
     id: string;
-    anchor: Element;
-    onClose: (event: any, reason: string) => void;
 }
 
-const Card = React.memo((props: IUserCard) => {
+const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
     const viewer = useViewer();
-
-    const classes = useStyles();
 
     const user = useUser(props.id)!;
 
     const dispatch = useDispatch();
 
-    const [text, setText] = useState<string>("");
+    const input = useInput("");
 
-    const [valid, setValid] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (text.trim().length > 1) {
-            setValid(true);
-        } else {
-            setValid(false);
-        }
-    }, [text]);
-
-    function handleTextInput({ target }: any) {
-        setText(target.value);
-    }
-
-    function handleSubmit(event: any) {
-        dispatch({
-            type: "POST_DIRECT_MESSAGE",
-            payload: {
-                text: text,
-                user: props.id,
-            },
-        });
-    }
-
-    function handleKeyPress(event: React.KeyboardEvent) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            event.stopPropagation();
-            if (valid) {
-                handleSubmit(event);
-            }
+    function handleSubmit() {
+        console.log("clicked");
+        if (input.valid) {
+            dispatch({
+                type: "POST_DIRECT_MESSAGE",
+                payload: {
+                    text: input.value,
+                    user: props.id,
+                },
+            });
         }
     }
 
     return (
-        <Popover
-            open
-            onClose={props.onClose}
-            anchorEl={props.anchor}
-            PaperProps={{ elevation: 3 }}
-            classes={{ paper: classes.root }}>
-            <div className={classes.glass} />
-            <div className={classes.header}>
-                <div className={classes.padded}>
-                    <PresenceAvatar
-                        id={user.id}
-                        src={user.avatar}
-                        className={classes.avatar}
-                    />
-                </div>
+        <Popper
+            open={true}
+            portal={true}
+            anchorEl={props.anchorEl}
+            onClickAway={props.onClickAway}
+            className="rounded-md flex flex-col w-[250px] z-[1500] bg-white shadow-lg">
+            <div className="w-full flex py-5 justify-center items-center">
+                <PresenceAvatar
+                    id={user.id}
+                    src={user.avatar}
+                    className={"w-20 h-20 rounded-full"}
+                />
             </div>
-            <Paper elevation={2}>
-                <div className={classes.info}>
+            <div className="flex flex-col">
+                <div className="flex flex-col justify-center items-center bg-gray-800/50">
                     <span className="text-base font-bold text-white pb-px">
                         {`@${user.name}`}
                     </span>
@@ -172,32 +68,24 @@ const Card = React.memo((props: IUserCard) => {
                 </div>
                 {viewer.id !== user.id && (
                     <>
-                        <InputBase
-                            multiline
-                            rows={4}
-                            value={text}
-                            fullWidth
-                            onChange={handleTextInput}
-                            className={classes.textarea}
-                            onKeyPress={handleKeyPress}
-                            placeholder={`Send ${
-                                user.name || ""
-                            } a quick message`}
-                            inputProps={{ "aria-label": "Send quick message" }}
+                        <Textarea
+                            value=""
+                            onSubmit={handleSubmit}
+                            onChange={input.setValue}
+                            className="p-3 min-h-[100px]"
+                            placeholder={`@${
+                                user.username || ""
+                            } quick message`}
                         />
-                        <Button
-                            fullWidth
-                            color="primary"
-                            variant="contained"
-                            onClick={handleSubmit}
-                            disabled={!valid || !Boolean(user.name)}
-                            className={classes.submit}>
+                        <button
+                            className="bg-primary-500 rounded-b w-full text-white font-bold py-2"
+                            onClick={handleSubmit}>
                             Send
-                        </Button>
+                        </button>
                     </>
                 )}
-            </Paper>
-        </Popover>
+            </div>
+        </Popper>
     );
 });
 
@@ -219,7 +107,14 @@ function useCard(
     );
 
     if (anchor && id) {
-        node = <Card id={id} anchor={anchor} onClose={() => setAnchor(null)} />;
+        node = (
+            <Card
+                id={id}
+                open={Boolean(anchor) && Boolean(id)}
+                anchorEl={anchor}
+                onClickAway={() => setAnchor(null)}
+            />
+        );
     }
     return [node, handle, setAnchor];
 }
