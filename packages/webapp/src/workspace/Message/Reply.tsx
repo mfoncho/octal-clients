@@ -47,7 +47,7 @@ export default React.memo<IMessage>(({ id }) => {
                 <div className="border-l-2 border-gray-500 rounded-tl border-t-2 w-[25px] h-[10px]" />
             </div>
             <div className="flex flex-row items-center justify-between space-x-2 mr-4">
-                <div className="rounded-full bg-slate-600 w-[20px] h-[20px]" />
+                <div className="rounded-full bg-slate-400 w-[20px] h-[20px]" />
             </div>
         </div>
     );
