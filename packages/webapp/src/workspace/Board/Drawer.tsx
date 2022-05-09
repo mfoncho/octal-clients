@@ -21,7 +21,6 @@ const Drawer = React.memo<IDrawer>((props) => {
         default:
             break;
     }
-
     return (
         <div className="w-[320px] min-w-[320px] max-w-[320px] flex-1 flex flex-row bg-gray-100 overflow-hidden">
             {component}
@@ -34,13 +33,13 @@ const Sidebar = React.memo<ISidenav>((props) => {
         <React.Fragment>
             {/** lg and xl **/}
             {props.open && (
-                <View size="md|xl|lg">
+                <View size="lg|xl">
                     <Drawer {...props.drawer} />
                 </View>
             )}
 
             {/** xs or phones **/}
-            <View size="xs|sm">
+            <View size="xs|sm|md">
                 <MuiDrawer
                     open={props.open}
                     anchor="right"
