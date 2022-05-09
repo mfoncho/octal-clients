@@ -161,7 +161,8 @@ export default class Socket {
             return `${this.protocol()}:${uri}`;
         }
 
-        return `${this.protocol()}://${location.host}${uri}`;
+        //return `${this.protocol()}://${location.host}${uri}`;
+        return `${this.protocol()}://192.168.1.2:4000${uri}`;
     }
 
     disconnect(
