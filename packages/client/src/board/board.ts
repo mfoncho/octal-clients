@@ -3,6 +3,12 @@ import BaseClient, { Params } from "../base";
 import * as Requests from "./types";
 
 export default class BoardClient extends BaseClient {
+    async fetchBoards(request: string, params?: Params): Promise<io.Board[]> {
+        const path = `/spaces/${request}/boards`;
+        let { data } = await this.endpoint.get(path, params);
+        return data;
+    }
+
     async createBoard(
         request: Requests.CreateBoardRequest,
         params?: Params

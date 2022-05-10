@@ -33,6 +33,12 @@ interface DeleteTopicRequest {
 }
 
 export default class TopicClient extends BaseClient {
+    async fetchTopics(request: string, params?: Params): Promise<io.Topic[]> {
+        const path = `/spaces/${request}/topics`;
+        let { data } = await this.endpoint.get(path, params);
+        return data;
+    }
+
     async fetchSpaceTopics(
         request: FetchSpaceTopicsRequest,
         params?: Params
