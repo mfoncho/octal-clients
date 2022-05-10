@@ -1,4 +1,4 @@
-import { put, takeEvery } from "redux-saga/effects";
+import { put, takeEvery, all } from "redux-saga/effects";
 import * as Actions from "../actions/types";
 import { CardSchema } from "../schemas";
 import * as BoardActions from "../actions/board";
@@ -21,12 +21,16 @@ function* updated(payload: io.Card | io.Card[]) {
 }
 
 function* loaded(payload: io.Card | io.Card[], metadata?: any) {
-    let card = yield* normalize(payload);
-    if (Array.isArray(card)) {
-        yield put(BoardActions.cardsLoaded(card as any, metadata));
-    } else {
-        yield put(BoardActions.cardLoaded(card as any, metadata));
+    let cards = yield* normalize(payload);
+    if (!Array.isArray(cards)) {
+        cards = [cards];
     }
+    let actions = cards
+        .sort((a: any, b: any) => a.position - b.position)
+        .map((card: any) => {
+            return put(BoardActions.cardLoaded(card, metadata));
+        });
+    yield all(actions);
 }
 
 function* fetch({

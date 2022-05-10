@@ -1,4 +1,4 @@
-import { put, takeEvery } from "redux-saga/effects";
+import { put, takeEvery, all } from "redux-saga/effects";
 import Client, { io } from "@octal/client";
 import { RelatedLoadedAction } from "../actions/app";
 import * as TopicActions from "../actions/topic";
@@ -77,9 +77,10 @@ function* trash({
 }
 
 function* load(topics: io.Topic[]): Iterable<any> {
-    for (let topic of topics) {
-        yield put(TopicActions.topicLoaded(topic as any));
-    }
+    let actions = topics.map((topic) => {
+        return put(TopicActions.topicLoaded(topic));
+    });
+    yield all(actions);
 }
 
 function* related({ payload }: RelatedLoadedAction): Iterable<any> {
