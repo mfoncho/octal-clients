@@ -1,9 +1,23 @@
-import { put, takeEvery } from "redux-saga/effects";
-import Client from "@octal/client";
+import { put, all, takeEvery } from "redux-saga/effects";
+import Client, { io } from "@octal/client";
 import { ColumnSchema } from "../schemas";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 import { relatedLoaded, RelatedLoadedAction } from "../actions/app";
+
+function* normalize(payload: io.Column | io.Column[]): Iterable<any> {
+    let [columns, related] = ColumnSchema.normalize(payload);
+    yield put(relatedLoaded(related as any) as any);
+    return columns;
+}
+
+function* load(columns: io.Column[]): Iterable<any> {
+    columns = yield* normalize(columns);
+    let actions = columns.map((column) => {
+        return put(BoardActions.columnLoaded(column as any));
+    });
+    yield all(actions);
+}
 
 function* fetch({
     payload,
@@ -17,23 +31,17 @@ function* fetch({
     }
 }
 
-function* load({
+function* loadBoardColumns({
     payload,
     resolve,
-    metadata,
 }: BoardActions.LoadColumnsAction): Iterable<any> {
     try {
         const task = yield put(BoardActions.fetchColumns(payload));
 
         const columns = (yield task) as any;
 
-        let [normalized, related] = ColumnSchema.normalize(columns);
+        yield* load(columns);
 
-        yield put(relatedLoaded(related));
-
-        if (Array.isArray(normalized)) {
-            yield put(BoardActions.columnsLoaded(normalized, metadata));
-        }
         resolve.success(columns);
     } catch (e) {
         resolve.error(e);
@@ -62,18 +70,6 @@ function* related({ payload }: RelatedLoadedAction): Iterable<any> {
     let columns = ColumnSchema.getCollection(payload as any);
     if (columns.length > 0) {
         yield put(BoardActions.columnsLoaded(columns));
-    }
-}
-
-function* store({ payload }: BoardActions.StoreColumnsAction): Iterable<any> {
-    let [normalized, related] = ColumnSchema.normalize(payload);
-
-    yield put(relatedLoaded(related));
-
-    if (Array.isArray(normalized)) {
-        yield put(BoardActions.columnsLoaded(normalized));
-    } else {
-        yield put(BoardActions.columnLoaded(normalized));
     }
 }
 
@@ -157,9 +153,11 @@ export const tasks = [
 
     { effect: takeEvery, type: Actions.FETCH_COLUMNS, handler: fetch },
 
-    { effect: takeEvery, type: Actions.LOAD_COLUMNS, handler: load },
-
-    { effect: takeEvery, type: Actions.STORE_COLUMNS, handler: store },
+    {
+        effect: takeEvery,
+        type: Actions.LOAD_COLUMNS,
+        handler: loadBoardColumns,
+    },
 
     { effect: takeEvery, type: Actions.MOVE_COLUMN, handler: move },
 
