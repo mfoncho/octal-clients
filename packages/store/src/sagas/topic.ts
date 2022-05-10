@@ -2,6 +2,7 @@ import { put, takeEvery } from "redux-saga/effects";
 import Client, { io } from "@octal/client";
 import { RelatedLoadedAction } from "../actions/app";
 import * as TopicActions from "../actions/topic";
+import * as SpaceActions from "../actions/space";
 import * as Actions from "../actions/types";
 import { TopicSchema } from "../schemas";
 
@@ -75,14 +76,36 @@ function* trash({
     }
 }
 
+function* load(topics: io.Topic[]): Iterable<any> {
+    for (let topic of topics) {
+        yield put(TopicActions.topicLoaded(topic as any));
+    }
+}
+
 function* related({ payload }: RelatedLoadedAction): Iterable<any> {
     let topics = Object.values(
         payload[TopicSchema.collect] || {}
     ) as io.Topic[];
-    yield put(TopicActions.topicsLoaded(topics));
+    yield* load(topics);
+}
+
+function* loadSpaceTopics({
+    payload,
+}: TopicActions.LoadSpaceTopicsAction): Iterable<any> {
+    //@ts-ignore
+    const topics: io.Topic[] = yield Client.fetchTopics(payload.id);
+    yield* load(topics);
+}
+
+function* spaceLoaded({
+    payload,
+}: SpaceActions.SpaceLoadedAction): Iterable<any> {
+    yield put(TopicActions.loadSpaceTopics(payload.id!));
 }
 
 export const tasks = [
+    { effect: takeEvery, type: Actions.SPACE_LOADED, handler: spaceLoaded },
+    { effect: takeEvery, type: Actions.LOAD_TOPICS, handler: loadSpaceTopics },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.ARCHIVE_TOPIC, handler: archive },
     { effect: takeEvery, type: Actions.UNARCHIVE_TOPIC, handler: unarchive },

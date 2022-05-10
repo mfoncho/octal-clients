@@ -4,6 +4,12 @@
 export const BOARD_LOADED = "BOARD_LOADED";
 export type BOARD_LOADED = typeof BOARD_LOADED;
 
+export const LOAD_BOARD = "LOAD_BOARD";
+export type LOAD_BOARD = typeof LOAD_BOARD;
+
+export const LOAD_BOARDS = "LOAD_BOARDS";
+export type LOAD_BOARDS = typeof LOAD_BOARDS;
+
 export const BOARDS_LOADED = "BOARDS_LOADED";
 export type BOARDS_LOADED = typeof BOARDS_LOADED;
 

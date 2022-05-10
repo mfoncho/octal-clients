@@ -3,6 +3,7 @@ import client, { io } from "@octal/client";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
+import * as SpaceActions from "../actions/space";
 import { RelatedLoadedAction } from "../actions/app";
 import { BoardSchema, CardSchema } from "../schemas";
 import * as AppActions from "../actions/app";
@@ -158,10 +159,48 @@ function* related({ payload }: RelatedLoadedAction): Iterable<any> {
     let boards = Object.values(
         payload[BoardSchema.collect] || {}
     ) as io.Board[];
-    yield put(BoardActions.boardsLoaded(boards));
+    yield* load(boards);
+}
+
+function* load(boards: io.Board[]): Iterable<any> {
+    for (let board of boards) {
+        yield put(BoardActions.boardLoaded(board as any));
+    }
+}
+
+/*
+function* loadBoard({ payload }: BoardActions.LoadBoardAction): Iterable<any> {
+    //const boards = yield client.getBoard(payload.id);
+    //yield put(BoardActions.boardLoaded(boards as any));
+}
+*/
+
+function* loadSpaceBoard({
+    payload,
+}: BoardActions.LoadSpaceBoardsAction): Iterable<any> {
+    //@ts-ignore
+    const boards: io.Board[] = yield client.fetchBoards(payload.id);
+    yield* load(boards);
+}
+
+function* spaceLoaded({
+    payload,
+}: SpaceActions.SpaceLoadedAction): Iterable<any> {
+    yield put(BoardActions.loadSpaceBoards(payload.id!));
 }
 
 export const tasks = [
+    {
+        effect: takeEvery,
+        type: Actions.LOAD_BOARDS,
+        handler: loadSpaceBoard,
+    },
+    { effect: takeEvery, type: Actions.SPACE_LOADED, handler: spaceLoaded },
+    {
+        effect: takeEvery,
+        type: Actions.SPACES_LOADED,
+        handler: spaceLoaded,
+    },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.BOARD_LOADED, handler: subscribe },
     { effect: takeEvery, type: Actions.CREATE_BOARD, handler: create },

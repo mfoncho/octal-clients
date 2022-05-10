@@ -2,6 +2,8 @@ import type { io } from "@octal/client";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
+    LOAD_TOPICS,
+    LOAD_TOPIC,
     CREATE_TOPIC,
     UPDATE_TOPIC,
     DELETE_TOPIC,
@@ -23,6 +25,20 @@ export interface CreateTopicPayload {
     name: string;
     type: string;
     subject?: string;
+}
+
+export interface LoadSpaceTopicsPayload {
+    id: string;
+    params?: {
+        [key: string]: string | number;
+    };
+}
+
+export interface LoadTopicPayload {
+    id: string;
+    params?: {
+        [key: string]: string | number;
+    };
 }
 
 export interface ArchiveTopicPayload {
@@ -57,6 +73,14 @@ export type UpdateTopicAction = IOAction<
     UPDATE_TOPIC,
     UpdateTopicPayload,
     io.Topic
+>;
+
+export type LoadTopicAction = IOAction<LOAD_TOPIC, LoadTopicPayload, io.Topic>;
+
+export type LoadSpaceTopicsAction = IOAction<
+    LOAD_TOPICS,
+    LoadSpaceTopicsPayload,
+    io.Topic[]
 >;
 
 export type DeleteTopicAction = IOAction<DELETE_TOPIC, DeleteTopicPayload, any>;
@@ -134,4 +158,18 @@ export function deleteTopic(payload: DeleteTopicPayload): DeleteTopicAction {
 
 export function topicDeleted(payload: DeletedTopicPayload): TopicDeletedAction {
     return createAction(TOPIC_DELETED, payload);
+}
+
+export function loadTopic(
+    id: string,
+    params: { [key: string]: string | number } = {}
+): LoadTopicAction {
+    return createIOAction<LOAD_TOPIC>(LOAD_TOPIC, { id, params });
+}
+
+export function loadSpaceTopics(
+    id: string,
+    params: { [key: string]: string | number } = {}
+): LoadSpaceTopicsAction {
+    return createIOAction<LOAD_TOPICS>(LOAD_TOPICS, { id, params });
 }

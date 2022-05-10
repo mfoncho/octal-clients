@@ -4,6 +4,8 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedCard, NormalizedColumn } from "../../schemas";
 import {
+    LOAD_BOARD,
+    LOAD_BOARDS,
     TRACKERS_LOADED,
     BOARD_COLUMNS_LOADED,
     BOARD_CARDS_LOADED,
@@ -96,6 +98,20 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface LoadSpaceBoardsPayload {
+    id: string;
+    params?: {
+        [key: string]: string | number;
+    };
+}
+
+export interface LoadBoardPayload {
+    id: string;
+    params?: {
+        [key: string]: string | number;
+    };
+}
 
 export interface LoadMetadata {
     root_id: string;
@@ -511,6 +527,15 @@ export type LabelDeletedAction = Action<LABEL_DELETED, Unique & BelongsToSpace>;
 export type LabelLoadedAction = Action<LABEL_LOADED, io.Label>;
 export type LabelsLoadedAction = Action<LABELS_LOADED, io.Label[]>;
 export type BoardLabelUpdated = Action<LABEL_UPDATED, io.Label>;
+
+export type LoadBoardAction = IOAction<LOAD_BOARD, LoadBoardPayload, io.Board>;
+
+export type LoadSpaceBoardsAction = IOAction<
+    LOAD_BOARDS,
+    LoadSpaceBoardsPayload,
+    io.Board[]
+>;
+
 export type CreateLabelAction = IOAction<
     CREATE_LABEL,
     CreateLabelPayload,
@@ -1304,4 +1329,18 @@ export function boardColumnsLoaded(
     payload: BoardColumnsLoadedPayload
 ): BoardColumnsLoadedAction {
     return createAction(BOARD_COLUMNS_LOADED, payload);
+}
+
+export function loadBoard(
+    id: string,
+    params: { [key: string]: string | number } = {}
+): LoadBoardAction {
+    return createIOAction<LOAD_BOARD>(LOAD_BOARD, { id, params });
+}
+
+export function loadSpaceBoards(
+    id: string,
+    params: { [key: string]: string | number } = {}
+): LoadSpaceBoardsAction {
+    return createIOAction<LOAD_BOARDS>(LOAD_BOARDS, { id, params });
 }

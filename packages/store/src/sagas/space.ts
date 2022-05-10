@@ -25,7 +25,9 @@ function* init(): Iterable<any> {
     try {
         const data = (yield client.fetchSpaces({})) as any;
         const normalized = yield* normalize(data);
-        yield put(SpaceActions.spacesLoaded(normalized));
+        for (let space of normalized) {
+            yield put(SpaceActions.spaceLoaded(space));
+        }
     } catch (e: any) {}
 }
 

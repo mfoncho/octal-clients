@@ -3,6 +3,9 @@
 export const LOAD_TOPICS = "LOAD_TOPICS";
 export type LOAD_TOPICS = typeof LOAD_TOPICS;
 
+export const LOAD_TOPIC = "LOAD_TOPIC";
+export type LOAD_TOPIC = typeof LOAD_TOPIC;
+
 export const CREATE_TOPIC = "CREATE_TOPIC";
 export type CREATE_TOPIC = typeof CREATE_TOPIC;
 
@@ -38,4 +41,3 @@ export type TOPIC_ARCHIVED = typeof TOPIC_ARCHIVED;
 
 export const TOPIC_UNARCHIVED = "TOPIC_UNARCHIVED";
 export type TOPIC_UNARCHIVED = typeof TOPIC_UNARCHIVED;
-
