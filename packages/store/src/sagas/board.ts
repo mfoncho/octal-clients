@@ -4,7 +4,6 @@ import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 import * as SpaceActions from "../actions/space";
-import { RelatedLoadedAction } from "../actions/app";
 import { BoardSchema, CardSchema } from "../schemas";
 import * as AppActions from "../actions/app";
 
@@ -148,7 +147,7 @@ function* subscribe({
         .receive("error", () => {});
 }
 
-function* related({ payload }: RelatedLoadedAction): Iterable<any> {
+function* related({ payload }: AppActions.RelatedLoadedAction): Iterable<any> {
     let boards = Object.values(
         payload[BoardSchema.collect] || {}
     ) as io.Board[];
@@ -175,6 +174,7 @@ function* loadSpaceBoard({
     //@ts-ignore
     const boards: io.Board[] = yield client.fetchBoards(payload.id);
     yield* load(boards);
+    yield put(AppActions.collectionLoaded(payload.id, "boards", boards));
 }
 
 function* spaceLoaded({

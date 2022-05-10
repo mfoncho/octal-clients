@@ -28,12 +28,19 @@ export class SpaceRecord
         member_id: "" as Id,
         roles: Map<string, SpaceRoleRecord>(),
         joined_at: "",
+        loaded: List<string>([]),
         created_at: "",
     })
     implements Unique
 {
     constructor(data: any) {
         super(SpaceRecord.objectFromJS(data) as any);
+    }
+
+    addLoaded(collection: string) {
+        return this.loaded.includes(collection)
+            ? this
+            : this.update("loaded", (loaded) => loaded.push(collection));
     }
 
     get is_private() {

@@ -6,6 +6,9 @@ export type STORE_INIT = typeof STORE_INIT;
 export const INIT = "COLAB_INIT";
 export type INIT = typeof INIT;
 
+export const COLLECTION_LOADED = "COLLECTION_LOADED";
+export type COLLECTION_LOADED = typeof COLLECTION_LOADED;
+
 export const SET_SITE = "SET_SITE";
 export type SET_SITE = typeof SET_SITE;
 

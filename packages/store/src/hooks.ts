@@ -53,11 +53,22 @@ export class UserChecklist extends Record({
     tasks: List<CardTaskValueRecord>(),
 }) {}
 
+export function useSpaceLoaded(id: string) {
+    return useSelector(
+        useCallback(
+            ({ spaces }: State) => {
+                return (spaces.getSpace(id) ?? defaultSpace).loaded;
+            },
+            [id]
+        )
+    );
+}
+
 export function useBoardLoaded(id: string) {
     return useSelector(
         useCallback(
             ({ boards }: State) => {
-                return boards.loaded.get(id, defaultStringList);
+                return (boards.getBoard(id) ?? defaultBoard).loaded;
             },
             [id]
         )

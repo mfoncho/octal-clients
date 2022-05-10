@@ -3,20 +3,24 @@ import Client, { io } from "@octal/client";
 import { ColumnSchema } from "../schemas";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
-import { relatedLoaded, RelatedLoadedAction } from "../actions/app";
+import * as AppActions from "../actions/app";
 
 function* normalize(payload: io.Column | io.Column[]): Iterable<any> {
     let [columns, related] = ColumnSchema.normalize(payload);
-    yield put(relatedLoaded(related as any) as any);
+    yield put(AppActions.relatedLoaded(related as any) as any);
     return columns;
 }
 
-function* load(columns: io.Column[]): Iterable<any> {
-    columns = yield* normalize(columns);
-    let actions = columns.map((column) => {
-        return put(BoardActions.columnLoaded(column as any));
+function* load(columns: any): Iterable<any> {
+    let actions = columns.map((column: any) => {
+        return put(BoardActions.columnLoaded(column));
     });
     yield all(actions);
+}
+
+function* normalizeLoad(columns: io.Column[]): Iterable<any> {
+    columns = yield* normalize(columns);
+    yield* load(columns);
 }
 
 function* fetch({
@@ -40,7 +44,10 @@ function* loadBoardColumns({
 
         const columns = (yield task) as any;
 
-        yield* load(columns);
+        yield* normalizeLoad(columns);
+        yield put(
+            AppActions.collectionLoaded(payload.board_id, "columns", columns)
+        );
 
         resolve.success(columns);
     } catch (e) {
@@ -66,10 +73,10 @@ function* move({
     }
 }
 
-function* related({ payload }: RelatedLoadedAction): Iterable<any> {
+function* related({ payload }: AppActions.RelatedLoadedAction): Iterable<any> {
     let columns = ColumnSchema.getCollection(payload as any);
     if (columns.length > 0) {
-        yield put(BoardActions.columnsLoaded(columns));
+        yield* load(columns);
     }
 }
 

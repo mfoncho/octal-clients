@@ -25,6 +25,7 @@ export class BoardRecord
         icon: "",
         name: "",
         space_id: "",
+        loaded: List<string>([]),
         labels: List<LabelRecord>(),
     })
     implements Unique
@@ -35,6 +36,12 @@ export class BoardRecord
 
     patch(data: any) {
         return this.merge(BoardRecord.objectFromJS(data));
+    }
+
+    addLoaded(collection: string) {
+        return this.loaded.includes(collection)
+            ? this
+            : this.update("loaded", (loaded) => loaded.push(collection));
     }
 
     putLabel(payload: any) {

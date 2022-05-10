@@ -5,6 +5,7 @@ import { NormalizedRelated } from "../../schemas";
 import {
     ROUTE,
     LOGIN,
+    COLLECTION_LOADED,
     AUTH,
     RELATED_LOADED,
     SET_SITE,
@@ -33,6 +34,17 @@ export interface ILoginPayload {
     password: string;
     remember_me?: boolean;
 }
+
+export interface CollectionLoadedPayload {
+    type: string;
+    data?: any;
+    collection: string;
+}
+
+export type CollectionLoadedAction = Action<
+    COLLECTION_LOADED,
+    CollectionLoadedPayload
+>;
 
 export type AuthAction = Action<AUTH, io.Auth | {}>;
 
@@ -106,6 +118,14 @@ export function route(route: any): RouteAction {
 
 export function relatedLoaded(related: NormalizedRelated): RelatedLoadedAction {
     return createAction(RELATED_LOADED, related);
+}
+
+export function collectionLoaded(
+    collection: string,
+    type: string,
+    data?: any
+): CollectionLoadedAction {
+    return createAction(COLLECTION_LOADED, { collection, type, data });
 }
 
 export function workspaceLoaded(workspace: io.Workspace): PutWorkspaceAction {

@@ -5,6 +5,7 @@ import * as TopicActions from "../actions/topic";
 import * as SpaceActions from "../actions/space";
 import * as Actions from "../actions/types";
 import { TopicSchema } from "../schemas";
+import * as AppActions from "../actions/app";
 
 function* archive({
     payload,
@@ -96,6 +97,7 @@ function* loadSpaceTopics({
     //@ts-ignore
     const topics: io.Topic[] = yield Client.fetchTopics(payload.id);
     yield* load(topics);
+    yield put(AppActions.collectionLoaded(payload.id, "topics", topics));
 }
 
 function* spaceLoaded({

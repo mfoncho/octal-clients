@@ -1,7 +1,10 @@
 import { Record, Map, List } from "immutable";
 import * as Actions from "../actions/types";
+import * as AppActions from "../actions/app";
 import * as BoardActions from "../actions/board";
 import { BoardRecord } from "../records";
+
+const collections = ["cards", "columns", "archived_cards"];
 
 export class BoardsStore extends Record({
     loaded: Map<string, List<string>>(),
@@ -121,6 +124,20 @@ export const reducers = {
         { payload }: BoardActions.BoardLoadedAction
     ) => {
         return store.putBoard(payload);
+    },
+
+    [Actions.COLLECTION_LOADED]: (
+        store: BoardsStore,
+        { payload }: AppActions.CollectionLoadedAction
+    ) => {
+        const board = store.getBoard(payload.collection);
+        if (board && collections.includes(payload.type)) {
+            return store.setIn(
+                ["entities", payload.collection],
+                board.addLoaded(payload.type)
+            );
+        }
+        return store;
     },
 
     [Actions.BOARDS_LOADED]: (

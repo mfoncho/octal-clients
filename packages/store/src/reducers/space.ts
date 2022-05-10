@@ -1,6 +1,9 @@
 import { Record, Map } from "immutable";
 import { SpaceRecord } from "../records";
+import * as AppActions from "../actions/app";
 import * as Actions from "../actions/types";
+
+const collections = ["topics", "boards", "members"];
 
 export class SpacesStore extends Record({
     entities: Map<string, SpaceRecord>(),
@@ -65,6 +68,20 @@ export const reducers = {
     },
     [Actions.SPACE_LOADED]: (store: SpacesStore, { payload }: any) => {
         return store.putSpace(payload);
+    },
+
+    [Actions.COLLECTION_LOADED]: (
+        store: SpacesStore,
+        { payload }: AppActions.CollectionLoadedAction
+    ) => {
+        const space = store.getSpace(payload.collection);
+        if (space && collections.includes(payload.type)) {
+            return store.setIn(
+                ["entities", payload.collection],
+                space.addLoaded(payload.type)
+            );
+        }
+        return store;
     },
 
     [Actions.SPACES_LOADED]: (store: SpacesStore, { payload }: any) => {

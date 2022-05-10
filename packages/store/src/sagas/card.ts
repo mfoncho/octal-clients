@@ -1,17 +1,17 @@
 import { put, takeEvery, all } from "redux-saga/effects";
 import * as Actions from "../actions/types";
+import * as AppActions from "../actions/app";
 import { CardSchema } from "../schemas";
 import * as BoardActions from "../actions/board";
-import { relatedLoaded, RelatedLoadedAction } from "../actions/app";
 import Client, { io } from "@octal/client";
 
 function* normalize(payload: io.Card | io.Card[]): Iterable<any> {
     let [card, related] = CardSchema.normalize(payload);
-    yield put(relatedLoaded(related as any) as any);
+    yield put(AppActions.relatedLoaded(related as any) as any);
     return card;
 }
 
-function* updated(payload: io.Card | io.Card[]) {
+function* updated(payload: io.Card | io.Card[]): Iterable<any> {
     let card = yield* normalize(payload);
     if (Array.isArray(card)) {
         yield put(BoardActions.cardsUpdated(card as any));
@@ -20,15 +20,19 @@ function* updated(payload: io.Card | io.Card[]) {
     }
 }
 
-function* loaded(payload: io.Card | io.Card[], metadata?: any) {
+function* normalizeLoad(payload: io.Card | io.Card[]): Iterable<any> {
     let cards = yield* normalize(payload);
     if (!Array.isArray(cards)) {
         cards = [cards];
     }
+    yield* load(cards);
+}
+
+function* load(cards: any): Iterable<any> {
     let actions = cards
         .sort((a: any, b: any) => a.position - b.position)
         .map((card: any) => {
-            return put(BoardActions.cardLoaded(card, metadata));
+            return put(BoardActions.cardLoaded(card));
         });
     yield all(actions);
 }
@@ -45,17 +49,17 @@ function* fetch({
     }
 }
 
-function* load({
+function* loadBoardCards({
     payload,
     resolve,
-    metadata,
 }: BoardActions.LoadCardsAction): Iterable<any> {
     try {
         const data = (yield yield put(
             BoardActions.fetchCards(payload)
         )) as any as io.Card[];
 
-        yield* loaded(data, metadata);
+        yield* normalizeLoad(data);
+        yield put(AppActions.collectionLoaded(payload.board_id, "cards", data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -84,7 +88,7 @@ function* update({
     try {
         const data = (yield Client.updateCard(payload)) as any;
         let [card, related] = CardSchema.normalizeOne(data as any) as any;
-        yield put(relatedLoaded(related));
+        yield put(AppActions.relatedLoaded(related));
         yield put(BoardActions.cardUpdated(card));
         resolve.success(data);
     } catch (e) {
@@ -114,11 +118,11 @@ function* move({
     }
 }
 
-function* related({ payload }: RelatedLoadedAction): Iterable<any> {
+function* related({ payload }: AppActions.RelatedLoadedAction): Iterable<any> {
     let cards = CardSchema.getCollection(payload as any);
 
     if (cards.length > 0) {
-        yield put(BoardActions.cardsLoaded(cards));
+        yield* load(cards);
     }
 }
 
@@ -190,7 +194,7 @@ function* unarchive({
 }
 
 function* store({ payload }: any) {
-    yield* loaded(payload);
+    yield* load(payload);
 }
 
 export const tasks = [
@@ -200,7 +204,7 @@ export const tasks = [
 
     { effect: takeEvery, type: Actions.CREATE_CARD, handler: create },
 
-    { effect: takeEvery, type: Actions.LOAD_CARDS, handler: load },
+    { effect: takeEvery, type: Actions.LOAD_CARDS, handler: loadBoardCards },
 
     { effect: takeEvery, type: Actions.STORE_CARDS, handler: store },
 
