@@ -1,4 +1,5 @@
 import { put, takeEvery, all } from "redux-saga/effects";
+import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as AppActions from "../actions/app";
 import { CardSchema } from "../schemas";
@@ -197,7 +198,56 @@ function* store({ payload }: any) {
     yield* load(payload);
 }
 
+function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
+    const { channel } = payload;
+    channel.on("card.created", (payload: io.Card) => {
+        let [card, related] = CardSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardCreated(card as any));
+    });
+
+    channel.on("card.updated", (payload: io.Card) => {
+        let [card, related] = CardSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardUpdated(card as any));
+    });
+
+    channel.on("card.done", (payload: io.Card) => {
+        let [card, related] = CardSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardUpdated(card as any));
+    });
+
+    channel.on("card.undone", (payload: io.Card) => {
+        let [card, related] = CardSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardUpdated(card as any));
+    });
+
+    channel.on("card.archived", (payload: io.Card) => {
+        let [card, related] = CardSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardArchived(card as any));
+    });
+
+    channel.on("card.unarchived", (payload: io.Card) => {
+        let [card, related] = CardSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardUnarchived(card as any));
+    });
+
+    channel.on("card.deleted", (payload: io.Card) => {
+        dispatch(BoardActions.cardDeleted(payload.id));
+    });
+
+    channel.on("cards.reordered", ({ cards }: { cards: io.Card[] }) => {
+        dispatch(BoardActions.cardsReordered(cards));
+    });
+}
+
 export const tasks = [
+    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
 
     { effect: takeEvery, type: Actions.MOVE_CARD, handler: move },

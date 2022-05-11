@@ -1,4 +1,6 @@
 import { put, takeEvery } from "redux-saga/effects";
+import { dispatch } from "..";
+import { io } from "@octal/client";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 
@@ -46,8 +48,23 @@ function* update({
         meta.error(e);
     }
 }
+function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
+    const { channel } = payload;
+    channel.on("label.created", (payload: io.Label) => {
+        dispatch(BoardActions.labelCreated(payload));
+    });
+
+    channel.on("label.updated", (payload: io.Label) => {
+        dispatch(BoardActions.boardLabelUpdated(payload));
+    });
+
+    channel.on("label.deleted", (payload: io.Label) => {
+        dispatch(BoardActions.labelDeleted(payload as any));
+    });
+}
 
 export const tasks = [
+    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.CREATE_LABEL, handler: create },
     { effect: takeEvery, type: Actions.DELETE_LABEL, handler: destroy },
     { effect: takeEvery, type: Actions.UPDATE_LABEL, handler: update },

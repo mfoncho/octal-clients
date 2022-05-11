@@ -1,5 +1,6 @@
 import { put, all, takeEvery } from "redux-saga/effects";
 import Client, { io } from "@octal/client";
+import { dispatch } from "..";
 import { ColumnSchema } from "../schemas";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
@@ -149,7 +150,36 @@ function* create({
     }
 }
 
+function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
+    const { channel } = payload;
+    channel.on("column.created", (payload: io.Column) => {
+        dispatch(BoardActions.columnCreated(payload));
+    });
+
+    channel.on("column.updated", (payload: io.Column) => {
+        dispatch(BoardActions.columnUpdated(payload as any));
+    });
+
+    channel.on("column.archived", (payload: io.Column) => {
+        dispatch(BoardActions.columnUpdated(payload as any));
+    });
+
+    channel.on("column.unarchived", (payload: io.Column) => {
+        dispatch(BoardActions.columnUpdated(payload as any));
+    });
+
+    channel.on("column.deleted", (payload: io.Column) => {
+        dispatch(BoardActions.columnDeleted(payload));
+    });
+
+    channel.on("columns.reordered", ({ columns }: { columns: io.Column[] }) => {
+        dispatch(BoardActions.columnsReordered(columns));
+    });
+}
+
 export const tasks = [
+    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+
     { effect: takeEvery, type: Actions.CREATE_COLUMN, handler: create },
 
     { effect: takeEvery, type: Actions.DELETE_COLUMN, handler: trash },

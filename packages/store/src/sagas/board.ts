@@ -60,91 +60,14 @@ function* subscribe({
 
     if (client.topic(topic)) return;
 
-    let ch = client.channel(topic);
+    let channel = client.channel(topic);
 
-    ch.on("card.created", (payload: io.Card) => {
-        let [card, related] = CardSchema.normalizeOne(payload);
-        dispatch(AppActions.relatedLoaded(related));
-        dispatch(BoardActions.cardCreated(card as any));
-    });
-
-    ch.on("card.updated", (payload: io.Card) => {
-        let [card, related] = CardSchema.normalizeOne(payload);
-        dispatch(AppActions.relatedLoaded(related));
-        dispatch(BoardActions.cardUpdated(card as any));
-    });
-
-    ch.on("card.done", (payload: io.Card) => {
-        let [card, related] = CardSchema.normalizeOne(payload);
-        dispatch(AppActions.relatedLoaded(related));
-        dispatch(BoardActions.cardUpdated(card as any));
-    });
-
-    ch.on("card.undone", (payload: io.Card) => {
-        let [card, related] = CardSchema.normalizeOne(payload);
-        dispatch(AppActions.relatedLoaded(related));
-        dispatch(BoardActions.cardUpdated(card as any));
-    });
-
-    ch.on("card.archived", (payload: io.Card) => {
-        let [card, related] = CardSchema.normalizeOne(payload);
-        dispatch(AppActions.relatedLoaded(related));
-        dispatch(BoardActions.cardArchived(card as any));
-    });
-
-    ch.on("card.unarchived", (payload: io.Card) => {
-        let [card, related] = CardSchema.normalizeOne(payload);
-        dispatch(AppActions.relatedLoaded(related));
-        dispatch(BoardActions.cardUnarchived(card as any));
-    });
-
-    ch.on("card.deleted", (payload: io.Card) => {
-        dispatch(BoardActions.cardDeleted(payload.id));
-    });
-
-    ch.on("column.created", (payload: io.Column) => {
-        dispatch(BoardActions.columnCreated(payload));
-    });
-
-    ch.on("column.updated", (payload: io.Column) => {
-        dispatch(BoardActions.columnUpdated(payload as any));
-    });
-
-    ch.on("column.archived", (payload: io.Column) => {
-        dispatch(BoardActions.columnUpdated(payload as any));
-    });
-
-    ch.on("column.unarchived", (payload: io.Column) => {
-        dispatch(BoardActions.columnUpdated(payload as any));
-    });
-
-    ch.on("column.deleted", (payload: io.Column) => {
-        dispatch(BoardActions.columnDeleted(payload));
-    });
-
-    ch.on("label.created", (payload: io.Label) => {
-        dispatch(BoardActions.labelCreated(payload));
-    });
-
-    ch.on("label.updated", (payload: io.Label) => {
-        dispatch(BoardActions.boardLabelUpdated(payload));
-    });
-
-    ch.on("label.deleted", (payload: io.Label) => {
-        dispatch(BoardActions.labelDeleted(payload as any));
-    });
-
-    ch.on("cards.reordered", ({ cards }: { cards: io.Card[] }) => {
-        dispatch(BoardActions.cardsReordered(cards));
-    });
-
-    ch.on("columns.reordered", ({ columns }: { columns: io.Column[] }) => {
-        dispatch(BoardActions.columnsReordered(columns));
-    });
-
-    ch.subscribe()
+    channel
+        .subscribe()
         .receive("ok", () => {})
         .receive("error", () => {});
+
+    yield put(BoardActions.boardConnected({ topic, channel, id: payload.id }));
 }
 
 function* related({ payload }: AppActions.RelatedLoadedAction): Iterable<any> {
