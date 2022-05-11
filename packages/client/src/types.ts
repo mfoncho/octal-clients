@@ -209,6 +209,7 @@ export namespace io {
 
     export interface CardFieldValue {
         id: string;
+        card_id: string;
         field_id: string;
     }
 
@@ -228,6 +229,7 @@ export namespace io {
         id: string;
         type: string;
         name: string;
+        card_id: string;
         position: number;
         created_at: string;
         values: (CardTextValue | CardUserValue | CardLabelValue)[];
