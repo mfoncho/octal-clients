@@ -55,11 +55,7 @@ function* createValue({
         const data = (yield Client.createCardFieldValue(payload)) as any;
         const [value, related] = CardFieldValueSchema.normalizeOne(data);
         yield put(AppActions.relatedLoaded(related));
-        const params = {
-            card_id: payload.card_id,
-            value: value,
-        };
-        yield put(BoardActions.cardFieldValueCreated(params as any));
+        yield put(BoardActions.cardFieldValueCreated(value as any));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -74,11 +70,7 @@ function* updateValue({
         const data = (yield Client.updateCardFieldValue(payload)) as any;
         const [value, related] = CardFieldValueSchema.normalizeOne(data);
         yield put(AppActions.relatedLoaded(related));
-        const params = {
-            card_id: payload.card_id,
-            value: value,
-        };
-        yield put(BoardActions.cardFieldValueUpdated(params as any));
+        yield put(BoardActions.cardFieldValueUpdated(value as any));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -92,9 +84,9 @@ function* deleteValue({
     try {
         const data = (yield Client.deleteCardFieldValue(payload)) as any;
         const params = {
+            id: payload.value_id,
             card_id: payload.card_id,
             field_id: payload.field_id,
-            value_id: payload.value_id,
         };
         yield put(BoardActions.cardFieldValueDeleted(params));
         resolve.success(data);

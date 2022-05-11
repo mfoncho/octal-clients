@@ -11,36 +11,47 @@ export class CardTaskValueRecord extends Record({
     id: "",
     name: "",
     done: false,
+    card_id: "",
+    field_id: "",
     created_at: "",
 }) {}
 
 export class CardTextValueRecord extends Record({
     id: "",
     value: "",
+    field_id: "",
     created_at: "",
 }) {}
 
 export class CardNumberValueRecord extends Record({
     id: "",
     value: 0,
+    card_id: "",
+    field_id: "",
     created_at: "",
 }) {}
 
 export class CardLabelValueRecord extends Record({
     id: "",
+    card_id: "",
     label_id: "",
+    field_id: "",
     created_at: "",
 }) {}
 
 export class CardUserValueRecord extends Record({
     id: "",
     user_id: "",
+    card_id: "",
+    field_id: "",
     created_at: "",
 }) {}
 
 export class CardDatetimeValueRecord extends Record({
     id: "",
     value: "",
+    card_id: "",
+    field_id: "",
     created_at: "",
 }) {}
 

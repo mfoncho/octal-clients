@@ -348,7 +348,7 @@ export const reducers = {
     ) => {
         let card = store.getCard(payload.card_id);
         if (card) {
-            card = card.addFieldValue(payload.value);
+            card = card.addFieldValue(payload);
             return store.putCard(card);
         }
         return store;
@@ -359,7 +359,7 @@ export const reducers = {
     ) => {
         let card = store.getCard(payload.card_id);
         if (card) {
-            card = card.updateFieldValue(payload.value);
+            card = card.updateFieldValue(payload);
             return store.putCard(card);
         }
         return store;
@@ -370,7 +370,7 @@ export const reducers = {
     ) => {
         let card = store.getCard(payload.card_id);
         if (card) {
-            card = card.removeFieldValue(payload.field_id, payload.value_id);
+            card = card.removeFieldValue(payload.field_id, payload.id);
             return store.putCard(card);
         }
         return store;

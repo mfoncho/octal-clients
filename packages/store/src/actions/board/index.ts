@@ -201,20 +201,18 @@ export interface CardFieldMovedPayload {
     position: number;
 }
 
-export interface CardFieldValueCreatedPayload {
-    card_id: string;
-    value: io.CardFieldValue;
+export interface CardFieldValueCreatedPayload extends io.CardFieldValue {
+    [key: string]: any;
 }
 
-export interface CardFieldValueUpdatedPayload {
-    card_id: string;
-    value: io.CardFieldValue;
+export interface CardFieldValueUpdatedPayload extends io.CardFieldValue {
+    [key: string]: any;
 }
 
 export interface CardFieldValueDeletedPayload {
+    id: string;
     card_id: string;
     field_id: string;
-    value_id: string;
 }
 
 export interface CardFieldDeletedPayload {
@@ -238,8 +236,8 @@ export interface CreateCardFieldValuePayload<T = { [key: string]: any }> {
 
 export interface UpdateCardFieldValuePayload<T = { [key: string]: any }> {
     card_id: string;
-    field_id: string;
     value_id: string;
+    field_id: string;
     params: T;
 }
 
