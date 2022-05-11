@@ -1,9 +1,10 @@
 import { put, takeEvery } from "redux-saga/effects";
+import Client, { io } from "@octal/client";
+import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 import { CardFieldSchema, CardFieldValueSchema } from "../schemas";
 import * as AppActions from "../actions/app";
-import Client from "@octal/client";
 
 function* create({
     payload,
@@ -170,7 +171,57 @@ function* trash({
     }
 }
 
+function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
+    const { channel } = payload;
+    channel.on("card.field.created", (payload: io.CardField) => {
+        const [field, related] = CardFieldSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardFieldCreated(field as any));
+    });
+
+    channel.on("card.field.updated", (payload: io.CardField) => {
+        const [field, related] = CardFieldSchema.normalizeOne(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardFieldUpdated(field as any));
+    });
+
+    channel.on("card.field.deleted", (payload: io.CardField) => {
+        dispatch(BoardActions.cardFieldDeleted(payload));
+    });
+
+    channel.on(
+        "card.field.assigned",
+        (payload: BoardActions.AssignChecklistPayload) => {
+            dispatch(BoardActions.checklistAssigned(payload));
+        }
+    );
+
+    channel.on(
+        "card.field.unassigned",
+        (payload: BoardActions.AssignChecklistPayload) => {
+            dispatch(BoardActions.checklistUnassigned(payload));
+        }
+    );
+
+    channel.on("field.value.created", (payload: io.CardFieldValue) => {
+        const [field, related] = CardFieldSchema.normalizeOne(payload as any);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardFieldValueCreated(field as any));
+    });
+
+    channel.on("field.value.updated", (payload: io.CardFieldValue) => {
+        const [field, related] = CardFieldSchema.normalizeOne(payload as any);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(BoardActions.cardFieldValueUpdated(field as any));
+    });
+
+    channel.on("field.value.deleted", (payload: io.CardFieldValue) => {
+        dispatch(BoardActions.cardFieldValueDeleted(payload as any));
+    });
+}
+
 export const tasks = [
+    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.CREATE_CARD_FIELD, handler: create },
     { effect: takeEvery, type: Actions.UPDATE_CARD_FIELD, handler: update },
     { effect: takeEvery, type: Actions.DELETE_CARD_FIELD, handler: trash },
