@@ -1,9 +1,11 @@
 import type { io, BelongsToBoard, Unique, BelongsToSpace } from "@octal/client";
+import type { Channel } from "@octal/endpoint";
 import type { Require } from "@octal/common";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedCard, NormalizedColumn } from "../../schemas";
 import {
+    BOARD_CONNECTED,
     LOAD_BOARD,
     LOAD_BOARDS,
     TRACKERS_LOADED,
@@ -98,6 +100,12 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface BoardConnectedPayload {
+    id: string;
+    topic: string;
+    channel: Channel;
+}
 
 export interface LoadSpaceBoardsPayload {
     id: string;
@@ -506,6 +514,11 @@ export interface UnarchiveColumnPayload extends ArchiveColumnPayload {}
 export type RemoveLabelPayload = Require<Partial<io.Label>, "id" | "board_id">;
 
 export type RemoveLabelsPayload = RemoveLabelPayload[];
+
+export type BoardConnectedAction = Action<
+    BOARD_CONNECTED,
+    BoardConnectedPayload
+>;
 
 export type CardFieldValueCreatedAction = Action<
     CARD_FIELD_VALUE_CREATED,
@@ -1319,6 +1332,12 @@ export function boardCardsLoaded(
     payload: BoardCardsLoadedPayload
 ): BoardCardsLoadedAction {
     return createAction(BOARD_CARDS_LOADED, payload);
+}
+
+export function boardConnected(
+    payload: BoardConnectedPayload
+): BoardConnectedAction {
+    return createAction(BOARD_CONNECTED, payload);
 }
 
 export function boardCreated(payload: io.Board): BoardCreatedAction {

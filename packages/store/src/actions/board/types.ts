@@ -7,6 +7,9 @@ export type BOARD_LOADED = typeof BOARD_LOADED;
 export const LOAD_BOARD = "LOAD_BOARD";
 export type LOAD_BOARD = typeof LOAD_BOARD;
 
+export const BOARD_CONNECTED = "BOARD_CONNECTED";
+export type BOARD_CONNECTED = typeof BOARD_CONNECTED;
+
 export const LOAD_BOARDS = "LOAD_BOARDS";
 export type LOAD_BOARDS = typeof LOAD_BOARDS;
 
