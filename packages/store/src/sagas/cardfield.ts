@@ -177,6 +177,10 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
         dispatch(BoardActions.cardFieldUpdated(field as any));
     });
 
+    channel.on("card.field.moved", (payload: io.CardField) => {
+        dispatch(BoardActions.cardFieldMoved(payload as any));
+    });
+
     channel.on("card.field.deleted", (payload: io.CardField) => {
         dispatch(BoardActions.cardFieldDeleted(payload));
     });
