@@ -44,7 +44,7 @@ const card_fields: Relation<"fields", string> = Schema.mapMany(
 );
 
 const card_field_values: Relation<"values", string> = Schema.mapMany(
-    "values",
+    "value",
     "values",
     "values"
 );

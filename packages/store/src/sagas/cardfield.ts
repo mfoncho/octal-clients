@@ -196,13 +196,17 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
     );
 
     channel.on("field.value.created", (payload: io.CardFieldValue) => {
-        const [field, related] = CardFieldSchema.normalizeOne(payload as any);
+        const [field, related] = CardFieldValueSchema.normalizeOne(
+            payload as any
+        );
         dispatch(AppActions.relatedLoaded(related));
         dispatch(BoardActions.cardFieldValueCreated(field as any));
     });
 
     channel.on("field.value.updated", (payload: io.CardFieldValue) => {
-        const [field, related] = CardFieldSchema.normalizeOne(payload as any);
+        const [field, related] = CardFieldValueSchema.normalizeOne(
+            payload as any
+        );
         dispatch(AppActions.relatedLoaded(related));
         dispatch(BoardActions.cardFieldValueUpdated(field as any));
     });
