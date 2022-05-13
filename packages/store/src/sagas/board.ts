@@ -53,9 +53,7 @@ function* trash({
     }
 }
 
-function* subscribe({
-    payload,
-}: BoardActions.BoardLoadedAction): Iterable<any> {
+function* connect({ payload }: BoardActions.BoardLoadedAction): Iterable<any> {
     const topic = `board:${payload.id}`;
 
     if (client.topic(topic)) return;
@@ -106,7 +104,20 @@ function* spaceLoaded({
     yield put(BoardActions.loadSpaceBoards(payload.id!));
 }
 
+function* subscribe({
+    payload: { channel },
+}: BoardActions.BoardConnectedAction): Iterable<any> {
+    channel.on("board.updated", (payload: io.Board) => {
+        dispatch(BoardActions.boardUpdated(payload));
+    });
+
+    channel.on("board.deleted", (payload: io.Board) => {
+        dispatch(BoardActions.boardDeleted(payload));
+    });
+}
+
 export const tasks = [
+    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
     {
         effect: takeEvery,
         type: Actions.LOAD_BOARDS,
@@ -119,7 +130,7 @@ export const tasks = [
         handler: spaceLoaded,
     },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
-    { effect: takeEvery, type: Actions.BOARD_LOADED, handler: subscribe },
+    { effect: takeEvery, type: Actions.BOARD_LOADED, handler: connect },
     { effect: takeEvery, type: Actions.CREATE_BOARD, handler: create },
     { effect: takeEvery, type: Actions.UPDATE_BOARD, handler: update },
     { effect: takeEvery, type: Actions.DELETE_BOARD, handler: trash },
