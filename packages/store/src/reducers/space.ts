@@ -99,6 +99,10 @@ export const reducers = {
         return store.putRole(payload);
     },
 
+    [Actions.SPACE_ROLE_CREATED]: (store: SpacesStore, { payload }: any) => {
+        return store.putRole(payload);
+    },
+
     [Actions.SPACE_ROLE_UPDATED]: (store: SpacesStore, { payload }: any) => {
         return store.updateRole(payload);
     },

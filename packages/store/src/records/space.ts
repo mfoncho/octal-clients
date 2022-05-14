@@ -77,7 +77,7 @@ export class SpaceRecord
 
     putRole(payload: any) {
         return this.update("roles", (roles) => {
-            return roles.set(payload.id, SpaceRoleRecord.make(payload));
+            return roles.set(payload.role_id, SpaceRoleRecord.make(payload));
         });
     }
 
