@@ -1,4 +1,5 @@
 import { Record, List, Map } from "immutable";
+import { IPermission } from "./auth";
 import { Unique, Id, SpaceType, AccessType } from "@octal/client";
 
 export class SpaceRoleRecord
@@ -6,7 +7,7 @@ export class SpaceRoleRecord
         id: "" as Id,
         role_id: "" as Id,
         space_id: "" as Id,
-        permissions: [] as object[],
+        permissions: [] as IPermission[],
     })
     implements Unique
 {

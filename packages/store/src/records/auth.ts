@@ -1,23 +1,53 @@
 import { Record } from "immutable";
 import { Unique } from "@octal/client";
 
-export class BooleanPermission extends Record({
-    name: "",
-    value: true,
-    base: "static",
-}) {
+export interface IPermission<T = any> {
+    readonly name: string;
+    readonly value: T;
+    readonly base?: string;
+    equal(value: any): boolean;
+    setValue(value: any): IPermission<T>;
+}
+
+export class BooleanPermission
+    extends Record({
+        name: "",
+        value: true,
+        base: "static",
+    })
+    implements IPermission<boolean>
+{
     constructor(value = true, base = "static") {
         super({ value, base });
     }
+
+    equal(value: boolean) {
+        return value == this.value;
+    }
+
+    setValue(value: any) {
+        return this.set("value", Boolean(value));
+    }
 }
 
-export class NumberPermission extends Record({
-    name: "",
-    value: 0,
-    base: "static",
-}) {
+export class NumberPermission
+    extends Record({
+        name: "",
+        value: 0,
+        base: "static",
+    })
+    implements IPermission<number>
+{
     constructor(value = 0, base = "static") {
         super({ value, base });
+    }
+
+    equal(value: any) {
+        return Number(value) === this.value;
+    }
+
+    setValue(value: any) {
+        return this.set("value", Number(value));
     }
 }
 
@@ -31,13 +61,24 @@ export class ListPermission extends Record({
     }
 }
 
-export class StringPermission extends Record({
-    name: "",
-    value: "",
-    base: "static",
-}) {
+export class StringPermission
+    extends Record({
+        name: "",
+        value: "",
+        base: "static",
+    })
+    implements IPermission<string>
+{
     constructor(value = "", base = "static") {
         super({ value, base });
+    }
+
+    equal(value: any) {
+        return String(value).trim() === this.value;
+    }
+
+    setValue(value: any) {
+        return this.set("value", String(value).trim());
     }
 }
 
@@ -74,7 +115,6 @@ export class RoleRecord
     extends Record({
         id: "",
         name: "",
-        icon: "",
     })
     implements Unique {}
 
