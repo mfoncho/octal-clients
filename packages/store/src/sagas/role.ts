@@ -1,8 +1,9 @@
 import { put, takeEvery } from "redux-saga/effects";
+import Client, { io } from "@octal/client";
+import { dispatch } from "..";
 import * as Actions from "../actions/types";
+import * as SpaceActions from "../actions/space";
 import * as RoleActions from "../actions/role";
-
-import Client from "@octal/client";
 
 function* fetch({
     payload,
@@ -57,7 +58,10 @@ function* update({
     }
 }
 
-function* destroy({ payload, resolve }: RoleActions.DeleteSpaceRoleAction): Iterable<any> {
+function* destroy({
+    payload,
+    resolve,
+}: RoleActions.DeleteSpaceRoleAction): Iterable<any> {
     try {
         const data = (yield Client.deleteSpaceRole(payload)) as any;
         yield put(RoleActions.spaceRoleDeleted(data));
@@ -67,7 +71,30 @@ function* destroy({ payload, resolve }: RoleActions.DeleteSpaceRoleAction): Iter
     }
 }
 
+function* spaceSubscribe({
+    payload,
+}: SpaceActions.SpaceConnectedAction): Iterable<any> {
+    const { channel } = payload;
+
+    channel.on("space.role.created", (payload: io.SpaceRole) => {
+        dispatch(RoleActions.spaceRoleCreated(payload));
+    });
+
+    channel.on("space.role.deleted", (payload: io.SpaceRole) => {
+        dispatch(RoleActions.spaceRoleDeleted(payload));
+    });
+
+    channel.on("space.role.permissions.updated", (payload: io.SpaceRole) => {
+        dispatch(RoleActions.spaceRoleUpdated(payload));
+    });
+}
+
 export const tasks = [
+    {
+        effect: takeEvery,
+        type: Actions.SPACE_CONNECTED,
+        handler: spaceSubscribe,
+    },
     { effect: takeEvery, type: Actions.LOAD_SPACE_ROLES, handler: load },
     { effect: takeEvery, type: Actions.FETCH_SPACE_ROLES, handler: fetch },
     { effect: takeEvery, type: Actions.CREATE_SPACE_ROLE, handler: create },

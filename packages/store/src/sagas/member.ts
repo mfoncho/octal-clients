@@ -1,6 +1,6 @@
 import { put, takeEvery } from "redux-saga/effects";
-import Client from "@octal/client";
-import { State } from "..";
+import client, { io } from "@octal/client";
+import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as SpaceActions from "../actions/space";
 import * as MemberActions from "../actions/member";
@@ -10,7 +10,7 @@ import { relatedLoaded } from "../actions/app";
 function* fetch(action: MemberActions.FetchMembersAction): Iterable<any> {
     try {
         const { payload } = action;
-        const data = (yield Client.fetchSpaceMembers(payload.space_id)) as any;
+        const data = (yield client.fetchSpaceMembers(payload.space_id)) as any;
         action.resolve.success(data);
     } catch (e) {
         action.resolve.error(e);
@@ -22,7 +22,7 @@ function* create({
     resolve: meta,
 }: MemberActions.CreateMemberAction): Iterable<any> {
     try {
-        const data = (yield Client.createSpaceMember(payload)) as any;
+        const data = (yield client.createSpaceMember(payload)) as any;
         yield put(MemberActions.memberJoined(data));
         meta.success(data);
     } catch (e) {
@@ -35,7 +35,7 @@ function* destroy({
     resolve: meta,
 }: MemberActions.DeleteMemberAction): Iterable<any> {
     try {
-        const data = (yield Client.deleteSpaceMember(payload)) as any;
+        const data = (yield client.deleteSpaceMember(payload)) as any;
         yield put(
             MemberActions.memberDeleted({
                 id: payload.member_id,
@@ -67,7 +67,21 @@ function* clear({ payload }: SpaceActions.SpaceShutdownAction): Iterable<any> {
     yield put(MemberActions.clearSpaceMembers(payload as any));
 }
 
+function* subscribe({
+    payload,
+}: SpaceActions.SpaceConnectedAction): Iterable<any> {
+    const { channel } = payload;
+    channel.on("member.left", (payload: io.Member) => {
+        dispatch(MemberActions.memberLeft(payload as any));
+    });
+
+    channel.on("member.joined", (payload: io.Member) => {
+        dispatch(MemberActions.memberJoined(payload as any));
+    });
+}
+
 export const tasks = [
+    { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.LOAD_MEMBERS, handler: load },
     { effect: takeEvery, type: Actions.FETCH_MEMBERS, handler: fetch },
     { effect: takeEvery, type: Actions.CREATE_MEMBER, handler: create },

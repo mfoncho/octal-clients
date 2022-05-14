@@ -12,6 +12,9 @@ export type CREATE_SPACE = typeof CREATE_SPACE;
 export const SPACE_JOINED = "SPACE_JOINED";
 export type SPACE_JOINED = typeof SPACE_JOINED;
 
+export const SPACE_CONNECTED = "SPACE_CONNECTED";
+export type SPACE_CONNECTED = typeof SPACE_CONNECTED;
+
 export const JOIN_SPACE = "JOIN_SPACE";
 export type JOIN_SPACE = typeof JOIN_SPACE;
 

@@ -106,7 +106,7 @@ function* spaceLoaded({
 
 function* subscribe({
     payload: { channel },
-}: BoardActions.BoardConnectedAction): Iterable<any> {
+}: SpaceActions.SpaceConnectedAction): Iterable<any> {
     channel.on("board.updated", (payload: io.Board) => {
         dispatch(BoardActions.boardUpdated(payload));
     });
@@ -117,7 +117,7 @@ function* subscribe({
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     {
         effect: takeEvery,
         type: Actions.LOAD_BOARDS,

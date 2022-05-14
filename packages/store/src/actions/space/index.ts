@@ -1,8 +1,10 @@
 import type { io, Unique } from "@octal/client";
+import type { Channel } from "@octal/endpoint";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedSpace } from "../../schemas";
 import {
+    SPACE_CONNECTED,
     SEND_INVITATIONS,
     CLEAR_SPACE,
     CREATE_SPACE,
@@ -22,6 +24,12 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface SpaceConnectedPayload {
+    space_id: string;
+    topic: string;
+    channel: Channel;
+}
 
 export interface BelongsToSpace {
     space_id: string;
@@ -65,6 +73,11 @@ export interface UpdateSpacePayload extends Unique {
     space_id: string;
     params: UpdateSpaceParams;
 }
+
+export type SpaceConnectedAction = Action<
+    SPACE_CONNECTED,
+    SpaceConnectedPayload
+>;
 
 export type SpaceUpdatedAction = Action<SPACE_UPDATED, NormalizedSpace>;
 
@@ -187,4 +200,10 @@ export function loadSpaces(payload: LoadSpacesPayload): LoadSpacesAction {
 
 export function clearSpace(payload: io.Space): ClearSpaceAction {
     return createAction(CLEAR_SPACE, payload);
+}
+
+export function spaceConnected(
+    payload: SpaceConnectedPayload
+): SpaceConnectedAction {
+    return createAction(SPACE_CONNECTED, payload);
 }

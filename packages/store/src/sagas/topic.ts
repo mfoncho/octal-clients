@@ -1,5 +1,6 @@
 import { put, takeEvery, all } from "redux-saga/effects";
 import Client, { io } from "@octal/client";
+import { dispatch } from "..";
 import { RelatedLoadedAction } from "../actions/app";
 import * as TopicActions from "../actions/topic";
 import * as SpaceActions from "../actions/space";
@@ -106,7 +107,23 @@ function* spaceLoaded({
     yield put(TopicActions.loadSpaceTopics(payload.id!));
 }
 
+function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
+    const { channel } = payload;
+    channel.on("topic.created", (payload: io.Topic) => {
+        dispatch(TopicActions.topicCreated(payload));
+    });
+
+    channel.on("topic.updated", (payload: io.Topic) => {
+        dispatch(TopicActions.topicUpdated(payload));
+    });
+
+    channel.on("topic.deleted", (payload: io.Topic) => {
+        dispatch(TopicActions.topicDeleted(payload));
+    });
+}
+
 export const tasks = [
+    { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.SPACE_LOADED, handler: spaceLoaded },
     { effect: takeEvery, type: Actions.LOAD_TOPICS, handler: loadSpaceTopics },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },

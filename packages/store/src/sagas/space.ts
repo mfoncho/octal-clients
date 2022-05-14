@@ -3,10 +3,7 @@ import client, { io } from "@octal/client";
 import { dispatch } from "..";
 import { SpaceSchema as Schema, NormalizedSpace } from "../schemas";
 import * as SpaceActions from "../actions/space";
-import * as TopicActions from "../actions/topic";
-import * as RoleActions from "../actions/role";
 import * as Actions from "../actions/types";
-import * as MemberActions from "../actions/member";
 import { relatedLoaded } from "../actions/app";
 
 function normalizeSpace(payload: io.Space) {
@@ -86,71 +83,21 @@ function* join({
     }
 }
 
-function* subscribe({
-    payload,
-}:
-    | SpaceActions.SpaceLoadedAction
-    | SpaceActions.SpacesLoadedAction): Iterable<any> {
-    if (!Array.isArray(payload)) {
-        payload = [payload];
-    }
-    for (let space of payload as any) {
-        const topic = `space:${space.id}`;
+function* connect({ payload }: SpaceActions.SpaceLoadedAction): Iterable<any> {
+    const topic = `space:${payload.id}`;
 
-        if (client.topic(topic)) continue;
+    if (client.topic(topic)) return;
 
-        let ch = client.channel(topic);
+    let channel = client.channel(topic);
 
-        ch.on("space.updated", (payload: io.Space) => {
-            let normalized = normalizeSpace(payload);
-            dispatch(SpaceActions.spaceUpdated(normalized));
-        });
+    yield put(
+        SpaceActions.spaceConnected({ space_id: payload.id!, topic, channel })
+    );
 
-        ch.on("permissions.updated", (payload: io.SpaceRole) => {
-            dispatch(RoleActions.spaceRoleUpdated(payload));
-        });
-
-        ch.on("space.shutdown", (payload: io.Space) => {
-            dispatch(SpaceActions.spaceShutdown(payload as any));
-        });
-
-        ch.on("topic.created", (payload: io.Topic) => {
-            dispatch(TopicActions.topicCreated(payload));
-        });
-
-        ch.on("topic.updated", (payload: io.Topic) => {
-            dispatch(TopicActions.topicUpdated(payload));
-        });
-
-        ch.on("topic.deleted", (payload: io.Topic) => {
-            dispatch(TopicActions.topicDeleted(payload));
-        });
-
-        ch.on("restored", (payload: io.Space) => {
-            let normalized = normalizeSpace(payload);
-            dispatch(SpaceActions.spaceRestored(normalized as any));
-        });
-
-        ch.on("role.created", (payload: io.SpaceRole) => {
-            dispatch(RoleActions.spaceRoleCreated(payload));
-        });
-
-        ch.on("role.deleted", (payload: io.SpaceRole) => {
-            dispatch(RoleActions.spaceRoleDeleted(payload));
-        });
-
-        ch.on("member.left", (payload: io.Member) => {
-            dispatch(MemberActions.memberLeft(payload as any));
-        });
-
-        ch.on("member.joined", (payload: io.Member) => {
-            dispatch(MemberActions.memberJoined(payload as any));
-        });
-
-        ch.subscribe()
-            .receive("ok", () => {})
-            .receive("error", () => {});
-    }
+    channel
+        .subscribe()
+        .receive("ok", () => {})
+        .receive("error", () => {});
 }
 
 function* create({
@@ -181,7 +128,7 @@ function* update({
     }
 }
 
-function* unsubscribe({
+function* disconnect({
     payload,
 }: SpaceActions.SpaceShutdownAction): Iterable<any> {
     const topic = `space:${payload.id}`;
@@ -191,8 +138,30 @@ function* unsubscribe({
     }
 }
 
+function* subscribe({
+    payload,
+}: SpaceActions.SpaceConnectedAction): Iterable<any> {
+    const { channel } = payload;
+
+    channel.on("space.updated", (payload: io.Space) => {
+        let normalized = normalizeSpace(payload);
+        dispatch(SpaceActions.spaceUpdated(normalized));
+    });
+
+    channel.on("space.shutdown", (payload: io.Space) => {
+        dispatch(SpaceActions.spaceShutdown(payload as any));
+    });
+
+    channel.on("restored", (payload: io.Space) => {
+        let normalized = normalizeSpace(payload);
+        dispatch(SpaceActions.spaceRestored(normalized as any));
+    });
+}
+
 export const tasks = [
     { effect: takeEvery, type: Actions.INIT, handler: init },
+
+    { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
 
     { effect: takeEvery, type: Actions.SHUTDOWN_SPACE, handler: shutdown },
 
@@ -200,17 +169,15 @@ export const tasks = [
 
     { effect: takeEvery, type: Actions.UPDATE_SPACE, handler: update },
 
-    { effect: takeEvery, type: Actions.SPACE_LOADED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_LOADED, handler: connect },
 
-    { effect: takeEvery, type: Actions.SPACES_LOADED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_JOINED, handler: connect },
 
-    { effect: takeEvery, type: Actions.SPACE_JOINED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_CREATED, handler: connect },
 
-    { effect: takeEvery, type: Actions.SPACE_CREATED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_RESTORED, handler: connect },
 
-    { effect: takeEvery, type: Actions.SPACE_RESTORED, handler: subscribe },
-
-    { effect: takeEvery, type: Actions.SPACE_SHUTDOWN, handler: unsubscribe },
+    { effect: takeEvery, type: Actions.SPACE_SHUTDOWN, handler: disconnect },
 
     { effect: takeEvery, type: Actions.LOAD_SPACE, handler: load },
 
