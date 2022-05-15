@@ -2,7 +2,7 @@ import { put, select, takeEvery } from "redux-saga/effects";
 import { State } from "..";
 import * as Actions from "../actions/types";
 import client from "@octal/client";
-import { MessageSchema, ReactionSchema } from "../schemas";
+import { MessageSchema } from "../schemas";
 import * as ThreadActions from "../actions/thread";
 import { relatedLoaded } from "../actions/app";
 
@@ -159,14 +159,7 @@ function* update({
     }
 }
 
-function* reacted({ payload }: ThreadActions.UserReactedAction): Iterable<any> {
-    const [normalized, related] = ReactionSchema.normalizeOne(payload);
-    yield put(relatedLoaded(related));
-    yield put(ThreadActions.reactionLoaded(normalized as any));
-}
-
 export const tasks = [
-    { effect: takeEvery, type: Actions.USER_REACTED, handler: reacted },
     { effect: takeEvery, type: Actions.FETCH_MESSAGES, handler: fetch },
     { effect: takeEvery, type: Actions.POST_MESSAGE, handler: post },
     { effect: takeEvery, type: Actions.NEW_MESSAGE, handler: created },

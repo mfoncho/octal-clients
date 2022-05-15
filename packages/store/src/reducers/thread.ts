@@ -133,7 +133,7 @@ export const reducers = {
         return state.updateThread(payload as any);
     },
 
-    [Actions.REACTION_LOADED]: (
+    [Actions.USER_REACTED]: (
         state: Conversations,
         { payload }: ThreadActions.MessageReactionAction
     ) => {
@@ -169,7 +169,7 @@ export const reducers = {
         return state.storeMessage(message);
     },
 
-    [Actions.REACTION_DELETED]: (
+    [Actions.USER_UNREACTED]: (
         state: Conversations,
         { payload }: ThreadActions.ReactionDeletedAction
     ) => {

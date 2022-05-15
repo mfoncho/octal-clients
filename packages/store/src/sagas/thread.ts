@@ -25,7 +25,7 @@ function* fetch(): Iterable<any> {
     try {
         const data = (yield client.fetchThreads()) as any;
         yield put(ThreadActions.threadsLoaded(data));
-    } catch (e) { }
+    } catch (e) {}
 }
 
 function* activity({
@@ -42,7 +42,7 @@ function* conversation({
     payload,
     resolve: meta,
 }: ThreadActions.LoadConversationAction): Iterable<any> {
-    const { threads } = ((yield select()) as any) as State;
+    const { threads } = (yield select()) as any as State;
     const thread = threads.getThread(payload.thread_id);
     if (!thread) return;
 
@@ -104,9 +104,8 @@ function* conversation({
         }
 
         for (let key in loading) {
-            loading[key as keyof typeof loading] = !loading[
-                key as keyof typeof loading
-            ];
+            loading[key as keyof typeof loading] =
+                !loading[key as keyof typeof loading];
         }
         yield put(
             ThreadActions.loadingConversation({
@@ -123,7 +122,7 @@ function* conversation({
 function* spaceshutdown({
     payload,
 }: SpaceActions.SpaceShutdownAction): Iterable<any> {
-    const { threads } = ((yield select()) as any) as State;
+    const { threads } = (yield select()) as any as State;
     threads.threads.forEach((thread) => {
         if (thread.space_id == payload.id) {
             dispatch(
@@ -154,10 +153,8 @@ function* subscribe({
             dispatch(ThreadActions.newMessage(payload));
         });
 
-        ch.on("user.reacted", (payload: io.Reaction) => {
-            dispatch(
-                ThreadActions.userReacted({ ...payload, thread_id: thread.id })
-            );
+        ch.on("user.reacted", (payload: any) => {
+            dispatch(ThreadActions.userReacted(payload));
         });
 
         ch.on("user.unreacted", (payload: any) => {
@@ -193,8 +190,8 @@ function* subscribe({
         });
 
         ch.subscribe()
-            .receive("ok", () => { })
-            .receive("error", () => { });
+            .receive("ok", () => {})
+            .receive("error", () => {});
     }
 }
 

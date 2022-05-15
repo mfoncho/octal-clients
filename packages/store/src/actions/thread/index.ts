@@ -323,6 +323,13 @@ export type SetConversationPageAction = Action<
     SetConversationPagePayload
 >;
 
+export interface MessageReactionPayload {
+    thread_id?: string;
+    user_id: string;
+    reaction: string;
+    message_id: string;
+}
+
 export type ThreadCreatedAction = Action<THREAD_CREATED, io.Thread>;
 
 export type ThreadUpdatedAction = Action<THREAD_UPDATED, io.Thread>;
@@ -335,14 +342,11 @@ export type LoadConversationAction = IOAction<
     io.Message[]
 >;
 
-export type UserReactedAction = Action<
-    USER_REACTED,
-    io.Reaction & { thread_id: string }
->;
+export type UserReactedAction = Action<USER_REACTED, MessageReactionPayload>;
 
 export type UserUnreactedAction = Action<
     USER_UNREACTED,
-    MessageReactionDeletedPayload
+    MessageReactionPayload
 >;
 
 export type TrimConversationAction = Action<
@@ -464,13 +468,13 @@ export function reactMessage(payload: ReactMessagePayload): ReactMessageAction {
 }
 
 export function userReacted(
-    reaction: io.Reaction & { thread_id: string }
+    reaction: MessageReactionPayload
 ): UserReactedAction {
     return createAction(USER_REACTED, reaction);
 }
 
 export function userUnreacted(
-    reaction: MessageReactionDeletedPayload
+    reaction: MessageReactionPayload
 ): UserUnreactedAction {
     return createAction(USER_UNREACTED, reaction);
 }
