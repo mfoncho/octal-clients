@@ -41,14 +41,14 @@ export default function Role(props: IRole) {
         );
         setChanges(custom);
         setOverrides(custom);
-    }, []);
+    }, [props.selected]);
 
     function handleSetPermission(key: string, value: any) {
         const permission = props.selected.permissions.find(
             (permission) => permission.name == key
         );
         if (permission) {
-            if (permission.equal(value)) {
+            if (permission.value == value) {
                 setChanges((changes) => {
                     return changes.delete(key);
                 });

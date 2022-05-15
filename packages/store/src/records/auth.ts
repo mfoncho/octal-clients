@@ -5,8 +5,6 @@ export interface IPermission<T = any> {
     readonly name: string;
     readonly value: T;
     readonly base?: string;
-    equal(value: any): boolean;
-    setValue(value: any): IPermission<T>;
 }
 
 export class BooleanPermission
@@ -20,14 +18,6 @@ export class BooleanPermission
     constructor(value = true, base = "static") {
         super({ value, base });
     }
-
-    equal(value: boolean) {
-        return value == this.value;
-    }
-
-    setValue(value: any) {
-        return this.set("value", Boolean(value));
-    }
 }
 
 export class NumberPermission
@@ -40,14 +30,6 @@ export class NumberPermission
 {
     constructor(value = 0, base = "static") {
         super({ value, base });
-    }
-
-    equal(value: any) {
-        return Number(value) === this.value;
-    }
-
-    setValue(value: any) {
-        return this.set("value", Number(value));
     }
 }
 
@@ -71,14 +53,6 @@ export class StringPermission
 {
     constructor(value = "", base = "static") {
         super({ value, base });
-    }
-
-    equal(value: any) {
-        return String(value).trim() === this.value;
-    }
-
-    setValue(value: any) {
-        return this.set("value", String(value).trim());
     }
 }
 
