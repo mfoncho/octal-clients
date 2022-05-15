@@ -202,16 +202,19 @@ const Manager = React.memo(({ space }: IManager) => {
     }
 
     function renderRole(role: RoleRecord) {
+        const clickHandler = openRoleClickHanlder(role.id);
         return (
             <div
                 key={role.id}
+                role="button"
+                onClick={clickHandler}
                 className="group hover:bg-gray-100 flex p-4 flex-row items-center justify-between">
                 <span className="font-bold text-gray-700">
                     <Text>{role.name}</Text>
                 </span>
                 <div className="flex flex-row items-center justify-end">
                     <button
-                        onClick={openRoleClickHanlder(role.id)}
+                        onClick={clickHandler}
                         className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500  p-1 hover:border-white hover:text-white hover:bg-primary-500 flex items-center justify-center">
                         <Icons.Edit fontSize="small" />
                     </button>
