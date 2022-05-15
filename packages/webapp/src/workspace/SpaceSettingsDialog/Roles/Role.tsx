@@ -3,9 +3,9 @@ import Transition from "@material-ui/core/Slide";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { Map } from "immutable";
 import { Button, Text } from "@octal/ui";
-import { useActions } from "@workspace/Space";
 import { RoleRecord, SpaceRoleRecord } from "@octal/store";
-import { useSpace } from "@workspace/Space";
+import { useSpace } from "@octal/store";
+import { useActions } from "@workspace/Space";
 import BooleanPermission from "./BooleanPermission";
 import definitions, { IPermissionsGroup, IPermission } from "./permissions";
 import NumberPermission from "./NumberPermission";
@@ -18,7 +18,7 @@ interface IRole {
 }
 
 export default function Role(props: IRole) {
-    const space = useSpace();
+    const space = useSpace(props.selected.space_id);
     const actions = useActions(space);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -44,9 +44,26 @@ export default function Role(props: IRole) {
     }, []);
 
     function handleSetPermission(key: string, value: any) {
-        setChanges((changes) => {
-            return changes.set(key, value);
-        });
+        const permission = props.selected.permissions.find(
+            (permission) => permission.name == key
+        );
+        if (permission) {
+            if (permission.equal(value)) {
+                setChanges((changes) => {
+                    return changes.delete(key);
+                });
+            } else {
+                setChanges((changes) => {
+                    return changes.set(key, value);
+                });
+            }
+            return;
+        } else {
+            setChanges((changes) => {
+                return changes.set(key, value);
+            });
+            return;
+        }
     }
 
     function handleClearPermission(key: string) {
