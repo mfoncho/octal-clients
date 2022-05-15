@@ -232,7 +232,7 @@ const Manager = React.memo(({ space }: IManager) => {
         <Layout
             ref={rootRef}
             title="Roles & Permissions"
-            className="relative flex flex-col flex-grow pb-20">
+            className="flex flex-col flex-grow pb-20">
             {role && custom ? (
                 <Role role={role} selected={custom} onClose={handleRoleClose} />
             ) : (

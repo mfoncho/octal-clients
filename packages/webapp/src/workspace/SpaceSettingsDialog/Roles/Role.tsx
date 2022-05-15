@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Transition from "@material-ui/core/Slide";
-import CancelIcon from "@material-ui/icons/Cancel";
 import { Map } from "immutable";
+import clx from "classnames";
+import * as Icons from "@octal/icons";
 import { Button, Text } from "@octal/ui";
 import { RoleRecord, SpaceRoleRecord } from "@octal/store";
 import { useSpace } from "@octal/store";
@@ -139,21 +139,22 @@ export default function Role(props: IRole) {
     return (
         <div className="flex flex-col px-2">
             <div className="flex flex-row items-center justify-between py-4">
-                <span className="font-bold text-gray-700">
-                    <Text>{props.role.name}</Text>
-                </span>
-                <button
-                    onClick={props.onClose}
-                    className="text-gray-500 rounded-full mx-2 border border-gray-500 p-1 hover:bg-gray-200 flex items-center justify-center">
-                    <CancelIcon fontSize="small" />
-                </button>
-            </div>
-            {definitions.map(renderPermissionGroup)}
-            <Transition appear={hasChanges} direction="up" in={hasChanges}>
+                <div className="flex flex-row items-center">
+                    <button
+                        onClick={props.onClose}
+                        className="text-gray-500 rounded-full border border-gray-500 p-1 hover:bg-gray-200 flex items-center justify-center">
+                        <Icons.LeftArrow className="h-4 w-4" />
+                    </button>
+                    <span className="font-bold text-gray-700 mx-2">
+                        <Text>{props.role.name}</Text>
+                    </span>
+                </div>
                 <div
-                    className="fixed flex bottom-4 flex-row items-center p-4 bg-white justify-between"
-                    style={{ width: "550px" }}>
-                    <span className="font-semibold text-sm text-gray-500">
+                    className={clx(
+                        "sticky top-0 flex flex-row items-center bg-white justify-between",
+                        hasChanges ? "visible" : "invisible"
+                    )}>
+                    <span className="font-semibold text-sm text-gray-500 px-2">
                         You have made some changes
                     </span>
                     <Button
@@ -163,7 +164,8 @@ export default function Role(props: IRole) {
                         Save
                     </Button>
                 </div>
-            </Transition>
+            </div>
+            {definitions.map(renderPermissionGroup)}
         </div>
     );
 }

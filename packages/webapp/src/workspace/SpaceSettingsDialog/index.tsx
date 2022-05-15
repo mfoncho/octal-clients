@@ -110,15 +110,17 @@ export default Dialog.create<IDialog>((props) => {
                         </ul>
                     </div>
                 </div>
-                <PerfectScrollbar
-                    options={scrollbarOptions}
-                    className="flex-1 flex flex-col">
-                    {Manager ? (
-                        <Manager space={space} permissions={permissions} />
-                    ) : (
-                        <div />
-                    )}
-                </PerfectScrollbar>
+                <div className="relative flex flex-1 flex-row">
+                    <PerfectScrollbar
+                        options={scrollbarOptions}
+                        className="flex-1 flex flex-col">
+                        {Manager ? (
+                            <Manager space={space} permissions={permissions} />
+                        ) : (
+                            <div />
+                        )}
+                    </PerfectScrollbar>
+                </div>
                 <div className="absolute w-full h-20 items-center flex flex-row justify-end px-8">
                     <Button
                         onClick={props.onClose as any}
