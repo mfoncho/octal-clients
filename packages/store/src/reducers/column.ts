@@ -1,13 +1,5 @@
 import { Record, List, Map } from "immutable";
-import {
-    ColumnUpdatedAction,
-    ColumnsUpdatedAction,
-    ColumnLoadedAction,
-    ColumnsLoadedAction,
-    ColumnDeletedAction,
-    ColumnsReorderedAction,
-    ColumnMovedAction,
-} from "../actions/board";
+import * as BoardActions from "../actions/board";
 import { sort } from "@octal/common";
 import * as Actions from "../actions/types";
 import { ColumnRecord } from "../records";
@@ -105,9 +97,15 @@ export class ColumnsStore extends Record({
 export const state = new ColumnsStore();
 
 export const reducers = {
+    [Actions.COLUMN_CREATED]: (
+        store: ColumnsStore,
+        { payload }: BoardActions.ColumnCreatedAction
+    ) => {
+        return store.putColumn(payload);
+    },
     [Actions.COLUMN_LOADED]: (
         store: ColumnsStore,
-        { payload }: ColumnLoadedAction
+        { payload }: BoardActions.ColumnLoadedAction
     ) => {
         return store.putColumn(payload);
     },
@@ -124,7 +122,7 @@ export const reducers = {
 
     [Actions.COLUMNS_LOADED]: (
         store: ColumnsStore,
-        { payload }: ColumnsLoadedAction
+        { payload }: BoardActions.ColumnsLoadedAction
     ) => {
         return payload.reduce(
             (store, payload) => store.putColumn(payload),
@@ -134,13 +132,13 @@ export const reducers = {
 
     [Actions.COLUMN_UPDATED]: (
         store: ColumnsStore,
-        { payload }: ColumnUpdatedAction
+        { payload }: BoardActions.ColumnUpdatedAction
     ) => {
         return store.patchColumn(payload);
     },
     [Actions.COLUMNS_UPDATED]: (
         store: ColumnsStore,
-        { payload }: ColumnsUpdatedAction
+        { payload }: BoardActions.ColumnsUpdatedAction
     ) => {
         return payload.reduce(
             (store: ColumnsStore, column: any) => store.patchColumn(column),
@@ -150,7 +148,7 @@ export const reducers = {
 
     [Actions.COLUMNS_REORDERED]: (
         store: ColumnsStore,
-        { payload }: ColumnsReorderedAction
+        { payload }: BoardActions.ColumnsReorderedAction
     ) => {
         return payload.reduce((store, col) => {
             return store.patchColumn(col);
@@ -159,27 +157,27 @@ export const reducers = {
 
     [Actions.COLUMN_MOVED]: (
         store: ColumnsStore,
-        { payload }: ColumnMovedAction
+        { payload }: BoardActions.ColumnMovedAction
     ) => {
         return store.patchColumn(payload);
     },
 
     [Actions.COLUMN_ARCHIVED]: (
         store: ColumnsStore,
-        { payload }: ColumnUpdatedAction
+        { payload }: BoardActions.ColumnUpdatedAction
     ) => {
         return store.patchColumn(payload);
     },
 
     [Actions.COLUMN_UNARCHIVED]: (
         store: ColumnsStore,
-        { payload }: ColumnUpdatedAction
+        { payload }: BoardActions.ColumnUpdatedAction
     ) => {
         return store.patchColumn(payload);
     },
     [Actions.COLUMN_DELETED]: (
         store: ColumnsStore,
-        { payload }: ColumnDeletedAction
+        { payload }: BoardActions.ColumnDeletedAction
     ) => {
         return store.removeColumn(payload.id);
     },

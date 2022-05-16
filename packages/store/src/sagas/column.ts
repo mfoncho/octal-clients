@@ -1,5 +1,5 @@
 import { put, all, takeEvery } from "redux-saga/effects";
-import Client, { io } from "@octal/client";
+import client, { io } from "@octal/client";
 import { dispatch } from "..";
 import { ColumnSchema } from "../schemas";
 import * as Actions from "../actions/types";
@@ -29,7 +29,7 @@ function* fetch({
     resolve,
 }: BoardActions.FetchColumnsAction): Iterable<any> {
     try {
-        const data = (yield Client.fetchColumns(payload)) as any;
+        const data = (yield client.fetchColumns(payload)) as any;
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -67,7 +67,7 @@ function* move({
                 position: payload.position,
             })
         );
-        const data = (yield Client.moveColumn(payload)) as any;
+        const data = (yield client.moveColumn(payload)) as any;
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -86,7 +86,7 @@ function* archive({
     resolve,
 }: BoardActions.ArchiveColumnAction): Iterable<any> {
     try {
-        const data = (yield Client.archiveColumn(payload)) as any;
+        const data = (yield client.archiveColumn(payload)) as any;
         yield put(BoardActions.columnArchived(data));
         resolve.success(data);
     } catch (e) {
@@ -99,7 +99,7 @@ function* unarchive({
     resolve,
 }: BoardActions.UnarchiveColumnAction): Iterable<any> {
     try {
-        const data = (yield Client.unarchiveColumn(payload)) as any;
+        const data = (yield client.unarchiveColumn(payload)) as any;
         yield put(BoardActions.columnUnarchived(data));
         resolve.success(data);
     } catch (e) {
@@ -112,7 +112,7 @@ function* update({
     resolve,
 }: BoardActions.UpdateColumnAction): Iterable<any> {
     try {
-        const data = (yield Client.updateColumn(payload)) as any;
+        const data = (yield client.updateColumn(payload)) as any;
         yield put(BoardActions.columnUpdated(data));
         resolve.success(data);
     } catch (e) {
@@ -125,7 +125,7 @@ function* trash({
     resolve,
 }: BoardActions.DeleteColumnAction): Iterable<any> {
     try {
-        const data = (yield Client.deleteColumn(payload)) as any;
+        const data = (yield client.deleteColumn(payload)) as any;
         const params = {
             id: payload.column_id,
             board_id: payload.board_id,
@@ -142,7 +142,7 @@ function* create({
     resolve,
 }: BoardActions.CreateColumnAction): Iterable<any> {
     try {
-        const data = (yield Client.createColumn(payload)) as any;
+        const data = (yield client.createColumn(payload)) as any;
         yield put(BoardActions.columnCreated(data));
         resolve.success(data);
     } catch (e) {

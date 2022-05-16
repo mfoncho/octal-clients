@@ -776,7 +776,7 @@ export type CardArchivedAction = Action<CARD_ARCHIVED, io.Card>;
 
 export type CardUnarchivedAction = Action<CARD_UNARCHIVED, io.Card>;
 
-export type ColumnCreateAction = Action<COLUMN_CREATED, io.Column>;
+export type ColumnCreatedAction = Action<COLUMN_CREATED, io.Column>;
 
 export type ColumnDeletedAction = Action<
     COLUMN_DELETED,
@@ -1030,7 +1030,7 @@ export function columnArchived(column: io.Column): ColumnArchivedAction {
     return createAction(COLUMN_ARCHIVED, column);
 }
 
-export function columnCreated(column: io.Column): ColumnCreateAction {
+export function columnCreated(column: io.Column): ColumnCreatedAction {
     return createAction(COLUMN_CREATED, column);
 }
 
