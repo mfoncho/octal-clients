@@ -1,6 +1,6 @@
 import React from "react";
 import { Dialog } from "@octal/ui";
-import ColumnsArchive from "./ColumnsArchive";
+import ColumnsStash from "./ColumnsStash";
 
 interface IDialog {
     board: { id: string; space_id: string };
@@ -9,13 +9,13 @@ interface IDialog {
 export default Dialog.create<IDialog>((props) => {
     return (
         <Dialog
+            title="Stash"
             maxWidth="md"
-            title={"Collections Drawer"}
             open={props.open}
             fullWidth={true}
             fullHeight={true}
             onClose={props.onClose}>
-            <ColumnsArchive board={props.board} />
+            <ColumnsStash board={props.board} />
         </Dialog>
     );
 });

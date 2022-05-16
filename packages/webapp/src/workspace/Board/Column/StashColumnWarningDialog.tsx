@@ -8,8 +8,8 @@ interface IDialog {
 }
 
 const warning = `
-Archiving this column means All cards in the column will be
-hidden untill the column is unarchived
+Stashed columns have call their cards
+hidden untill the column is unstashed
 `;
 
 export default Dialog.create<IDialog>(({ column, ...props }) => {
@@ -20,15 +20,15 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
     function handleConfirm(e: React.MouseEvent) {
         e.preventDefault();
         e.stopPropagation();
-        actions.archive().catch(() => setLoading(false));
+        actions.stash().catch(() => setLoading(false));
         setLoading(true);
     }
 
     return (
         <Dialog.Warning
             open={props.open}
-            title={`Archive Column (${column.name})`}
-            confirm="Archive"
+            title={`Stach (${column.name})`}
+            confirm="Confirm"
             onClose={loading ? undefined : props.onClose}
             disabled={loading}
             onConfirm={handleConfirm}>

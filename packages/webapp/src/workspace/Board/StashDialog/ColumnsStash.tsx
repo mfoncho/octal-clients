@@ -10,7 +10,7 @@ import SimpleBar from "simplebar-react";
 import DestroyColumnWarningDialog from "./DestroyColumnWaringDialog";
 import { useColumnCards } from "@octal/store";
 
-interface IColumnArchive {
+interface IColumnsStash {
     board: { id: string };
 }
 
@@ -59,7 +59,7 @@ function Column({ column }: IColumn) {
                         </Tooltip>
                     )}
                     <Button
-                        onClick={actions.unarchive}
+                        onClick={actions.unstash}
                         color="clear"
                         className="mx-2"
                         variant="icon">
@@ -88,7 +88,7 @@ function Column({ column }: IColumn) {
     );
 }
 
-export default function ColumnsArchive(props: IColumnArchive) {
+export default function ColumnsArchive(props: IColumnsStash) {
     const columns = useColumns().filter((column) =>
         Boolean(column.archived_at)
     );

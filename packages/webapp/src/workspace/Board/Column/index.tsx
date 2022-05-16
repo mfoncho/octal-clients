@@ -9,7 +9,7 @@ import Menu from "./Menu";
 import { sort } from "@octal/common";
 import UpdateColumnDialog from "./UpdateDialog";
 import CreateCardPopper from "./CreateCardPopper";
-import ArchiveColumnWarningDialog from "./ArchiveColumnWarningDialog";
+import StashColumnWarningDialog from "./StashColumnWarningDialog";
 import { ColumnRecord, CardRecord } from "@octal/store";
 import { useDragged } from "../hooks";
 import { usePermissions } from "@workspace/Space";
@@ -177,8 +177,8 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                 column={column}
                 onClose={handleCloseDialog}
             />
-            <ArchiveColumnWarningDialog
-                open={dialog == "archive"}
+            <StashColumnWarningDialog
+                open={dialog == "stash"}
                 column={column}
                 onClose={handleCloseDialog}
             />

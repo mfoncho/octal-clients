@@ -129,7 +129,7 @@ export function useColumnActions(column: ColumnRecord) {
         return dispatch(action);
     }, []);
 
-    const archive = useCallback(() => {
+    const stash = useCallback(() => {
         const action = BoardAction.archiveColumn({
             column_id: column.id,
             board_id: column.board_id,
@@ -137,7 +137,7 @@ export function useColumnActions(column: ColumnRecord) {
         return dispatch(action);
     }, []);
 
-    const unarchive = useCallback(() => {
+    const unstash = useCallback(() => {
         const action = BoardAction.unarchiveColumn({
             column_id: column.id,
             board_id: column.board_id,
@@ -158,8 +158,8 @@ export function useColumnActions(column: ColumnRecord) {
     return {
         update,
         destroy,
-        archive,
-        unarchive,
+        stash,
+        unstash,
         createCard,
     };
 }

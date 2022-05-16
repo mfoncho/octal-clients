@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Dialog, Text } from "@octal/ui";
 import { useBoard, useDrawer } from "./hooks";
-import ArchiveDialog from "./ArchiveDialog";
+import StashDialog from "./StashDialog";
 import RenameBoardDialog from "./RenameBoardDialog";
 import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
 import { RiArchiveDrawerFill as DrawerIcon } from "react-icons/ri";
@@ -36,9 +36,9 @@ export default React.memo(() => {
     const dialog = Dialog.useDialog();
 
     function handleToggleArchive() {
-        if (drawer.props.type != "archive" || !drawer.open) {
-            drawerActions.open({ type: "archive", board_id: board.id });
-        } else if (drawer.props.type == "archive" && drawer.open) {
+        if (drawer.props.type != "stash" || !drawer.open) {
+            drawerActions.open({ type: "stash", board_id: board.id });
+        } else if (drawer.props.type == "stash" && drawer.open) {
             drawerActions.close({ type: "" });
         }
     }
@@ -79,18 +79,18 @@ export default React.memo(() => {
                 <Button
                     variant="icon"
                     className="mx-2"
-                    onClick={dialog.opener("archive")}>
+                    onClick={dialog.opener("stash")}>
                     <DrawerIcon />
-                    <ArchiveDialog
+                    <StashDialog
                         onClose={dialog.close}
-                        open={dialog.archive}
+                        open={dialog.stash}
                         board={board}
                     />
                 </Button>
                 <Button
                     variant="icon"
                     color={
-                        drawer.props?.type == "archive" ? "primary" : undefined
+                        drawer.props?.type == "stash" ? "primary" : undefined
                     }
                     className="mx-2"
                     onClick={handleToggleArchive}>

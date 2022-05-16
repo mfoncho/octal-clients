@@ -26,11 +26,11 @@ export default Popper.create<HTMLUListElement, IMenu>((props) => {
                 </span>
             </li>
             <li
-                data-menu-name="archive"
+                data-menu-name="stash"
                 className="flex group p-2 flex-row items-center hover:bg-primary-500"
                 onClick={props.onSelect}>
                 <span className="px-4 font-semibold group-hover:text-white">
-                    Archive
+                    Stash
                 </span>
             </li>
         </Popper>
