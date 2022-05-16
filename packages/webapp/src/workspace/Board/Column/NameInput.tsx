@@ -1,11 +1,12 @@
 import React, { useImperativeHandle, useRef } from "react";
+import { Textarea } from "@octal/ui";
 import { useInput } from "src/utils";
 
 export interface IColumnNameInput {
     defaultValue?: string;
     disabled?: boolean;
     onClose: (e: React.MouseEvent | any) => void;
-    onSubmit?: (e: React.KeyboardEvent, name: string) => void;
+    onSubmit?: (name: string) => void;
 }
 
 export interface IColumnNameInputRef {
@@ -19,9 +20,9 @@ export default React.forwardRef<IColumnNameInputRef, IColumnNameInput>(
 
         const inputRef = useRef<HTMLInputElement | null>(null);
 
-        function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-            if (e.key == "Enter" && props.onSubmit) {
-                props.onSubmit(e, name.value);
+        function handleSubmit() {
+            if (name.valid && props.onSubmit) {
+                props.onSubmit(name.value);
             }
         }
 
@@ -41,14 +42,14 @@ export default React.forwardRef<IColumnNameInputRef, IColumnNameInput>(
         );
 
         return (
-            <input
-                {...name.props}
+            <Textarea.Input
                 autoFocus={true}
-                ref={inputRef}
-                disabled={props.disabled}
-                className="form-input font-semibold rounded-md border text-sm"
+                value={name.value}
+                onChange={name.setValue}
+                onSubmit={handleSubmit}
                 onBlur={props.onClose}
-                onKeyPress={handleKeyPress}
+                placeholder="Card name"
+                className="focus:border-primary-700 py-1.5 focus:shadow border-slate-500 border-2 px-2 w-full rounded-md mx-2 font-semibold text-base text-gray-900"
             />
         );
     }

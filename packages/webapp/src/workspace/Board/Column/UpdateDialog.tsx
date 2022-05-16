@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import clx from "classnames";
+import { Textarea } from "@octal/ui";
 import { Switch, Dialog, Button, Range } from "@octal/ui";
 import { useInput } from "src/utils";
 import { ColumnRecord } from "@octal/store/lib/records";
@@ -81,13 +82,16 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
             fullWidth={false}
             onClose={loading ? undefined : props.onClose}>
             <Dialog.Content className="flex flex-col">
-                <input
-                    value={name.value}
-                    disabled={loading}
-                    placeholder="Column name"
-                    onChange={name.onChange}
-                    className="form-input rounded-md font-semibold focus:ring-primary-500"
-                />
+                <div className="flex flex-row">
+                    <Textarea.Input
+                        autoFocus={true}
+                        value={name.value}
+                        disabled={loading}
+                        onChange={name.setValue}
+                        placeholder="Column name"
+                        className="mx-0 focus:border-primary-700 py-1.5 focus:shadow border-slate-500 border-2 px-2 w-full rounded-md mx-2 font-semibold text-base text-gray-900"
+                    />
+                </div>
 
                 <div className="flex flex-col pt-2">
                     <Range

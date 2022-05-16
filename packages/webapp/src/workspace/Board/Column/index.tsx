@@ -4,7 +4,7 @@ import AddIcon from "@material-ui/icons/Add";
 import FullIcon from "@material-ui/icons/HourglassFull";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { Tooltip, Button } from "@octal/ui";
+import { Text, Tooltip, Button } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import { DraggableCard as Card } from "../Card";
 import Menu from "./Menu";
@@ -127,7 +127,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                             </>
                         </Tooltip>
                         <span className="px-2 text-gray-800 font-semibold">
-                            {column.name}
+                            <Text>{column.name}</Text>
                         </span>
                     </button>
                     <div className="flex flex-row items-center justify-end">

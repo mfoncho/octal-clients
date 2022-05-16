@@ -32,7 +32,7 @@ function CreateColumn() {
     }, []);
 
     const handleCreateColumn = useCallback(
-        (_e: React.KeyboardEvent, name: string) => {
+        (name: string) => {
             setCreating(true);
             const action = createColumn({
                 name: name,
