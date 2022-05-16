@@ -163,7 +163,7 @@ function EmailInvite(props: IInviteMode) {
 
 function InviteLink(props: IInviteMode) {
     function handleCopyLink() {
-        if (props.invite) {
+        if (props.invite && navigator.clipboard) {
             navigator.clipboard.writeText(props.invite.link);
         }
     }
