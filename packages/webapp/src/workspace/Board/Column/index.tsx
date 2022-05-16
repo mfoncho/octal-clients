@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Context from "./Context";
-import AddIcon from "@material-ui/icons/Add";
-import FullIcon from "@material-ui/icons/HourglassFull";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Text, Tooltip, Button } from "@octal/ui";
@@ -101,31 +99,15 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
             <div
                 className={
                     isDragging
-                        ? "w-[315px] flex flex-col overflow-hidden bg-gray-50 shadow-md"
-                        : "w-[315px] flex flex-col overflow-hidden"
+                        ? "w-[315px] flex flex-col overflow-hidden bg-gray-50 shadow-md p-2"
+                        : "w-[315px] flex flex-col overflow-hidden p-2"
                 }>
                 <div
                     {...handle}
-                    className="flex px-3 py-2 flex-row items-center justify-between">
+                    className="flex px-3 py-1 flex-row items-center justify-between rounded shadow bg-primary-100 m-1">
                     <button
                         onClick={canManageBoard ? handleOpenMenu : undefined}
                         className="flex flex-row items-center">
-                        <Tooltip
-                            placement="top"
-                            title={
-                                <span className="font-semibold">
-                                    {column.type}
-                                </span>
-                            }>
-                            <>
-                                {column.type == "stack" && (
-                                    <Icons.Stack className="text-gray-600" />
-                                )}
-                                {column.type == "queue" && (
-                                    <Icons.Queue className="text-gray-600" />
-                                )}
-                            </>
-                        </Tooltip>
                         <span className="px-2 text-gray-800 font-semibold">
                             <Text>{column.name}</Text>
                         </span>
@@ -137,7 +119,12 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                                 title={
                                     <span className="font-semibold">Full</span>
                                 }>
-                                <FullIcon className="text-gray-500" />
+                                <Button
+                                    variant="icon"
+                                    disabled={true}
+                                    color="clear">
+                                    <Icons.Full />
+                                </Button>
                             </Tooltip>
                         ) : (
                             column.origin &&
@@ -146,14 +133,14 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                                     variant="icon"
                                     color="clear"
                                     onClick={handleOpenCreateCardDialog}>
-                                    <AddIcon />
+                                    <Icons.Plus />
                                 </Button>
                             )
                         )}
                     </div>
                 </div>
                 <PerfectScrollbar
-                    className="flex flex-col px-3 "
+                    className="flex flex-col px-2"
                     style={{ maxHeight: "100%" }}>
                     <Droppable
                         type="card"
@@ -164,7 +151,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                             <div
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
-                                className="flex pb-12 flex-col pt-0.5 flex-grow">
+                                className="flex pb-12 flex-col pt-3 flex-grow">
                                 {cards.toList().map(renderCard)}
                                 {provided.placeholder}
                             </div>

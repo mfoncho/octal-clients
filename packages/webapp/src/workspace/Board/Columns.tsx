@@ -56,7 +56,7 @@ function CreateColumn() {
 
     return (
         <div
-            className="flex-zeros-auto pt-1 pl-4 mt-4 mx-4 flex-col"
+            className="flex-zeros-auto pt-2.5 pl-4 mt-4 mx-4 flex-col"
             style={{ width: "330px" }}>
             {open ? (
                 <ColumnNameInput
