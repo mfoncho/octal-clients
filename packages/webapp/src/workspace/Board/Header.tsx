@@ -36,9 +36,9 @@ export default React.memo(() => {
     const dialog = Dialog.useDialog();
 
     function handleToggleArchive() {
-        if (drawer.props.type != "stash" || !drawer.open) {
-            drawerActions.open({ type: "stash", board_id: board.id });
-        } else if (drawer.props.type == "stash" && drawer.open) {
+        if (drawer.props.type != "archive" || !drawer.open) {
+            drawerActions.open({ type: "archive", board_id: board.id });
+        } else if (drawer.props.type == "archive" && drawer.open) {
             drawerActions.close({ type: "" });
         }
     }
