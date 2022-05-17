@@ -1,6 +1,7 @@
 import React from "react";
 import Board from "./Board";
 import Header from "./Header";
+import Filters from "./Filters";
 import Drawer from "./Drawer";
 import CardDialog from "@workspace/CardDialog";
 import { useCard } from "@octal/store";
@@ -37,6 +38,7 @@ export default function Main() {
         <div className="flex flex-row flex-grow overflow-hidden">
             <div className="flex flex-col flex-1 overflow-hidden">
                 <Header />
+                <Filters />
                 <Board />
             </div>
             <Drawer id={params.board_id!} />

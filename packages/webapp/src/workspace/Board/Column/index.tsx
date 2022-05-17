@@ -203,7 +203,7 @@ export default React.memo<IColumnMain>(({ column, index }) => {
                 <div
                     {...provided.draggableProps}
                     ref={provided.innerRef}
-                    className="flex flex-row p-3">
+                    className="flex flex-row pt-0 p-3">
                     <Context column={column}>
                         <Column
                             column={column}

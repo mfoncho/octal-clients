@@ -70,12 +70,6 @@ export default React.memo(() => {
                 </div>
             </div>
             <div className="flex flex-row items-center justify-end px-4">
-                <button className="hidden mx-4 sm:flex flex-grow items-center">
-                    <SearchIcon />
-                    <span className="pl-4 font-semibold text-gray-500">
-                        Quick search board
-                    </span>
-                </button>
                 <Button
                     variant="icon"
                     className="mx-2"

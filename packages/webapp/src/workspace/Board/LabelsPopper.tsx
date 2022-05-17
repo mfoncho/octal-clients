@@ -29,6 +29,8 @@ interface ILabelForm {
     onSubmit: (params: IFormPayload) => void;
 }
 
+const labelStyle = { margin: 0 };
+
 const colors: string[] = [
     "#f44336",
     "#2196f3",
@@ -334,10 +336,11 @@ export default Popper.create<HTMLDivElement, ILabelsPopper>((props) => {
             flip={flip}
             open={props.open}
             tabIndex={-1}
+            style={labelStyle}
             anchorEl={props.anchorEl}
             placement="bottom-start"
             onClickAway={handlePopperClickAway}
-            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 min-w-[256px] max-w-[256px] overflow-hidden pt-4 bg-white shadow-md">
+            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 z-[1000] ring-opacity-5 min-w-[256px] max-w-[256px] overflow-hidden pt-4 bg-white shadow-md">
             {form ? (
                 <LabelForm onClose={closeForm} onSubmit={handleCreateLabel} />
             ) : (

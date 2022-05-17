@@ -73,7 +73,7 @@ export default function Board() {
         <Dragged.Provider value={dragged}>
             <PerfectScrollbar
                 options={scrollbarOptions}
-                className="flex-1 flex overflow-y-hidden pt-4">
+                className="flex-1 flex overflow-y-hidden">
                 <DragDropContext
                     onDragEnd={handleDragEnd}
                     onDragStart={handleDragStart}>

@@ -14,6 +14,8 @@ interface IMember {
     member: MemberRecord;
 }
 
+const labelStyle = { margin: 0 };
+
 function Member({ member, onClick }: IMember) {
     const user = useUser(member.user_id);
     function handleClick(e: React.MouseEvent) {
@@ -65,6 +67,7 @@ export default Popper.create<HTMLUListElement, IMenu>(
                 role="select"
                 open={props.open}
                 tabIndex={-1}
+                style={labelStyle}
                 distance={10}
                 anchorEl={props.anchorEl}
                 placement="bottom-start"
