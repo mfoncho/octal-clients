@@ -34,7 +34,7 @@ function Member({ member, onClick, selected }: IMember) {
             <div className="flex flex-row space-x-2">
                 <img
                     alt={user.username}
-                    className="w-8 h-8 rounded-full"
+                    className="w-9 h-9 rounded-full"
                     src={user.avatar}
                 />
                 <div className=" flex flex-col">
