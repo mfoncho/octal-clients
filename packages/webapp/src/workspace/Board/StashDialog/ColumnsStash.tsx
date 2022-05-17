@@ -1,12 +1,11 @@
 import React from "react";
-import FullIcon from "@material-ui/icons/HourglassFull";
 import { Dialog, Tooltip, Button, Text } from "@octal/ui";
 import { ColumnRecord, CardRecord } from "@octal/store";
 import Card from "@workspace/Board/Card";
 import * as Icons from "@octal/icons";
 import { useColumns } from "@workspace/Board";
 import { useColumnActions } from "@workspace/Board";
-import SimpleBar from "simplebar-react";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import DestroyColumnWarningDialog from "./DestroyColumnWaringDialog";
 import { useColumnCards } from "@octal/store";
 
@@ -64,11 +63,11 @@ function Column({ column }: IColumn) {
                     </Button>
                 </div>
             </div>
-            <SimpleBar className="flex flex-col px-3 ">
+            <PerfectScrollbar className="flex flex-col px-3">
                 <div className="flex flex-col py-5 flex-grow">
                     {cards.toList().map(renderCard)}
                 </div>
-            </SimpleBar>
+            </PerfectScrollbar>
             <DestroyColumnWarningDialog
                 open={dialog.destroy}
                 onClose={dialog.close}
