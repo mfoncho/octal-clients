@@ -249,7 +249,7 @@ function Labels(props: ILabels) {
     }
 
     return (
-        <div className="flex flex-col px-2 pb-4 max-h-[250px] overflow-y-auto overflow-x-hidden">
+        <div className="flex flex-col max-h-[250px] overflow-y-auto overflow-x-hidden  divide-y dark:divide-slate-100/5">
             {labels.map((label) => {
                 const selctd = selected.includes(label.id);
                 return (
@@ -257,8 +257,8 @@ function Labels(props: ILabels) {
                         key={label.id}
                         role="button"
                         onClick={handleLabelClick(label)}
-                        className="group flex cursor-pointer hover:bg-primary-50 rounded-md  my-1 flex-row items-center justify-between">
-                        <div className="flex flex-row items-center">
+                        className="group flex cursor-pointer hover:bg-slate-100 flex-row items-center justify-between p-2">
+                        <div className="flex flex-row items-center space-x-2">
                             <input
                                 checked={selctd}
                                 readOnly={true}
@@ -269,7 +269,7 @@ function Labels(props: ILabels) {
                                     borderColor: label.color,
                                 }}
                             />
-                            <span className="p-1 font-semibold text-sm text-gray-700">
+                            <span className="font-semibold text-sm text-gray-700">
                                 <Text>{label.name}</Text>
                             </span>
                         </div>
@@ -340,7 +340,7 @@ export default Popper.create<HTMLDivElement, ILabelsPopper>((props) => {
             anchorEl={props.anchorEl}
             placement="bottom-start"
             onClickAway={handlePopperClickAway}
-            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 z-[1000] ring-opacity-5 min-w-[256px] max-w-[256px] overflow-hidden pt-4 bg-white shadow-md">
+            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 z-[1000] ring-opacity-5 min-w-[264px] max-w-[264px] overflow-hidden bg-white shadow-md">
             {form ? (
                 <LabelForm onClose={closeForm} onSubmit={handleCreateLabel} />
             ) : (
