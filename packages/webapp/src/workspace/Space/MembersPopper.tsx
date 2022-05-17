@@ -1,5 +1,5 @@
 import React from "react";
-import { MemberRecord, useUser, useUsers } from "@octal/store";
+import { MemberRecord, useUser } from "@octal/store";
 import { useMembers } from "./hooks";
 import * as Icons from "@octal/icons";
 import { Popper } from "@octal/ui";
@@ -54,8 +54,6 @@ function Member({ member, onClick, selected }: IMember) {
 export default Popper.create<HTMLUListElement, IMenu>(
     ({ selected = [], ...props }) => {
         const members = useMembers();
-
-        let users = useUsers();
 
         return (
             <Popper
