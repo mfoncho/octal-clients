@@ -69,6 +69,16 @@ export function useBoardActions() {
         },
         [board.id]
     );
+
+    const filter = useCallback((filter: string, value: string| string[]) => {
+            const action = BoardAction.updateBoardFilter({
+                filter: filter,
+                board_id: board.id,
+                value: value,
+            });
+            return dispatch(action);
+
+    }, [board.id])
     const createLabel = useCallback(
         (params: BoardAction.CreateLabelParams) => {
             const action = BoardAction.createLabel(board.id, params);
@@ -98,7 +108,7 @@ export function useBoardActions() {
         },
         [board.id]
     );
-    return { updateBoard, createLabel, updateLabel, deleteLabel };
+    return { updateBoard, filter, createLabel, updateLabel, deleteLabel };
 }
 
 export function useColumnActions(column: ColumnRecord) {

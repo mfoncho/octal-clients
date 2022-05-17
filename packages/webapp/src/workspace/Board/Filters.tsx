@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Icons from "@octal/icons";
-import LabelsPopper from "./LabelsPopper";
+import { useInput } from "src/hooks";
+import { Button, Dialog } from "@octal/ui";
+import { useDebouncedCallback } from "@octal/hooks";
+import { MemberRecord, LabelRecord } from "@octal/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
-import { Button, Dialog, Popper } from "@octal/ui";
-import { useBoard } from "./hooks";
+import { useBoard, useBoardActions } from "./hooks";
+import LabelsPopper from "./LabelsPopper";
 
 const SearchIcon = () => (
     <svg width="24" height="24" fill="none" className="text-gray-500">
@@ -17,16 +20,61 @@ const SearchIcon = () => (
 );
 
 export default React.memo(() => {
-    const board = useBoard();
+    const { filter } = useBoard();
+    const input = useInput(filter.term);
+    const actions = useBoardActions();
     const labelBtn = React.useRef<HTMLButtonElement | null>();
     const memberBtn = React.useRef<HTMLButtonElement | null>();
     const dialog = Dialog.useDialog();
+
+    const callback = useDebouncedCallback(
+        () => {
+            actions.filter("term", input.value);
+        },
+        1000,
+        [input.value]
+    );
+
+    useEffect(() => {
+        callback();
+    }, [input.value]);
+
+    function handleSelectMember(member: MemberRecord) {
+        if (filter.users.includes(member.user_id)) {
+            actions.filter(
+                "users",
+                filter.users
+                    .filter((id) => id !== member.user_id)
+                    .toJS() as string[]
+            );
+        } else {
+            actions.filter(
+                "users",
+                filter.users.push(member.user_id).toJS() as string[]
+            );
+        }
+    }
+
+    function handleSelectLabel(label: LabelRecord) {
+        if (filter.labels.includes(label.id)) {
+            actions.filter(
+                "labels",
+                filter.labels.filter((id) => id !== label.id).toJS() as string[]
+            );
+        } else {
+            actions.filter(
+                "labels",
+                filter.labels.push(label.id).toJS() as string[]
+            );
+        }
+    }
 
     return (
         <div className="flex px-8 flex-row items-center h-14 sm:h-20 space-x-3">
             <div className="hidden mx-4 sm:flex items-center rounded-md px-2 py-1 ring-primary-500 ring-2">
                 <SearchIcon />
                 <input
+                    {...input.props}
                     placeholder="Quick search board"
                     className="pl-2 font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700"
                 />
@@ -46,11 +94,15 @@ export default React.memo(() => {
                 <Icons.Users />
             </Button>
             <LabelsPopper
+                selected={filter.labels.toJS() as any}
+                onSelect={handleSelectLabel}
                 anchorEl={labelBtn.current}
                 open={dialog.labels}
                 onClickAway={dialog.close}
             />
             <MembersPopper
+                selected={filter.users.toJS() as any}
+                onSelect={handleSelectMember}
                 anchorEl={memberBtn.current}
                 open={dialog.members}
                 onClickAway={dialog.close}

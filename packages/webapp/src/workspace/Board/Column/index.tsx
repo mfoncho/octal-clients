@@ -11,7 +11,7 @@ import UpdateColumnDialog from "./UpdateDialog";
 import CreateCardPopper from "./CreateCardPopper";
 import StashColumnWarningDialog from "./StashColumnWarningDialog";
 import { ColumnRecord, CardRecord } from "@octal/store";
-import { useDragged } from "../hooks";
+import { useDragged, useBoard } from "../hooks";
 import { usePermissions } from "@workspace/Space";
 import { useColumnCards } from "@octal/store";
 export { default as Context } from "./Context";
@@ -24,6 +24,8 @@ interface IColumn {
 const positionSort = sort("position", "asc");
 
 const Column = React.memo<IColumn>(({ column, handle }) => {
+    const board = useBoard();
+
     const dragged = useDragged();
 
     const permissions = usePermissions();
@@ -82,6 +84,14 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
         setDialog(dialog);
     }
 
+    const renderedCards = (
+        board.filter.valid
+            ? cards.filter((card) => board.filter.test(card))
+            : cards
+    )
+        .toList()
+        .map(renderCard);
+
     const canManageBoard = permissions.manage_board.value;
 
     const isFull = cards.size >= column.capacity;
@@ -90,9 +100,12 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
 
     const isDragging = droppableId == dragged?.draggableId;
 
+    const filtered = renderedCards.size != cards.size;
+
     const dropDisabled =
         (isFull && dragged && dragged.source.droppableId !== droppableId) ||
-        !canManageBoard;
+        !canManageBoard ||
+        filtered;
 
     return (
         <React.Fragment>
@@ -113,6 +126,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                         </span>
                     </button>
                     <div className="flex flex-row items-center justify-end">
+                        {filtered && <Icons.Filter className="text-gray-700" />}
                         {isFull ? (
                             <Tooltip
                                 placement="top"
@@ -152,7 +166,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                                 className="flex pb-12 flex-col pt-3 flex-grow">
-                                {cards.toList().map(renderCard)}
+                                {renderedCards}
                                 {provided.placeholder}
                             </div>
                         )}
