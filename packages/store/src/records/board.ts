@@ -1,5 +1,6 @@
 import { Record, List } from "immutable";
 import { Unique, Id } from "@octal/client";
+import { CardRecord } from "./card";
 
 export class LabelRecord
     extends Record({
@@ -19,6 +20,27 @@ export class LabelRecord
     }
 }
 
+export class Filter extends Record({
+    term: "",
+    labels: List<string>(),
+    users: List<string>(),
+}) {
+    get valid() {
+        return (
+            this.term.length > 0 || this.labels.size > 0 || this.users.size > 0
+        );
+    }
+    test(card: CardRecord) {
+        if (this.term.length > 0 && card.name.includes(this.term)) return true;
+        if (this.users.find((user) => card.users.includes(user))) return true;
+
+        if (this.labels.find((label) => card.labels.includes(label)))
+            return true;
+
+        return false;
+    }
+}
+
 export class BoardRecord
     extends Record({
         id: "" as Id,
@@ -27,6 +49,7 @@ export class BoardRecord
         space_id: "",
         loaded: List<string>([]),
         labels: List<LabelRecord>(),
+        filter: new Filter(),
     })
     implements Unique
 {
@@ -42,6 +65,13 @@ export class BoardRecord
         return this.loaded.includes(collection)
             ? this
             : this.update("loaded", (loaded) => loaded.push(collection));
+    }
+
+    updateFilter(filter: string, value: string | string[] | List<string>) {
+        if ((filter == "users" || filter == "labels") && Array.isArray(value)) {
+            value = List(value);
+        }
+        return this.updateIn(["filter", filter], (_old) => value);
     }
 
     putLabel(payload: any) {

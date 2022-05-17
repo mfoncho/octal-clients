@@ -113,6 +113,17 @@ export class BoardsStore extends Record({
 export const state = new BoardsStore();
 
 export const reducers = {
+    [Actions.BOARD_FILTER_UPDATED]: (
+        store: BoardsStore,
+        { payload }: BoardActions.BoardFilterUpdatedAction
+    ) => {
+        let board = store.getBoard(payload.board_id);
+        if (board) {
+            board = board.updateFilter(payload.filter, payload.value);
+            return store.setIn(["entities", payload.board_id], board);
+        }
+        return store;
+    },
     [Actions.BOARD_CREATED]: (
         store: BoardsStore,
         { payload }: BoardActions.BoardCreatedAction

@@ -5,6 +5,7 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedCard, NormalizedColumn } from "../../schemas";
 import {
+    BOARD_FILTER_UPDATED,
     BOARD_CONNECTED,
     LOAD_BOARD,
     LOAD_BOARDS,
@@ -100,6 +101,12 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface BoardFilterPayload {
+    board_id: string;
+    filter: string;
+    value: string | string[];
+}
 
 export interface BoardConnectedPayload {
     id: string;
@@ -512,6 +519,11 @@ export interface UnarchiveColumnPayload extends ArchiveColumnPayload {}
 export type RemoveLabelPayload = Require<Partial<io.Label>, "id" | "board_id">;
 
 export type RemoveLabelsPayload = RemoveLabelPayload[];
+
+export type BoardFilterUpdatedAction = Action<
+    BOARD_FILTER_UPDATED,
+    BoardFilterPayload
+>;
 
 export type BoardConnectedAction = Action<
     BOARD_CONNECTED,
@@ -1348,6 +1360,11 @@ export function boardColumnsLoaded(
     return createAction(BOARD_COLUMNS_LOADED, payload);
 }
 
+export function updateBoardFilter(
+    payload: BoardFilterPayload
+): BoardFilterUpdatedAction {
+    return createAction(BOARD_FILTER_UPDATED, payload);
+}
 export function loadBoard(
     id: string,
     params: { [key: string]: string | number } = {}

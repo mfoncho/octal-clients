@@ -10,6 +10,9 @@ export type LOAD_BOARD = typeof LOAD_BOARD;
 export const BOARD_CONNECTED = "BOARD_CONNECTED";
 export type BOARD_CONNECTED = typeof BOARD_CONNECTED;
 
+export const BOARD_FILTER_UPDATED = "BOARD_FILTER_UPDATED";
+export type BOARD_FILTER_UPDATED = typeof BOARD_FILTER_UPDATED;
+
 export const LOAD_BOARDS = "LOAD_BOARDS";
 export type LOAD_BOARDS = typeof LOAD_BOARDS;
 

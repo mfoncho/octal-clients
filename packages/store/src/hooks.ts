@@ -601,6 +601,10 @@ export function useUserInvolvedCardsIndex(id: string) {
     return useSelector(selector);
 }
 
+export function useBoardFilter(id: string) {
+    return useBoard(id).filter;
+}
+
 export function useCalendarLoaded() {
     return useSelector(selector.calendarLoaded);
 }
