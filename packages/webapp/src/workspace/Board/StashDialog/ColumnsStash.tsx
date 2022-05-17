@@ -1,6 +1,6 @@
 import React from "react";
 import FullIcon from "@material-ui/icons/HourglassFull";
-import { Dialog, Tooltip, Button } from "@octal/ui";
+import { Dialog, Tooltip, Button, Text } from "@octal/ui";
 import { ColumnRecord, CardRecord } from "@octal/store";
 import Card from "@workspace/Board/Card";
 import * as Icons from "@octal/icons";
@@ -34,48 +34,38 @@ function Column({ column }: IColumn) {
 
     return (
         <div
-            className={
-                "flex flex-col flex-none overflow-hidden shadow-md mx-4 rounded-md border border-gray-200"
-            }
+            className={"flex flex-col flex-none overflow-hidden mx-4"}
             style={{ width: "315px" }}>
-            <div className="flex pl-2 pr-1 py-3 flex-row items-center justify-between">
-                <button className="flex flex-row items-center">
-                    {column.type == "stack" && (
-                        <Icons.Stack className="text-gray-600" />
-                    )}
-                    {column.type == "queue" && (
-                        <Icons.Queue className="text-gray-600" />
-                    )}
+            <div className="flex bg-slate-100 rounded-lg shadow pl-2 pr-1 py-1.5 flex-row items-center justify-between">
+                <div className="flex flex-row items-center">
                     <span className="px-2 text-gray-800 font-semibold">
-                        {column.name}
+                        <Text>{column.name}</Text>
                     </span>
-                </button>
-                <div className="flex flex-row items-center justify-end">
+                </div>
+                <div className="flex flex-row items-center justify-end space-x-2">
                     {isFull && (
                         <Tooltip
                             placement="top"
                             title={<span className="font-semibold">Full</span>}>
-                            <FullIcon className="text-gray-500" />
+                            <Icons.Full className="text-gray-500 w-6 h-6" />
                         </Tooltip>
                     )}
                     <Button
                         onClick={actions.unstash}
                         color="clear"
-                        className="mx-2"
                         variant="icon">
                         <Icons.Unarchive />
                     </Button>
                     <Button
                         onClick={dialog.opener("destroy")}
                         color="clear"
-                        className="mx-2"
                         variant="icon">
-                        <Icons.Delete />
+                        <Icons.Delete className="w-6 h-6" />
                     </Button>
                 </div>
             </div>
             <SimpleBar className="flex flex-col px-3 ">
-                <div className="flex pb-12 flex-col pt-0.5 flex-grow">
+                <div className="flex flex-col py-5 flex-grow">
                     {cards.toList().map(renderCard)}
                 </div>
             </SimpleBar>
