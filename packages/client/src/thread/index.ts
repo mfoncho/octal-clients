@@ -11,6 +11,14 @@ export interface FetchMessagesRequest {
     };
 }
 
+export interface PostDirectMessageRequest {
+    user_id: string;
+    params: {
+        content: string;
+        attachment?: File;
+    };
+}
+
 export interface ReactMessageRequest {
     thread_id: string;
     message_id: string;
@@ -79,6 +87,20 @@ export default class ThreadClient extends BaseClient {
         form.append("content", request.content);
         if (request.attachemnt) {
             form.append("attachment", request.attachemnt);
+        }
+        const { data } = await this.endpoint.post(path, form, params);
+        return data;
+    }
+
+    async postDirectMessage(
+        request: PostDirectMessageRequest,
+        params?: Params
+    ): Promise<io.Message> {
+        const path = `/users/${request.user_id}/messages`;
+        const form = new FormData();
+        form.append("content", request.params.content);
+        if (request.params.attachment) {
+            form.append("attachment", request.params.attachment);
         }
         const { data } = await this.endpoint.post(path, form, params);
         return data;
