@@ -26,6 +26,7 @@ export class SpaceRecord
         type: "" as SpaceType,
         access: "" as AccessType,
         topic_id: "",
+        thread_id: "",
         member_id: "" as Id,
         roles: Map<string, SpaceRoleRecord>(),
         joined_at: "",
@@ -107,6 +108,10 @@ export class SpaceRecord
                 return roles.set(role.role_id, new SpaceRoleRecord(role));
             }, Map());
             data = { ...data, roles };
+        }
+        if (data.users) {
+            const users = List(data.users);
+            data = { ...data, users };
         }
         return data;
     }

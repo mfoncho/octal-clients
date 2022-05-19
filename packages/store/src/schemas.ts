@@ -62,8 +62,7 @@ const TopicStruct = {};
 const LabelStruct = {};
 
 const SpaceStruct = {
-    boards: boards,
-    topics: topics,
+    users: users
 };
 
 const UsersReactionStruct = {
