@@ -4,6 +4,7 @@ import { Text } from "@octal/ui";
 import PresenceAvatar from "../PresenceAvatar";
 import { useInput } from "src/utils";
 import { useUser, useViewer } from "@octal/store";
+import * as ThreadAction from "@octal/store/lib/actions/thread";
 import { useDispatch } from "react-redux";
 
 interface IUserCard {
@@ -20,15 +21,14 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
     const input = useInput("");
 
     function handleSubmit() {
-        console.log("clicked");
         if (input.valid) {
-            dispatch({
-                type: "POST_DIRECT_MESSAGE",
-                payload: {
-                    text: input.value,
-                    user: props.id,
+            const action = ThreadAction.postDirectMessage({
+                user_id: user.id,
+                params: {
+                    content: input.value,
                 },
             });
+            return dispatch(action);
         }
     }
 
