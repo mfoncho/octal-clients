@@ -31,6 +31,19 @@ function* post({
     }
 }
 
+function* postDirect({
+    payload,
+    resolve,
+}: ThreadActions.PostDirectMessageAction): Iterable<any> {
+    try {
+        const data = (yield client.postDirectMessage(payload)) as any;
+        yield put(ThreadActions.newMessage(data));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
 function* created({ payload }: ThreadActions.NewMessageAction): Iterable<any> {
     const [normalized, related] = MessageSchema.normalizeOne(payload);
     yield put(relatedLoaded(related));
@@ -162,6 +175,11 @@ function* update({
 export const tasks = [
     { effect: takeEvery, type: Actions.FETCH_MESSAGES, handler: fetch },
     { effect: takeEvery, type: Actions.POST_MESSAGE, handler: post },
+    {
+        effect: takeEvery,
+        type: Actions.POST_DIRECT_MESSAGE,
+        handler: postDirect,
+    },
     { effect: takeEvery, type: Actions.NEW_MESSAGE, handler: created },
     { effect: takeEvery, type: Actions.PIN_MESSAGE, handler: pin },
     { effect: takeEvery, type: Actions.FLAG_MESSAGE, handler: flag },

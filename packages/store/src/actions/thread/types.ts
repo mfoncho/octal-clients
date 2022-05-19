@@ -33,6 +33,9 @@ export type MESSAGE_DELETED = typeof MESSAGE_DELETED;
 export const POST_MESSAGE = "POST_MESSAGE";
 export type POST_MESSAGE = typeof POST_MESSAGE;
 
+export const POST_DIRECT_MESSAGE = "POST_DIRECT_MESSAGE";
+export type POST_DIRECT_MESSAGE = typeof POST_DIRECT_MESSAGE;
+
 export const FLAG_MESSAGE = "FLAG_MESSAGE";
 export type FLAG_MESSAGE = typeof FLAG_MESSAGE;
 

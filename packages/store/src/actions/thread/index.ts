@@ -29,6 +29,7 @@ import {
     UPDATE_MESSAGE,
     NEW_MESSAGE,
     TRIM_CONVSERSATION,
+    POST_DIRECT_MESSAGE,
     SET_CONVERSATION_PAGE,
     INIT_CONVERSATION,
     CREATE_CONVERSATION,
@@ -42,6 +43,14 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface PostDirectMessagePayload {
+    user_id: string;
+    params: {
+        content: string;
+        attachment?: File;
+    };
+}
 
 export interface TrimConversationPayload {
     mode: "top" | "bottom";
@@ -251,6 +260,12 @@ export type InitConversationAction = IOAction<
     INIT_CONVERSATION,
     InitConversationPayload,
     undefined
+>;
+
+export type PostDirectMessageAction = IOAction<
+    POST_DIRECT_MESSAGE,
+    PostDirectMessagePayload,
+    io.Message
 >;
 
 export type ReactMessageAction = IOAction<
@@ -507,6 +522,12 @@ export function loadConversation({
         ...params,
         limit,
     });
+}
+
+export function postDirectMessage(
+    payload: PostDirectMessagePayload
+): PostDirectMessageAction {
+    return createIOAction<POST_DIRECT_MESSAGE>(POST_DIRECT_MESSAGE, payload);
 }
 
 export function reactionLoaded(
