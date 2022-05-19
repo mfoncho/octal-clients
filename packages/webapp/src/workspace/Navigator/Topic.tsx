@@ -29,8 +29,10 @@ export default React.memo<ITopic>(({ id }) => {
         <Link
             to={path}
             className={clx(
-                "flex px-2 py-1 flex-row items-center rounded-md",
-                selected ? "bg-primary-500 text-white" : "text-gray-500"
+                "flex px-2 py-1 flex-row items-center",
+                selected
+                    ? "bg-primary-500 text-white"
+                    : "text-gray-500 hover:bg-slate-200"
             )}>
             <Icons.Topic className="w-5 h-5 mx-1" />
             <span

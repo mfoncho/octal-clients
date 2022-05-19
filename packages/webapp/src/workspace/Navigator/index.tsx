@@ -15,10 +15,10 @@ export default React.memo(() => {
     return (
         <div className="flex flex-grow flex-col overflow-hidden">
             <Scrollbars autoHide className="flex flex-col">
-                <div className="flex flex-col px-2 pb-14 overflow-hidden">
-                    <div className="py-2">
-                        <CreateSpaceBtn />
-                    </div>
+                <div className="py-2">
+                    <CreateSpaceBtn />
+                </div>
+                <div className="flex flex-col pb-14 overflow-hidden">
                     <Sections />
                     {spaces.toList().map(renderSpaces)}
                 </div>

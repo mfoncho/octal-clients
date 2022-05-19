@@ -86,13 +86,22 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
     let selected = params.space_id == space.id;
 
     return (
-        <Link to={path} className="flex flex-row pl-2 px-2 items-center h-8">
+        <Link
+            to={path}
+            className={clx(
+                "flex flex-row pl-2 px-2 items-center h-8",
+                selected ? "bg-primary-500" : "hover:bg-slate-200"
+            )}>
             <img
                 alt={user.username}
                 src={user.avatar}
                 className="rounded-full h-7 w-7 shadow"
             />
-            <span className="flex-grow px-2 text-gray-500 font-bold text-sm">
+            <span
+                className={clx(
+                    "flex-grow px-2 font-bold text-sm",
+                    selected ? "text-white" : "text-gray-500"
+                )}>
                 <Text>{user.username}</Text>
             </span>
             <Counter value={notification} />

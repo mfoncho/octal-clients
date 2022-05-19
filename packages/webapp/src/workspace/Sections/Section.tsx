@@ -20,9 +20,10 @@ export default React.memo<ISection>(function Section({
             <Link
                 to={props.path}
                 className={cls(
-                    "flex flex-row justify-between my-0.5 items-center rounded-md py-1 px-2 font-semibold",
+                    "flex flex-row justify-between my-0.5 items-center py-1 px-2 font-semibold",
                     {
-                        ["text-gray-600"]: location.pathname !== props.path,
+                        ["text-gray-600 hover:bg-slate-200"]:
+                            location.pathname !== props.path,
                         ["bg-primary-500 text-white"]:
                             location.pathname == props.path,
                     }

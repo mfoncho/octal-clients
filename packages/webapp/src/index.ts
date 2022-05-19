@@ -19,7 +19,7 @@ const interceptors = {
 client.intercept(interceptors);
 
 window.api = client;
-//window.theme = theme;
+window.theme = theme;
 
 function mount(cmp: any, node: any) {
     ReactDOM.render(React.createElement(cmp), node);
