@@ -14,6 +14,8 @@ interface IUserCard {
 const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
     const viewer = useViewer();
 
+    const [loading, setLoading] = React.useState<boolean>(false);
+
     const user = useUser(props.id)!;
 
     const dispatch = useDispatch();
@@ -21,14 +23,15 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
     const input = useInput("");
 
     function handleSubmit() {
-        if (input.valid) {
+        if (input.valid && !loading) {
             const action = ThreadAction.postDirectMessage({
                 user_id: user.id,
                 params: {
                     content: input.value,
                 },
             });
-            return dispatch(action);
+            setLoading(true);
+            return dispatch(action).finally(props.onClickAway as any);
         }
     }
 
@@ -69,10 +72,10 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
                 {viewer.id !== user.id && (
                     <>
                         <Textarea
-                            value=""
+                            value={loading ? input.value : ""}
                             onSubmit={handleSubmit}
                             onChange={input.setValue}
-                            className="p-3 min-h-[100px]"
+                            className="text-msg p-3 min-h-[100px]"
                             placeholder={`@${
                                 user.username || ""
                             } quick message`}

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Textarea } from "@octal/ui";
+import Chat from "../Chat";
 import Board from "../Board";
 import Topic from "../Topic";
 import { useSpace, useSuggestable } from "./hooks";
@@ -31,6 +32,8 @@ export default React.memo(() => {
             dispatch(clearSpace(space.toJS() as any));
         }
     }, [space.is_archived]);
+
+    if (space.is_direct) return <Chat space={space} />;
 
     return (
         <Textarea.Suggestions.Context.Provider value={mentionable as any}>

@@ -65,6 +65,10 @@ export default React.memo(function Layout() {
             <main className="flex-grow flex overflow-hidden flex-row">
                 <Routes>
                     <Route
+                        path={paths.workspace.chat}
+                        element={<Workspace.Main />}
+                    />
+                    <Route
                         path="spaces/:space_id/*"
                         element={<Workspace.Main />}
                     />

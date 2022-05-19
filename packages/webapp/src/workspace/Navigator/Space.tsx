@@ -13,6 +13,7 @@ import SpaceSettingsDialog from "../SpaceSettingsDialog";
 import {
     SpaceRecord,
     useUser,
+    useAuthId,
     useSpaceBoardsIndex,
     useSpaceTopicsIndex,
 } from "@octal/store";
@@ -70,16 +71,15 @@ const Menu = Popper.create<HTMLUListElement, IMenu>((props) => {
 export const DirectSpace = React.memo<ISpace>(({ space }) => {
     const notification = 0;
 
-    //const authId = useAuthId();
+    const authId = useAuthId();
 
-    const uid = "0"; //space.users.find((id) => id != authId);
+    const uid = space.users.find((id) => id != authId);
 
-    const user = useUser(uid);
+    const user = useUser(uid ?? authId);
 
-    const params = useParams<{ space_id: string; thread_id: string }>();
+    const params = useParams<{ space_id: string }>();
 
-    const path = generatePath(paths.thread, {
-        thread_id: space.topic_id!,
+    const path = generatePath(paths.chat, {
         space_id: space.id,
     });
 
@@ -90,10 +90,10 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
             <img
                 alt={user.username}
                 src={user.avatar}
-                className="rounded-xl h-10 w-10"
+                className="rounded-full h-7 w-7 shadow"
             />
-            <span className="flex-grow px-2">
-                <Text>{space.name}</Text>
+            <span className="flex-grow px-2 text-gray-500 font-bold text-sm">
+                <Text>{user.username}</Text>
             </span>
             <Counter value={notification} />
         </Link>
@@ -203,7 +203,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 });
 
 export default React.memo<ISpace>((props) => {
-    if (props.space.type === "direct") {
+    if (props.space.is_direct) {
         return <DirectSpace {...props} />;
     } else {
         return <GeneralSpace {...props} />;

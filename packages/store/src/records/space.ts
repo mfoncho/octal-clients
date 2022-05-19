@@ -1,6 +1,6 @@
 import { Record, List, Map } from "immutable";
 import { IPermission } from "./auth";
-import { Unique, Id, SpaceType, AccessType } from "@octal/client";
+import { Unique, Id, AccessType } from "@octal/client";
 
 export class SpaceRoleRecord
     extends Record({
@@ -23,7 +23,6 @@ export class SpaceRecord
         icon: "",
         name: "",
         users: List<Id>(),
-        type: "" as SpaceType,
         access: "" as AccessType,
         topic_id: "",
         thread_id: "",
@@ -53,20 +52,12 @@ export class SpaceRecord
         return this.access == "public";
     }
 
-    get is_board() {
-        return this.type === "board";
-    }
-
     get is_direct() {
-        return this.type === "direct";
+        return this.access === "direct";
     }
 
     get is_archived() {
         return false;
-    }
-
-    get is_discuss() {
-        return this.type === "discuss";
     }
 
     toServer() {

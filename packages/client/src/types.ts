@@ -10,9 +10,7 @@ export type ThreadType =
     | "comment"
     | "email";
 
-export type SpaceType = "board" | "discuss" | "direct";
-
-export type AccessType = "public" | "private";
+export type AccessType = "public" | "private" | "direct";
 
 export type Id = string;
 
@@ -341,7 +339,6 @@ export namespace io {
     export interface Space extends Unique, BelongsToWorkspace {
         icon: string;
         name: string;
-        type: SpaceType;
         access: AccessType;
         topics: Topic[];
         created_at: Timestamp;
