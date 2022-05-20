@@ -71,7 +71,7 @@ function Checklist(props: ICard) {
     const subheader = (
         <div className="inline-flex flex-row">
             <span className="text-sm font-semibold text-gray-500">
-                {props.card.name}
+                <Text>{props.card.name}</Text>
             </span>
             <span className="text-xs px-2 text-gray-500">
                 (<Text>{props.board.name}</Text>)
@@ -85,7 +85,7 @@ function Checklist(props: ICard) {
                     onClick={handleOpenCard}
                     role="button"
                     className="cursor-pointer font-bold">
-                    {props.name}
+                    <Text>{props.name}</Text>
                 </span>
                 <UserAvatar users={props.users} />
             </div>
@@ -103,7 +103,7 @@ function Checklist(props: ICard) {
                             onClick={handleOpenCard}
                             role="button"
                             className="cursor-pointer px-2 font-semibold text-sm text-gray-500">
-                            {task.name}
+                            <Text>{task.name}</Text>
                         </span>
                     </div>
                 ))}
