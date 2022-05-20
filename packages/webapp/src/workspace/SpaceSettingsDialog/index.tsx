@@ -74,14 +74,14 @@ export default Dialog.create<IDialog>((props) => {
                     "px-4 py-1.5 flex flex-row items-center rounded-md  my-px",
                     {
                         ["bg-red-100"]: selected && critical,
-                        ["bg-gray-200"]: selected && !critical,
+                        ["bg-slate-200"]: selected && !critical,
                         ["mt-4 text-red-600 hover:bg-red-50"]: critical,
-                        ["text-gray-600 hover:bg-gray-50"]: !critical,
+                        ["text-slate-600 hover:bg-slate-50"]: !critical,
                     }
                 )}>
                 <span
                     className={clx("font-semibold text-base", {
-                        ["text-gray-800"]: selected && !critical,
+                        ["text-slate-800"]: selected && !critical,
                         ["text-red-800"]: selected && critical,
                     })}>
                     {menu.name}
@@ -98,7 +98,7 @@ export default Dialog.create<IDialog>((props) => {
             className="h-5/6"
             onClose={props.onClose}>
             <div className="flex-1 flex flex-row justify-center overflow-hidden">
-                <div className="flex rounded-l-lg bg-gray-100 flex-none w-3/12 flex-row justify-end">
+                <div className="flex rounded-l-lg bg-slate-100 flex-none w-3/12 flex-row justify-end">
                     <div className="flex-none flex flex-col w-56 ">
                         <div className="h-20 pl-8 pr-4 flex flex-row items-center">
                             <span className="font-semibold text-base text-gray-600">
