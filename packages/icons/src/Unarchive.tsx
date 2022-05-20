@@ -1,1 +1,1 @@
-export { default } from "@material-ui/icons/UnarchiveRounded";
+export { MdUnarchive as default } from "react-icons/md";

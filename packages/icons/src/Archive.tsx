@@ -1,1 +1,1 @@
-export { default } from "@material-ui/icons/ArchiveRounded";
+export { MdArchive as default } from "react-icons/md";
