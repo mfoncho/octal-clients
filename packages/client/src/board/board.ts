@@ -18,14 +18,14 @@ export default class BoardClient extends BaseClient {
         return data;
     }
 
-    async archiveBoard(request: string, params?: Params): Promise<io.Board> {
-        const path = `/boards/${request}`;
+    async archiveBoard(request: Requests.BoardRequest, params?: Params): Promise<io.Board> {
+        const path = `/boards/${request.board_id}`;
         let { data } = await this.endpoint.post(path, {}, params);
         return data;
     }
 
-    async unarchiveBoard(request: string, params?: Params): Promise<io.Board> {
-        const path = `/boards/${request}`;
+    async unarchiveBoard(request: Requests.BoardRequest, params?: Params): Promise<io.Board> {
+        const path = `/boards/${request.board_id}`;
         let { data } = await this.endpoint.post(path, {}, params);
         return data;
     }
@@ -42,8 +42,8 @@ export default class BoardClient extends BaseClient {
         );
         return data;
     }
-    async deleteBoard(request: string, params?: Params): Promise<any> {
-        const path = `/boards/${request}`;
+    async deleteBoard(request: Requests.BoardRequest, params?: Params): Promise<any> {
+        const path = `/boards/${request.board_id}`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }

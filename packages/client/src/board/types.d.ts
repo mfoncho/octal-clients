@@ -13,7 +13,7 @@ export interface UpdateBoardRequest {
     };
 }
 
-export interface DeleteBoardRequest {
+export interface BoardRequest {
     board_id: string;
     space_id: string;
 }
