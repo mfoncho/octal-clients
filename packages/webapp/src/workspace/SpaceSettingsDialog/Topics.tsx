@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
+import clx from "classnames";
+import client, { io } from "@octal/client";
 import * as Icons from "@octal/icons";
 import { useDispatch } from "react-redux";
 import { Dialog } from "@octal/ui";
@@ -7,15 +9,13 @@ import { Promiseable } from "@octal/common";
 import { useInput } from "src/utils";
 import { Text } from "@octal/ui";
 import { SpaceManagerFilterParams } from ".";
-import { TopicRecord } from "@octal/store/lib/records";
 import * as TopicActions from "@octal/store/lib/actions/topic";
-import { useSpaceTopics } from "@octal/store";
 
 interface ITopic {
-    topic: TopicRecord;
-    onDelete?: (topic: TopicRecord) => Promiseable;
-    onArchive?: (params: TopicRecord) => Promiseable;
-    onUnarchive?: (topic: TopicRecord) => Promiseable;
+    topic: io.Topic;
+    onDelete?: (topic: string) => Promiseable;
+    onArchive?: (params: string) => Promiseable;
+    onUnarchive?: (topic: string) => Promiseable;
 }
 
 interface IWarning {
@@ -46,7 +46,7 @@ const WarningDialog = Dialog.create<IWarning>((props) => {
     );
 });
 
-function Row({ topic, onArchive, onUnarchive, onDelete }: ITopic) {
+function Topic({ topic, onArchive, onUnarchive, onDelete }: ITopic) {
     const [loading, setLoading] = useState(false);
 
     const dialog = Dialog.useDialog("");
@@ -54,53 +54,55 @@ function Row({ topic, onArchive, onUnarchive, onDelete }: ITopic) {
     function handleDelete() {
         setLoading(true);
         if (onDelete) {
-            onDelete(topic).catch(() => setLoading(false));
+            onDelete(topic.id).catch(() => setLoading(false));
         }
     }
 
     function handleArchiveTopic() {
         setLoading(true);
         if (onArchive) {
-            onArchive(topic).finally(() => setLoading(false));
+            onArchive(topic.id).finally(() => setLoading(false));
         }
     }
 
     function handleUnarchiveTopic() {
         setLoading(true);
         if (onUnarchive) {
-            onUnarchive(topic).finally(() => setLoading(false));
+            onUnarchive(topic.id).finally(() => setLoading(false));
         }
     }
 
     function renderActions() {
-        if (topic.is_main) return null;
         if (topic.is_archived) {
             return (
-                <>
+                <div className="flex flex-row space-x-2 items-center">
                     <button
-                        onClick={handleUnarchiveTopic}
-                        className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500 p-1 hover:bg-gray-200 flex items-center justify-center">
-                        <Icons.Unarchive fontSize="small" />
-                    </button>
-                    <button
+                        disabled={topic.is_main}
                         onClick={dialog.opener("destroy")}
-                        className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500 p-1 hover:bg-gray-200 flex items-center justify-center">
-                        <Icons.Delete fontSize="small" />
+                        className="text-gray-500 rounded-md border border-slate-200 p-1 hover:bg-slate-300 flex items-center justify-center">
+                        <Icons.Delete className="h-5 w-5" />
                     </button>
-                </>
+                    <button
+                        disabled={topic.is_main}
+                        onClick={handleUnarchiveTopic}
+                        className="text-gray-500 rounded-md border border-slate-200 p-1 hover:bg-slate-300 flex items-center justify-center">
+                        <Icons.Unarchive className="h-5 w-5" />
+                    </button>
+                </div>
             );
         }
         return (
             <button
+                disabled={topic.is_main}
                 onClick={handleArchiveTopic}
-                className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500 p-1 hover:bg-gray-200 flex items-center justify-center">
-                <Icons.Archive fontSize="small" />
+                className="text-gray-500 rounded-md border border-slate-200 p-1 hover:bg-slate-300 flex items-center justify-center">
+                <Icons.Archive className="h-5 w-5" />
             </button>
         );
     }
 
     return (
-        <div className="flex group px-4 py-2 hover:bg-gray-50 flex-row p-2 items-center justify-between">
+        <div className="flex group px-4 py-3 hover:bg-slate-100 flex-row items-center justify-between">
             <div className="flex flex-row items-center">
                 <div className="mx-2 text-gray-500">
                     <Icons.Topic />
@@ -109,7 +111,11 @@ function Row({ topic, onArchive, onUnarchive, onDelete }: ITopic) {
                     <Text>{topic.name}</Text>
                 </span>
             </div>
-            <div className="invisible group-hover:visible flex flex-row items-center justify-end">
+            <div
+                className={clx(
+                    "flex flex-row items-center justify-end",
+                    topic.is_main && "invisible"
+                )}>
                 {renderActions()}
             </div>
             <WarningDialog
@@ -128,57 +134,79 @@ function Row({ topic, onArchive, onUnarchive, onDelete }: ITopic) {
 const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     const dispatch = useDispatch();
 
-    const topics = useSpaceTopics(space.id);
+    const [topics, setTopics] = React.useState<io.Topic[]>([]);
 
     const search = useInput("");
 
-    function handleDeleteTopic(topic: TopicRecord) {
+    useEffect(() => {
+        client.fetchTopics(space.id, { archived: true }).then(setTopics);
+    }, []);
+
+    function handleDeleteTopic(id: string) {
         const action = TopicActions.deleteTopic({
-            topic_id: topic.id,
-            space_id: topic.space_id,
+            topic_id: id,
+            space_id: space.id,
         });
-        return dispatch(action);
+        return dispatch(action).then(() => {
+            setTopics((topics) => topics.filter((topic) => topic.id !== id));
+        });
     }
 
-    function handleArchiveTopic(topic: TopicRecord) {
+    function handleArchiveTopic(id: string) {
         const action = TopicActions.archiveTopic({
-            topic_id: topic.id,
-            space_id: topic.space_id,
+            topic_id: id,
+            space_id: space.id,
         });
-        return dispatch(action);
+        return dispatch(action).then((topic) => {
+            setTopics((topics) =>
+                topics.map((stopic) => (stopic.id == topic.id ? topic : stopic))
+            );
+        });
     }
 
-    function handleUnarchiveTopic(topic: TopicRecord) {
+    function handleUnarchiveTopic(id: string) {
         const action = TopicActions.unarchiveTopic({
-            topic_id: topic.id,
-            space_id: topic.space_id,
+            topic_id: id,
+            space_id: space.id,
         });
-        return dispatch(action);
+        return dispatch(action).then((topic) => {
+            setTopics((topics) =>
+                topics.map((stopic) => (stopic.id == topic.id ? topic : stopic))
+            );
+        });
+    }
+
+    function renderTopic(topic: io.Topic) {
+        return (
+            <Topic
+                key={topic.id}
+                topic={topic}
+                onDelete={handleDeleteTopic}
+                onArchive={handleArchiveTopic}
+                onUnarchive={handleUnarchiveTopic}
+            />
+        );
     }
 
     return (
-        <Layout title="Space Topics" className="flex flex-col">
+        <Layout title="Topics" className="flex flex-col">
             <div className="flex flex-row pb-4 justify-end">
                 <div className="relative flex flex-row item-center">
                     <input
-                        className="form-input font-semibold rounded-md text-sm text-gray-800 pl-10 pr-4 border shadow-sm border-gray-300"
+                        className="form-input font-semibold rounded-md text-sm text-gray-800 pl-9 pr-4 border shadow-sm border-gray-300"
                         {...search.props}
                     />
                     <div className="absolute px-2 h-full flex flex-col justify-center">
-                        <Icons.Search className="text-gray-500 w-5 h-5" />
+                        <Icons.Filter className="text-gray-500 w-5 h-5" />
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col py-4 rounded-md bg-gray-100">
-                {topics.map((topic) => (
-                    <Row
-                        key={topic.id}
-                        topic={topic}
-                        onDelete={handleDeleteTopic}
-                        onArchive={handleArchiveTopic}
-                        onUnarchive={handleUnarchiveTopic}
-                    />
-                ))}
+            <div className="flex flex-col rounded-md border-gray-200 border divide-y divide-solid">
+                {search.valid
+                    ? topics
+                          .filter((topic) => topic.name.includes(search.value))
+                          .map(renderTopic)
+                    : topics.map(renderTopic)}
             </div>
         </Layout>
     );
