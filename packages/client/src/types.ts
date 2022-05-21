@@ -325,15 +325,18 @@ export namespace io {
 
     export interface Board extends Unique, BelongsToSpace {
         name: string;
-        icon: string;
+        is_archived: boolean;
         created_at: Timestamp;
+        archived_at: Timestamp;
     }
 
     export interface Topic extends Unique, BelongsToSpace {
         name: string;
+        is_main: boolean;
         thread_id: string;
         is_archived: boolean;
         created_at: Timestamp;
+        archived_at: Timestamp;
     }
 
     export interface Space extends Unique, BelongsToWorkspace {
@@ -342,14 +345,6 @@ export namespace io {
         access: AccessType;
         topics: Topic[];
         created_at: Timestamp;
-    }
-
-    export interface BoardSpace extends Space {
-        board: Board;
-    }
-
-    export interface DiscussSpace extends Space {
-        topic_id: string;
     }
 
     export interface Member extends Unique, BelongsToSpace {
