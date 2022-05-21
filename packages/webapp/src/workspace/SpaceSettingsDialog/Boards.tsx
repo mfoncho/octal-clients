@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTrello as BoardIcon } from "react-icons/fa";
-import Layout from "./Layout";
 import * as Icons from "@octal/icons";
 import { useDispatch } from "react-redux";
 import { Dialog, Text } from "@octal/ui";
 import { Promiseable } from "src/types";
 import { useInput } from "src/utils";
+import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
+import client, { io } from "@octal/client";
 import { BoardRecord } from "@octal/store/lib/records";
 import * as BoardActions from "@octal/store/lib/actions/board";
 import { useSpaceBoards } from "@octal/store";
 
 interface ITopic {
-    board: BoardRecord;
-    onDelete?: (topic: BoardRecord) => Promiseable;
+    board: io.Board;
+    onDelete: (id: string) => Promiseable;
+    onArchive: (id: string) => Promiseable;
+    onUnarchive: (id: string) => Promiseable;
 }
 
 interface IWarning {
@@ -44,20 +47,53 @@ const WarningDialog = Dialog.create<IWarning>((props) => {
     );
 });
 
-function Row({ board, onDelete }: ITopic) {
+function Row({ board, onDelete, onArchive, onUnarchive }: ITopic) {
     const [loading, setLoading] = useState(false);
 
     const dialog = Dialog.useDialog("");
 
     function handleDelete() {
         setLoading(true);
-        if (onDelete) {
-            onDelete(board).catch(() => setLoading(false));
-        }
+        onDelete(board.id).catch(() => setLoading(false));
     }
 
+    function handleArchiveBoard() {
+        setLoading(true);
+        onArchive(board.id).finally(() => setLoading(false));
+    }
+
+    function handleUnarchiveBoard() {
+        setLoading(true);
+        onUnarchive(board.id).finally(() => setLoading(false));
+    }
+
+    function renderActions() {
+        if (board.is_archived) {
+            return (
+                <div className="flex flex-row space-x-2 items-center">
+                    <button
+                        onClick={dialog.opener("destroy")}
+                        className="text-gray-500 rounded-md border border-slate-200 p-1 hover:bg-slate-300 flex items-center justify-center">
+                        <Icons.Delete className="h-5 w-5" />
+                    </button>
+                    <button
+                        onClick={handleUnarchiveBoard}
+                        className="text-gray-500 rounded-md border border-slate-200 p-1 hover:bg-slate-300 flex items-center justify-center">
+                        <Icons.Unarchive className="h-5 w-5" />
+                    </button>
+                </div>
+            );
+        }
+        return (
+            <button
+                onClick={handleArchiveBoard}
+                className="text-gray-500 rounded-md border border-slate-200 p-1 hover:bg-slate-300 flex items-center justify-center">
+                <Icons.Archive className="h-5 w-5" />
+            </button>
+        );
+    }
     return (
-        <div className="flex group px-4 py-2 hover:bg-gray-50 flex-row p-2 items-center justify-between">
+        <div className="flex group px-4 py-3 hover:bg-slate-100 flex-row p-2 items-center justify-between">
             <div className="flex flex-row items-center">
                 <div className="mx-2">
                     <BoardIcon className="w-6 h-6 text-gray-500" />
@@ -67,11 +103,7 @@ function Row({ board, onDelete }: ITopic) {
                 </span>
             </div>
             <div className="invisible group-hover:visible flex flex-row items-center justify-end">
-                <button
-                    onClick={dialog.opener("destroy")}
-                    className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500 p-1 hover:bg-gray-200 flex items-center justify-center">
-                    <Icons.Delete fontSize="small" />
-                </button>
+                {renderActions()}
             </div>
             <WarningDialog
                 loading={loading}
@@ -91,18 +123,60 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
 
     const search = useInput("");
 
-    const boards = useSpaceBoards(space.id);
+    const [boards, setBoards] = useState<io.Board[]>([]);
 
-    function handleDeleteTopic(board: BoardRecord) {
+    useEffect(() => {
+        client.fetchBoards(space.id).then(setBoards);
+    }, []);
+
+    function handleDeleteBoard(id: string) {
         const action = BoardActions.deleteBoard({
-            board_id: board.id,
-            space_id: board.space_id,
+            board_id: id,
+            space_id: space.id,
         });
-        return dispatch(action);
+        return dispatch(action).then(() => {
+            setBoards((boards) => boards.filter((board) => board.id !== id));
+        });
+    }
+
+    function handleArchiveBoard(id: string) {
+        const action = BoardActions.archiveBoard({
+            board_id: id,
+            space_id: space.id,
+        });
+        return dispatch(action).then((board) => {
+            setBoards((boards) =>
+                boards.map((sboard) => (sboard.id == board.id ? board : sboard))
+            );
+        });
+    }
+
+    function handleUnarchiveBoard(id: string) {
+        const action = BoardActions.unarchiveBoard({
+            board_id: id,
+            space_id: space.id,
+        });
+        return dispatch(action).then((board) => {
+            setBoards((boards) =>
+                boards.map((sboard) => (sboard.id == board.id ? board : sboard))
+            );
+        });
+    }
+
+    function renderBoard(board: io.Board) {
+        return (
+            <Row
+                key={board.id}
+                board={board}
+                onDelete={handleDeleteBoard}
+                onArchive={handleArchiveBoard}
+                onUnarchive={handleUnarchiveBoard}
+            />
+        );
     }
 
     return (
-        <Layout title="Space Topics" className="flex flex-col">
+        <Layout title="Boards" className="flex flex-col">
             <div className="flex flex-row pb-4 justify-end">
                 <div className="relative flex flex-row item-center">
                     <input
@@ -110,18 +184,16 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
                         {...search.props}
                     />
                     <div className="absolute px-2 h-full flex flex-col justify-center">
-                        <Icons.Search className="text-gray-500 w-5 h-5" />
+                        <Icons.Filter className="text-gray-500 w-5 h-5" />
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col py-4 rounded-md bg-gray-100">
-                {boards.map((board) => (
-                    <Row
-                        key={board.id}
-                        board={board}
-                        onDelete={handleDeleteTopic}
-                    />
-                ))}
+            <div className="flex flex-col rounded-md border-gray-200 border divide-y divide-solid">
+                {search.valid
+                    ? boards
+                          .filter((board) => board.name.includes(search.value))
+                          .map(renderBoard)
+                    : boards.map(renderBoard)}
             </div>
         </Layout>
     );
