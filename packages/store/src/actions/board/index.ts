@@ -5,6 +5,10 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedCard, NormalizedColumn } from "../../schemas";
 import {
+    BOARD_ARCHIVED,
+    BOARD_UNARCHIVED,
+    ARCHIVE_BOARD,
+    UNARCHIVE_BOARD,
     BOARD_FILTER_UPDATED,
     BOARD_CONNECTED,
     LOAD_BOARD,
@@ -101,6 +105,16 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface ArchiveBoardPayload {
+    board_id: string;
+    space_id: string;
+}
+
+export interface UnarchiveBoardPayload {
+    board_id: string;
+    space_id: string;
+}
 
 export interface BoardFilterPayload {
     board_id: string;
@@ -520,6 +534,10 @@ export type RemoveLabelPayload = Require<Partial<io.Label>, "id" | "board_id">;
 
 export type RemoveLabelsPayload = RemoveLabelPayload[];
 
+export type BoardArchivedAction = Action<BOARD_ARCHIVED, BoardPartial>;
+
+export type BoardUnarchivedAction = Action<BOARD_UNARCHIVED, BoardPartial>;
+
 export type BoardFilterUpdatedAction = Action<
     BOARD_FILTER_UPDATED,
     BoardFilterPayload
@@ -550,6 +568,18 @@ export type LabelDeletedAction = Action<LABEL_DELETED, Unique & BelongsToSpace>;
 export type LabelLoadedAction = Action<LABEL_LOADED, io.Label>;
 export type LabelsLoadedAction = Action<LABELS_LOADED, io.Label[]>;
 export type BoardLabelUpdated = Action<LABEL_UPDATED, io.Label>;
+
+export type ArchiveBoardAction = IOAction<
+    ARCHIVE_BOARD,
+    ArchiveBoardPayload,
+    io.Board
+>;
+
+export type UnarchiveBoardAction = IOAction<
+    UNARCHIVE_BOARD,
+    UnarchiveBoardPayload,
+    io.Board
+>;
 
 export type LoadBoardAction = IOAction<LOAD_BOARD, LoadBoardPayload, io.Board>;
 
@@ -1377,4 +1407,22 @@ export function loadSpaceBoards(
     params: { [key: string]: string | number } = {}
 ): LoadSpaceBoardsAction {
     return createIOAction<LOAD_BOARDS>(LOAD_BOARDS, { id, params });
+}
+
+export function archiveBoard(payload: ArchiveBoardPayload): ArchiveBoardAction {
+    return createIOAction<ARCHIVE_BOARD>(ARCHIVE_BOARD, payload);
+}
+
+export function unarchiveBoard(
+    payload: UnarchiveBoardPayload
+): UnarchiveBoardAction {
+    return createIOAction<UNARCHIVE_BOARD>(UNARCHIVE_BOARD, payload);
+}
+
+export function boardArchived(payload: BoardPartial): BoardArchivedAction {
+    return createAction(BOARD_ARCHIVED, payload);
+}
+
+export function boardUnarchived(payload: BoardPartial): BoardUnarchivedAction {
+    return createAction(BOARD_UNARCHIVED, payload);
 }

@@ -4,19 +4,45 @@ import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 import * as SpaceActions from "../actions/space";
-import { BoardSchema, CardSchema } from "../schemas";
+import { BoardSchema } from "../schemas";
 import * as AppActions from "../actions/app";
 
 function* create({
     payload,
-    resolve: meta,
+    resolve,
 }: BoardActions.CreateBoardAction): Iterable<any> {
     try {
         const data = (yield client.createBoard(payload)) as any;
         yield put(BoardActions.boardLoaded(data));
-        meta.success(data);
+        resolve.success(data);
     } catch (e) {
-        meta.error(e);
+        resolve.error(e);
+    }
+}
+
+function* archive({
+    payload,
+    resolve,
+}: BoardActions.ArchiveBoardAction): Iterable<any> {
+    try {
+        const data = (yield client.archiveBoard(payload)) as any;
+        yield put(BoardActions.boardArchived(data));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
+function* unarchive({
+    payload,
+    resolve,
+}: BoardActions.UnarchiveBoardAction): Iterable<any> {
+    try {
+        const data = (yield client.unarchiveBoard(payload)) as any;
+        yield put(BoardActions.boardUnarchived(data));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
     }
 }
 
@@ -129,7 +155,8 @@ export const tasks = [
         type: Actions.SPACES_LOADED,
         handler: spaceLoaded,
     },
-    { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
+    { effect: takeEvery, type: Actions.ARCHIVE_BOARD, handler: archive },
+    { effect: takeEvery, type: Actions.UNARCHIVE_BOARD, handler: unarchive },
     { effect: takeEvery, type: Actions.BOARD_LOADED, handler: connect },
     { effect: takeEvery, type: Actions.CREATE_BOARD, handler: create },
     { effect: takeEvery, type: Actions.UPDATE_BOARD, handler: update },

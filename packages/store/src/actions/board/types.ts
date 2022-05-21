@@ -34,6 +34,18 @@ export type DELETE_BOARD = typeof DELETE_BOARD;
 export const UPDATE_BOARD = "UPDATE_BOARD";
 export type UPDATE_BOARD = typeof UPDATE_BOARD;
 
+export const ARCHIVE_BOARD = "ARCHIVE_BOARD";
+export type ARCHIVE_BOARD = typeof ARCHIVE_BOARD;
+
+export const UNARCHIVE_BOARD = "UNARCHIVE_BOARD";
+export type UNARCHIVE_BOARD = typeof UNARCHIVE_BOARD;
+
+export const BOARD_ARCHIVED = "BOARD_ARCHIVED";
+export type BOARD_ARCHIVED = typeof BOARD_ARCHIVED;
+
+export const BOARD_UNARCHIVED = "BOARD_UNARCHIVED";
+export type BOARD_UNARCHIVED = typeof BOARD_UNARCHIVED;
+
 export const BOARD_UPDATED = "BOARD_UPDATED";
 export type BOARD_UPDATED = typeof BOARD_UPDATED;
 
