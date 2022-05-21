@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog, Avatar } from "@octal/ui";
 import client, { io } from "@octal/client";
+import { useInput } from "src/utils";
 import * as Icons from "@octal/icons";
 
 interface IUsersDialog {
@@ -10,6 +11,9 @@ interface IUsersDialog {
 
 export default Dialog.create<IUsersDialog>(({ selected = [], ...props }) => {
     const [users, setUsers] = useState<io.User[]>([]);
+
+    const search = useInput("");
+
     useEffect(() => {
         client.fetchUsers().then((data) => setUsers(data));
     }, []);
@@ -23,13 +27,23 @@ export default Dialog.create<IUsersDialog>(({ selected = [], ...props }) => {
             onClose={props.onClose}>
             <Dialog.Content className="flex flex-col overflow-hiddden">
                 <div className="relative flex flex-col item-center">
-                    <input className="form-input font-semibold rounded-md text-sm text-gray-800 pl-10 pr-4 border shadow-sm border-gray-300" />
+                    <input
+                        {...search.props}
+                        className="form-input font-semibold rounded-md text-sm text-gray-800 pl-10 pr-4 border shadow-sm border-gray-300"
+                    />
                     <div className="absolute px-2 h-full flex flex-col justify-center">
-                        <Icons.Search className="text-gray-500 w-5 h-5" />
+                        <Icons.Filter className="text-gray-500 w-5 h-5" />
                     </div>
                 </div>
                 <div className="users flex flex-col py-4 overflow-x-hiddden overflow-y-auto">
-                    {users.map((user) => (
+                    {(search.valid
+                        ? users.filter(
+                              (user) =>
+                                  user.name.includes(search.value) ||
+                                  user.username.includes(search.value)
+                          )
+                        : users
+                    ).map((user) => (
                         <div
                             key={user.id}
                             role="button"
@@ -39,13 +53,13 @@ export default Dialog.create<IUsersDialog>(({ selected = [], ...props }) => {
                             }
                             className="group flex flex-row my-1 p-1 rounded-md hover:bg-primary-500 justify-between items-center">
                             <div className="flex flex-row">
-                                <Avatar alt={user.name} src={user.avatar} />
+                                <Avatar alt={user.username} src={user.avatar} />
                                 <div className="flex flex-col px-2">
-                                    <span className="font-bold group-hover:text-white text-gray-800 text-sm">
-                                        {user.name}
-                                    </span>
-                                    <span className="group-hover:text-white font-semibold text-sm text-gray-500">
+                                    <span className="font-bold group-hover:text-white text-gray-800 text-base">
                                         {user.username}
+                                    </span>
+                                    <span className="group-hover:text-white font-semibold text-xs text-gray-500">
+                                        {user.name}
                                     </span>
                                 </div>
                             </div>
