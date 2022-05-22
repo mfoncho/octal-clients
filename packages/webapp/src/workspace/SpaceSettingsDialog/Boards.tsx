@@ -8,9 +8,7 @@ import { useInput } from "src/utils";
 import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
 import client, { io } from "@octal/client";
-import { BoardRecord } from "@octal/store/lib/records";
 import * as BoardActions from "@octal/store/lib/actions/board";
-import { useSpaceBoards } from "@octal/store";
 
 interface ITopic {
     board: io.Board;
