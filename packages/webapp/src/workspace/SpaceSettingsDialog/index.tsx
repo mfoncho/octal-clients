@@ -70,6 +70,7 @@ export default Dialog.create<IDialog>((props) => {
             <li
                 key={String(index)}
                 onClick={handleClick}
+                role="button"
                 className={clx(
                     "px-4 py-1.5 flex flex-row items-center rounded-md  my-px",
                     {

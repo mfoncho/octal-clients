@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import Role from "./Role";
 import GeneralIcon from "@material-ui/icons/AccountTreeRounded";
 import * as Icons from "@octal/icons";
-import AddIcon from "@material-ui/icons/Add";
 import Layout from "../Layout";
 import { useActions } from "@workspace/Space";
 import { Popper, Button, Dialog, Markdown, Text } from "@octal/ui";
@@ -83,7 +82,7 @@ const MenuPopper = Popper.create<HTMLDivElement, IMenu>((props) => {
             anchorEl={props.anchorEl}
             placement="bottom-end"
             onClickAway={props.onClickAway}
-            className="rounded-md shadow flex bg-white min-w-[300px] flex-col py-2 border border-gray-200 divide-y divide-solid divide-gray-200">
+            className="rounded-md shadow flex bg-white min-w-[300px] flex-col border border-gray-200 divide-y divide-solid divide-gray-200">
             {props.roles
                 .map((role) => {
                     const selected = props.selected.includes(role.id);
@@ -95,7 +94,7 @@ const MenuPopper = Popper.create<HTMLDivElement, IMenu>((props) => {
                                     ? (e) => props.onSelect!(e, role.id)
                                     : undefined
                             }
-                            className="hover:bg-gray-100 flex py-2 px-4 flex-row items-center justify-between cursor-pointer">
+                            className="hover:bg-slate-200 flex py-2 px-4 flex-row items-center justify-between cursor-pointer">
                             <span className="font-bold text-gray-700">
                                 <Text>{role.name}</Text>
                             </span>
@@ -208,20 +207,15 @@ const Manager = React.memo(({ space }: IManager) => {
                 key={role.id}
                 role="button"
                 onClick={clickHandler}
-                className="group hover:bg-gray-100 flex p-4 flex-row items-center justify-between">
+                className="group hover:bg-slate-100 flex py-2 px-4 flex-row items-center justify-between">
                 <span className="font-bold text-gray-700">
                     <Text>{role.name}</Text>
                 </span>
-                <div className="flex flex-row items-center justify-end">
+                <div className="invisible group-hover:visible flex flex-row items-center justify-end space-x-2">
                     <button
-                        onClick={clickHandler}
-                        className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500  p-1 hover:border-white hover:text-white hover:bg-primary-500 flex items-center justify-center">
-                        <Icons.Edit fontSize="small" />
-                    </button>
-                    <button
-                        className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500 p-1 hover:bg-gray-200 flex items-center justify-center"
+                        className="text-gray-500 rounded-md border border-gray-400 p-2 hover:bg-gray-200 flex items-center justify-center"
                         onClick={handleOpenWarning(role.id)}>
-                        <Icons.Delete fontSize="small" />
+                        <Icons.Delete />
                     </button>
                 </div>
             </div>
@@ -241,15 +235,12 @@ const Manager = React.memo(({ space }: IManager) => {
                         <button
                             onClick={handleOpenMenu}
                             ref={addBtnRef}
-                            className="flex rounded-md bg-primary-500 flex-row items-center">
-                            <span className="text-white px-3 py-1.5 font-semibold border-r border-white">
-                                Add Role
-                            </span>
-                            <AddIcon className="text-white mx-2" />
+                            className="flex rounded-md bg-primary-500 flex-row items-center text-white px-3 py-1.5 font-semibold">
+                            Create Role
                         </button>
                     </div>
 
-                    <div className="flex flex-col rounded-md border-2 border-gray-200 divide-y-2 divide-solid divide-gray-200">
+                    <div className="flex flex-col rounded-md border border-gray-200 divide-y divide-solid divide-gray-200">
                         {customRoles.map(renderRole).toList()}
                     </div>
                 </>
