@@ -9,6 +9,7 @@ import { Markdown, Avatar, Dialog, Button } from "@octal/ui";
 import { useMembers, useUser } from "@octal/store";
 import { deleteMember, createMember } from "@octal/store/lib/actions/member";
 import { useDispatch } from "react-redux";
+import { useInput } from "src/utils";
 import {
     MemberRecord,
     SpaceRecord,
@@ -17,6 +18,7 @@ import {
 
 interface IMember {
     space: SpaceRecord;
+    filter: string;
     member: MemberRecord;
     onDelete: (member: MemberRecord) => Promiseable;
 }
@@ -47,12 +49,18 @@ const WarningDialog = Dialog.create<IWarning>((props) => {
     );
 });
 
-function Row({ member, space, onDelete }: IMember) {
+function Row({ member, space, filter, onDelete }: IMember) {
     const [loading, setLoading] = useState(false);
 
     const [warning, setWarning] = useState<boolean>(false);
 
     const user = useUser(member.user_id);
+
+    if (
+        filter.length > 0 &&
+        !(user.name.includes(filter) || user.username.includes(filter))
+    )
+        return null;
 
     function handleCloseWarning() {
         setWarning(false);
@@ -70,13 +78,13 @@ function Row({ member, space, onDelete }: IMember) {
     }
 
     const userNode = (
-        <div className="flex flex-row items-center">
-            <Avatar alt={user.name} src={user.avatar} />
-            <div className="flex flex-col px-2">
+        <div className="flex flex-row items-center space-x-4">
+            <Avatar alt={user.username} src={user.avatar} />
+            <div className="flex flex-col">
                 <span className="font-semibold text-base text-gray-800">
-                    {user.name}
+                    {user.username}
                 </span>
-                <span className="font-semibold text-sm text-gray-600">
+                <span className="font-semibold text-xs text-gray-500">
                     {user.name}
                 </span>
             </div>
@@ -84,11 +92,11 @@ function Row({ member, space, onDelete }: IMember) {
     );
 
     return (
-        <div className="group flex px-4 py-1 flex-row items-center justify-between mb-2 hover:bg-gray-50">
+        <div className="group flex px-4 py-2 flex-row items-center justify-between hover:bg-slate-100">
             {userNode}
             <button
                 onClick={loading ? undefined : handleOpenWarning}
-                className="invisible group-hover:visible text-gray-500 rounded-full mx-2 border border-gray-500 p-1 hover:bg-gray-200">
+                className="invisible group-hover:visible text-gray-500 rounded-md border border-gray-500 p-1 hover:bg-gray-200">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
@@ -120,6 +128,8 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
 
     const dialog = Dialog.useDialog();
 
+    const filter = useInput("");
+
     const members = useMembers(space.id);
 
     React.useEffect(() => {
@@ -147,12 +157,15 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }
 
     return (
-        <Layout title="Space Members" className="flex flex-col">
+        <Layout title="Members" className="flex flex-col">
             <div className="flex flex-row justify-end pb-4">
                 <div className="relative flex flex-row item-center">
-                    <input className="form-input font-semibold rounded-md text-sm text-gray-800 px-10 border shadow-sm border-gray-300" />
+                    <input
+                        {...filter.props}
+                        className="form-input font-semibold rounded-md text-sm text-gray-800 px-10 border shadow-sm border-gray-300"
+                    />
                     <div className="absolute px-2 h-full flex flex-col justify-center">
-                        <Icons.Search className="text-gray-500 w-5 h-5" />
+                        <Icons.Filter className="text-gray-500 w-5 h-5" />
                     </div>
                     <div className="absolute px-1 right-0 h-full flex flex-col justify-center">
                         <Button
@@ -170,12 +183,13 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col border-2 border-gray-200 rounded-lg py-4">
+            <div className="flex flex-col rounded-md border-gray-200 border divide-y divide-solid">
                 {members.toList().map((member) => (
                     <Row
                         space={space}
                         key={member.id}
                         member={member}
+                        filter={filter.value}
                         onDelete={handleDeleteMember}
                     />
                 ))}
