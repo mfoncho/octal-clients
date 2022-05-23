@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Avatar } from "@octal/ui";
+import { Button } from "@octal/ui";
 import { BsTrash as DeleteIcon } from "react-icons/bs";
 import moment from "moment";
 import client, { io } from "@octal/client";
@@ -46,13 +46,17 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
     return (
         <Layout
             title="Invitations"
-            className="flex flex-col divide-solid divide-y">
+            className="flex flex-col divide-solid divide-y border border-solid rounded">
             {invitations.map((invite) => (
                 <div
                     key={invite.id}
-                    className="flex flex-row items-center justify-between">
+                    className="flex flex-row items-center justify-between hover:bg-slate-200 px-4">
                     <div className="flex-1 flex flex-row items-center">
-                        <Avatar alt="username" src={invite.user.avatar} />
+                        <img
+                            className="w-8 h-8 rounded-full"
+                            alt={invite.user.username}
+                            src={invite.user.avatar}
+                        />
                         <span className="px-2 font-bold text-sm text-gray-800">
                             {invite.user.username}
                         </span>
@@ -70,19 +74,17 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
                         )}
                     </div>
                     <div className="flex-1 flex flex-row font-semibold text-xs justify-center overflow-x-hidden text-gray-600">
-                        {moment(invite.expire_at).format("l")}
+                        {moment(invite.expire_at).fromNow()}
                     </div>
-                    <div className="">
-                        <div className="flex flex-row p-4  justify-end">
-                            <Button
-                                variant="icon"
-                                onClick={handleDeleteInvitation(invite)}
-                                disabled={loading}
-                                className="hover:text-red-500"
-                                color="clear">
-                                <DeleteIcon />
-                            </Button>
-                        </div>
+                    <div className="flex flex-row p-2  justify-end">
+                        <Button
+                            variant="icon"
+                            onClick={handleDeleteInvitation(invite)}
+                            disabled={loading}
+                            className="hover:text-red-500"
+                            color="clear">
+                            <DeleteIcon />
+                        </Button>
                     </div>
                 </div>
             ))}
