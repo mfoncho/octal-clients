@@ -50,6 +50,8 @@ export class BoardRecord
         loaded: List<string>([]),
         labels: List<LabelRecord>(),
         filter: new Filter(),
+        is_archived: false,
+        archived_at: null as string | null,
     })
     implements Unique
 {
