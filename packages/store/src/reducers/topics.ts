@@ -73,6 +73,12 @@ export class TopicsStore extends Record({
 export const state = new TopicsStore();
 
 export const reducers = {
+    [Actions.TOPIC_CREATED]: (
+        store: TopicsStore,
+        { payload }: TopicActions.TopicCreatedAction
+    ) => {
+        return store.putTopic(payload);
+    },
     [Actions.TOPIC_LOADED]: (
         store: TopicsStore,
         { payload }: TopicActions.TopicLoadedAction
