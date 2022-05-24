@@ -61,7 +61,7 @@ export class TopicsStore extends Record({
 
                 // index user_id
                 let spaces = store.spaces.get(topic.space_id, List<string>());
-                if (spaces.includes(topic.space_id))
+                if (spaces.includes(topic.id))
                     store.setIn(["spaces"], spaces.filter(filter));
 
                 store.deleteIn(["entities", topic.id]);
