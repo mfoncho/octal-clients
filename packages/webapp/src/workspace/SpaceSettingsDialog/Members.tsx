@@ -94,17 +94,19 @@ function Row({ member, space, filter, onDelete }: IMember) {
     return (
         <div className="group flex px-4 py-2 flex-row items-center justify-between hover:bg-slate-100">
             {userNode}
-            <button
-                onClick={loading ? undefined : handleOpenWarning}
-                className="invisible group-hover:visible text-gray-500 rounded-md border border-gray-500 p-1 hover:bg-gray-200">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z" />
-                </svg>
-            </button>
+            {space.admin_id !== member.user_id && (
+                <button
+                    onClick={loading ? undefined : handleOpenWarning}
+                    className="invisible group-hover:visible text-gray-500 rounded-md border border-gray-500 p-1 hover:bg-gray-200">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z" />
+                    </svg>
+                </button>
+            )}
             <WarningDialog
                 open={Boolean(warning)}
                 loading={loading}
