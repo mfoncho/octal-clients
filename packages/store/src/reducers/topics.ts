@@ -33,7 +33,7 @@ export class TopicsStore extends Record({
 
                 // index space_id
                 let topics = store.spaces.get(topic.space_id, List<string>());
-                if (!topics.includes(topic.space_id))
+                if (!topics.includes(topic.id))
                     store.setIn(
                         ["spaces", topic.space_id],
                         topics.push(topic.id)
