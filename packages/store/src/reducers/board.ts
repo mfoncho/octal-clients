@@ -73,11 +73,11 @@ export class BoardsStore extends Record({
                 store.setIn(["entities", payload.id], board);
 
                 // index space_id
-                let spaces = store.spaces.get(board.space_id, List<string>());
-                if (!spaces.includes(board.space_id))
+                let boards = store.spaces.get(board.space_id, List<string>());
+                if (!boards.includes(board.id))
                     store.setIn(
                         ["spaces", board.space_id],
-                        spaces.push(board.id)
+                        boards.push(board.id)
                     );
             });
         }
@@ -101,9 +101,12 @@ export class BoardsStore extends Record({
                 const filter = (id: string) => id !== board.id;
 
                 // index user_id
-                let spaces = store.spaces.get(board.space_id, List<string>());
-                if (spaces.includes(board.space_id))
-                    store.setIn(["spaces"], spaces.filter(filter));
+                let boards = store.spaces.get(board.space_id, List<string>());
+                if (boards.includes(board.id))
+                    store.setIn(
+                        ["spaces", board.space_id],
+                        boards.filter(filter)
+                    );
 
                 store.deleteIn(["entities", board.id]);
             });
