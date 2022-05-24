@@ -124,6 +124,18 @@ export const reducers = {
         }
         return store;
     },
+    [Actions.BOARD_ARCHIVED]: (
+        store: BoardsStore,
+        { payload }: BoardActions.BoardArchivedAction
+    ) => {
+        return store.patchBoard(payload);
+    },
+    [Actions.BOARD_UNARCHIVED]: (
+        store: BoardsStore,
+        { payload }: BoardActions.BoardArchivedAction
+    ) => {
+        return store.patchBoard(payload);
+    },
     [Actions.BOARD_CREATED]: (
         store: BoardsStore,
         { payload }: BoardActions.BoardCreatedAction
