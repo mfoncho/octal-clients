@@ -70,14 +70,16 @@ export default React.memo(() => {
     }
 
     return (
-        <div className="flex px-8 flex-row items-center h-14 sm:h-20 space-x-3">
-            <div className="hidden mx-4 sm:flex items-center rounded-md px-2 py-1 ring-primary-500 ring-2">
-                <SearchIcon />
+        <div className="flex px-12 flex-row items-center h-14 sm:h-20 space-x-3">
+            <div className="relative hidden sm:flex items-center">
                 <input
                     {...input.props}
                     placeholder="Quick search board"
-                    className="pl-2 font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700"
+                    className="pl-8 font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700 focus:ring-primary-500 ring-gray-400 ring-2 rounded py-1 px-2"
                 />
+                <div className="px-2 absolute">
+                    <Icons.Filter className="text-gray-500" />
+                </div>
             </div>
             <Button
                 ref={labelBtn as any}
