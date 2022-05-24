@@ -22,6 +22,7 @@ export class SpaceRecord
         id: "" as Id,
         icon: "",
         name: "",
+        admin_id: "",
         users: List<Id>(),
         access: "" as AccessType,
         topic_id: "",
