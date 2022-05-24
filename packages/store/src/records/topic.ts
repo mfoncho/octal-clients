@@ -13,6 +13,7 @@ export class TopicRecord
         thread_id: "",
         created_at: "",
         is_archived: false,
+        archived_at: null as null | string,
     })
     implements Unique
 {
