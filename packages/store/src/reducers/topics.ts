@@ -32,11 +32,11 @@ export class TopicsStore extends Record({
                 store.setIn(["entities", payload.id], topic);
 
                 // index space_id
-                let spaces = store.spaces.get(topic.space_id, List<string>());
-                if (!spaces.includes(topic.space_id))
+                let topics = store.spaces.get(topic.space_id, List<string>());
+                if (!topics.includes(topic.space_id))
                     store.setIn(
                         ["spaces", topic.space_id],
-                        spaces.push(topic.id)
+                        topics.push(topic.id)
                     );
             });
         }
@@ -60,9 +60,13 @@ export class TopicsStore extends Record({
                 const filter = (id: string) => id !== topic.id;
 
                 // index user_id
-                let spaces = store.spaces.get(topic.space_id, List<string>());
-                if (spaces.includes(topic.id))
-                    store.setIn(["spaces"], spaces.filter(filter));
+                let topics = store.spaces.get(topic.space_id, List<string>());
+                if (topics.includes(topic.id)) {
+                    store.setIn(
+                        ["spaces", topic.space_id],
+                        topics.filter(filter)
+                    );
+                }
 
                 store.deleteIn(["entities", topic.id]);
             });
