@@ -48,7 +48,6 @@ const Menu = Popper.create<HTMLUListElement, IMenu>((props) => {
             role="select"
             open={props.open}
             tabIndex={-1}
-            distance={10}
             anchorEl={props.anchorEl}
             placement="bottom-start"
             onClickAway={props.onClickAway}
