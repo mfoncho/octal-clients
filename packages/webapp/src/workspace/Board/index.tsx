@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Main from "./Main";
 import Board from "./Context";
 import { useDispatch } from "react-redux";
 import * as BoardAction from "@octal/store/lib/actions/board";
 import { useBoard, useBoardLoaded } from "@octal/store";
 import { useParams } from "react-router-dom";
+import { useNavigator } from "src/hooks";
 export * from "./hooks";
 
 export default React.memo(() => {
+    const nav = useNavigator();
+    const [init, setInit] = useState<boolean>(false);
     const [loading, setLoading] = React.useState<string[]>([]);
     const params = useParams<{ space_id: string; board_id: string }>();
     const dispatch = useDispatch();
@@ -15,7 +18,19 @@ export default React.memo(() => {
     const loaded = useBoardLoaded(params.board_id!);
 
     useEffect(() => {
-        if (!Boolean(board)) {
+        if (Boolean(board.id)) {
+            setInit(true);
+        }
+        if (init && board.id !== params.board_id) {
+            return nav.openSpace({ id: params.space_id! });
+        }
+    }, [board.id, init]);
+
+    useEffect(() => {
+        if (!init) {
+            return;
+        }
+        if (init && board.id !== params.board_id) {
             return;
         }
         if (loaded.includes("columns")) {
@@ -41,7 +56,7 @@ export default React.memo(() => {
             dispatch(action);
             setLoading((loading) => loading.concat(["cards"]));
         }
-    }, [loaded]);
+    }, [init, loaded]);
 
     if (board) {
         return (
