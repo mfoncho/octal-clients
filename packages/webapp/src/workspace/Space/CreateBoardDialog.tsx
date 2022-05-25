@@ -11,8 +11,8 @@ interface IDialog {
 }
 
 export default Dialog.create<IDialog>((props) => {
+    const nav = useNavigator();
     const actions = useActions(props.space);
-    const navigator = useNavigator();
     const [loading, setLoading] = useState(false);
     const name = useInput("");
 
@@ -25,7 +25,7 @@ export default Dialog.create<IDialog>((props) => {
                 name: name.value,
             })
             .then((board) => {
-                navigator.openBoard(board);
+                nav.openBoard(board);
                 props.onClose(e);
             })
             .catch(() => {
