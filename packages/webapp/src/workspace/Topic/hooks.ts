@@ -19,6 +19,18 @@ export function useActions(topic: ITopic) {
         return dispatch(action);
     }, [topic.id]);
 
+    const updateFilter = useCallback(
+        (type: string, value: string | string[]) => {
+            const action = TopicActions.updateTopicFilter(
+                topic.id,
+                type,
+                value
+            );
+            return dispatch(action);
+        },
+        [topic.id]
+    );
+
     const unarchiveTopic = useCallback(() => {
         const action = TopicActions.unarchiveTopic({
             space_id: topic.space_id,
@@ -47,5 +59,11 @@ export function useActions(topic: ITopic) {
         return dispatch(action);
     }, [topic.id]);
 
-    return { updateTopic, deleteTopic, archiveTopic, unarchiveTopic };
+    return {
+        updateTopic,
+        updateFilter,
+        deleteTopic,
+        archiveTopic,
+        unarchiveTopic,
+    };
 }

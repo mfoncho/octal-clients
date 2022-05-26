@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import clx from "classnames";
+import moment from "moment";
 import { useScreen, useInput } from "src/hooks";
 import * as Icons from "@octal/icons";
 import UserAvatar from "@workspace/UserAvatar";
+import { useActions } from "./hooks";
 import { Datepicker, Popper } from "@octal/ui";
 import { Dialog, Button, Textarea } from "@octal/ui";
 import { TopicRecord, MemberRecord } from "@octal/store";
-import moment from "moment";
 import MembersPopper from "@workspace/Space/MembersPopper";
 
 interface ISearch {
@@ -36,10 +37,11 @@ const DatePopper = Popper.create<HTMLDivElement, IDatePicker>((props) => {
 });
 
 export default Dialog.create<ISearch>((props) => {
+    const actions = useActions(props.topic);
     const dialog = Dialog.useDialog();
+    const { filter } = props.topic;
     const screen = useScreen();
     const input = useInput("");
-    const [users, setUsers] = useState<string[]>([]);
     const [from, setFrom] = useState<string>();
     const [upto, setUpto] = useState<string>();
     const usersRef = React.useRef<HTMLDivElement | null>(null);
@@ -47,11 +49,10 @@ export default Dialog.create<ISearch>((props) => {
     const uptoRef = React.useRef<HTMLButtonElement | null>(null);
 
     function handleUserInput(member: MemberRecord) {
-        setUsers((users) =>
-            users.includes(member.user_id)
-                ? users.filter((id) => id !== member.user_id)
-                : users.concat([member.user_id])
-        );
+        const users = filter.users.includes(member.user_id)
+            ? filter.users.filter((id) => id !== member.user_id)
+            : filter.users.push(member.user_id);
+        actions.updateFilter("users", users.toArray());
     }
 
     return (
@@ -86,7 +87,7 @@ export default Dialog.create<ISearch>((props) => {
                             <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-50 ring-2 ring-white">
                                 <Icons.Users className="text-white w-4 h-4" />
                             </div>
-                            {users.slice(0, 4).map((id, index) => (
+                            {filter.users.slice(0, 4).map((id, index) => (
                                 <UserAvatar
                                     uid={id}
                                     key={id}
@@ -104,7 +105,7 @@ export default Dialog.create<ISearch>((props) => {
                                 />
                             ))}
 
-                            {users.length > 4 && (
+                            {filter.users.size > 4 && (
                                 <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-0 ring-2 ring-white">
                                     <Icons.Plus className="text-white w-4 h-4" />
                                 </div>
@@ -153,7 +154,7 @@ export default Dialog.create<ISearch>((props) => {
                 <div className="bg-gray-400 w-5 h-[1000px]" />
             </div>
             <MembersPopper
-                selected={users}
+                selected={filter.users.toArray()}
                 open={dialog.users}
                 onSelect={handleUserInput}
                 anchorEl={usersRef.current}
