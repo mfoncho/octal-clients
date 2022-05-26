@@ -23,6 +23,18 @@ export class TopicsStore extends Record({
         }
         return this;
     }
+
+    updateFilter(payload: TopicActions.TopicFilterUpdatedPayload) {
+        const topic = this.getTopic(payload.topic_id);
+        if (topic) {
+            return this.setIn(
+                ["entities", payload.topic_id],
+                topic.updateFilter(payload.type, payload.value)
+            );
+        }
+        return this;
+    }
+
     putTopic(payload: any) {
         if (this.contains(payload.id)) {
             return this;
@@ -77,6 +89,12 @@ export class TopicsStore extends Record({
 export const state = new TopicsStore();
 
 export const reducers = {
+    [Actions.TOPIC_FILTER_UPDATED]: (
+        store: TopicsStore,
+        { payload }: TopicActions.TopicFilterUpdatedAction
+    ) => {
+        return store.updateFilter(payload);
+    },
     [Actions.TOPIC_CREATED]: (
         store: TopicsStore,
         { payload }: TopicActions.TopicCreatedAction

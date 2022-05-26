@@ -16,9 +16,16 @@ import {
     TOPIC_DELETED,
     TOPIC_LOADED,
     TOPICS_LOADED,
+    TOPIC_FILTER_UPDATED,
 } from "./types";
 
 export * from "./types";
+
+export interface TopicFilterUpdatedPayload {
+    topic_id: string;
+    type: string;
+    value: string | string[];
+}
 
 export interface CreateTopicPayload {
     space_id: string;
@@ -105,6 +112,19 @@ export type CreateTopicAction = IOAction<
 export type TopicCreatedAction = Action<TOPIC_CREATED, io.Topic>;
 export type TopicLoadedAction = Action<TOPIC_LOADED, io.Topic>;
 export type TopicsLoadedAction = Action<TOPICS_LOADED, io.Topic[]>;
+
+export type TopicFilterUpdatedAction = Action<
+    TOPIC_FILTER_UPDATED,
+    TopicFilterUpdatedPayload
+>;
+
+export function updateTopicFilter(
+    topic_id: string,
+    type: string,
+    value: string | string[]
+): TopicFilterUpdatedAction {
+    return createAction(TOPIC_FILTER_UPDATED, { topic_id, type, value });
+}
 
 export function archiveTopic(payload: ArchiveTopicPayload): ArchiveTopicAction {
     return createIOAction<ARCHIVE_TOPIC>(ARCHIVE_TOPIC, payload);

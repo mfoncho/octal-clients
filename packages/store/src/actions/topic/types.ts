@@ -6,6 +6,9 @@ export type LOAD_TOPICS = typeof LOAD_TOPICS;
 export const LOAD_TOPIC = "LOAD_TOPIC";
 export type LOAD_TOPIC = typeof LOAD_TOPIC;
 
+export const TOPIC_FILTER_UPDATED = "TOPIC_FILTER_UPDATED";
+export type TOPIC_FILTER_UPDATED = typeof TOPIC_FILTER_UPDATED;
+
 export const CREATE_TOPIC = "CREATE_TOPIC";
 export type CREATE_TOPIC = typeof CREATE_TOPIC;
 

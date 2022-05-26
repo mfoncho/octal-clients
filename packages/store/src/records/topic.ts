@@ -1,5 +1,12 @@
-import { Record } from "immutable";
+import { Record, List } from "immutable";
 import { Unique, Id } from "@octal/client";
+
+export class Filter extends Record({
+    since: "",
+    until: "",
+    search: "",
+    users: List<string>(),
+}) {}
 
 export class TopicRecord
     extends Record({
@@ -7,6 +14,7 @@ export class TopicRecord
         icon: "",
         name: "",
         type: "",
+        filter: new Filter(),
         subject: "",
         is_main: false,
         space_id: "",
@@ -27,6 +35,13 @@ export class TopicRecord
 
     patch(payload: any) {
         return this.merge(payload);
+    }
+
+    updateFilter(filter: string, value: string | string[] | List<string>) {
+        if (Array.isArray(value)) {
+            value = List(value);
+        }
+        return this.updateIn(["filter", filter], (_old) => value);
     }
 
     static make(payload: any) {
