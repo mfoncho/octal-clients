@@ -33,6 +33,7 @@ export { default as Task } from "./Task";
 export { default as Full } from "./Full";
 export { default as Plus } from "./Plus";
 export { default as Filter } from "./Filter";
+export { default as Calendar } from "./Calendar";
 export { default as LeftArrow } from "./LeftArrow";
 export { default as DropdownArrows } from "./DropdownArrows";
 export { default as CloseCircleSolid } from "./CloseCircleSolid";
