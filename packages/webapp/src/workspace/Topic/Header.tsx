@@ -4,6 +4,7 @@ import * as Icons from "@octal/icons";
 import { useTopic } from "@octal/store";
 import RenameTopicDialog from "./RenameTopicDialog";
 import InviteDialog from "../InviteDialog";
+import SearchDialog from "./Search";
 import { useParams } from "react-router-dom";
 import { useSpace } from "../Space/hooks";
 import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
@@ -36,14 +37,15 @@ export default React.memo(() => {
                 </div>
             </div>
             <div className="hidden sm:flex flex-none flex-row items-center justify-end px-4">
-                <button
-                    onClick={dialog.opener("invite")}
+                <div
+                    role="button"
+                    onClick={dialog.opener("search")}
                     className="mx-4 text-gray-500 flex flex-grow items-center">
                     <Icons.Search />
                     <span className="pl-4 font-semibold">
-                        Quick search board
+                        Quick search topic
                     </span>
-                </button>
+                </div>
             </div>
             {topic && (
                 <>
@@ -56,6 +58,11 @@ export default React.memo(() => {
                         space={space}
                         open={dialog.invite}
                         onClose={dialog.close}
+                    />
+                    <SearchDialog
+                        open={dialog.search}
+                        onClose={dialog.close}
+                        topic={topic}
                     />
                 </>
             )}
