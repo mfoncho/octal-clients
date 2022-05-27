@@ -79,3 +79,12 @@ export function useDebouncedCallback<
         }, wait);
     }, watch) as T;
 }
+
+export function useDebouncedEffect<
+    T extends (...args: any[]) => any,
+    S extends readonly unknown[]
+>(callback: T, wait: number, watch: S = [] as any) {
+    const cb = useDebouncedCallback(callback, wait, watch);
+
+    useEffect(cb, watch);
+}
