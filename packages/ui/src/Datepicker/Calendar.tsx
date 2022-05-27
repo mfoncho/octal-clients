@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import UIEvent, { Target } from "../event";
 const MONTH_NAMES = [
     "January",
     "February",
@@ -16,9 +17,11 @@ const MONTH_NAMES = [
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-interface ICalendar {
+export type ISelectEvent = UIEvent<Target<Date>>;
+
+export interface ICalendar {
     selected?: Date | Date[] | null;
-    onSelect?: (e: any, date: Date) => void;
+    onSelect?: (event: UIEvent<Target<Date>>) => void;
 }
 
 export default function Calendar(props: ICalendar) {
@@ -88,9 +91,9 @@ export default function Calendar(props: ICalendar) {
         let className = "";
         let { selected } = props;
         const date = new Date(year, month, day);
-        const onClick = (e: React.MouseEvent) => {
+        const onClick = (event: React.MouseEvent) => {
             if (props.onSelect) {
-                props.onSelect(e, date);
+                props.onSelect(UIEvent.create({ value: date }, event));
             }
         };
         if (selected && !Array.isArray(selected)) {

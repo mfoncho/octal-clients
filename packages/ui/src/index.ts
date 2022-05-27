@@ -24,3 +24,4 @@ export { default as Dialog } from "./Dialog";
 export { default as ImageInput } from "./ImageInput";
 export { default as Switch } from "./Switch";
 export { default as Emoji } from "./Emoji";
+export { default as UIEvent} from "./event";

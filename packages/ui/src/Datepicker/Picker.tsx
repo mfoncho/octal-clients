@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Calendar from "./Calendar";
+import Calendar, { ISelectEvent } from "./Calendar";
+import UIEvent from "../event";
 import { Base } from "../Button";
 
-interface IPicker {
+export interface IChangeEvent {
+    event: React.MouseEvent;
+    target: { value: string };
+}
+
+export interface IPicker {
     value?: string | null;
     time?: boolean;
     disabled?: boolean;
     clear?: string | React.ReactNode;
     confirm?: string | React.ReactNode;
-    onChange: (e: React.MouseEvent, datetime: string) => void;
+    onChange: (e: UIEvent) => void;
     onClear?: (e: React.MouseEvent) => void;
 }
 
@@ -76,8 +82,8 @@ export default function Picker({
         }
     }
 
-    function handleSetDate(e: any, date: Date) {
-        setDate(date);
+    function handleSetDate({ target: { value } }: ISelectEvent) {
+        setDate(value);
         if (!Boolean(time)) {
             if (props.time) {
                 setTime("23:59");
@@ -87,9 +93,9 @@ export default function Picker({
         }
     }
 
-    function handleChangeValue(e: React.MouseEvent) {
+    function handleChangeValue(event: React.MouseEvent) {
         if (datetime) {
-            onChange(e, datetime);
+            onChange(UIEvent.create({ value: datetime }, event));
         }
     }
 
