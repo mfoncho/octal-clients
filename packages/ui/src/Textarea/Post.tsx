@@ -299,7 +299,7 @@ export default React.memo<InputProps>((props) => {
         setValue(val);
         if (props.onChange) {
             const text = slater.serialize(val).trim();
-            const prev = slater.serialize(val).trim();
+            const prev = slater.serialize(value).trim();
             if (text != prev) {
                 const event = UIEvent.synthesis(
                     UIEvent.event("change", { currentTarget: rootRef.current! })
