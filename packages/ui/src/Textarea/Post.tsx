@@ -4,12 +4,14 @@ import Elements from "../Elements";
 import Popover from "@material-ui/core/Popover";
 import * as Icons from "@octal/icons";
 import emoji from "@octal/emoji";
+import UIEvent from "../event";
+import { EventTarget } from "./types";
 import Suggestions, { useSuggesting } from "./Suggestion";
 import Button, { Base as ButtonBase } from "../Button";
 import UploadQueue from "./UploadQueue";
 import { Slater } from "@octal/markdown";
 import Emoji from "../Emoji";
-import { IFileItem } from "./types";
+import { InputFile } from "./types";
 import {
     wrap,
     withPaste,
@@ -51,29 +53,21 @@ const wrappers = [
     withShortcuts,
 ];
 
-export interface IPostInputState {
-    value: string;
-    file?: File;
-}
-
-export interface IUpload {
+export interface IAccept {
     max: number;
-    accept: string;
+    types: string;
 }
 
 export interface IPostInput {
-    onChange?: (state: IPostInputState) => void;
-    onSubmit?: (state: IPostInputState) => void;
+    onChange?: (event: UIEvent<EventTarget>) => void;
+    onSubmit?: (event: UIEvent<EventTarget>) => void;
     value: string;
     // SOR is acronym for
     // Submit On Return
-    rows?: number;
-    multiline?: boolean;
-    upload?: IUpload;
+    accept?: IAccept;
     autoFocus?: boolean;
     placeholder?: string;
     disabled?: boolean;
-    passthrough?: boolean;
 }
 
 interface IActionButton {
@@ -214,7 +208,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
 
     const [fid] = useState(`${gcid}`);
 
-    const [files, setFiles] = useState<IFileItem[]>([]);
+    const [files, setFiles] = useState<InputFile[]>([]);
 
     const [accept, setAccept] = useState<string>("");
 
@@ -241,15 +235,15 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     }, [props.value]);
 
     useEffect(() => {
-        if (props.upload?.accept) {
+        if (props.accept?.types) {
             setAccept(() => {
                 return props
-                    .upload!.accept.split(",")
+                    .accept!.types.split(",")
                     .map((ext) => `.${ext.trim()}`)
                     .join(",");
             });
         }
-    }, [props.upload?.accept]);
+    }, [props.accept?.types]);
 
     useEffect(() => {
         if (files.length == 0) {
@@ -266,15 +260,25 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         setPopup("emoji");
     }, []);
 
-    function handleSubmit() {
+    function handleSubmit(event: any) {
         if (props.onSubmit) {
-            const val = slater.serialize(value).trim();
-            props.onSubmit({ value: val, file: file?.file });
-
             if (file) {
                 setFiles((files) => files.slice(1));
             }
             clearEditor(editor);
+
+            const target = {
+                files: files,
+                value: slater.serialize(value).trim(),
+                editor,
+                data: value,
+            };
+            const uievent = UIEvent.create<EventTarget>(
+                target as any,
+                event,
+                "submit"
+            );
+            props.onSubmit(uievent);
         }
     }
 
@@ -309,10 +313,19 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     function handleChange(val: any) {
         setValue(val);
         if (props.onChange) {
-            const value = slater.serialize(val).trim();
+            const text = slater.serialize(val).trim();
             const prev = slater.serialize(val).trim();
-            if (value != prev) {
-                props.onChange({ value, file: file?.file });
+            if (text != prev) {
+                const event = UIEvent.synthesis(
+                    UIEvent.event("change", { currentTarget: rootRef.current! })
+                );
+                const target = { files: files, value: text, editor, data: val };
+                const uievent = UIEvent.create<EventTarget>(
+                    target,
+                    event,
+                    "change"
+                );
+                props.onChange(uievent);
             }
         }
     }
@@ -333,7 +346,7 @@ export default React.memo<IPostInput>((props: IPostInput) => {
         // Submit if mention dialog is closed
         if (event.key == "Enter") {
             event.preventDefault();
-            if (suggesting[0] === false) return handleSubmit();
+            if (suggesting[0] === false) return handleSubmit(event);
             return;
         }
 

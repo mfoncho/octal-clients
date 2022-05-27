@@ -1,11 +1,11 @@
 import React from "react";
 import Dialog from "../Dialog";
 import Button from "../Button";
-import { IFileItem } from "./types";
+import { InputFile } from "./types";
 import * as Icons from "@octal/icons";
 
 interface IDialog {
-    files: IFileItem[];
+    files: InputFile[];
     onDequeue: (index: number) => void;
 }
 
@@ -16,7 +16,7 @@ export default Dialog.create<IDialog>(({ files, ...props }) => {
         };
     }
 
-    function renderFile(file: IFileItem, index: number) {
+    function renderFile(file: InputFile, index: number) {
         const key = String(index);
         return (
             <div

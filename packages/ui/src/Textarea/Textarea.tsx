@@ -5,6 +5,8 @@ import emoji from "@octal/emoji";
 import isHotkey from "is-hotkey";
 import Toolbar from "./Toolbar";
 import Suggestions, { useSuggesting } from "./Suggestion";
+import UIEvent from "../event";
+import { EventTarget } from "./types";
 import { Slater } from "@octal/markdown";
 import {
     withPaste,
@@ -36,8 +38,8 @@ const wrappers = [
 ];
 
 export interface ITextarea {
-    onChange?: (value: string) => void;
-    onSubmit?: (value: string) => void;
+    onChange?: (event: UIEvent<EventTarget>) => void;
+    onSubmit?: (event: UIEvent<EventTarget>) => void;
     className?: string;
     onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
     onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
@@ -113,7 +115,16 @@ export default function Textarea(props: ITextarea) {
             const text = slater.serialize(val).trim();
             const prev = slater.serialize(value).trim();
             if (text != prev) {
-                props.onChange(text);
+                const event = UIEvent.synthesis(
+                    UIEvent.event("change", { currentTarget: rootRef.current! })
+                );
+                const target = { files: [], value: text, editor, data: val };
+                const uievent = UIEvent.create<EventTarget>(
+                    target,
+                    event,
+                    "change"
+                );
+                props.onChange(uievent);
             }
         }
     }
@@ -136,7 +147,19 @@ export default function Textarea(props: ITextarea) {
             event.preventDefault();
             if (suggesting[0] === false && props.onSubmit) {
                 const text = slater.serialize(value).trim();
-                props.onSubmit(text);
+
+                const target = {
+                    files: [],
+                    value: text,
+                    editor,
+                    data: value,
+                };
+                const uievent = UIEvent.create<EventTarget>(
+                    target,
+                    event,
+                    "submit"
+                );
+                props.onSubmit(uievent);
             }
             return;
         }

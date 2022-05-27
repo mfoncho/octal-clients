@@ -3,6 +3,8 @@ import { Slate, Editable, withReact, ReactEditor } from "slate-react";
 import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import cls from "classnames";
+import UIEvent from "../event";
+import { EventTarget } from "./types";
 import Suggestions, { useSuggesting } from "./Suggestion";
 import Markdown, { Slater, nodes } from "@octal/markdown";
 import { isEmojiActive, insertEmoji } from "./utils";
@@ -24,8 +26,8 @@ export interface IInput {
     className?: string;
     onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
     onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
-    onChange?: (value: string) => void;
-    onSubmit?: (value: string) => void;
+    onChange?: (event: UIEvent<EventTarget>) => void;
+    onSubmit?: (event: UIEvent<EventTarget>) => void;
     autoFocus?: boolean;
     placeholder?: string;
     value: string;
@@ -114,7 +116,16 @@ export default function Input(props: IInput) {
             const text = slater.serialize(val).trim();
             const prev = slater.serialize(value).trim();
             if (text != prev) {
-                props.onChange(text);
+                const event = UIEvent.synthesis(
+                    UIEvent.event("change", { currentTarget: rootEl! })
+                );
+                const target = { files: [], value: text, editor, data: val };
+                const uievent = UIEvent.create<EventTarget>(
+                    target,
+                    event,
+                    "change"
+                );
+                props.onChange(uievent);
             }
         }
     }
@@ -125,7 +136,18 @@ export default function Input(props: IInput) {
             if (suggesting[0] == false) {
                 if (props.onSubmit) {
                     const text = slater.serialize(value).trim();
-                    props.onSubmit(text);
+                    const target = {
+                        files: [],
+                        value: text,
+                        editor,
+                        data: value,
+                    };
+                    const uievent = UIEvent.create<EventTarget>(
+                        target,
+                        event,
+                        "submit"
+                    );
+                    props.onSubmit(uievent);
                 }
             }
 
