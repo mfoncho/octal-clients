@@ -42,7 +42,7 @@ export default Dialog.create<ISearch>((props) => {
     const dialog = Dialog.useDialog();
     const { filter } = props.topic;
     const screen = useScreen();
-    const input = useInput("");
+    const input = useInput(filter.search);
     const usersRef = React.useRef<HTMLDivElement | null>(null);
     const fromRef = React.useRef<HTMLButtonElement | null>(null);
     const uptoRef = React.useRef<HTMLButtonElement | null>(null);
@@ -88,10 +88,9 @@ export default Dialog.create<ISearch>((props) => {
                 <div className="w-2/5 flex-row overflow-hidden">
                     <div className="relative border border-gray-400 items-center max-w-full overflow-hidden rounded-md shadow">
                         <Textarea
-                            value=""
-                            onChange={input.props.onChange}
                             placeholder="Quick search topic"
                             className="pl-9 w-full max-w-full font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700 focus:ring-primary-500 ring-gray-400 ring-2 rounded py-1 px-2 text-base"
+                            {...input.props}
                         />
                         <div className="px-2 absolute top-1 w-9 h-9">
                             <Icons.Search className="text-gray-500" />
