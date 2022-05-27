@@ -2,6 +2,7 @@ import Textarea from "./Textarea";
 import Suggestions from "./Suggestion";
 import Post from "./Post";
 import Input from "./Input";
+export * from "./types";
 
 export type TextAreaType = typeof Textarea & {
     Post: typeof Post;

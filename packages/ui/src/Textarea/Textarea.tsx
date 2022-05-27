@@ -6,7 +6,7 @@ import isHotkey from "is-hotkey";
 import Toolbar from "./Toolbar";
 import Suggestions, { useSuggesting } from "./Suggestion";
 import UIEvent from "../event";
-import { EventTarget } from "./types";
+import { EventTarget, InputProps } from "./types";
 import { Slater } from "@octal/markdown";
 import {
     withPaste,
@@ -37,18 +37,6 @@ const wrappers = [
     withShortcuts,
 ];
 
-export interface ITextarea {
-    onChange?: (event: UIEvent<EventTarget>) => void;
-    onSubmit?: (event: UIEvent<EventTarget>) => void;
-    className?: string;
-    onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
-    onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
-    autoFocus?: boolean;
-    placeholder?: string;
-    value: string;
-    disabled?: boolean;
-}
-
 const HOTKEYS = {
     "mod+b": "bold",
     "mod+i": "italic",
@@ -67,7 +55,7 @@ const initialValue: Descendant[] = [
     },
 ];
 
-export default function Textarea(props: ITextarea) {
+export default function Textarea(props: InputProps) {
     const Component = Elements.useElements();
 
     const rootRef = React.useRef<HTMLDivElement | null>(null);
@@ -89,15 +77,15 @@ export default function Textarea(props: ITextarea) {
     const [value, setValue] = useState<Descendant[]>(initialValue);
 
     useEffect(() => {
-        const { value } = props;
-        if (Boolean(value)) {
-            const slated = slater.parse(value!);
-            setValue(slated as any);
+        let pvalue = (props.value ?? "").split("\n").join(" ").trim();
+        let ivalue = slater.serialize(value).trim();
+        if (pvalue !== ivalue) {
+            const slated = slater.parse(pvalue);
             Transforms.deselect(editor);
             setValue(slated as any);
             Transforms.select(editor, { path: [0, 0], offset: 0 });
         }
-    }, [props.value]);
+    }, [props.value ?? ""]);
 
     function handleSuggestionSelected(selected: any) {
         if (selected.type == "mention") {

@@ -5,7 +5,7 @@ import Popover from "@material-ui/core/Popover";
 import * as Icons from "@octal/icons";
 import emoji from "@octal/emoji";
 import UIEvent from "../event";
-import { EventTarget } from "./types";
+import { EventTarget, InputProps } from "./types";
 import Suggestions, { useSuggesting } from "./Suggestion";
 import Button, { Base as ButtonBase } from "../Button";
 import UploadQueue from "./UploadQueue";
@@ -52,23 +52,6 @@ const wrappers = [
     withTables,
     withShortcuts,
 ];
-
-export interface IAccept {
-    max: number;
-    types: string;
-}
-
-export interface IPostInput {
-    onChange?: (event: UIEvent<EventTarget>) => void;
-    onSubmit?: (event: UIEvent<EventTarget>) => void;
-    value: string;
-    // SOR is acronym for
-    // Submit On Return
-    accept?: IAccept;
-    autoFocus?: boolean;
-    placeholder?: string;
-    disabled?: boolean;
-}
 
 interface IActionButton {
     boolean?: boolean;
@@ -181,7 +164,7 @@ const initialValue: any = [
     },
 ];
 
-export default React.memo<IPostInput>((props: IPostInput) => {
+export default React.memo<InputProps>((props) => {
     const Component = Elements.useElements();
 
     const suggesting = useSuggesting();
@@ -226,13 +209,15 @@ export default React.memo<IPostInput>((props: IPostInput) => {
     });
 
     useEffect(() => {
-        const { value } = props;
-        if (props.value.trim() == "") {
-            setValue(initialValue);
-        } else if (Boolean(value)) {
-            setValue(slater.parse(value!));
+        let pvalue = (props.value ?? "").split("\n").join(" ").trim();
+        let ivalue = slater.serialize(value).trim();
+        if (pvalue != ivalue) {
+            let parsed = slater.parse(pvalue!);
+            //Transforms.deselect(editor);
+            setValue(parsed as any);
+            //Transforms.select(editor, { path: [0, 0], offset: 0 });
         }
-    }, [props.value]);
+    }, [props.value ?? ""]);
 
     useEffect(() => {
         if (props.accept?.types) {

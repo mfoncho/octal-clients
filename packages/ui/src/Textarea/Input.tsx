@@ -4,7 +4,7 @@ import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import cls from "classnames";
 import UIEvent from "../event";
-import { EventTarget } from "./types";
+import { EventTarget, InputProps } from "./types";
 import Suggestions, { useSuggesting } from "./Suggestion";
 import Markdown, { Slater, nodes } from "@octal/markdown";
 import { isEmojiActive, insertEmoji } from "./utils";
@@ -21,18 +21,6 @@ const pslater = new Slater(new Markdown())
     .add(new nodes.Text());
 
 const wrappers = [withReact, withPaste(pslater)];
-
-export interface IInput {
-    className?: string;
-    onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
-    onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
-    onChange?: (event: UIEvent<EventTarget>) => void;
-    onSubmit?: (event: UIEvent<EventTarget>) => void;
-    autoFocus?: boolean;
-    placeholder?: string;
-    value: string;
-    disabled?: boolean;
-}
 
 interface InputClasses {
     focus?: string | null;
@@ -71,7 +59,7 @@ function filterout<T>(
     );
 }
 
-export default function Input(props: IInput) {
+export default function Input(props: InputProps) {
     const Component = Elements.useElements();
 
     const [rootEl, setRootEl] = React.useState<HTMLDivElement | null>(null);
@@ -95,7 +83,7 @@ export default function Input(props: IInput) {
     const [value, setValue] = useState<Descendant[]>(initialValue);
 
     useEffect(() => {
-        let pvalue = props.value.split("\n").join(" ").trim();
+        let pvalue = (props.value ?? "").split("\n").join(" ").trim();
         let ivalue = slater.serialize(value).trim();
         if (pvalue != ivalue) {
             let parsed = slater.parse(pvalue!);
@@ -103,7 +91,7 @@ export default function Input(props: IInput) {
             setValue(parsed as any);
             Transforms.select(editor, { path: [0, 0], offset: 0 });
         }
-    }, [props.value]);
+    }, [props.value ?? ""]);
 
     useEffect(() => {
         const el = ReactEditor.toDOMNode(editor, editor);
