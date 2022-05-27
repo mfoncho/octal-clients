@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import clx from "classnames";
 import moment from "moment";
 import { useScreen, useInput } from "src/hooks";
@@ -6,7 +6,7 @@ import * as Icons from "@octal/icons";
 import UserAvatar from "@workspace/UserAvatar";
 import { useActions } from "./hooks";
 import { Datepicker, Popper } from "@octal/ui";
-import { Dialog, Button, Textarea } from "@octal/ui";
+import { Dialog, Button, Textarea, UIEvent } from "@octal/ui";
 import { TopicRecord, MemberRecord } from "@octal/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
 
@@ -16,7 +16,7 @@ interface ISearch {
 
 interface IDatePicker {
     value: string;
-    onChange: (e: any, value: string) => void;
+    onChange: (e: UIEvent) => void;
     onClear: (e: any) => void;
 }
 
@@ -42,8 +42,6 @@ export default Dialog.create<ISearch>((props) => {
     const { filter } = props.topic;
     const screen = useScreen();
     const input = useInput("");
-    const [from, setFrom] = useState<string>();
-    const [upto, setUpto] = useState<string>();
     const usersRef = React.useRef<HTMLDivElement | null>(null);
     const fromRef = React.useRef<HTMLButtonElement | null>(null);
     const uptoRef = React.useRef<HTMLButtonElement | null>(null);
@@ -53,6 +51,20 @@ export default Dialog.create<ISearch>((props) => {
             ? filter.users.filter((id) => id !== member.user_id)
             : filter.users.push(member.user_id);
         actions.updateFilter("users", users.toArray());
+    }
+
+    function handleSinceClear(_event: UIEvent) {
+        actions.updateFilter("since", "");
+    }
+    function handleSinceChange(event: UIEvent) {
+        actions.updateFilter("since", event.target.value);
+    }
+
+    function handleUntilClear(_event: UIEvent) {
+        actions.updateFilter("until", "");
+    }
+    function handleUntilChange(event: UIEvent) {
+        actions.updateFilter("until", event.target.value);
     }
 
     return (
@@ -114,12 +126,12 @@ export default Dialog.create<ISearch>((props) => {
                     </div>
                     <button
                         ref={fromRef}
-                        onClick={dialog.opener("from")}
+                        onClick={dialog.opener("since")}
                         className="flex flex-row items-center rounded-md bg-slate-100 hover:bg-slate-200 px-2 text-gray-500 space-x-2">
                         <Icons.Calendar.Day className="" />
-                        {Boolean(from) ? (
+                        {Boolean(filter.since) ? (
                             <span className="text-sm font-bold">
-                                {moment(from).format("ll")}
+                                {moment(filter.since).format("ll")}
                             </span>
                         ) : (
                             <span className="invisible text-sm font-bold">
@@ -132,12 +144,12 @@ export default Dialog.create<ISearch>((props) => {
                     </div>
                     <button
                         ref={uptoRef}
-                        onClick={dialog.opener("to")}
+                        onClick={dialog.opener("until")}
                         className="flex flex-row items-center text-gray-500 rounded-md bg-slate-100 hover:bg-slate-200 px-2 space-x-2">
                         <Icons.Calendar.Day className="" />
-                        {Boolean(upto) ? (
+                        {Boolean(filter.until) ? (
                             <span className="text-sm font-bold">
-                                {moment(upto).format("ll")}
+                                {moment(filter.until).format("ll")}
                             </span>
                         ) : (
                             <span className="invisible text-sm font-bold">
@@ -161,20 +173,20 @@ export default Dialog.create<ISearch>((props) => {
                 onClickAway={dialog.close}
             />
             <DatePopper
-                value={from ?? ""}
+                value={filter.since}
                 anchorEl={fromRef.current}
-                onChange={(a: any, b: any) => setFrom(b)}
-                open={dialog.from}
+                onChange={handleSinceChange}
+                open={dialog.since}
                 onClickAway={dialog.close}
-                onClear={() => setFrom("")}
+                onClear={handleSinceClear}
             />
             <DatePopper
-                value={upto ?? ""}
+                value={filter.until}
                 anchorEl={uptoRef.current}
-                onChange={(a: any, b: any) => setUpto(b)}
-                open={dialog.to}
+                onChange={handleUntilChange}
+                open={dialog.until}
                 onClickAway={dialog.close}
-                onClear={() => setUpto("")}
+                onClear={handleUntilClear}
             />
         </Dialog.Base>
     );

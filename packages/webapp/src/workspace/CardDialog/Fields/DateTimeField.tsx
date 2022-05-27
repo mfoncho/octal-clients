@@ -4,8 +4,8 @@ import { useFieldAction } from "@workspace/Board/hooks";
 import { CardDatetimeValueRecord } from "@octal/store";
 import Field, { IField } from "./Field";
 import Popover from "@material-ui/core/Popover";
-import { Datepicker } from "@octal/ui";
-import moment, { Moment } from "moment";
+import { Datepicker, UIEvent } from "@octal/ui";
+import moment from "moment";
 
 export default function DateTimeField({ field, handle, ...props }: IField) {
     const [popper, setPopper] = useState<boolean>(false);
@@ -16,11 +16,9 @@ export default function DateTimeField({ field, handle, ...props }: IField) {
 
     const value = field.values.first()! as CardDatetimeValueRecord;
 
-    function onChange(e: React.MouseEvent, datetime: string) {
-        e.stopPropagation();
-        e.preventDefault();
+    function onChange(e: UIEvent) {
         setPopper(false);
-        handleSetFieldValue(datetime);
+        handleSetFieldValue(e.target.value);
     }
 
     function onClear(e: React.MouseEvent) {
