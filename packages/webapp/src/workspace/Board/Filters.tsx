@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as Icons from "@octal/icons";
 import { useInput } from "src/hooks";
 import { Button, Dialog } from "@octal/ui";
-import { useDebouncedCallback } from "@octal/hooks";
+import { useDebouncedEffect } from "@octal/hooks";
 import { MemberRecord, LabelRecord } from "@octal/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import { useBoard, useBoardActions } from "./hooks";
@@ -16,17 +16,13 @@ export default React.memo(() => {
     const memberBtn = React.useRef<HTMLButtonElement | null>();
     const dialog = Dialog.useDialog();
 
-    const callback = useDebouncedCallback(
+    useDebouncedEffect(
         () => {
             actions.filter("term", input.value);
         },
         1000,
         [input.value]
     );
-
-    useEffect(() => {
-        callback();
-    }, [input.value]);
 
     function handleSelectMember(member: MemberRecord) {
         if (filter.users.includes(member.user_id)) {

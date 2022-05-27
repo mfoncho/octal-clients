@@ -6,6 +6,7 @@ import * as Icons from "@octal/icons";
 import UserAvatar from "@workspace/UserAvatar";
 import { useActions } from "./hooks";
 import { Datepicker, Popper } from "@octal/ui";
+import { useDebouncedEffect } from "@octal/hooks";
 import { Dialog, Button, Textarea, UIEvent } from "@octal/ui";
 import { TopicRecord, MemberRecord } from "@octal/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
@@ -52,6 +53,14 @@ export default Dialog.create<ISearch>((props) => {
             : filter.users.push(member.user_id);
         actions.updateFilter("users", users.toArray());
     }
+
+    useDebouncedEffect(
+        () => {
+            actions.updateFilter("search", input.value);
+        },
+        700,
+        [input.value]
+    );
 
     function handleSinceClear(_event: UIEvent) {
         actions.updateFilter("since", "");
