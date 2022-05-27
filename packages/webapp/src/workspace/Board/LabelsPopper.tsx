@@ -121,9 +121,8 @@ function LabelForm(props: ILabelForm) {
         <div className="flex flex-col">
             <div className="relative flex flex-row overflow-hidden">
                 <Textarea.Input
-                    value={name.value}
-                    onChange={name.setValue}
                     className="form-input w-full max-w-full font-semibold text-gray-800 m-2 rounded-md focus:ring border-1.5 focus:border-primary-400 text-base"
+                    {...name.props}
                 />
             </div>
             <div className="grid grid-flow-row grid-cols-7 p-2">

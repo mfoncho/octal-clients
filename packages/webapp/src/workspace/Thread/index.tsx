@@ -82,7 +82,7 @@ export default React.memo<IThread>((props) => {
                         <Textarea.Post
                             {...postInput}
                             value=""
-                            upload={undefined}
+                            accept={undefined}
                             placeholder=""
                             onSubmit={handleSubmit}
                         />

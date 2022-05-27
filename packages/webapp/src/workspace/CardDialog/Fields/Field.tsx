@@ -54,11 +54,10 @@ function Rename({ field, onClose }: IRname) {
     return (
         <Textarea.Input
             autoFocus={true}
-            value={name.value}
             onBlur={handleOnBlur}
-            onChange={name.setValue}
             className="rounded px-2 py-0 min-w-[128px] focus:outline-none font-semibold text-gray-700 text-base"
             onSubmit={handleSubmit}
+            {...name.props}
         />
     );
 }

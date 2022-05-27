@@ -88,12 +88,11 @@ function Task({ task, ...props }: ITask) {
                 </button>
                 {edit ? (
                     <Textarea.Input
-                        value={name.value}
-                        onChange={name.setValue}
                         onBlur={handleBlur}
                         autoFocus={true}
                         className="flex-1 rounded mx-1 px-1 py-0 focus:outline-none font-semibold text-gray-700 text-sm"
                         onSubmit={handleKeyPress}
+                        {...name.props}
                     />
                 ) : (
                     <span className="rounded px-2 focus:outline-none font-semibold text-gray-700 text-sm">
@@ -146,12 +145,11 @@ function AddTask({ onSubmit }: ITaskCreator) {
                     <Icons.Task.Undone className="h-5 w-5 text-primary-500" />
 
                     <Textarea.Input
-                        value={name.value}
                         onBlur={handleBlur}
                         autoFocus={true}
                         onSubmit={handleSubmit}
-                        onChange={name.setValue}
                         className="flex-1 rounded mx-1 px-1 py-0  focus:outline-none font-semibold text-gray-700 text-sm"
+                        {...name.props}
                     />
                 </div>
                 <button onClick={handleClose}>

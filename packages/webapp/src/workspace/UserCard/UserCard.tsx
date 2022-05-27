@@ -74,7 +74,7 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
                         <Textarea
                             value={loading ? input.value : ""}
                             onSubmit={handleSubmit}
-                            onChange={input.setValue}
+                            onChange={input.props.onChange}
                             className="text-msg p-3 min-h-[100px]"
                             placeholder={`@${
                                 user.username || ""

@@ -44,12 +44,11 @@ export default React.forwardRef<IColumnNameInputRef, IColumnNameInput>(
         return (
             <Textarea.Input
                 autoFocus={true}
-                value={name.value}
-                onChange={name.setValue}
                 onSubmit={handleSubmit}
                 onBlur={props.onClose}
                 placeholder="Card name"
                 className="focus:border-primary-700 py-1.5 focus:shadow border-slate-500 border-2 px-2 w-full rounded-md mx-2 font-semibold text-base text-gray-900"
+                {...name.props}
             />
         );
     }

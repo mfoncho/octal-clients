@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 //import Switch from "@material-ui/core/Switch";
 import { useDispatch } from "react-redux";
-import { Dialog, Button, Switch, Textarea } from "@octal/ui";
+import { Dialog, Button, Switch, Textarea, UIEvent } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import { useInput } from "src/utils";
 import { useNavigator } from "src/hooks";
@@ -15,7 +15,7 @@ interface ISpaceCreator {
 interface IInput {
     label: string;
     value: string;
-    onChange: (value: string) => void;
+    onChange: (value: UIEvent) => void;
     subheader?: string;
     placeholder?: string;
 }
@@ -90,19 +90,13 @@ export default React.memo<ISpaceCreator>((props) => {
             fullHeight={false}
             onClose={creating ? undefined : props.onClose}>
             <Dialog.Content className="flex flex-col overflow-y-auto">
-                <Input
-                    label="Name"
-                    placeholder="name"
-                    value={name.value}
-                    onChange={name.setValue}
-                />
+                <Input label="Name" placeholder="name" {...name.props} />
 
                 <Input
                     label="Topic"
                     placeholder="topic"
-                    value={topic.value}
-                    onChange={topic.setValue}
                     subheader="Main space topic"
+                    {...topic.props}
                 />
 
                 <div className="flex flex-col py-4">

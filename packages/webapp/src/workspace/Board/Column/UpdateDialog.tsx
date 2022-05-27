@@ -85,11 +85,10 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
                 <div className="flex flex-row">
                     <Textarea.Input
                         autoFocus={true}
-                        value={name.value}
                         disabled={loading}
-                        onChange={name.setValue}
                         placeholder="Column name"
                         className="mx-0 focus:border-primary-700 py-1.5 focus:shadow border-slate-500 border-2 px-2 w-full rounded-md mx-2 font-semibold text-base text-gray-900"
+                        {...name.props}
                     />
                 </div>
 

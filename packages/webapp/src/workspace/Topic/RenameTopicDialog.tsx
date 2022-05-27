@@ -55,8 +55,7 @@ export default Dialog.create<IRenameTopicDialog>((props) => {
                     <Textarea.Input
                         disabled={loading}
                         className="form-input focus:ring text-base font-semibold w-full text-gray-800 rounded-md border-gray-400"
-                        value={name.value}
-                        onChange={name.setValue}
+                        {...name.props}
                     />
                 </div>
             </Dialog.Content>

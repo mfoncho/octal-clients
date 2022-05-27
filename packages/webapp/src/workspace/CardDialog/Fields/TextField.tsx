@@ -34,10 +34,10 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
             <Textarea
                 value={value}
                 disabled={disabled}
-                onChange={setDesc}
+                onChange={(e) => setDesc(e.target.value)}
                 autoFocus={true}
                 onBlur={handleBlur}
-                onSubmit={handleChange}
+                onSubmit={(e) => handleChange(e.target.value)}
                 className="bg-primary-50 p-2 rounded-md break-word w-full text-gray-800 text-base"
             />
             <div className="flex flex-row justify-end pt-2 px-3">

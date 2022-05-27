@@ -32,8 +32,6 @@ function Edit({ value, onSubmit, onClose }: IEdit) {
         <Textarea.Input
             {...name.props}
             autoFocus
-            value={name.props.value}
-            onChange={name.setValue}
             onBlur={onClose}
             className="w-full max-w-full px-2 sm:py-0 focus:ring focus:text-gray-900 text-left text-2xl text-gray-700 font-black"
             onSubmit={handleKeyPress}

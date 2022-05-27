@@ -80,7 +80,7 @@ export default Dialog.create<ISearch>((props) => {
                     <div className="relative border border-gray-400 items-center max-w-full overflow-hidden rounded-md shadow">
                         <Textarea
                             value=""
-                            onChange={input.setValue}
+                            onChange={input.props.onChange}
                             placeholder="Quick search topic"
                             className="pl-9 w-full max-w-full font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700 focus:ring-primary-500 ring-gray-400 ring-2 rounded py-1 px-2 text-base"
                         />
