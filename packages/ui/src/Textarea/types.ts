@@ -7,22 +7,15 @@ export interface IAccept {
     types: string;
 }
 
-export interface InputFile {
-    preview?: string;
-    ext: string;
-    file: File;
-    name: string;
-    type: string;
-}
-
 export interface EventTarget {
     data: Descendant[];
     value: string;
     editor: ReturnType<typeof createEditor>;
-    files: InputFile[];
+    files: File[];
 }
 
 export interface InputProps {
+    files?: File[];
     className?: string;
     onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
     onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;

@@ -11,7 +11,6 @@ import Button, { Base as ButtonBase } from "../Button";
 import UploadQueue from "./UploadQueue";
 import { Slater } from "@octal/markdown";
 import Emoji from "../Emoji";
-import { InputFile } from "./types";
 import {
     wrap,
     withPaste,
@@ -28,7 +27,7 @@ import isHotkey from "is-hotkey";
 import { Transforms, Editor, createEditor, Descendant } from "slate";
 
 import {
-    fileItem,
+    fileinfo,
     insertEmoji,
     isBlockActive,
     insertMention,
@@ -191,7 +190,7 @@ export default React.memo<InputProps>((props) => {
 
     const [fid] = useState(`${gcid}`);
 
-    const [files, setFiles] = useState<InputFile[]>([]);
+    const [files, setFiles] = useState<File[]>([]);
 
     const [accept, setAccept] = useState<string>("");
 
@@ -207,6 +206,10 @@ export default React.memo<InputProps>((props) => {
     useEffect(() => {
         gcid = gcid + 1;
     });
+
+    useEffect(() => {
+        setFiles(props.files ?? []);
+    }, [props.files]);
 
     useEffect(() => {
         let pvalue = (props.value ?? "").split("\n").join(" ").trim();
@@ -286,13 +289,24 @@ export default React.memo<InputProps>((props) => {
         handleCloseMenu();
     }
 
-    function handleFileInput(event: any) {
+    function handleFileInput(ev: any) {
         let files = [];
-        for (let file of event.target.files) {
+        for (let file of ev.target.files) {
             files.push(file);
         }
-        setFiles(files.map(fileItem));
+        setFiles(files);
         setPopup(null);
+        if (props.onChange) {
+            const text = slater.serialize(value).trim();
+            const event = UIEvent.synthesis(ev);
+            const target = { files: files, value: text, editor, data: value };
+            const uievent = UIEvent.create<EventTarget>(
+                target,
+                event,
+                "change"
+            );
+            props.onChange(uievent);
+        }
     }
 
     function handleChange(val: any) {
@@ -382,6 +396,24 @@ export default React.memo<InputProps>((props) => {
         });
     }
 
+    function renderFile(file: File) {
+        const info = fileinfo(file);
+        return (
+            <Tooltip
+                title={<span className="font-bold text-xs">{info.name}</span>}>
+                <button
+                    className="cursor-pointer text-primary-500 flex justify-center items-center w-10 h-10 rounded-md"
+                    onClick={handleTogggleUploadQueue}>
+                    <Icons.File
+                        type={info.type}
+                        ext={info.ext}
+                        className="h-8 w-8"
+                    />
+                </button>
+            </Tooltip>
+        );
+    }
+
     return (
         <Slate editor={editor} value={value} onChange={handleChange}>
             <div
@@ -390,22 +422,7 @@ export default React.memo<InputProps>((props) => {
                 {Dialog && <Dialog onClose={handleCloseDialog} />}
                 <div className="flex flex-row p-1.5 overflow-hidden">
                     {Boolean(file) ? (
-                        <Tooltip
-                            title={
-                                <span className="font-bold text-xs">
-                                    {file!.file.name}
-                                </span>
-                            }>
-                            <button
-                                className="cursor-pointer text-primary-500 flex justify-center items-center w-10 h-10 rounded-md"
-                                onClick={handleTogggleUploadQueue}>
-                                <Icons.File
-                                    type={file!.type}
-                                    ext={file!.ext}
-                                    className="h-8 w-8"
-                                />
-                            </button>
-                        </Tooltip>
+                        renderFile(file!)
                     ) : (
                         <React.Fragment>
                             <label

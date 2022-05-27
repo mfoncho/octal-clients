@@ -6,7 +6,6 @@ import {
     Range,
 } from "slate";
 import emoji from "@octal/emoji";
-import { InputFile } from "./types";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
@@ -177,7 +176,7 @@ export function insertMention(editor: Editor, value: string) {
     Transforms.move(editor);
 }
 
-export function fileItem(file: File): InputFile {
+export function fileinfo(file: File) {
     const ext = file.name.split(".").pop() ?? "";
     const name = file.name.split(".").slice(0, -1).join(".");
     const type = file.type;
