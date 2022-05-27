@@ -2,17 +2,19 @@ import React from "react";
 import Dialog from "../Dialog";
 import Button from "../Button";
 import * as Icons from "@octal/icons";
+import UIEvent from "../event";
 import { fileinfo } from "./utils";
 
 interface IDialog {
     files: File[];
-    onDequeue: (index: number) => void;
+    onChange: (event: UIEvent<{ value: File[] }>) => void;
 }
 
 export default Dialog.create<IDialog>(({ files, ...props }) => {
     function removeFile(index: number) {
-        return () => {
-            props.onDequeue(index);
+        return (event: React.MouseEvent) => {
+            let value = files.filter((_v, i) => i !== index);
+            props.onChange(UIEvent.create({ value }, event));
         };
     }
 

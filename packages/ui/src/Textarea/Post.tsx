@@ -388,12 +388,19 @@ export default React.memo<InputProps>((props) => {
         setQueue((queue) => !queue);
     }
 
-    function handleRemoveFile(index: number) {
-        setFiles((files) => {
-            let qfiles = [...files];
-            qfiles.splice(index, 1);
-            return qfiles;
-        });
+    function handleUpdateFiles(e: UIEvent<{ value: File[] }>) {
+        const files = e.target.value;
+        setFiles(files);
+        if (props.onChange) {
+            const text = slater.serialize(value).trim();
+            const target = { files, value: text, editor, data: value };
+            const uievent = UIEvent.create<EventTarget>(
+                target,
+                e.event,
+                "change"
+            );
+            props.onChange(uievent);
+        }
     }
 
     function renderFile(file: File) {
@@ -534,7 +541,7 @@ export default React.memo<InputProps>((props) => {
                 open={queue}
                 files={files}
                 onClose={handleCloseUploadQueue}
-                onDequeue={handleRemoveFile}
+                onChange={handleUpdateFiles}
             />
         </Slate>
     );
