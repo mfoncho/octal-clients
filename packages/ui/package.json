@@ -8,7 +8,7 @@
     "scripts": {
         "build": "tsc",
         "start": "yarn build --watch",
-        "storybook": "start-storybook -p 6006",
+        "storybook": "start-storybook -p 6006 --host 0.0.0.0",
         "build-storybook": "build-storybook"
     },
     "prettier": {
