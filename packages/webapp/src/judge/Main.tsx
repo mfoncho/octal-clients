@@ -23,7 +23,7 @@ export default React.memo(() => {
     useEffect(() => {
         if (authenticated === null && !Boolean(id)) {
             dispatch(loadAuth()).then((auth) => {
-                if (auth.token && auth.user && auth.roles) {
+                if (auth.token && auth.user) {
                     setAuthenticated(true);
                 } else {
                     setAuthenticated(false);
@@ -32,17 +32,17 @@ export default React.memo(() => {
         } else {
             if (Boolean(id) && !authenticated) {
                 setAuthenticated(true);
-            } else if (authenticated) {
+            } else if (!Boolean(id.trim()) && authenticated) {
                 setAuthenticated(false);
             }
         }
     }, [id]);
 
     useEffect(() => {
-        if (!Boolean(authenticated)) {
+        if (Boolean(id.trim()) && authenticated === false) {
             client.shutdown();
         }
-    }, [authenticated]);
+    }, [id, authenticated]);
 
     if (authenticated === null) {
         return <div />;
