@@ -4,13 +4,15 @@ import * as Icons from "@octal/icons";
 import { isFormatActive, toggleFormat } from "./utils";
 import { useSlate } from "slate-react";
 
+export type Icon = React.FC<React.SVGAttributes<HTMLOrSVGElement>>;
+
 const icons = {
-    bold: Icons.Editor.Bold,
-    italic: Icons.Editor.Italic,
-    strike: Icons.Editor.Strike,
+    bold: Icons.Editor.Bold as Icon,
+    italic: Icons.Editor.Italic as Icon,
+    strike: Icons.Editor.Strike as Icon,
 };
 
-interface IFormatButton {
+export interface IFormatButton {
     icon: string;
     format: keyof typeof icons;
 }
