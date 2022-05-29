@@ -1,4 +1,5 @@
 import React from "react";
+import { createRoot } from 'react-dom/client';
 import ReactDOM from "react-dom";
 import client from "@octal/client";
 import * as theme from "./theme";
@@ -21,8 +22,9 @@ client.intercept(interceptors);
 window.api = client;
 window.theme = theme;
 
-function mount(cmp: any, node: any) {
-    ReactDOM.render(React.createElement(cmp), node);
+function init(cmp: any, node: any) {
+    const root = createRoot(node);
+    root.render(React.createElement(cmp))
 }
 
 const root = document.getElementById("root");
@@ -33,6 +35,6 @@ theme.apply("primary", theme.colors.indigo);
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 
-mount(App, root);
+init(App, root);
 
 reportWebVitals();
