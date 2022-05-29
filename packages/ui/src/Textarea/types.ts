@@ -7,6 +7,15 @@ export interface IAccept {
     types: string;
 }
 
+export interface State {
+    value: string;
+    data: Descendant[];
+    files: File[];
+    currentTarget?: HTMLDivElement;
+}
+
+export type EditorState = [State, React.Dispatch<React.SetStateAction<State>>];
+
 export interface EventTarget {
     data: Descendant[];
     value: string;
@@ -14,8 +23,9 @@ export interface EventTarget {
     files: File[];
 }
 
-export interface InputProps {
+export interface InputProps<Data extends Descendant = Descendant> {
     files?: File[];
+    data?: Data[];
     className?: string;
     onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
     onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;

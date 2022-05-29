@@ -1,19 +1,27 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import PostInput from "./Post";
+import Input from "./Post";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
     title: "UI/Input/Post",
-    component: PostInput,
+    component: Input,
     // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
-} as ComponentMeta<typeof PostInput>;
+} as ComponentMeta<typeof Input>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof PostInput> = (args) => (
-    <PostInput {...args} />
-);
+const Template: ComponentStory<typeof Input> = (args) => {
+    const [value, setValue] = React.useState(args.value);
+    return (
+        <Input
+            {...args}
+            value={value}
+            onSubmit={console.log}
+            onChange={(e) => setValue(e.target.value)}
+        />
+    );
+};
 
 const text = "";
 

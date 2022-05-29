@@ -5,6 +5,12 @@ import Popover from "@material-ui/core/Popover";
 import * as Icons from "@octal/icons";
 import emoji from "@octal/emoji";
 import UIEvent from "../event";
+import {
+    useInput,
+    useChangeHandler,
+    useReflection,
+    useKeyDownHandler,
+} from "./hooks";
 import { EventTarget, InputProps } from "./types";
 import Suggestions, { useSuggesting } from "./Suggestion";
 import Button, { Base as ButtonBase } from "../Button";
@@ -21,10 +27,8 @@ import {
 } from "./wrappers";
 import Tooltip from "../Tooltip";
 
-import isHotkey from "is-hotkey";
-
 // Import the Slate editor factory.
-import { Transforms, Editor, createEditor, Descendant } from "slate";
+import { Transforms, Editor, createEditor } from "slate";
 
 import {
     fileinfo,
@@ -33,9 +37,7 @@ import {
     insertMention,
     isMarkActive,
     toggleMark,
-    clearEditor,
     toggleBlock,
-    isEmojiActive,
 } from "./utils";
 
 // Import the Slate components and React plugin.
@@ -62,13 +64,6 @@ interface IActionButton {
     highlight?: boolean;
     onClick?: (e: React.MouseEvent) => any;
 }
-
-const HOTKEYS = {
-    "mod+b": "bold",
-    "mod+i": "italic",
-    "mod+`": "code",
-    "shift+enter": "new_line",
-};
 
 const FORMAT_ACTIONS = [
     {
@@ -156,13 +151,6 @@ const ActionButton = React.memo<IActionButton>((props) => {
     );
 });
 
-const initialValue: any = [
-    {
-        type: "paragraph",
-        children: [{ text: "" }],
-    },
-];
-
 export default React.memo<InputProps>((props) => {
     const Component = Elements.useElements();
 
@@ -186,11 +174,15 @@ export default React.memo<InputProps>((props) => {
 
     const editor = useMemo(() => wrap(createEditor(), wrappers), []);
 
-    const [value, setValue] = useState<Descendant[]>(initialValue);
+    const input = useInput(editor);
+
+    const [state, setState] = input;
+
+    useReflection(editor, input, props, slater);
+
+    const handleChange = useChangeHandler(editor, input, props, slater);
 
     const [fid] = useState(`${gcid}`);
-
-    const [files, setFiles] = useState<File[]>([]);
 
     const [accept, setAccept] = useState<string>("");
 
@@ -198,7 +190,7 @@ export default React.memo<InputProps>((props) => {
 
     const [anchor, setAnchor] = useState<HTMLElement>();
 
-    const file = files.length > 0 ? files[0] : undefined;
+    const file = state.files.length > 0 ? state.files[0] : undefined;
 
     // Increament the global counter
     // id to prevent input elemnt
@@ -206,21 +198,6 @@ export default React.memo<InputProps>((props) => {
     useEffect(() => {
         gcid = gcid + 1;
     });
-
-    useEffect(() => {
-        setFiles(props.files ?? []);
-    }, [props.files]);
-
-    useEffect(() => {
-        let pvalue = (props.value ?? "").split("\n").join(" ").trim();
-        let ivalue = slater.serialize(value).trim();
-        if (pvalue != ivalue) {
-            let parsed = slater.parse(pvalue!);
-            //Transforms.deselect(editor);
-            setValue(parsed as any);
-            //Transforms.select(editor, { path: [0, 0], offset: 0 });
-        }
-    }, [props.value ?? ""]);
 
     useEffect(() => {
         if (props.accept?.types) {
@@ -233,12 +210,6 @@ export default React.memo<InputProps>((props) => {
         }
     }, [props.accept?.types]);
 
-    useEffect(() => {
-        if (files.length == 0) {
-            setQueue(false);
-        }
-    }, [files.length]);
-
     const handleCloseDialog = useCallback(() => {
         setDialog(null);
     }, []);
@@ -248,27 +219,12 @@ export default React.memo<InputProps>((props) => {
         setPopup("emoji");
     }, []);
 
-    function handleSubmit(event: any) {
-        if (props.onSubmit) {
-            if (file) {
-                setFiles((files) => files.slice(1));
-            }
-            clearEditor(editor);
-
-            const target = {
-                files: files,
-                value: slater.serialize(value).trim(),
-                editor,
-                data: value,
-            };
-            const uievent = UIEvent.create<EventTarget>(
-                target as any,
-                event,
-                "submit"
-            );
-            props.onSubmit(uievent);
-        }
-    }
+    const keyDownHandler = useKeyDownHandler(
+        editor,
+        state,
+        suggesting[0] === false,
+        props
+    );
 
     function insertAtCursor(value: any) {
         const node = {
@@ -290,83 +246,27 @@ export default React.memo<InputProps>((props) => {
     }
 
     function handleFileInput(ev: any) {
-        let files = [];
+        let files: File[] = [];
         for (let file of ev.target.files) {
             files.push(file);
         }
-        setFiles(files);
+        setState((state) => ({ ...state, files }));
         setPopup(null);
         if (props.onChange) {
-            const text = slater.serialize(value).trim();
+            const text = state.value;
             const event = UIEvent.synthesis(ev);
-            const target = { files: files, value: text, editor, data: value };
+            const target = {
+                files: files,
+                value: text,
+                editor,
+                data: state.data,
+            };
             const uievent = UIEvent.create<EventTarget>(
                 target,
                 event,
                 "change"
             );
             props.onChange(uievent);
-        }
-    }
-
-    function handleChange(val: any) {
-        setValue(val);
-        if (props.onChange) {
-            const text = slater.serialize(val).trim();
-            const prev = slater.serialize(value).trim();
-            if (text != prev) {
-                const event = UIEvent.synthesis(
-                    UIEvent.event("change", { currentTarget: rootRef.current! })
-                );
-                const target = { files: files, value: text, editor, data: val };
-                const uievent = UIEvent.create<EventTarget>(
-                    target,
-                    event,
-                    "change"
-                );
-                props.onChange(uievent);
-            }
-        }
-    }
-
-    function handleKeyDown(event: React.KeyboardEvent) {
-        for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event as any)) {
-                event.preventDefault();
-                const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS];
-                if (mark == "new_line") {
-                    return Editor.insertBreak(editor);
-                } else {
-                    return toggleMark(editor, mark);
-                }
-            }
-        }
-
-        // Submit if mention dialog is closed
-        if (event.key == "Enter") {
-            event.preventDefault();
-            if (suggesting[0] === false) return handleSubmit(event);
-            return;
-        }
-
-        if (emoji.test(event.key)) {
-            event.preventDefault();
-            const icon = emoji.image(event.key);
-            return Transforms.insertFragment(editor, {
-                icon,
-                emoji: true,
-                text: event.key,
-            } as any);
-        }
-
-        if (event.key.length == 1 && isEmojiActive(editor)) {
-            // Insert new character on new block
-            event.preventDefault();
-            return Transforms.insertFragment(editor, [
-                {
-                    text: event.key,
-                },
-            ] as any);
         }
     }
 
@@ -390,10 +290,10 @@ export default React.memo<InputProps>((props) => {
 
     function handleUpdateFiles(e: UIEvent<{ value: File[] }>) {
         const files = e.target.value;
-        setFiles(files);
+        setState((state) => ({ ...state, files }));
         if (props.onChange) {
-            const text = slater.serialize(value).trim();
-            const target = { files, value: text, editor, data: value };
+            const text = state.value;
+            const target = { files, value: text, editor, data: state.data };
             const uievent = UIEvent.create<EventTarget>(
                 target,
                 e.event,
@@ -422,7 +322,7 @@ export default React.memo<InputProps>((props) => {
     }
 
     return (
-        <Slate editor={editor} value={value} onChange={handleChange}>
+        <Slate editor={editor} value={state.data} onChange={handleChange}>
             <div
                 ref={rootRef}
                 className="flex flex-col rounded-md ring-2 text-base ring-gray-300 overflow-hidden">
@@ -452,7 +352,7 @@ export default React.memo<InputProps>((props) => {
                         autoFocus={true}
                         className="p-2 flex-1 break-all"
                         placeholder="Post message"
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={keyDownHandler}
                         disabled={props.disabled}
                         renderLeaf={renderLeaf}
                         renderElement={renderElement}
@@ -539,7 +439,7 @@ export default React.memo<InputProps>((props) => {
             </div>
             <UploadQueue
                 open={queue}
-                files={files}
+                files={state.files}
                 onClose={handleCloseUploadQueue}
                 onChange={handleUpdateFiles}
             />

@@ -1,12 +1,15 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Slate, Editable, withReact } from "slate-react";
 import Elements from "../Elements";
-import emoji from "@octal/emoji";
-import isHotkey from "is-hotkey";
 import Toolbar from "./Toolbar";
 import Suggestions, { useSuggesting } from "./Suggestion";
-import UIEvent from "../event";
-import { EventTarget, InputProps } from "./types";
+import {
+    useInput,
+    useKeyDownHandler,
+    useChangeHandler,
+    useReflection,
+} from "./hooks";
+import { InputProps } from "./types";
 import { Slater } from "@octal/markdown";
 import {
     withPaste,
@@ -16,15 +19,9 @@ import {
     withLink,
     withShortcuts,
 } from "./wrappers";
-import {
-    toggleFormat,
-    isEmojiActive,
-    insertEmoji,
-    insertMention,
-    toggleMark,
-} from "./utils";
+import { toggleFormat, insertEmoji, insertMention } from "./utils";
 
-import { Transforms, Editor, createEditor, Descendant } from "slate";
+import { Transforms, createEditor } from "slate";
 
 const slater = Slater.create();
 
@@ -35,24 +32,6 @@ const wrappers = [
     withMention,
     withTables,
     withShortcuts,
-];
-
-const HOTKEYS = {
-    "mod+b": "bold",
-    "mod+i": "italic",
-    "mod+`": "code",
-    "shift+enter": "new_line",
-};
-
-const initialValue: Descendant[] = [
-    {
-        type: "paragraph",
-        children: [
-            {
-                text: "",
-            },
-        ],
-    },
 ];
 
 export default function Textarea(props: InputProps) {
@@ -74,18 +53,20 @@ export default function Textarea(props: InputProps) {
 
     const editor = useMemo(() => wrap(createEditor(), wrappers), []);
 
-    const [value, setValue] = useState<Descendant[]>(initialValue);
+    const input = useInput(editor);
 
-    useEffect(() => {
-        let pvalue = (props.value ?? "").split("\n").join(" ").trim();
-        let ivalue = slater.serialize(value).trim();
-        if (pvalue !== ivalue) {
-            const slated = slater.parse(pvalue);
-            Transforms.deselect(editor);
-            setValue(slated as any);
-            Transforms.select(editor, { path: [0, 0], offset: 0 });
-        }
-    }, [props.value ?? ""]);
+    const [state] = input;
+
+    useReflection(editor, input, props, slater);
+
+    const handleChange = useChangeHandler(editor, input, props, slater);
+
+    const keyDownHandler = useKeyDownHandler(
+        editor,
+        state,
+        suggesting[0] === false,
+        props
+    );
 
     function handleSuggestionSelected(selected: any) {
         if (selected.type == "mention") {
@@ -97,90 +78,14 @@ export default function Textarea(props: InputProps) {
         }
     }
 
-    function handleChange(val: any) {
-        setValue(val);
-        if (props.onChange) {
-            const text = slater.serialize(val).trim();
-            const prev = slater.serialize(value).trim();
-            if (text != prev) {
-                const event = UIEvent.synthesis(
-                    UIEvent.event("change", { currentTarget: rootRef.current! })
-                );
-                const target = { files: [], value: text, editor, data: val };
-                const uievent = UIEvent.create<EventTarget>(
-                    target,
-                    event,
-                    "change"
-                );
-                props.onChange(uievent);
-            }
-        }
-    }
-
-    function handleKeyDown(event: React.KeyboardEvent) {
-        for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event as any)) {
-                event.preventDefault();
-                const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS];
-                if (mark == "new_line") {
-                    return Editor.insertBreak(editor);
-                } else {
-                    return toggleMark(editor, mark);
-                }
-            }
-        }
-
-        // Submit if mention dialog is closed
-        if (event.key == "Enter") {
-            event.preventDefault();
-            if (suggesting[0] === false && props.onSubmit) {
-                const text = slater.serialize(value).trim();
-
-                const target = {
-                    files: [],
-                    value: text,
-                    editor,
-                    data: value,
-                };
-                const uievent = UIEvent.create<EventTarget>(
-                    target,
-                    event,
-                    "submit"
-                );
-                props.onSubmit(uievent);
-            }
-            return;
-        }
-
-        if (emoji.test(event.key)) {
-            event.preventDefault();
-            const icon = emoji.image(event.key);
-            return Transforms.insertFragment(editor, {
-                icon,
-                emoji: true,
-                text: event.key,
-            } as any);
-        }
-
-        if (event.key.length == 1 && isEmojiActive(editor)) {
-            // Insert new character on new block
-            event.preventDefault();
-            return Transforms.insertFragment(editor, [
-                {
-                    text: event.key,
-                },
-            ] as any);
-        }
-    }
-
     return (
-        <Slate editor={editor} value={value} onChange={handleChange}>
+        <Slate editor={editor} value={state.data} onChange={handleChange}>
             <div ref={rootRef} className={props.className}>
                 <Toolbar />
                 <Editable
                     disabled={props.disabled}
                     onBlur={props.onBlur}
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={keyDownHandler}
                     renderLeaf={renderLeaf}
                     autoFocus={props.autoFocus}
                     placeholder={props.placeholder}

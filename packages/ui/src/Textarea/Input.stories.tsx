@@ -11,9 +11,16 @@ export default {
 } as ComponentMeta<typeof TextInput>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof TextInput> = (args) => (
-    <TextInput {...args} />
-);
+const Template: ComponentStory<typeof TextInput> = (args) => {
+    const [value, setValue] = React.useState(args.value);
+    return (
+        <TextInput
+            {...args}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+        />
+    );
+};
 
 const text = ``;
 

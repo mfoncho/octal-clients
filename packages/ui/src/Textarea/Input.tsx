@@ -9,7 +9,15 @@ import Suggestions, { useSuggesting } from "./Suggestion";
 import Markdown, { Slater, nodes } from "@octal/markdown";
 import { isEmojiActive, insertEmoji } from "./utils";
 import { withPaste, wrap } from "./wrappers";
-import { Transforms, createEditor, Descendant } from "slate";
+import { useReflection, useInput, useChangeHandler } from "./hooks";
+import {
+    Transforms,
+    createEditor,
+    Descendant,
+    Editor,
+    Range,
+    Path,
+} from "slate";
 
 let slater = new Slater(new Markdown())
     .add(new nodes.Paragraph())
@@ -62,10 +70,6 @@ function filterout<T>(
 export default function Input(props: InputProps) {
     const Component = Elements.useElements();
 
-    const [rootEl, setRootEl] = React.useState<HTMLDivElement | null>(null);
-
-    const [focused, setFocused] = useState(false);
-
     const suggesting = useSuggesting();
 
     const renderLeaf = useCallback(
@@ -80,55 +84,24 @@ export default function Input(props: InputProps) {
 
     const editor = useMemo(() => wrap(createEditor(), wrappers), []);
 
-    const [value, setValue] = useState<Descendant[]>(initialValue);
+    const input = useInput(editor);
 
-    useEffect(() => {
-        let pvalue = (props.value ?? "").split("\n").join(" ").trim();
-        let ivalue = slater.serialize(value).trim();
-        if (pvalue != ivalue) {
-            let parsed = slater.parse(pvalue!);
-            Transforms.deselect(editor);
-            setValue(parsed as any);
-            Transforms.select(editor, { path: [0, 0], offset: 0 });
-        }
-    }, [props.value ?? ""]);
+    const [state] = input;
 
-    useEffect(() => {
-        const el = ReactEditor.toDOMNode(editor, editor);
-        setRootEl(el as any);
-    }, []);
+    useReflection(editor, input, props, slater);
 
-    function handleChange(val: any) {
-        setValue(val);
-        if (props.onChange) {
-            const text = slater.serialize(val).trim();
-            const prev = slater.serialize(value).trim();
-            if (text != prev) {
-                const event = UIEvent.synthesis(
-                    UIEvent.event("change", { currentTarget: rootEl! })
-                );
-                const target = { files: [], value: text, editor, data: val };
-                const uievent = UIEvent.create<EventTarget>(
-                    target,
-                    event,
-                    "change"
-                );
-                props.onChange(uievent);
-            }
-        }
-    }
+    const handleChange = useChangeHandler(editor, input, props, slater);
 
     function handleKeyDown(event: React.KeyboardEvent) {
         if (event.key == "Enter") {
             event.preventDefault();
             if (suggesting[0] == false) {
                 if (props.onSubmit) {
-                    const text = slater.serialize(value).trim();
                     const target = {
                         files: [],
-                        value: text,
+                        value: state.value,
                         editor,
-                        data: value,
+                        data: state.data,
                     };
                     const uievent = UIEvent.create<EventTarget>(
                         target,
@@ -171,14 +144,12 @@ export default function Input(props: InputProps) {
     }
 
     function handleFocused(event: React.FocusEvent<HTMLDivElement>) {
-        setFocused(true);
         if (props.onFocus) {
             props.onFocus(event);
         }
     }
 
     function handleUnfocused(event: React.FocusEvent<HTMLDivElement>) {
-        setFocused(false);
         if (props.onBlur) {
             props.onBlur(event);
         }
@@ -241,7 +212,7 @@ export default function Input(props: InputProps) {
     }, [props.className]);
 
     return (
-        <Slate editor={editor} value={value} onChange={handleChange}>
+        <Slate editor={editor} value={state.data} onChange={handleChange}>
             <Editable
                 className={cls(
                     "rounded-md w-full",
@@ -263,7 +234,7 @@ export default function Input(props: InputProps) {
                 renderElement={renderElement}
             />
             <Suggestions.Popper
-                anchorEl={rootEl}
+                anchorEl={state.currentTarget}
                 suggesting={suggesting}
                 onSelect={handleSuggestionSelected}
             />
