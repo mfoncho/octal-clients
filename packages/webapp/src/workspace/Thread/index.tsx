@@ -6,7 +6,8 @@ import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
 import { Textarea } from "@octal/ui";
 import Menu from "@workspace/Message/Menu";
 import ReplyPreview from "./ReplyPreview";
-import { usePostInput, usePermissions } from "../Space/hooks";
+import { usePermissions } from "../Space/hooks";
+import { usePostInput } from "./hooks";
 import Conversation from "../Conversation";
 
 export interface IThread {
@@ -19,10 +20,10 @@ export default React.memo<IThread>((props) => {
     const dispatch = useDispatch();
     const params = useParams<{ space_id: string }>();
     const [menu, setMenu] = useState<string[]>(props.menu ?? []);
-    const [replyId, setReplyId] = useState<string | null>(null);
+    const [replyId, setReplyId] = useState<string>("");
     const thread = useThread(props.id);
     const replyMsg = useMessage(replyId ?? "");
-    const postInput = usePostInput(thread);
+    const postInput = usePostInput(thread!);
 
     useEffect(() => {
         let actions = ["react", "reply", "flag"];
@@ -54,10 +55,13 @@ export default React.memo<IThread>((props) => {
 
     const handleSubmit = useCallback(
         (payload: any) => {
-            if (replyId === null || (replyId?.length > 0 && replyMsg)) {
-                setReplyId(null);
-                return postInput.onSubmit(payload, replyId!);
+            if (replyId.length > 0 && replyMsg) {
+                setReplyId("");
             }
+            return postInput.onSubmit(
+                payload,
+                replyId.length > 0 ? replyId : undefined
+            );
         },
         [thread?.id, replyMsg?.id]
     );
@@ -75,14 +79,13 @@ export default React.memo<IThread>((props) => {
                             <div className="relative w-full -top-1">
                                 <ReplyPreview
                                     message={replyMsg}
-                                    onClose={() => setReplyId(null)}
+                                    onClose={() => setReplyId("")}
                                 />
                             </div>
                         )}
                         <Textarea.Post
                             {...postInput}
                             value=""
-                            accept={undefined}
                             placeholder=""
                             onSubmit={handleSubmit}
                         />
