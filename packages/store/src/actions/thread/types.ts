@@ -3,6 +3,9 @@
 export const GET_MESSAGE = "GET_MESSAGE";
 export type GET_MESSAGE = typeof GET_MESSAGE;
 
+export const THREAD_DRAFT_UPDATED = "THREAD_DRAFT_UPDATED";
+export type THREAD_DRAFT_UPDATED = typeof THREAD_DRAFT_UPDATED;
+
 export const MESSAGE_LOADED = "MESSAGE_LOADED";
 export type MESSAGE_LOADED = typeof MESSAGE_LOADED;
 

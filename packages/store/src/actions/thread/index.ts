@@ -4,6 +4,7 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedMessage } from "../../schemas";
 import {
+    THREAD_DRAFT_UPDATED,
     REACTION_CREATED,
     REACTION_DELETED,
     REACTION_LOADED,
@@ -49,6 +50,15 @@ export interface PostDirectMessagePayload {
     params: {
         content: string;
         attachment?: File;
+    };
+}
+
+export interface ThreadDraftUpdatedPayload {
+    space_id: string;
+    thread_id: string;
+    params: {
+        value?: string;
+        files?: File[];
     };
 }
 
@@ -369,6 +379,11 @@ export type TrimConversationAction = Action<
     TrimConversationPayload
 >;
 
+export type ThreadDraftUpdatedAction = Action<
+    THREAD_DRAFT_UPDATED,
+    ThreadDraftUpdatedPayload
+>;
+
 export function setConversationPage(
     payload: SetConversationPagePayload
 ): SetConversationPageAction {
@@ -546,4 +561,10 @@ export function fetchMessages(
     payload: FetchMessagesPayload
 ): FetchMessagesAction {
     return createIOAction<FETCH_MESSAGES>(FETCH_MESSAGES, payload);
+}
+
+export function updateDaft(
+    payload: ThreadDraftUpdatedPayload
+): ThreadDraftUpdatedAction {
+    return createAction(THREAD_DRAFT_UPDATED, payload);
 }

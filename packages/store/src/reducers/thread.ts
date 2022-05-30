@@ -55,6 +55,14 @@ export class Conversations extends Record(
         return this.update("threads", (threads) => threads.delete(id));
     }
 
+    updateDraft(payload: ThreadActions.ThreadDraftUpdatedPayload) {
+        if (this.threads.has(payload.thread_id))
+            return this.updateIn(["threads", payload.thread_id], (thread) =>
+                (thread as ThreadRecord).updateDraft(payload.params)
+            );
+        return this;
+    }
+
     deleteMessage(id: string) {
         const tid = this.paths.get(id);
         if (tid) {
@@ -110,15 +118,22 @@ export const state = new Conversations();
 export const reducers = {
     [Actions.THREAD_LOADED]: (
         state: Conversations,
-        { payload }: ThreadLoadedAction
+        { payload }: ThreadActions.ThreadLoadedAction
     ) => {
         const thread = new ThreadRecord(payload as any);
         return state.storeThread(thread);
     },
 
+    [Actions.THREAD_DRAFT_UPDATED]: (
+        state: Conversations,
+        { payload }: ThreadActions.ThreadDraftUpdatedAction
+    ) => {
+        return state.updateDraft(payload);
+    },
+
     [Actions.THREADS_LOADED]: (
         state: Conversations,
-        { payload }: ThreadsLoadedAction
+        { payload }: ThreadActions.ThreadsLoadedAction
     ) => {
         return payload.reduce((state, thr) => {
             const thread = new ThreadRecord(thr as any);
@@ -235,7 +250,7 @@ export const reducers = {
             if (chat.isEmpty()) return;
 
             state.updateIn(path, (val) => {
-                const thread = (val as any) as ThreadRecord;
+                const thread = val as any as ThreadRecord;
                 let history = thread.history;
                 switch (payload.mode) {
                     case "append": {

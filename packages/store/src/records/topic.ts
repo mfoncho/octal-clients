@@ -1,7 +1,7 @@
 import { Record, List } from "immutable";
 import { Unique, Id } from "@octal/client";
 
-export class Filter extends Record({
+export class TopicSearchFilter extends Record({
     since: "",
     until: "",
     search: "",
@@ -14,7 +14,7 @@ export class TopicRecord
         icon: "",
         name: "",
         type: "",
-        filter: new Filter(),
+        filter: new TopicSearchFilter(),
         subject: "",
         is_main: false,
         space_id: "",

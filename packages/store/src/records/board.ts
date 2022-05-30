@@ -20,7 +20,7 @@ export class LabelRecord
     }
 }
 
-export class Filter extends Record({
+export class BoardFilter extends Record({
     term: "",
     labels: List<string>(),
     users: List<string>(),
@@ -49,7 +49,7 @@ export class BoardRecord
         space_id: "",
         loaded: List<string>([]),
         labels: List<LabelRecord>(),
-        filter: new Filter(),
+        filter: new BoardFilter(),
         is_archived: false,
         archived_at: null as string | null,
     })

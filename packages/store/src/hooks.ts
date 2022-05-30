@@ -269,23 +269,22 @@ export function useRoles() {
     return useSelector(selector.roles);
 }
 
-export function useThreadProp(id: string, prop: string) {
+export function useThreadProp<T = any>(
+    id: string,
+    prop: string
+): T | undefined {
     const selector = useCallback(
         ({ threads }: State) => {
-            const path = threads.paths.get(id);
-            if (path != null) {
-                const thread = threads.threads.getIn(path) as ThreadRecord;
-                if (thread) {
-                    return thread.get(prop as any);
-                }
+            if (threads.threads.has(id)) {
+                return threads.threads.get(id)?.getIn([prop]);
             }
         },
         [id]
     );
-    return useSelector(selector);
+    return useSelector(selector) as T | undefined;
 }
 
-export function useThread(id: string, prop?: string) {
+export function useThread(id: string) {
     const selector = useCallback(
         ({ threads }: State) => {
             if (threads.threads.has(id)) {

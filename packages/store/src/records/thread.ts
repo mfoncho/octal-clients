@@ -30,12 +30,18 @@ export class ThreadView extends Record({
 
 export class ThreadHistory extends Record({}) {}
 
+export class ThreadDraft extends Record({
+    value: "",
+    files: [] as File[],
+}) {}
+
 export class ThreadRecord
     extends Record({
         id: "0" as Id,
         type: "" as ThreadType,
         init: false,
         is_active: false,
+        draft: new ThreadDraft(),
         created_at: "",
         space_id: "0" as Id,
         message_count: 0,
@@ -67,6 +73,10 @@ export class ThreadRecord
 
     getStorePath(): [Id, Id] {
         return [this.space_id, this.id];
+    }
+
+    updateDraft(draft: any) {
+        return this.update("draft", (daft) => daft.merge(draft));
     }
 
     getHistoryAtIndex(index: number): ChatMessage | undefined {
