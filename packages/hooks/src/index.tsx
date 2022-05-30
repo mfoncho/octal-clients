@@ -46,6 +46,32 @@ export function useDebounce<T>(value: T, delay: number) {
     return debouncedValue;
 }
 
+export function useThrottledCallback<
+    T extends (...args: any[]) => any,
+    S extends readonly unknown[]
+>(callback: T, wait: number, watch: S = [] as any) {
+    // track args & timeout handle between calls
+    const active = useRef<boolean>(true);
+
+    return useCallback((...args: any[]) => {
+        if (active.current) {
+            callback(...args);
+            active.current = false;
+            setTimeout(() => {
+                active.current = true;
+            }, wait);
+        }
+    }, watch) as T;
+}
+
+export function useThrottledEffect<
+    T extends () => void,
+    S extends readonly unknown[]
+>(callback: T, wait: number, watch: S = [] as any) {
+    const cb = useThrottledCallback(callback, wait, watch);
+    return useEffect(cb, [cb]);
+}
+
 export function useDebouncedCallback<
     T extends (...args: any[]) => any,
     S extends readonly unknown[]
