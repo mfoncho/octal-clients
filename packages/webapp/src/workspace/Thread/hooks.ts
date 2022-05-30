@@ -1,12 +1,18 @@
 import { useEffect, useCallback, useState } from "react";
+import { useThrottledEffect, useDebouncedEffect } from "@octal/hooks";
 import { useDispatch } from "react-redux";
-import { postMessage, threadActivity } from "@octal/store/lib/actions/thread";
+import { ThreadRecord } from "@octal/store";
+import { UIEvent } from "@octal/ui";
+import * as ThreadActions from "@octal/store/lib/actions/thread";
 import { usePermissions } from "@workspace/Space";
 
-export function usePostInput(thread: { id: string; space_id: string }) {
-    const dispatch = useDispatch();
+interface FileInput {
+    value: string;
+    files: File[];
+}
 
-    const [value] = useState<string>("");
+export function usePostInput(thread: ThreadRecord) {
+    const dispatch = useDispatch();
 
     const permissions = usePermissions();
 
@@ -17,16 +23,35 @@ export function usePostInput(thread: { id: string; space_id: string }) {
             max: permissions.upload_limit.value,
             types: permissions.upload_types.value,
         });
-    }, [permissions.upload_limit.value, permissions.upload_types.value]);
+    }, [permissions]);
 
-    const onChange = useCallback(() => {
-        const action = threadActivity({
-            type: "typing",
-            thread_id: thread!.id,
-            space_id: thread!.space_id,
-        });
-        return dispatch(action);
-    }, [thread?.id]);
+    const onChange = useCallback(
+        (event: UIEvent<FileInput>) => {
+            const action = ThreadActions.updateDaft({
+                thread_id: thread.id,
+                space_id: thread.space_id,
+                params: {
+                    value: event.target.value,
+                    files: event.target.files,
+                },
+            });
+            dispatch(action);
+        },
+        [thread.id]
+    );
+
+    useThrottledEffect(
+        () => {
+            const action = ThreadActions.threadActivity({
+                type: "typing",
+                thread_id: thread.id,
+                space_id: thread.space_id,
+            });
+            return dispatch(action);
+        },
+        5000,
+        [thread.id, thread.draft.value]
+    );
 
     const onSubmit = useCallback(
         (payload: any, reply_id?: string) => {
@@ -39,14 +64,24 @@ export function usePostInput(thread: { id: string; space_id: string }) {
                     thread_id: thread.id,
                     attachment: target.files[0],
                 };
-                return dispatch(postMessage(params));
+                const action = ThreadActions.updateDaft({
+                    thread_id: thread.id,
+                    space_id: thread.space_id,
+                    params: {
+                        value: "",
+                        files: [],
+                    },
+                });
+                dispatch(action);
+                return dispatch(ThreadActions.postMessage(params));
             }
         },
-        [thread?.id]
+        [thread.id]
     );
 
     return {
-        value,
+        value: thread.draft.value,
+        files: thread.draft.files,
         onChange,
         onSubmit,
         accept,
