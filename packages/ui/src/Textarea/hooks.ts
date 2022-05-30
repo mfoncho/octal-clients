@@ -59,6 +59,12 @@ export function useReflection(
     }, [props.data]);
 
     React.useEffect(() => {
+        if (Boolean(props.files) && props.files !== state.files) {
+            setState((state) => ({ ...state, files: props.files! }));
+        }
+    }, [props.files]);
+
+    React.useEffect(() => {
         let value = (props.value ?? "").trim();
         if (value != state.value.trim()) {
             let data = slater.parse(value!);

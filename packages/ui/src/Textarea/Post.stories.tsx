@@ -28,4 +28,5 @@ const text = "";
 export const Post = Template.bind({});
 Post.args = {
     value: text,
+    files: [new File(["sample"], "hello.txt")],
 };

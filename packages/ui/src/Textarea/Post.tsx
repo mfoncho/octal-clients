@@ -250,7 +250,8 @@ export default React.memo<InputProps>((props) => {
         for (let file of ev.target.files) {
             files.push(file);
         }
-        setState((state) => ({ ...state, files }));
+        if (props.files == undefined)
+            setState((state) => ({ ...state, files }));
         setPopup(null);
         if (props.onChange) {
             const text = state.value;
@@ -290,7 +291,8 @@ export default React.memo<InputProps>((props) => {
 
     function handleUpdateFiles(e: UIEvent<{ value: File[] }>) {
         const files = e.target.value;
-        setState((state) => ({ ...state, files }));
+        if (props.files == undefined)
+            setState((state) => ({ ...state, files }));
         if (props.onChange) {
             const text = state.value;
             const target = { files, value: text, editor, data: state.data };
