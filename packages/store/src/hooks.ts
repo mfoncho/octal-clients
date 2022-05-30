@@ -75,7 +75,10 @@ export function useBoardLoaded(id: string) {
     );
 }
 
-export function useDrawer<T = undefined>(id: string, defaultProps?: T) {
+export function useDrawer<T = undefined>(
+    id: string,
+    defaultProps?: T
+): Drawer<T> {
     const drawer: T extends undefined ? undefined : Drawer<T> = (
         defaultProps === undefined
             ? undefined
@@ -87,7 +90,7 @@ export function useDrawer<T = undefined>(id: string, defaultProps?: T) {
         },
         [id]
     );
-    return useSelector(selector) ?? drawer;
+    return useSelector(selector) ?? (drawer as any);
 }
 
 export function useCalendar(id: string) {
