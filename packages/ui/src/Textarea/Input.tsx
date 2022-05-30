@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { Slate, Editable, withReact, ReactEditor } from "slate-react";
+import React, { useCallback, useMemo } from "react";
+import { Slate, Editable, withReact } from "slate-react";
 import Elements from "../Elements";
 import emoji from "@octal/emoji";
 import cls from "classnames";
@@ -10,14 +10,7 @@ import Markdown, { Slater, nodes } from "@octal/markdown";
 import { isEmojiActive, insertEmoji } from "./utils";
 import { withPaste, wrap } from "./wrappers";
 import { useReflection, useInput, useChangeHandler } from "./hooks";
-import {
-    Transforms,
-    createEditor,
-    Descendant,
-    Editor,
-    Range,
-    Path,
-} from "slate";
+import { Transforms, createEditor, Descendant } from "slate";
 
 let slater = new Slater(new Markdown())
     .add(new nodes.Paragraph())
@@ -37,17 +30,6 @@ interface InputClasses {
     padding?: string | null;
     classname?: string;
 }
-
-const initialValue: Descendant[] = [
-    {
-        type: "paragraph",
-        children: [
-            {
-                text: "",
-            },
-        ],
-    },
-];
 
 function filterout<T>(
     array: Array<T>,
@@ -73,12 +55,12 @@ export default function Input(props: InputProps) {
     const suggesting = useSuggesting();
 
     const renderLeaf = useCallback(
-        (props) => <Component.Leaf {...props} />,
+        (props: any) => <Component.Leaf {...props} />,
         [Component.Leaf]
     );
 
     const renderElement = useCallback(
-        (props) => <Component.Element {...props} />,
+        (props: any) => <Component.Element {...props} />,
         [Component.Element]
     );
 

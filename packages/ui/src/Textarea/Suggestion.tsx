@@ -313,7 +313,7 @@ export function BasePortal({ subject, ...props }: IBasePortal) {
 
     useEffect(() => {
         const el = ref.current;
-        if (el && subject.target && suggestions && values.length > 0) {
+        if (el && subject.target && values.length > 0) {
             const domRange = ReactEditor.toDOMRange(editor, subject.target);
             const rect = domRange.getBoundingClientRect();
             if (

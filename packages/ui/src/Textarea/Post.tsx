@@ -163,12 +163,12 @@ export default React.memo<InputProps>((props) => {
     const rootRef = React.useRef<HTMLDivElement | null>(null);
 
     const renderLeaf = useCallback(
-        (props) => <Component.Leaf {...props} />,
+        (props: any) => <Component.Leaf {...props} />,
         [Component.Leaf]
     );
 
     const renderElement = useCallback(
-        (props) => <Component.Element {...props} />,
+        (props: any) => <Component.Element {...props} />,
         [Component.Element]
     );
 

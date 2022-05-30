@@ -80,7 +80,7 @@ export const Editor = Dialog.create<IIEditor>(
         }, [props.file]);
 
         const onCropComplete = useCallback(
-            (_croppedArea, croppedAreaPixels) => {
+            (_croppedArea: any, croppedAreaPixels: any) => {
                 if (!cropping) setCroppedArea(croppedAreaPixels);
             },
             []

@@ -42,12 +42,12 @@ export default function Textarea(props: InputProps) {
     const suggesting = useSuggesting();
 
     const renderLeaf = useCallback(
-        (props) => <Component.Leaf {...props} />,
+        (props: any) => <Component.Leaf {...props} />,
         [Component.Leaf]
     );
 
     const renderElement = useCallback(
-        (props) => <Component.Element {...props} />,
+        (props: any) => <Component.Element {...props} />,
         [Component.Element]
     );
 

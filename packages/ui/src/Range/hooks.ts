@@ -15,7 +15,10 @@ export function useEventCallback(fn: any) {
     useEnhancedEffect(() => {
         ref.current = fn;
     });
-    return React.useCallback((...args) => (0 as any, ref.current)(...args), []);
+    return React.useCallback(
+        (...args: any) => (0 as any, ref.current)(...args),
+        []
+    );
 }
 
 export function useForkRef(refA: any, refB: any) {
@@ -79,7 +82,7 @@ export function useControlled({
         }, [JSON.stringify(defaultProp)]);
     }
 
-    const setValueIfUncontrolled = React.useCallback((newValue) => {
+    const setValueIfUncontrolled = React.useCallback((newValue: any) => {
         if (!isControlled) {
             setValue(newValue);
         }
@@ -208,7 +211,7 @@ function handleBlurVisible() {
 }
 
 export function useIsFocusVisible() {
-    const ref = React.useCallback((instance) => {
+    const ref = React.useCallback((instance: any) => {
         const node = ReactDOM.findDOMNode(instance);
         if (node != null) {
             prepare(node.ownerDocument);
