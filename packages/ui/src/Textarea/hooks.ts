@@ -123,11 +123,6 @@ export function useChangeHandler(
             value !== props.value &&
             value.trim() !== state.value.trim()
         ) {
-            console.log(
-                `props: ${props.value}`,
-                `state: ${state.value}`,
-                `change: ${value}`
-            );
             const event = UIEvent.synthesis(
                 UIEvent.event("change", { currentTarget })
             );
