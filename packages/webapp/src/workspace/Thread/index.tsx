@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useThread, useMessage } from "@octal/store";
+import { useThread, useMessage, ThreadRecord } from "@octal/store";
 import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
 import { Textarea } from "@octal/ui";
 import Menu from "@workspace/Message/Menu";
@@ -15,6 +15,8 @@ export interface IThread {
     menu?: string[];
 }
 
+const defaultThread = new ThreadRecord();
+
 export default React.memo<IThread>((props) => {
     const permissions = usePermissions();
     const dispatch = useDispatch();
@@ -23,7 +25,7 @@ export default React.memo<IThread>((props) => {
     const [replyId, setReplyId] = useState<string>("");
     const thread = useThread(props.id);
     const replyMsg = useMessage(replyId ?? "");
-    const postInput = usePostInput(thread!);
+    const postInput = usePostInput(thread ?? defaultThread);
 
     useEffect(() => {
         let actions = ["react", "reply", "flag"];
@@ -85,8 +87,7 @@ export default React.memo<IThread>((props) => {
                         )}
                         <Textarea.Post
                             {...postInput}
-                            value=""
-                            placeholder=""
+                            key={thread.id}
                             onSubmit={handleSubmit}
                         />
                     </div>

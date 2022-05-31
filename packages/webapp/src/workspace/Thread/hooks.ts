@@ -37,7 +37,7 @@ export function usePostInput(thread: ThreadRecord) {
             });
             dispatch(action);
         },
-        [thread.id]
+        [thread.id, thread.draft]
     );
 
     useThrottledEffect(
@@ -54,26 +54,28 @@ export function usePostInput(thread: ThreadRecord) {
     );
 
     const onSubmit = useCallback(
-        (payload: any, reply_id?: string) => {
+        (payload: UIEvent<FileInput>, reply_id?: string) => {
             const { target } = payload;
             if (target.value.length > 0 || target.files.length > 0) {
-                const params = {
+                const [file, ...files] = target.files;
+                const postAction = ThreadActions.postMessage({
                     content: target.value,
                     reply_id: reply_id!,
                     space_id: thread.space_id,
                     thread_id: thread.id,
-                    attachment: target.files[0],
-                };
-                const action = ThreadActions.updateDaft({
+                    //@ts-ignore
+                    attachment: file,
+                });
+                const resetAction = ThreadActions.updateDaft({
                     thread_id: thread.id,
                     space_id: thread.space_id,
                     params: {
                         value: "",
-                        files: [],
+                        files: files,
                     },
                 });
-                dispatch(action);
-                return dispatch(ThreadActions.postMessage(params));
+                dispatch(resetAction);
+                return dispatch(postAction);
             }
         },
         [thread.id]
