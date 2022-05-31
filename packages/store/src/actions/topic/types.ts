@@ -9,6 +9,12 @@ export type LOAD_TOPIC = typeof LOAD_TOPIC;
 export const TOPIC_FILTER_UPDATED = "TOPIC_FILTER_UPDATED";
 export type TOPIC_FILTER_UPDATED = typeof TOPIC_FILTER_UPDATED;
 
+export const SEARCH_TOPIC = "SEARCH_TOPIC";
+export type SEARCH_TOPIC = typeof SEARCH_TOPIC;
+
+export const TOPIC_SEARCH_RESULT = "TOPIC_SEACH_RESULT";
+export type TOPIC_SEARCH_RESULT = typeof TOPIC_SEARCH_RESULT;
+
 export const CREATE_TOPIC = "CREATE_TOPIC";
 export type CREATE_TOPIC = typeof CREATE_TOPIC;
 

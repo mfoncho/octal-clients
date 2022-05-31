@@ -92,6 +92,19 @@ function* related({ payload }: RelatedLoadedAction): Iterable<any> {
     yield* load(topics);
 }
 
+function* search({
+    payload,
+    resolve,
+}: TopicActions.SearchTopicAction): Iterable<any> {
+    try {
+        const results: any = yield Client.searchTopic(payload);
+        yield put(TopicActions.searchResult(results));
+        resolve.success(results);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
 function* loadSpaceTopics({
     payload,
 }: TopicActions.LoadSpaceTopicsAction): Iterable<any> {
@@ -131,5 +144,6 @@ export const tasks = [
     { effect: takeEvery, type: Actions.UNARCHIVE_TOPIC, handler: unarchive },
     { effect: takeEvery, type: Actions.CREATE_TOPIC, handler: create },
     { effect: takeEvery, type: Actions.UPDATE_TOPIC, handler: update },
+    { effect: takeEvery, type: Actions.SEARCH_TOPIC, handler: search },
     { effect: takeEvery, type: Actions.DELETE_TOPIC, handler: trash },
 ];

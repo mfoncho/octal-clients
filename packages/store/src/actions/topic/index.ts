@@ -2,6 +2,8 @@ import type { io } from "@octal/client";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
+    SEARCH_TOPIC,
+    TOPIC_SEARCH_RESULT,
     LOAD_TOPICS,
     LOAD_TOPIC,
     CREATE_TOPIC,
@@ -20,6 +22,18 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface SearchTopicPayload {
+    topic_id: string;
+    space_id: string;
+    params: {
+        offset?: number;
+        query: string;
+        users?: string[];
+        start?: string;
+        end?: string;
+    };
+}
 
 export interface TopicFilterUpdatedPayload {
     topic_id: string;
@@ -99,6 +113,17 @@ export type ArchiveTopicAction = IOAction<ARCHIVE_TOPIC, ArchiveTopicPayload>;
 export type UnarchiveTopicAction = IOAction<
     UNARCHIVE_TOPIC,
     UnarchiveTopicPayload
+>;
+
+export type SearchTopicAction = IOAction<
+    SEARCH_TOPIC,
+    SearchTopicPayload,
+    io.TopicSearchResult
+>;
+
+export type TopicSearchResultAction = Action<
+    TOPIC_SEARCH_RESULT,
+    io.TopicSearchResult
 >;
 
 export type TopicArchivedAction = Action<TOPIC_ARCHIVED, io.Topic>;
@@ -185,6 +210,16 @@ export function loadTopic(
     params: { [key: string]: string | number } = {}
 ): LoadTopicAction {
     return createIOAction<LOAD_TOPIC>(LOAD_TOPIC, { id, params });
+}
+
+export function searchTopic(payload: SearchTopicPayload): SearchTopicAction {
+    return createIOAction<SEARCH_TOPIC, any>(SEARCH_TOPIC, payload);
+}
+
+export function searchResult(
+    payload: io.TopicSearchResult
+): TopicSearchResultAction {
+    return createAction(TOPIC_SEARCH_RESULT, payload);
 }
 
 export function loadSpaceTopics(
