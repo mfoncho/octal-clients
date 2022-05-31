@@ -1,19 +1,10 @@
 import React from "react";
 import emoji from "@octal/emoji";
 import { ReactEditor } from "slate-react";
-import { Transforms, Descendant, Editor, Path } from "slate";
+import { Transforms, Descendant, Editor, Path, Text } from "slate";
 import UIEvent from "../event";
 import isHotkey from "is-hotkey";
-import {
-    fileinfo,
-    insertEmoji,
-    isBlockActive,
-    insertMention,
-    isMarkActive,
-    toggleMark,
-    toggleBlock,
-    isEmojiActive,
-} from "./utils";
+import { clearEditor, toggleMark, isEmojiActive } from "./utils";
 import { InputProps, EditorState, State, EventTarget } from "./types";
 
 import { Slater } from "@octal/markdown";
@@ -65,54 +56,36 @@ export function useReflection(
     }, [props.files]);
 
     React.useEffect(() => {
+        if (props.value === undefined || props.value === null) return;
         let value = (props.value ?? "").trim();
         if (value != state.value.trim()) {
             let data = slater.parse(value!);
-            setState((state) => ({ ...state, value, data }));
-        }
-    }, [props.value]);
+            const { selection } = editor;
+            clearEditor(editor);
+            Transforms.insertFragment(editor, data, { at: [] });
+            if (selection) {
+                const end = Editor.end(editor, []);
+                const [node, path] = Editor.node(editor, {
+                    anchor: end,
+                    focus: end,
+                });
 
-    React.useEffect(() => {
-        if (props.value !== undefined && props.value !== null) {
-            const value = props.value.trim();
-            if (state.value.trim() !== value) {
-                let data = slater.parse(props.value);
-                let node, path;
-                const { selection } = editor;
-                Transforms.deselect(editor);
-                if (selection) [node, path] = Editor.node(editor, selection);
-                if (node && path && selection) {
-                    if (Path.equals(path, ReactEditor.findPath(editor, node))) {
-                        //@ts-ignore
-                        if (node.text && node.text[selection.anchor.offset])
-                            Transforms.select(editor, selection);
-                        else {
-                            //@ts-ignore
-                            const offset = Boolean(node.text)
-                                ? //@ts-ignore
-                                  node.text.length - 1
-                                : 0;
-                            Transforms.select(editor, {
-                                anchor: {
-                                    ...selection.anchor,
-                                    offset,
-                                },
-                                focus: {
-                                    ...selection.focus,
-                                    offset,
-                                },
-                            });
-                        }
-                    }
+                if (Text.isText(node)) {
+                    const offset = node.text.trim().length;
+                    Transforms.select(editor, {
+                        anchor: {
+                            path,
+                            offset,
+                        },
+                        focus: {
+                            path,
+                            offset,
+                        },
+                    });
                 }
-                setState((state) => ({
-                    ...state,
-                    data,
-                    value,
-                }));
             }
         }
-    }, [state.data]);
+    }, [props.value, state.data]);
 }
 
 export function useInput(editor: Editor) {
@@ -158,7 +131,7 @@ export function useChangeHandler(
                 props.onChange(uievent);
             }
         },
-        [state.value, state.files, state.currentTarget]
+        [state.files, state.currentTarget]
     );
 }
 

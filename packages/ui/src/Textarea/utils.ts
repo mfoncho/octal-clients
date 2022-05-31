@@ -79,32 +79,12 @@ export const toggleBlock = (editor: Editor, format: string) => {
 
 export function clearEditor(editor: Editor) {
     // get path of first and last element in editor
-    const [, first_element_path] = Editor.first(editor, [0]);
-    const [, last_element_path] = Editor.last(editor, [
-        editor.children.length - 1,
-    ]);
-
-    // create full range from first -> last element
-    const full_range = Editor.range(
-        editor,
-        first_element_path,
-        last_element_path
-    );
-
-    // remove all nodes starting from the highest one
-    Transforms.removeNodes(editor, {
-        at: full_range,
-        mode: "highest",
-        hanging: true,
+    Transforms.delete(editor, {
+        at: {
+            anchor: Editor.start(editor, []),
+            focus: Editor.end(editor, []),
+        },
     });
-
-    // insert an empty paragraph
-    if (editor.children.length === 0) {
-        Transforms.insertNodes(editor, {
-            type: "paragraph",
-            children: [{ text: "" }],
-        });
-    }
 
     return;
 }
