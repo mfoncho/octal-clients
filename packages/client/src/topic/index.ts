@@ -109,7 +109,22 @@ export default class TopicClient extends BaseClient {
         params?: Params
     ): Promise<io.TopicSearchResult> {
         const path = `/topics/${request.topic_id}/search`;
-        const { data } = await this.endpoint.get(path, request.params, params);
+        const rparams: { [key: string]: any } = {};
+        for (let key of Object.keys(request.params)) {
+            //@ts-ignore
+            const val = request.params[key];
+            if (val) {
+                if (Array.isArray(val) && val.length == 0) continue;
+                if (typeof val === "string" && val.trim().length === 0)
+                    continue;
+                rparams[key] = val;
+            }
+        }
+        const { data } = await this.endpoint.get(
+            path,
+            { params: rparams },
+            params
+        );
         return data;
     }
 
