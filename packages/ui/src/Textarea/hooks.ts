@@ -50,12 +50,6 @@ export function useReflection(
     }, [props.data]);
 
     React.useEffect(() => {
-        if (Boolean(props.files) && props.files !== state.files) {
-            setState((state) => ({ ...state, files: props.files! }));
-        }
-    }, [props.files]);
-
-    React.useEffect(() => {
         if (props.value === undefined || props.value === null) return;
         let value = (props.value ?? "").trim();
         if (value != state.value.trim()) {
@@ -92,6 +86,12 @@ export function useReflection(
             }));
         }
     }, [props.value, state.data]);
+
+    React.useEffect(() => {
+        if (Boolean(props.files) && props.files !== state.files) {
+            setState((state) => ({ ...state, files: props.files! }));
+        }
+    }, [props.files]);
 }
 
 export function useInput(editor: Editor) {
@@ -114,31 +114,37 @@ export function useChangeHandler(
     slater: Slater
 ) {
     const [state, setState] = input;
-    return React.useCallback(
-        (data: Descendant[]) => {
-            const { files, currentTarget } = state;
-            const value = slater.serialize(data).trim();
-            setState((state) => ({ ...state, value, data }));
-            if (props.onChange && value !== state.value) {
-                const event = UIEvent.synthesis(
-                    UIEvent.event("change", { currentTarget })
-                );
-                const target = {
-                    files,
-                    value,
-                    editor,
-                    data,
-                };
-                const uievent = UIEvent.create<EventTarget>(
-                    target,
-                    event,
-                    "change"
-                );
-                props.onChange(uievent);
-            }
-        },
-        [state.files, state.currentTarget]
-    );
+    return (data: Descendant[]) => {
+        const { files, currentTarget } = state;
+        const value = slater.serialize(data);
+        setState((state) => ({ ...state, value, data }));
+        if (
+            props.onChange &&
+            value !== props.value &&
+            value.trim() !== state.value.trim()
+        ) {
+            console.log(
+                `props: ${props.value}`,
+                `state: ${state.value}`,
+                `change: ${value}`
+            );
+            const event = UIEvent.synthesis(
+                UIEvent.event("change", { currentTarget })
+            );
+            const target = {
+                files,
+                value,
+                editor,
+                data,
+            };
+            const uievent = UIEvent.create<EventTarget>(
+                target,
+                event,
+                "change"
+            );
+            props.onChange(uievent);
+        }
+    };
 }
 
 export function useKeyDownHandler(
