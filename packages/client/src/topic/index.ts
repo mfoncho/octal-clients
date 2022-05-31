@@ -6,6 +6,18 @@ interface ArchiveTopicRequest {
     topic_id: string;
 }
 
+interface SearchTopicRequest {
+    topic_id: string;
+    space_id: string;
+    params: {
+        offset?: number;
+        query: string;
+        users?: string[];
+        start?: string;
+        end?: string;
+    };
+}
+
 interface UnarchiveTopicRequest {
     space_id: string;
     topic_id: string;
@@ -89,6 +101,15 @@ export default class TopicClient extends BaseClient {
     ): Promise<io.Topic> {
         const path = `/topics/${request.topic_id}/unarchive`;
         const { data } = await this.endpoint.post(path, {}, params);
+        return data;
+    }
+
+    async searchTopic(
+        request: SearchTopicRequest,
+        params?: Params
+    ): Promise<io.TopicSearchResult> {
+        const path = `/topics/${request.topic_id}/search`;
+        const { data } = await this.endpoint.get(path, request.params, params);
         return data;
     }
 

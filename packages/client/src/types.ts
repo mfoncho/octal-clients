@@ -339,6 +339,12 @@ export namespace io {
         archived_at: Timestamp;
     }
 
+    export interface TopicSearchResult {
+        total_found: number;
+        messages: Message[];
+        offset: number;
+    }
+
     export interface Space extends Unique, BelongsToWorkspace {
         icon: string;
         name: string;
