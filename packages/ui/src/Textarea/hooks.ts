@@ -84,6 +84,12 @@ export function useReflection(
                     });
                 }
             }
+            setState((state) => ({
+                ...state,
+                value,
+                data,
+                files: props.files ?? state.files,
+            }));
         }
     }, [props.value, state.data]);
 }
