@@ -85,11 +85,6 @@ function* password({
     }
 }
 
-function* patch({ payload }: UserActions.UserUpdatedAction): Iterable<any> {
-    const [normalized, related] = UserSchema.normalizeOne(payload);
-    yield put(relatedLoaded(related));
-    yield put(UserActions.userUpdated(normalized as any));
-}
 
 function* related({ payload }: any): Iterable<any> {
     let users = Object.values(payload[UserSchema.collect] || {}) as io.User[];
@@ -171,5 +166,4 @@ export const tasks = [
     { effect: takeEvery, type: Actions.SET_AUTH, handler: syncPresence },
     { effect: takeEvery, type: Actions.SET_USER_STATUS, handler: setStatus },
     //{ effect: takeEvery, type: "STORE_USERS", handler: store },
-    { effect: takeEvery, type: Actions.USER_UPDATED, handler: patch },
 ];
