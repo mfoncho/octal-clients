@@ -1,6 +1,5 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
-import ReactDOM from "react-dom";
 import client from "@octal/client";
 import * as theme from "./theme";
 import reportWebVitals from "./reportWebVitals";
