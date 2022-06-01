@@ -12,7 +12,7 @@ export interface ISearchMessage {
     message: io.Message;
 }
 
-const messageActions: ActionT[] = [];
+const messageActions: ActionT[] = ["jump"];
 
 const Reply = React.memo<ISearchMessage>((props) => {
     const author = props.message.author;
@@ -62,10 +62,14 @@ export default React.memo<ISearchMessage>((props) => {
         return new MessageRecord({ ...props.message });
     }, []);
 
+    function handleJump() {
+        console.log(props.message);
+    }
+
     return (
         <div
             className={clx(
-                "flex flex-col py-2 relative group hover:bg-gray-100 border-2 border-gray-100 rounded-md"
+                "flex flex-col py-3 relative group hover:bg-gray-100 border-2 border-gray-100 rounded-md"
             )}>
             {message.reply_id && props.message.reply && (
                 <Reply message={props.message.reply} />
@@ -96,9 +100,6 @@ export default React.memo<ISearchMessage>((props) => {
                             {message.pinned && (
                                 <Icons.Pin className="h-2.5 w-2.5" />
                             )}
-                            {message.flagged && (
-                                <Icons.Bookmark className="h-2.5 w-2.5" />
-                            )}
                         </div>
                         {emoji.test(message.content) ? (
                             <div className="text-6xl">
@@ -114,11 +115,10 @@ export default React.memo<ISearchMessage>((props) => {
 
                 <Menu
                     id={message.id}
-                    open={false}
+                    open={true}
                     anchor={anchor.current!}
+                    onJump={handleJump}
                     buttons={messageActions}
-                    pinned={message.pinned}
-                    flagged={message.flagged}
                 />
             </div>
         </div>
