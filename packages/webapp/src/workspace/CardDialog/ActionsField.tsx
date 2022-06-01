@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import * as Icons from "@octal/icons";
 import ColumnsMenuPopper from "@workspace/Board/ColumnsMenuPopper";
 import { CardRecord, useColumn, useAuthId } from "@octal/store";
-import { useScreen } from "@octal/ui";
+import { Text, useScreen } from "@octal/ui";
 import Actions from "./Actions";
 import { useActions } from "./hooks";
 import { usePermissions } from "@workspace/Space";
@@ -45,7 +45,7 @@ export default function ColumnField({ card, ...props }: IColumnField) {
                 ref={root}
                 disabled={!moveable}
                 onClick={moveable ? () => setPopper(true) : undefined}
-                className="py-1 flex flex-row rounded-md hover:bg-gray-100 items-center">
+                className="py-1 px-2 flex flex-row rounded-md hover:bg-slate-200 items-center bg-slate-100">
                 {card.archived ? (
                     <>
                         <span className="bg-primary-500 font-bold text-sm rounded text-white">
@@ -57,18 +57,11 @@ export default function ColumnField({ card, ...props }: IColumnField) {
                     </>
                 ) : (
                     <>
-                        <span className="text-gray-500">
-                            {column.type == "stack" ? (
-                                <Icons.Stack className="w-5 h-5" />
-                            ) : (
-                                <Icons.Queue className="w-5 h-5" />
-                            )}
-                        </span>
                         <span className="px-1.5 bg-primary-500 font-bold text-sm rounded text-white">
                             {card.position + 1}
                         </span>
                         <span className="px-2 mx-1 text-base font-bold text-gray-700">
-                            {column.name}
+                            <Text>{column.name}</Text>
                         </span>
                     </>
                 )}

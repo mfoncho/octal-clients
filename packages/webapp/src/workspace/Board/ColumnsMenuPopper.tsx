@@ -1,5 +1,5 @@
 import React from "react";
-import { Popper } from "@octal/ui";
+import { Popper, Text } from "@octal/ui";
 import { sort } from "@octal/common";
 import { ColumnRecord, useColumnCardsIndex } from "@octal/store";
 import * as Icons from "@octal/icons";
@@ -31,11 +31,13 @@ function Column({ column, ...props }: IColumn) {
             <li
                 key={column.id}
                 role="button"
-                className="flex rounded-md group flex-row py-1 items-center px-2 hover:bg-gray-100">
-                <Icon className="text-gray-400" />
-                <span className="px-2 text-gray-600 font-semibold">
-                    {column.name}
+                className="flex rounded-md group flex-row py-1 items-center px-2 justify-between">
+                <span className="text-gray-600 font-semibold">
+                    <Text>{column.name}</Text>
                 </span>
+                <div className="flex flex-row">
+                    <Icons.Full className="text-gray-400" />
+                </div>
             </li>
         );
     } else {
@@ -43,12 +45,12 @@ function Column({ column, ...props }: IColumn) {
             <li
                 key={column.id}
                 role="button"
-                className="flex group cursor-pointer rounded-md flex-row py-1 items-center px-2 hover:bg-primary-500 "
+                className="flex group cursor-pointer rounded-md flex-row py-1 items-center px-2 hover:bg-primary-500 justify-between"
                 onClick={(e) => props.onSelect(e, column.id)}>
-                <Icon className="group-hover:text-white text-gray-500" />
-                <span className="px-2 group-hover:text-white text-gray-800 font-semibold">
-                    {column.name}
+                <span className="group-hover:text-white text-gray-800 font-semibold">
+                    <Text>{column.name}</Text>
                 </span>
+                <Icon className="group-hover:text-white text-gray-500" />
             </li>
         );
     }
