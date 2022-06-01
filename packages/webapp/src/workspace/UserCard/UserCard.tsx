@@ -72,7 +72,8 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
                 {viewer.id !== user.id && (
                     <>
                         <Textarea
-                            value={loading ? input.value : ""}
+                            value={input.value}
+                            disabled={loading}
                             onSubmit={handleSubmit}
                             onChange={input.props.onChange}
                             className="text-msg p-3 min-h-[100px]"
