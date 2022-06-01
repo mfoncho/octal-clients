@@ -24,7 +24,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
     }
 
     function handleBlur() {
-        if (desc == value) {
+        if (desc.trim() == value.trim()) {
             onClose();
         }
     }
@@ -32,7 +32,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
     return (
         <div className="flex flex-col w-full">
             <Textarea
-                value={value}
+                value={desc}
                 disabled={disabled}
                 autoFocus={true}
                 onBlur={handleBlur}
