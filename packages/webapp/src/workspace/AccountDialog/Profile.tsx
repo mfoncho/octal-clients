@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { UserRecord } from "@octal/store/lib/records";
 import { useInput } from "src/utils";
 import { Dialog, Avatar, Button, Textarea } from "@octal/ui";
-import { updateProfile } from "@octal/store/lib/actions/user";
+import * as UserActions from "@octal/store/lib/actions/user";
 import { useDispatch } from "react-redux";
 
 export interface IProfile {
@@ -67,7 +67,7 @@ export default React.memo<IProfile>(({ user, ...props }) => {
         if (bio.valid) {
             params.bio = bio.value;
         }
-        const action = updateProfile(params);
+        const action = UserActions.updateProfile(params);
         dispatch(action).finally(() => setLoading(false));
         setLoading(true);
     }
