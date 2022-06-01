@@ -31,6 +31,8 @@ export { default as VerifiedBadge } from "./VerifiedBadge";
 export { default as Field } from "./Field";
 export { default as Task } from "./Task";
 export { default as Full } from "./Full";
+export { default as Expand } from "./Expand";
+export { default as Jump } from "./Jump";
 export { default as Plus } from "./Plus";
 export { default as Filter } from "./Filter";
 export { default as Calendar } from "./Calendar";
