@@ -10,11 +10,11 @@ interface SearchTopicRequest {
     topic_id: string;
     space_id: string;
     params: {
-        offset?: number;
+        page?: number;
         query: string;
         users?: string[];
-        start?: string;
-        end?: string;
+        after?: string;
+        before?: string;
     };
 }
 

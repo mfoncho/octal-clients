@@ -50,6 +50,14 @@ export interface BelongsToWorkspace {
     workspace_id: Id;
 }
 
+export interface Page<Entry = any> {
+    entries: Entry[];
+    page_size: number;
+    page_number: number;
+    total_pages: number;
+    total_entries: number;
+}
+
 export namespace io {
     export type PresenceState =
         | "invisible"
@@ -339,11 +347,7 @@ export namespace io {
         archived_at: Timestamp;
     }
 
-    export interface TopicSearchResult {
-        total_found: number;
-        messages: Message[];
-        offset: number;
-    }
+    export interface TopicSearchResult extends Page<Message> {}
 
     export interface Space extends Unique, BelongsToWorkspace {
         icon: string;
