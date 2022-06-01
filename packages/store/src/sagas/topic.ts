@@ -98,7 +98,7 @@ function* search({
 }: TopicActions.SearchTopicAction): Iterable<any> {
     try {
         const results: any = yield Client.searchTopic(payload);
-        yield put(TopicActions.searchResult(results));
+        yield put(TopicActions.searchResult({ ...results, ...payload } as any));
         resolve.success(results);
     } catch (e) {
         resolve.error(e);

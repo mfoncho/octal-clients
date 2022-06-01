@@ -53,7 +53,6 @@ export class ThreadRecord
         highlight: "0",
         loading: new ConversationLoading(),
         view: new ThreadView(),
-        messages: Map<string, MessageRecord>(),
         hcache: OrderedMap<string, ChatMessage>(),
         history: OrderedMap<string, ChatMessage>(),
     })

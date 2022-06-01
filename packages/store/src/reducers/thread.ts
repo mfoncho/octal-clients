@@ -31,11 +31,12 @@ export class Conversations extends Record(
     {
         paths: Map<Id, Id>(),
         threads: Map<Id, ThreadRecord>(),
+        messages: Map<Id, MessageRecord>(),
     },
     "threads"
 ) {
     hasMessage(id: string) {
-        return this.paths.has(id);
+        return this.messages.has(id);
     }
 
     hasThread(id: string) {
@@ -47,8 +48,7 @@ export class Conversations extends Record(
     }
 
     getMessage(id: string): MessageRecord | undefined {
-        const tid = this.paths.get(id);
-        if (tid) return this.threads.get(tid)?.get("messages")?.get(id);
+        return this.messages.get(id);
     }
 
     deleteThread({ id }: { id: string }) {
@@ -64,33 +64,23 @@ export class Conversations extends Record(
     }
 
     deleteMessage(id: string) {
-        const tid = this.paths.get(id);
-        if (tid) {
-            const path = [tid];
-            return this.deleteIn(["paths", id])
-                .deleteIn(["threads", ...path, "hcache", id])
-                .deleteIn(["threads", ...path, "history", id])
-                .deleteIn(["threads", ...path, "messages", id]);
+        const message = this.messages.get(id);
+        if (message) {
+            return this.deleteIn(["threads", message.thread_id, "hcache", id])
+                .deleteIn(["threads", message.thread_id, "history", id])
+                .deleteIn(["messages", id]);
         }
         return this;
     }
 
     storeMessage(message: MessageRecord) {
-        if (this.threads.has(message.thread_id)) {
-            return this.setIn(["paths", message.id], message.thread_id).setIn(
-                ["threads", message.thread_id, "messages", message.id],
-                message
-            );
-        }
-        return this;
+        return this.setIn(["messages", message.id], message);
     }
 
     udpateMessage(partial: Partial<MessageRecord>) {
-        const path = ["threads", partial.thread_id, "messages", partial.id];
-        if (this.hasIn(path)) {
-            return this.updateIn(path, (message) => {
-                return (message as MessageRecord).merge(partial);
-            });
+        const message = this.messages.get(partial.id!);
+        if (message) {
+            return this.storeMessage(message.merge(partial));
         }
         return this;
     }

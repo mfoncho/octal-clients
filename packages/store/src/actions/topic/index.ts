@@ -123,7 +123,7 @@ export type SearchTopicAction = IOAction<
 
 export type TopicSearchResultAction = Action<
     TOPIC_SEARCH_RESULT,
-    io.TopicSearchResult
+    io.TopicSearchResult & SearchTopicPayload
 >;
 
 export type TopicArchivedAction = Action<TOPIC_ARCHIVED, io.Topic>;
@@ -217,7 +217,7 @@ export function searchTopic(payload: SearchTopicPayload): SearchTopicAction {
 }
 
 export function searchResult(
-    payload: io.TopicSearchResult
+    payload: io.TopicSearchResult & SearchTopicPayload
 ): TopicSearchResultAction {
     return createAction(TOPIC_SEARCH_RESULT, payload);
 }
