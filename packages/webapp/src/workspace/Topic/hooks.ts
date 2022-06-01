@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 import * as TopicActions from "@octal/store/lib/actions/topic";
 import { useDispatch } from "react-redux";
-import { UpdateTopicPayload } from "@octal/store/lib/actions/topic";
+import {
+    UpdateTopicPayload,
+    SearchTopicPayload,
+} from "@octal/store/lib/actions/topic";
 
 interface ITopic {
     id: string;
@@ -18,6 +21,18 @@ export function useActions(topic: ITopic) {
         });
         return dispatch(action);
     }, [topic.id]);
+
+    const searchTopic = useCallback(
+        (params: SearchTopicPayload["params"]) => {
+            const action = TopicActions.searchTopic({
+                params: params,
+                space_id: topic.space_id,
+                topic_id: topic.id,
+            });
+            return dispatch(action);
+        },
+        [topic.id]
+    );
 
     const updateFilter = useCallback(
         (type: string, value: string | string[]) => {
@@ -60,6 +75,7 @@ export function useActions(topic: ITopic) {
     }, [topic.id]);
 
     return {
+        searchTopic,
         updateTopic,
         updateFilter,
         deleteTopic,
