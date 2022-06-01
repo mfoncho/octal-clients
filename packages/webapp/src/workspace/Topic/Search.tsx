@@ -1,18 +1,28 @@
 import React from "react";
+import * as uuid from "uuid";
 import clx from "classnames";
 import moment from "moment";
+import { io, Page } from "@octal/client";
 import { useScreen, useInput } from "src/hooks";
 import * as Icons from "@octal/icons";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import UserAvatar from "@workspace/UserAvatar";
+import SearchMessage from "@workspace/Message/SearchMessage";
 import { useActions } from "./hooks";
 import { Datepicker, Popper } from "@octal/ui";
 import { useDebouncedEffect } from "@octal/hooks";
 import { Dialog, Button, Textarea, UIEvent } from "@octal/ui";
 import { TopicRecord, MemberRecord } from "@octal/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
+import Pagination from "@material-ui/lab/Pagination";
 
 interface ISearch {
     topic: TopicRecord;
+}
+
+interface Result extends Page<io.Message> {
+    id: string;
+    pending: boolean;
 }
 
 interface IDatePicker {
@@ -20,6 +30,11 @@ interface IDatePicker {
     onChange: (e: UIEvent) => void;
     onClear: (e: any) => void;
 }
+
+const scrollbarOptions = {
+    suppressScrollX: true,
+    suppressScrollY: false,
+};
 
 const DatePopper = Popper.create<HTMLDivElement, IDatePicker>((props) => {
     return (
@@ -37,12 +52,24 @@ const DatePopper = Popper.create<HTMLDivElement, IDatePicker>((props) => {
     );
 });
 
+const defaultResult = {
+    id: "",
+    entries: [],
+    page_size: 0,
+    total_pages: 0,
+    page_number: 0,
+    total_entries: 0,
+    pending: false,
+};
+
 export default Dialog.create<ISearch>((props) => {
     const actions = useActions(props.topic);
     const dialog = Dialog.useDialog();
     const { filter } = props.topic;
     const screen = useScreen();
+    const [page, setPage] = React.useState<number>(1);
     const input = useInput(filter.search);
+    const [results, setResults] = React.useState<Result>(defaultResult);
     const usersRef = React.useRef<HTMLDivElement | null>(null);
     const fromRef = React.useRef<HTMLButtonElement | null>(null);
     const uptoRef = React.useRef<HTMLButtonElement | null>(null);
@@ -62,6 +89,41 @@ export default Dialog.create<ISearch>((props) => {
         [input.value]
     );
 
+    React.useEffect(() => {
+        if (filter.users.size > 0 || filter.search.trim().length > 0) {
+            const id = uuid.v1();
+            actions
+                .searchTopic({
+                    page: page,
+                    query: filter.search,
+                    users: filter.users.toArray(),
+                    before: moment(filter.until).add({ day: 1 }).toISOString(),
+                    after: moment(filter.since)
+                        .subtract({ day: 1 })
+                        .toISOString(),
+                })
+                .then((data) =>
+                    setResults((state) => {
+                        if (id == state.id) {
+                            return { ...state, ...data, pending: false };
+                        }
+                        return state;
+                    })
+                );
+            setResults((state) => ({
+                ...state,
+                id,
+                pending: true,
+            }));
+        }
+    }, [
+        page,
+        filter.search.trim(),
+        filter.users.toArray().sort().join(","),
+        filter.since,
+        filter.until,
+    ]);
+
     function handleSinceClear(_event: UIEvent) {
         actions.updateFilter("since", "");
     }
@@ -75,7 +137,6 @@ export default Dialog.create<ISearch>((props) => {
     function handleUntilChange(event: UIEvent) {
         actions.updateFilter("until", event.target.value);
     }
-
     return (
         <Dialog.Base
             open={props.open}
@@ -170,8 +231,24 @@ export default Dialog.create<ISearch>((props) => {
                     </Button>
                 </div>
             </div>
-            <div className="flex-1 flex flex-row flex-grow overflow-hidden px-4">
-                <div className="bg-gray-400 w-5 h-[1000px]" />
+            <div className="flex-1 flex flex-col flex-grow overflow-hidden px-4">
+                <PerfectScrollbar
+                    options={scrollbarOptions}
+                    className="flex-1 flex flex-col  space-y-2 pb-16 overflow-y-hidden">
+                    {results.entries.map((message) => (
+                        <SearchMessage key={message.id} message={message} />
+                    ))}
+                </PerfectScrollbar>
+                <div className="flex flex-row justify-end p-4 justify-center">
+                    {results.total_entries > 0 && (
+                        <Pagination
+                            variant="outlined"
+                            page={results.page_number}
+                            count={results.total_pages}
+                            onChange={(_e, page) => setPage(page)}
+                        />
+                    )}
+                </div>
             </div>
             <MembersPopper
                 selected={filter.users.toArray()}
