@@ -3,9 +3,8 @@ import { Text, Dialog, Tooltip } from "@octal/ui";
 import { useUser, usePresence, useStatus } from "@octal/store";
 import Menu from "./Menu";
 import StatusDialog from "../StatusDialog";
-import AccountDialog from "../Account";
+import AccountDialog from "../AccountDialog";
 import PresenceDialog from "../PresenceDialog";
-import PreferencesDialog from "../PreferencesDialog";
 import { presence as colors } from "src/colors";
 import { GoPrimitiveDot as PresenceDotIcon } from "react-icons/go";
 
@@ -62,12 +61,8 @@ const menuItems: IMenuItem[] = [
         secondary: <Presence />,
     },
     {
-        name: "Profile",
+        name: "Account",
         component: AccountDialog,
-    },
-    {
-        name: "Preferences",
-        component: PreferencesDialog,
     },
 ];
 
