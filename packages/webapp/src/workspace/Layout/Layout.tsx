@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation, useParams, Route, Routes } from "react-router-dom";
+import {
+    useLocation,
+    useParams,
+    Route,
+    Routes,
+    Navigate,
+} from "react-router-dom";
 import Suggestion, { Mention } from "../Mention";
 import Home from "../Home";
 import Calendar from "../Calendar";
@@ -64,6 +70,12 @@ export default React.memo(function Layout() {
             </Sidebar>
             <main className="flex-grow flex overflow-hidden flex-row">
                 <Routes>
+                    <Route
+                        path="auth/*"
+                        element={
+                            <Navigate to={paths.sections.home} replace={true} />
+                        }
+                    />
                     <Route
                         path={paths.workspace.chat}
                         element={<Workspace.Main />}

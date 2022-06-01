@@ -9,7 +9,7 @@ export default React.memo(() => {
         <Routes>
             <Route path={path.login} element={<Login />} />
             <Route path={path.reset} element={<ResetPassword />} />
-            <Route path="/" element={<Navigate replace to={path.login} />} />
+            <Route path="*" element={<Navigate replace={true} to={path.login} />} />
         </Routes>
     );
 });
