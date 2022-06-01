@@ -6,7 +6,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import LoadingRings from "../Animated/Rings";
 import immutable, { Map, OrderedMap } from "immutable";
 import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
-import { ThreadRecord, MessageRecord, useAuthId } from "@octal/store";
+import { ThreadRecord, MessageRecord, useAuthId, useMessage } from "@octal/store";
 import { useUnmount, useCurPrev, useDebouncedCallback } from "src/hooks";
 
 window.immutable = immutable;
@@ -27,8 +27,6 @@ interface IThread {
     thread: ThreadRecord;
 }
 
-const Context = React.createContext(Map<string, MessageRecord>());
-
 /*
  * Element scroll position in container
  * container scrollTop
@@ -43,7 +41,7 @@ const scrollerOptions = {
 
 const Msg = React.memo<{ id: string; extra: boolean; authid: string }>(
     ({ id, extra, authid }) => {
-        const message = React.useContext(Context).get(id);
+        const message = useMessage(id);
         if (message) {
             return (
                 <Message
@@ -378,7 +376,6 @@ export default React.memo<IThread>(function ({ thread }) {
     }
 
     return (
-        <Context.Provider value={thread.messages}>
             <div className="flex-1 flex flex-col overflow-hidden">
                 <PerfectScrollbar
                     options={scrollerOptions}
@@ -390,6 +387,5 @@ export default React.memo<IThread>(function ({ thread }) {
                     </div>
                 </PerfectScrollbar>
             </div>
-        </Context.Provider>
     );
 });
