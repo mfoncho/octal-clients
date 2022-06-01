@@ -1,6 +1,5 @@
 import React from "react";
 import { Popper } from "@octal/ui";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { logout } from "@octal/store/lib/actions/app";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -43,6 +42,7 @@ export default Popper.create<HTMLDivElement, IMenu>((props) => {
             onClickAway={props.onClickAway}>
             {props.options.map((option) => (
                 <div
+                    role="button"
                     className="rounded-md px-4 py-2 text-base text-gray-700 hover:bg-gray-100 flex flex-row items-center justify-between"
                     key={option.name}
                     onClick={hanleSelect(option.name)}>
@@ -58,10 +58,10 @@ export default Popper.create<HTMLDivElement, IMenu>((props) => {
             </Link>
 
             <div
+                role="button"
                 className="rounded-md px-4 py-2 mt-4 text-gray-800 bg-gray-100 flex flex-row items-center justify-between"
                 onClick={handleLogout}>
                 <span className="font-semibold text-sm">Logout</span>
-                <FontAwesomeIcon icon="sign-out-alt" />
             </div>
         </Popper>
     );
