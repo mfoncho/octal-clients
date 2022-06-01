@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import Popover from "@material-ui/core/Popover";
-import JumpIcon from "@material-ui/icons/KeyboardReturn";
 import { Picker as EmojiPicker, EmojiData } from "emoji-mart";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Tooltip } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import Editor from "./Editor";
@@ -40,16 +38,17 @@ interface IEmojiPopover {
 export interface IMenu {
     id: string;
     open?: boolean;
-    pinned: boolean;
+    pinned?: boolean;
     buttons: ActionT[];
-    flagged: boolean;
+    flagged?: boolean;
     anchor: HTMLElement;
-    onPin?: () => void;
-    onEdit?: () => void;
-    onFlag?: () => void;
+    onPin?: (e: React.MouseEvent) => void;
+    onEdit?: (e: React.MouseEvent) => void;
+    onFlag?: (e: React.MouseEvent) => void;
+    onJump?: (e: React.MouseEvent) => void;
     onReply?: () => void;
     onReact?: (reaction: string) => void;
-    onDelete?: () => void;
+    onDelete?: (e: React.MouseEvent) => void;
 }
 
 enum PopupType {
@@ -58,7 +57,7 @@ enum PopupType {
     EDITOR,
 }
 
-export const Context = React.createContext<string[]>([]);
+export const Context = React.createContext<string[]>(["jump", "flag", "pin"]);
 
 export const Reply = React.createContext<
     (id: string, e: React.MouseEvent) => void
@@ -111,8 +110,6 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
             props.onReact(reaction.native);
         }
     }
-
-    function handleJump() {}
 
     function handleEdit() {
         setPopup(PopupType.EDITOR);
@@ -185,8 +182,8 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
                 case "jump":
                     return {
                         name: "Goto Message",
-                        icon: JumpIcon,
-                        onClick: handleJump,
+                        icon: Icons.Jump,
+                        onClick: props.onJump,
                     };
 
                 case "delete":
@@ -198,7 +195,7 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
                 default:
                     return {
                         name: "unknown",
-                        icon: ((props: any) => ({})) as any,
+                        icon: ((_props: any) => ({})) as any,
                         onClick: () => {},
                     };
             }
@@ -207,7 +204,7 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
     const collapsable = buttons.length > present;
 
     return (
-        <div className="absolute invisible group-hover:visible hover:shadow-md bg-white rounded-md -top-8 right-4 flex flex-row items-center border border-gray-100 first-child:rounded-l-md last-child:rounded-r-md bg-slate-100 space-x-1 pl-2">
+        <div className="absolute invisible group-hover:visible bg-white rounded-t-md -top-6 right-4 flex flex-row items-center border border-gray-100 first-child:rounded-l-md last-child:rounded-r-md bg-slate-100 space-x-1">
             {buttons
                 .slice(0, expanded ? buttons.length : present)
                 .map(renderButton)}
@@ -217,12 +214,11 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
                     aria-label="Show more"
                     className="p-1 text-gray-600 flex items-center justify-center hover:bg-slate-200 rounded-md my-0.5 "
                     onClick={() => setExpanded(!expanded)}>
-                    <ExpandMoreIcon
-                        fontSize="small"
+                    <Icons.Expand.Up
                         className={
                             expanded
-                                ? "w-5 h-5 rotate-90"
-                                : "w-5 h-5 -rotate-90"
+                                ? "w-4 h-4 rotate-90"
+                                : "w-4 h-4 -rotate-90"
                         }
                     />
                 </button>
