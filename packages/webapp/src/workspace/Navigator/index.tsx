@@ -28,7 +28,7 @@ export default React.memo(() => {
             </div>
             <Sections />
             <Scrollbars autoHide className="flex flex-col">
-                <div className="flex flex-col overflow-hidden">
+                <div className="flex flex-col overflow-hidden space-y-1">
                     {grouped
                         .get("direct", defaultSpaces)
                         .toList()
