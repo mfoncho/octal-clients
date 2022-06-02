@@ -155,7 +155,11 @@ export function useActions(card: CardRecord) {
     }, [card.id]);
 
     const uncompleteCard = useCallback(() => {
-        return Promise.reject("@TODO");
+        const action = BoardAction.uncompleteCard({
+            board_id: card.board_id,
+            card_id: card.id,
+        });
+        return dispatch(action);
     }, [card.id]);
 
     const actions = {
