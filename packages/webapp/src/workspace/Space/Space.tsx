@@ -6,7 +6,7 @@ import Chat from "../Chat";
 import Board from "../Board";
 import Topic from "../Topic";
 import { useSpace, useSuggestable } from "./hooks";
-import { clearSpace } from "@octal/store/lib/actions/space";
+import { purgeSpace } from "@octal/store/lib/actions/space";
 import { useNavigator, useUnmount } from "src/hooks";
 
 function Redirect() {
@@ -29,7 +29,7 @@ export default React.memo(() => {
 
     useUnmount(() => {
         if (space.is_archived) {
-            dispatch(clearSpace(space.toJS() as any));
+            dispatch(purgeSpace(space.toJS() as any));
         }
     }, [space.is_archived]);
 

@@ -70,6 +70,10 @@ export const reducers = {
         return store.putSpace(payload);
     },
 
+    [Actions.SPACE_PURGED]: (store: SpacesStore, { payload }: any) => {
+        return store.removeSpace(payload.id);
+    },
+
     [Actions.COLLECTION_LOADED]: (
         store: SpacesStore,
         { payload }: AppActions.CollectionLoadedAction

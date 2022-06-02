@@ -6,8 +6,17 @@ export type GET_MEMBER = typeof GET_MEMBER;
 export const LOAD_MEMBERS = "LOAD_MEMBERS";
 export type LOAD_MEMBERS = typeof LOAD_MEMBERS;
 
-export const SPACE_MEMBERS_LOADED = "SPACE_MEMBERS_LOADED";
-export type SPACE_MEMBERS_LOADED = typeof SPACE_MEMBERS_LOADED;
+export const JOIN_SPACE = "JOIN_SPACE";
+export type JOIN_SPACE = typeof JOIN_SPACE;
+
+export const LEAVE_SPACE = "JOIN_SPACE";
+export type LEAVE_SPACE = typeof JOIN_SPACE;
+
+export const SPACE_JOINED = "SPACE_JOINED";
+export type SPACE_JOINED = typeof SPACE_JOINED;
+
+export const SPACE_LEFT = "SPACE_LEFT";
+export type SPACE_LEFT = typeof SPACE_LEFT;
 
 export const FETCH_MEMBERS = "FETCH_MEMBERS";
 export type FETCH_MEMBERS = typeof FETCH_MEMBERS;
@@ -32,9 +41,6 @@ export type CLEAR_SPACE_MEMBERS = typeof CLEAR_SPACE_MEMBERS;
 
 export const MEMBER_JOINED = "MEMBER_JOINED";
 export type MEMBER_JOINED = typeof MEMBER_JOINED;
-
-export const MEMBER_UPDATED = "MEMBER_UPDATED";
-export type MEMBER_UPDATED = typeof MEMBER_UPDATED;
 
 export const MEMBER_DELETED = "MEMBER_DELETED";
 export type MEMBER_DELETED = typeof MEMBER_DELETED;

@@ -7,6 +7,9 @@ export type BOARD_LOADED = typeof BOARD_LOADED;
 export const LOAD_BOARD = "LOAD_BOARD";
 export type LOAD_BOARD = typeof LOAD_BOARD;
 
+export const BOARD_PURGED = "BOARD_PURGED";
+export type BOARD_PURGED = typeof BOARD_PURGED;
+
 export const BOARD_CONNECTED = "BOARD_CONNECTED";
 export type BOARD_CONNECTED = typeof BOARD_CONNECTED;
 
@@ -167,9 +170,6 @@ export type LOAD_CARDS = typeof LOAD_CARDS;
 
 export const BOARD_CARDS_LOADED = "BOARD_CARDS_LOADED";
 export type BOARD_CARDS_LOADED = "BOARD_CARDS_LOADED";
-
-export const CLEAR_CARDS = "CLEAR_CARDS";
-export type CLEAR_CARDS = typeof CLEAR_CARDS;
 
 export const CARD_CREATED = "CARD_CREATED";
 export type CARD_CREATED = typeof CARD_CREATED;

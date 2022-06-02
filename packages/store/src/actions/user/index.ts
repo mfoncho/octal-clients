@@ -1,7 +1,9 @@
 import type { io } from "@octal/client";
+import type { Channel } from "@octal/endpoint";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
+    USER_CONNECTED,
     USER_LOADED,
     USERS_LOADED,
     PRESENCE_LOST,
@@ -22,6 +24,12 @@ export * from "./types";
 export type PreferencesUpdatedPayload = Partial<io.Preferences>;
 
 export type UpdatePreferencesPayload = Partial<io.Preferences>;
+
+export interface UserConnectedPayload {
+    topic: string;
+    user_id: string;
+    channel: Channel;
+}
 
 export interface UpdateUserPasswordPayload {
     password: string;
@@ -123,6 +131,8 @@ export type PreferencesUpdatedAction = Action<
     PreferencesUpdatedPayload
 >;
 
+export type UserConnectedAction = Action<USER_CONNECTED, UserConnectedPayload>;
+
 export type PresenceLostAction = Action<PRESENCE_LOST, PresenceLostPayload>;
 
 export type UserUpdatedAction = Action<USER_UPDATED, io.User>;
@@ -205,4 +215,10 @@ export function setUserStatus(
         user_id: id,
         params,
     });
+}
+
+export function userConnected(
+    payload: UserConnectedPayload
+): UserConnectedAction {
+    return createAction(USER_CONNECTED, payload);
 }

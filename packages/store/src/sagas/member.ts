@@ -2,10 +2,11 @@ import { put, takeEvery } from "redux-saga/effects";
 import client, { io } from "@octal/client";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
+import * as UserActions from "../actions/user";
 import * as SpaceActions from "../actions/space";
 import * as MemberActions from "../actions/member";
 import { MemberSchema } from "../schemas";
-import { relatedLoaded } from "../actions/app";
+import * as AppActions from "../actions/app";
 
 function* fetch(action: MemberActions.FetchMembersAction): Iterable<any> {
     try {
@@ -55,7 +56,7 @@ function* load(action: MemberActions.LoadMembersAction): Iterable<any> {
             MemberActions.fetchMembers(payload)
         )) as any;
         const [normalized, related] = MemberSchema.normalizeMany(members);
-        yield put(relatedLoaded(related));
+        yield put(AppActions.relatedLoaded(related));
         yield put(MemberActions.membersLoaded(normalized));
         action.resolve.success(members);
     } catch (e) {
@@ -65,6 +66,20 @@ function* load(action: MemberActions.LoadMembersAction): Iterable<any> {
 
 function* clear({ payload }: SpaceActions.SpaceShutdownAction): Iterable<any> {
     yield put(MemberActions.clearSpaceMembers(payload as any));
+}
+
+function* userConnected({
+    payload,
+}: UserActions.UserConnectedAction): Iterable<any> {
+    const { channel } = payload;
+
+    channel.on("space.joined", (payload: io.Member) => {
+        dispatch(SpaceActions.loadSpace(payload));
+    });
+
+    channel.on("space.left", (payload: io.Member) => {
+        dispatch(MemberActions.spaceLeft(payload as any));
+    });
 }
 
 function* subscribe({
@@ -81,6 +96,7 @@ function* subscribe({
 }
 
 export const tasks = [
+    { effect: takeEvery, type: Actions.USER_CONNECTED, handler: userConnected },
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.LOAD_MEMBERS, handler: load },
     { effect: takeEvery, type: Actions.FETCH_MEMBERS, handler: fetch },

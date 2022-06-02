@@ -6,17 +6,14 @@ export type SEND_INVITATIONS = typeof SEND_INVITATIONS;
 export const CLEAR_SPACE = "CLEAR_SPACE";
 export type CLEAR_SPACE = typeof CLEAR_SPACE;
 
+export const SPACE_PURGED = "SPACE_PURGED";
+export type SPACE_PURGED = typeof SPACE_PURGED;
+
 export const CREATE_SPACE = "CREATE_SPACE";
 export type CREATE_SPACE = typeof CREATE_SPACE;
 
-export const SPACE_JOINED = "SPACE_JOINED";
-export type SPACE_JOINED = typeof SPACE_JOINED;
-
 export const SPACE_CONNECTED = "SPACE_CONNECTED";
 export type SPACE_CONNECTED = typeof SPACE_CONNECTED;
-
-export const JOIN_SPACE = "JOIN_SPACE";
-export type JOIN_SPACE = typeof JOIN_SPACE;
 
 export const LOAD_SPACE = "LOAD_SPACE";
 export type LOAD_SPACE = typeof LOAD_SPACE;

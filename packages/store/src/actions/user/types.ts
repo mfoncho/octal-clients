@@ -18,6 +18,9 @@ export type FETCH_USERS = typeof FETCH_USERS;
 export const USER_UPDATED = "USER_UPDATED";
 export type USER_UPDATED = "USER_UPDATED";
 
+export const USER_CONNECTED = "USER_CONNECTED";
+export type USER_CONNECTED = typeof USER_CONNECTED;
+
 export const USER_STATUS_UPDATED = "USER_STATUS_UPDATED";
 export type USER_STATUS_UPDATED = typeof USER_STATUS_UPDATED;
 

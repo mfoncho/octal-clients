@@ -14,7 +14,7 @@ import * as Icons from "@octal/icons";
 import Client from "@octal/client";
 import paths from "src/paths/workspace";
 import { useSpaces } from "@octal/store";
-import { joinSpace } from "@octal/store/lib/actions/space";
+import { joinSpace } from "@octal/store/lib/actions/member";
 import { io } from "@octal/client";
 
 const useStyles = makeStyles((theme) => ({

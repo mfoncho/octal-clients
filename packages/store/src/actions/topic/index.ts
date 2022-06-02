@@ -2,6 +2,7 @@ import type { io } from "@octal/client";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
+    TOPIC_PURGED,
     SEARCH_TOPIC,
     TOPIC_SEARCH_RESULT,
     LOAD_TOPICS,
@@ -90,6 +91,11 @@ export interface DeletedTopicPayload {
     id: string;
     space_id: string;
 }
+
+export interface TopicPurgedPayload {
+    id: string;
+}
+
 export type UpdateTopicAction = IOAction<
     UPDATE_TOPIC,
     UpdateTopicPayload,
@@ -105,7 +111,10 @@ export type LoadSpaceTopicsAction = IOAction<
 >;
 
 export type DeleteTopicAction = IOAction<DELETE_TOPIC, DeleteTopicPayload, any>;
+
 export type TopicDeletedAction = Action<TOPIC_DELETED, DeletedTopicPayload>;
+
+export type TopicPurgedAction = Action<TOPIC_PURGED, TopicPurgedPayload>;
 
 export type TopicUpdatedAction = Action<TOPIC_UPDATED, io.Topic>;
 
@@ -220,6 +229,10 @@ export function searchResult(
     payload: io.TopicSearchResult & SearchTopicPayload
 ): TopicSearchResultAction {
     return createAction(TOPIC_SEARCH_RESULT, payload);
+}
+
+export function purgeTopic(payload: TopicPurgedPayload): TopicPurgedAction {
+    return createAction(TOPIC_PURGED, payload);
 }
 
 export function loadSpaceTopics(

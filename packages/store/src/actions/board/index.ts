@@ -5,6 +5,7 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedCard, NormalizedColumn } from "../../schemas";
 import {
+    BOARD_PURGED,
     BOARD_ARCHIVED,
     BOARD_UNARCHIVED,
     ARCHIVE_BOARD,
@@ -75,7 +76,6 @@ import {
     FETCH_COLUMNS,
     DELETE_COLUMN,
     UPDATE_CARD_FIELD,
-    CLEAR_CARDS,
     COLUMN_MOVED,
     UPDATE_BOARD,
     ASSIGN_CHECKLIST,
@@ -105,6 +105,10 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface BoardPurgedPayload {
+    id: string;
+}
 
 export interface ArchiveBoardPayload {
     board_id: string;
@@ -538,6 +542,8 @@ export type BoardArchivedAction = Action<BOARD_ARCHIVED, BoardPartial>;
 
 export type BoardUnarchivedAction = Action<BOARD_UNARCHIVED, BoardPartial>;
 
+export type BoardPurgedAction = Action<BOARD_PURGED, BoardPurgedPayload>;
+
 export type BoardFilterUpdatedAction = Action<
     BOARD_FILTER_UPDATED,
     BoardFilterPayload
@@ -739,8 +745,6 @@ export type BoardCardsLoadedAction = Action<
 >;
 
 export type CardsUpdatedAction = Action<CARDS_UPDATED, NormalizedCard[]>;
-
-export type ClearCardsAction = Action<CLEAR_CARDS, ClearCardPayload[]>;
 
 export type CardsReorderedAction = Action<CARDS_REORDERED, CardPosition[]>;
 
@@ -993,10 +997,6 @@ export function storeCard(card: io.Card): StoreCardAction {
 
 export function storeCards(cards: io.Card[]): StoreCardsAction {
     return createAction(STORE_CARDS, cards);
-}
-
-export function clearCards(payload: ClearCardPayload[]): ClearCardsAction {
-    return createAction(CLEAR_CARDS, payload);
 }
 
 export function cardCreated(card: io.Card): CardCreatedAction {
@@ -1425,4 +1425,8 @@ export function boardArchived(payload: BoardPartial): BoardArchivedAction {
 
 export function boardUnarchived(payload: BoardPartial): BoardUnarchivedAction {
     return createAction(BOARD_UNARCHIVED, payload);
+}
+
+export function purgeBoard(payload: BoardPurgedPayload): BoardPurgedAction {
+    return createAction(BOARD_PURGED, payload);
 }

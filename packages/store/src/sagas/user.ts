@@ -2,11 +2,10 @@ import { put, takeEvery, select } from "redux-saga/effects";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as UserActions from "../actions/user";
-import * as SpaceActions from "../actions/space";
+import * as MemberActions from "../actions/member";
 import client, { io, Presence } from "@octal/client";
 import { UserSchema } from "../schemas";
 import { State } from "..";
-import { relatedLoaded } from "../actions/app";
 
 function* getPreferences(): Iterable<any> {
     try {
@@ -85,7 +84,6 @@ function* password({
     }
 }
 
-
 function* related({ payload }: any): Iterable<any> {
     let users = Object.values(payload[UserSchema.collect] || {}) as io.User[];
     if (users.length > 0) {
@@ -95,16 +93,14 @@ function* related({ payload }: any): Iterable<any> {
 
 function* subscribe({ payload }: any): Iterable<any> {
     const topic = `user:${payload.id}`;
-    if (client.topic(topic)) {
-        let channel = client.channel(topic);
-        channel.on("space.joined", (space: io.Space) => {
-            dispatch(SpaceActions.spaceJoined(space as any));
-        });
-        channel
-            .subscribe()
-            .receive("ok", () => {})
-            .receive("error", () => {});
-    }
+    let channel = client.channel(topic);
+    yield put(
+        UserActions.userConnected({ user_id: payload.id, topic, channel })
+    );
+    channel
+        .subscribe()
+        .receive("ok", () => {})
+        .receive("error", () => {});
 }
 
 function* syncPresence(): Iterable<any> {
@@ -162,8 +158,8 @@ export const tasks = [
         type: Actions.UPDATE_PREFERENCES,
         handler: preferences,
     },
-    { effect: takeEvery, type: Actions.SET_AUTH, handler: subscribe },
-    { effect: takeEvery, type: Actions.SET_AUTH, handler: syncPresence },
+    { effect: takeEvery, type: Actions.AUTH, handler: subscribe },
+    { effect: takeEvery, type: Actions.AUTH, handler: syncPresence },
     { effect: takeEvery, type: Actions.SET_USER_STATUS, handler: setStatus },
     //{ effect: takeEvery, type: "STORE_USERS", handler: store },
 ];

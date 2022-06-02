@@ -1,6 +1,6 @@
-import { put, takeEvery, all } from "redux-saga/effects";
+import { put, takeEvery, select, all } from "redux-saga/effects";
 import Client, { io } from "@octal/client";
-import { dispatch } from "..";
+import { dispatch, State } from "..";
 import { RelatedLoadedAction } from "../actions/app";
 import * as TopicActions from "../actions/topic";
 import * as SpaceActions from "../actions/space";
@@ -120,6 +120,18 @@ function* spaceLoaded({
     yield put(TopicActions.loadSpaceTopics(payload.id!));
 }
 
+function* spacePurged({
+    payload,
+}: SpaceActions.SpacePurgedAction): Iterable<any> {
+    const { topics } = (yield select()) as any as State;
+    const bids = topics.spaces.get(payload.id);
+    if (bids) {
+        for (let id of bids.toArray()) {
+            yield put(TopicActions.purgeTopic({ id }));
+        }
+    }
+}
+
 function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
     const { channel } = payload;
     channel.on("topic.created", (payload: io.Topic) => {
@@ -146,4 +158,5 @@ export const tasks = [
     { effect: takeEvery, type: Actions.UPDATE_TOPIC, handler: update },
     { effect: takeEvery, type: Actions.SEARCH_TOPIC, handler: search },
     { effect: takeEvery, type: Actions.DELETE_TOPIC, handler: trash },
+    { effect: takeEvery, type: Actions.SPACE_PURGED, handler: spacePurged },
 ];

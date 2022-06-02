@@ -139,6 +139,12 @@ export const reducers = {
     ) => {
         return store.patchTopic(payload);
     },
+    [Actions.TOPIC_PURGED]: (
+        store: TopicsStore,
+        { payload }: TopicActions.TopicPurgedAction
+    ) => {
+        return store.removeTopic(payload.id);
+    },
     [Actions.TOPIC_DELETED]: (
         store: TopicsStore,
         { payload }: TopicActions.TopicDeletedAction

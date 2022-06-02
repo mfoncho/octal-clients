@@ -3,6 +3,7 @@ import client, { io } from "@octal/client";
 import { dispatch } from "..";
 import { SpaceSchema as Schema, NormalizedSpace } from "../schemas";
 import * as SpaceActions from "../actions/space";
+import * as MemberActions from "../actions/member";
 import * as Actions from "../actions/types";
 import { relatedLoaded } from "../actions/app";
 
@@ -62,21 +63,7 @@ function* shutdown({
 }: SpaceActions.ShutdownSpaceAction): Iterable<any> {
     try {
         const data = (yield client.shutdownSpace(payload)) as any;
-        yield put(SpaceActions.spaceShutdown({ id: payload.space_id } as any));
-        resolve.success(data);
-    } catch (e) {
-        resolve.error(e);
-    }
-}
-
-function* join({
-    payload,
-    resolve,
-}: SpaceActions.JoinSpaceAction): Iterable<any> {
-    try {
-        const data = (yield client.joinSpace(payload)) as any;
-        const normalized = yield* normalize(data);
-        yield put(SpaceActions.spaceJoined(normalized));
+        yield put(SpaceActions.purgeSpace({ id: payload.space_id }));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -128,9 +115,13 @@ function* update({
     }
 }
 
+function* left({ payload }: MemberActions.SpaceLeftAction): Iterable<any> {
+    yield put(SpaceActions.purgeSpace({ id: payload.space_id! }));
+}
+
 function* disconnect({
     payload,
-}: SpaceActions.SpaceShutdownAction): Iterable<any> {
+}: SpaceActions.SpacePurgedAction): Iterable<any> {
     const topic = `space:${payload.id}`;
     let channel = client.topic(topic);
     if (channel) {
@@ -161,6 +152,8 @@ function* subscribe({
 export const tasks = [
     { effect: takeEvery, type: Actions.INIT, handler: init },
 
+    { effect: takeEvery, type: Actions.SPACE_LEFT, handler: left },
+
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
 
     { effect: takeEvery, type: Actions.SHUTDOWN_SPACE, handler: shutdown },
@@ -182,6 +175,4 @@ export const tasks = [
     { effect: takeEvery, type: Actions.LOAD_SPACE, handler: load },
 
     { effect: takeEvery, type: Actions.LOAD_SPACES, handler: loads },
-
-    { effect: takeEvery, type: Actions.JOIN_SPACE, handler: join },
 ];

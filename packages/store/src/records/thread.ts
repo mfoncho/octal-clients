@@ -41,6 +41,7 @@ export class ThreadRecord
         type: "" as ThreadType,
         init: false,
         is_active: false,
+        type_id: "",
         draft: new ThreadDraft(),
         created_at: "",
         space_id: "0" as Id,

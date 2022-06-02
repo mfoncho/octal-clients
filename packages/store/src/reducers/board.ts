@@ -214,6 +214,13 @@ export const reducers = {
         return store.removeLabel(payload);
     },
 
+    [Actions.BOARD_PURGED]: (
+        store: BoardsStore,
+        { payload }: BoardActions.BoardPurgedAction
+    ) => {
+        return store.removeBoard(payload.id);
+    },
+
     [Actions.BOARD_DELETED]: (
         store: BoardsStore,
         { payload }: BoardActions.BoardDeletedAction

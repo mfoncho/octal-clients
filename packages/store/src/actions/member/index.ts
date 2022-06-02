@@ -3,6 +3,10 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedMember } from "../../schemas";
 import {
+    JOIN_SPACE,
+    LEAVE_SPACE,
+    SPACE_JOINED,
+    SPACE_LEFT,
     CREATE_MEMBER,
     CLEAR_SPACE_MEMBERS,
     MEMBER_LEFT,
@@ -16,6 +20,14 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface JoinSpacePayload {
+    space_id: string;
+}
+
+export interface LeaveSpacePayload {
+    space_id: string;
+}
 
 export interface CreateMemberPayload {
     space_id: string;
@@ -36,6 +48,14 @@ export interface DeleteMemberPayload {
 export interface FetchMembersPayload {
     space_id: string;
 }
+
+export type JoinSpaceAction = IOAction<JOIN_SPACE, JoinSpacePayload, io.Member>;
+
+export type LeaveSpaceAction = IOAction<LEAVE_SPACE, LeaveSpacePayload, any>;
+
+export type SpaceJoinedAction = Action<SPACE_JOINED, NormalizedMember>;
+
+export type SpaceLeftAction = Action<SPACE_LEFT, NormalizedMember>;
 
 export type CreateMemberAction = IOAction<
     CREATE_MEMBER,
@@ -120,4 +140,20 @@ export function memberDeleted(
     payload: MemberDeletedPayload
 ): MemberDeletedAction {
     return createAction(MEMBER_DELETED, payload);
+}
+
+export function joinSpace(payload: JoinSpacePayload): JoinSpaceAction {
+    return createIOAction<JOIN_SPACE>(JOIN_SPACE, payload);
+}
+
+export function leaveSpace(payload: LeaveSpacePayload): LeaveSpaceAction {
+    return createIOAction<LEAVE_SPACE>(LEAVE_SPACE, payload);
+}
+
+export function spaceJoined(payload: NormalizedMember): SpaceJoinedAction {
+    return createIOAction<SPACE_JOINED>(SPACE_JOINED, payload);
+}
+
+export function spaceLeft(payload: NormalizedMember): SpaceLeftAction {
+    return createIOAction<SPACE_LEFT>(SPACE_LEFT, payload);
 }

@@ -1,6 +1,6 @@
-import { takeEvery, put, all } from "redux-saga/effects";
+import { takeEvery, put, all, select } from "redux-saga/effects";
 import client, { io } from "@octal/client";
-import { dispatch } from "..";
+import { dispatch, State } from "..";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 import * as SpaceActions from "../actions/space";
@@ -142,6 +142,18 @@ function* subscribe({
     });
 }
 
+function* spacePurged({
+    payload,
+}: SpaceActions.SpacePurgedAction): Iterable<any> {
+    const { boards } = (yield select()) as any as State;
+    const bids = boards.spaces.get(payload.id);
+    if (bids) {
+        for (let id of bids.toArray()) {
+            yield put(BoardActions.purgeBoard({ id }));
+        }
+    }
+}
+
 export const tasks = [
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     {
@@ -161,4 +173,5 @@ export const tasks = [
     { effect: takeEvery, type: Actions.CREATE_BOARD, handler: create },
     { effect: takeEvery, type: Actions.UPDATE_BOARD, handler: update },
     { effect: takeEvery, type: Actions.DELETE_BOARD, handler: trash },
+    { effect: takeEvery, type: Actions.SPACE_PURGED, handler: spacePurged },
 ];
