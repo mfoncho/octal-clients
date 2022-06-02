@@ -153,7 +153,7 @@ export default class CardClient extends BaseClient {
         request: CompleteCardRequest,
         params?: Params
     ): Promise<io.Card> {
-        const path = `/boards/${request.board_id}/cards/${request.card_id}/complete`;
+        const path = `/cards/${request.card_id}/complete`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }
@@ -163,7 +163,7 @@ export default class CardClient extends BaseClient {
         request: UncompleteCardRequest,
         params?: Params
     ): Promise<io.Card> {
-        const path = `/boards/${request.board_id}/cards/${request.card_id}/uncomplete`;
+        const path = `/cards/${request.card_id}/uncomplete`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }
