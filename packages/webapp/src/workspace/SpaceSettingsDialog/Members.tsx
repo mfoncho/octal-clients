@@ -4,32 +4,26 @@ import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
 import UsersDialog from "../UsersDialog";
 import MembersIcon from "@material-ui/icons/PeopleRounded";
-import { Promiseable } from "@octal/common";
+import client, { io } from "@octal/client";
 import { Markdown, Avatar, Dialog, Button } from "@octal/ui";
-import { useMembers, useUser } from "@octal/store";
 import { deleteMember, createMember } from "@octal/store/lib/actions/member";
 import { useDispatch } from "react-redux";
 import { useInput } from "src/utils";
-import {
-    MemberRecord,
-    SpaceRecord,
-    UserRecord,
-} from "@octal/store/lib/records";
+import { SpaceRecord } from "@octal/store/lib/records";
 
 interface IMember {
     space: SpaceRecord;
     filter: string;
-    member: MemberRecord;
-    onDelete: (member: MemberRecord) => Promiseable;
+    member: io.Member;
+    onDelete: (member: io.Member) => void;
 }
 
 interface IWarning {
     onConfirm: (e: React.MouseEvent) => void;
-    loading: boolean;
     children: React.ReactNode;
 }
 
-function warningText(space: SpaceRecord, user: UserRecord) {
+function warningText(space: SpaceRecord, user: { name: string }) {
     return `If you remove __${user.name}__ from __${space.name}__, they will no longer be able to see any of its messages. To rejoin the space, they will have to be re-invited.
 
 Are you sure you wish to do this?`;
@@ -42,7 +36,6 @@ const WarningDialog = Dialog.create<IWarning>((props) => {
             title="Remove Member"
             confirm="Remove"
             onClose={props.onClose}
-            disabled={props.loading}
             onConfirm={props.onConfirm}>
             {props.children}
         </Dialog.Warning>
@@ -50,15 +43,14 @@ const WarningDialog = Dialog.create<IWarning>((props) => {
 });
 
 function Row({ member, space, filter, onDelete }: IMember) {
-    const [loading, setLoading] = useState(false);
-
     const [warning, setWarning] = useState<boolean>(false);
-
-    const user = useUser(member.user_id);
 
     if (
         filter.length > 0 &&
-        !(user.name.includes(filter) || user.username.includes(filter))
+        !(
+            member.user.name.includes(filter) ||
+            member.user.username.includes(filter)
+        )
     )
         return null;
 
@@ -67,8 +59,7 @@ function Row({ member, space, filter, onDelete }: IMember) {
     }
 
     function handleDelete() {
-        setLoading(true);
-        onDelete(member).catch(() => setLoading(false));
+        onDelete(member);
     }
 
     function handleOpenWarning(e: React.MouseEvent<HTMLElement>) {
@@ -79,13 +70,13 @@ function Row({ member, space, filter, onDelete }: IMember) {
 
     const userNode = (
         <div className="flex flex-row items-center space-x-4">
-            <Avatar alt={user.username} src={user.avatar} />
+            <Avatar alt={member.user.username} src={member.user.avatar} />
             <div className="flex flex-col">
                 <span className="font-semibold text-base text-gray-800">
-                    {user.username}
+                    {member.user.username}
                 </span>
                 <span className="font-semibold text-xs text-gray-500">
-                    {user.name}
+                    {member.user.name}
                 </span>
             </div>
         </div>
@@ -94,9 +85,9 @@ function Row({ member, space, filter, onDelete }: IMember) {
     return (
         <div className="group flex px-4 py-2 flex-row items-center justify-between hover:bg-slate-100">
             {userNode}
-            {space.admin_id !== member.user_id && (
+            {space.admin_id !== member.user.id && (
                 <button
-                    onClick={loading ? undefined : handleOpenWarning}
+                    onClick={handleOpenWarning}
                     className="invisible group-hover:visible text-gray-500 rounded-md border border-gray-500 p-1 hover:bg-gray-200">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -109,13 +100,12 @@ function Row({ member, space, filter, onDelete }: IMember) {
             )}
             <WarningDialog
                 open={Boolean(warning)}
-                loading={loading}
                 onConfirm={handleDelete}
                 onClose={handleCloseWarning}>
                 <div className="flex flex-col">
                     {userNode}
                     <div className="py-4 text-base text-gray-800">
-                        <Markdown>{warningText(space, user)}</Markdown>
+                        <Markdown>{warningText(space, member.user)}</Markdown>
                     </div>
                 </div>
             </WarningDialog>
@@ -128,33 +118,35 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
 
     const [selected, setSelected] = useState<string[]>([]);
 
+    const [members, setMembers] = useState<io.Member[]>([]);
+
     const dialog = Dialog.useDialog();
 
     const filter = useInput("");
 
-    const members = useMembers(space.id);
-
     React.useEffect(() => {
-        const selected = members
-            .map((member) => member.user_id)
-            .toList()
-            .toJS() as any;
-        setSelected(selected);
+        setSelected(members.map((member) => member.user.id));
     }, [members]);
 
-    function handleDeleteMember(member: MemberRecord) {
+    React.useEffect(() => {
+        client.fetchSpaceMembers(space.id).then(setMembers);
+    }, [space.id]);
+
+    function handleDeleteMember(member: io.Member) {
         const action = deleteMember({
             member_id: member.id,
             space_id: space.id,
         });
-        return dispatch(action);
+        dispatch(action);
+        setMembers((members) => members.filter(({ id }) => member.id !== id));
     }
 
     function handleAddUser(id: string) {
         if (!selected.includes(id)) {
-            console.log(id);
             const action = createMember({ space_id: space.id, user_id: id });
-            dispatch(action);
+            dispatch(action).then((data) =>
+                setMembers((members) => [data].concat(members))
+            );
         }
     }
 
@@ -186,7 +178,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
                 </div>
             </div>
             <div className="flex flex-col rounded-md border-gray-200 border divide-y divide-solid">
-                {members.toList().map((member) => (
+                {members.map((member) => (
                     <Row
                         space={space}
                         key={member.id}
