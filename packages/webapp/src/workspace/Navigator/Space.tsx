@@ -88,7 +88,7 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
         <Link
             to={path}
             className={clx(
-                "flex flex-row pl-2 px-2 items-center h-8",
+                "flex flex-row pl-2 px-2 items-center h-8 py-2",
                 selected ? "bg-primary-500" : "hover:bg-slate-200"
             )}>
             <img
