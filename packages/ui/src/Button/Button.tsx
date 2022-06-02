@@ -25,16 +25,16 @@ export const colors = {
         disabled: "bg-primary-300 text-white",
     },
     regular: {
-        active: "bg-gray-200 text-gray-700 hover:bg-gray-300",
-        disabled: "bg-primary-100 text-gray-500",
+        active: "bg-slate-200 text-slate-700 hover:bg-slate-300",
+        disabled: "bg-primary-100 text-gray-400",
     },
     danger: {
         active: "bg-red-500 text-white hover:bg-red-700 ",
         disabled: "bg-red-300",
     },
     clear: {
-        active: "text-gray-700 hover:bg-gray-200",
-        disabled: "text-gray-500",
+        active: "text-slate-700 hover:bg-slate-200",
+        disabled: "text-gray-400",
     },
 };
 
