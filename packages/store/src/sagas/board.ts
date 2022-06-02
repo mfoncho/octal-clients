@@ -142,6 +142,16 @@ function* subscribe({
     });
 }
 
+function* unsubscribe({
+    payload,
+}: BoardActions.BoardPurgedAction): Iterable<any> {
+    const topic = `board:${payload.id}`;
+    let channel = client.topic(topic);
+    if (channel) {
+        channel.unsubscribe();
+    }
+}
+
 function* spacePurged({
     payload,
 }: SpaceActions.SpacePurgedAction): Iterable<any> {
@@ -167,6 +177,7 @@ export const tasks = [
         type: Actions.SPACES_LOADED,
         handler: spaceLoaded,
     },
+    { effect: takeEvery, type: Actions.BOARD_PURGED, handler: unsubscribe },
     { effect: takeEvery, type: Actions.ARCHIVE_BOARD, handler: archive },
     { effect: takeEvery, type: Actions.UNARCHIVE_BOARD, handler: unarchive },
     { effect: takeEvery, type: Actions.BOARD_LOADED, handler: connect },
