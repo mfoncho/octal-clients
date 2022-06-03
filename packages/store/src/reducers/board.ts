@@ -131,7 +131,7 @@ export const reducers = {
         store: BoardsStore,
         { payload }: BoardActions.BoardArchivedAction
     ) => {
-        return store.patchBoard(payload);
+        return store.patchBoard({ ...payload, column_id: null });
     },
     [Actions.BOARD_UNARCHIVED]: (
         store: BoardsStore,

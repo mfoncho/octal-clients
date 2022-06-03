@@ -280,7 +280,7 @@ export const reducers = {
         return store.patchCard(payload);
     },
     [Actions.CARD_UNARCHIVED]: (store: CardsStore, { payload }: any) => {
-        return store.patchCard(payload);
+        return store.putCard(payload);
     },
     [Actions.CARDS_UPDATED]: (store: CardsStore, { payload }: any) => {
         return payload.reduce(

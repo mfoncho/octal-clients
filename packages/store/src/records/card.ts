@@ -388,9 +388,9 @@ export class CardRecord
             data = { ...data, fields };
         }
 
-        if (data.archived) {
+        if (data.archived || Boolean(data.archived_at)) {
             data.column_id = data.board_id;
-        } else if (data.archived === false) {
+        } else if (data.archived === false || data.archived_at == null) {
             data.archived_at = null;
         }
         return data;
