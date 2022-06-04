@@ -32,7 +32,10 @@ export default React.memo<IThread>((props) => {
         if (permissions.get("message.pin")) {
             actions.push("pin");
         }
-        if (permissions.get("space.manage")|| permissions.get("message.delete")) {
+        if (
+            permissions.get("space.manage") ||
+            permissions.get("message.delete")
+        ) {
             actions.push("delete");
         }
         if (permissions.get("message.edit")) {
@@ -85,11 +88,13 @@ export default React.memo<IThread>((props) => {
                                 />
                             </div>
                         )}
-                        <Textarea.Post
-                            {...postInput}
-                            key={thread.id}
-                            onSubmit={handleSubmit}
-                        />
+                        {!postInput.disabled && (
+                            <Textarea.Post
+                                {...postInput}
+                                key={thread.id}
+                                onSubmit={handleSubmit}
+                            />
+                        )}
                     </div>
                 </div>
             </Menu.Context.Provider>

@@ -18,7 +18,19 @@ export function usePostInput(thread: ThreadRecord) {
 
     const [accept, setAccept] = useState<{ max: number; types: string }>();
 
+    function setDraft(value: string, files: File[] = []) {
+        const action = ThreadActions.updateDaft({
+            thread_id: thread.id,
+            space_id: thread.space_id,
+            params: { value, files },
+        });
+        dispatch(action);
+    }
+
     useEffect(() => {
+        if (!permissions.get("message.create")) {
+            setDraft("", []);
+        }
         setAccept({
             max: permissions.get("message.attachment.max") as number,
             types: permissions.get("message.attachment.types") as string,
@@ -27,15 +39,7 @@ export function usePostInput(thread: ThreadRecord) {
 
     const onChange = useCallback(
         (event: UIEvent<FileInput>) => {
-            const action = ThreadActions.updateDaft({
-                thread_id: thread.id,
-                space_id: thread.space_id,
-                params: {
-                    value: event.target.value,
-                    files: event.target.files,
-                },
-            });
-            dispatch(action);
+            setDraft(event.target.value, event.target.files);
         },
         [thread.id, thread.draft]
     );
@@ -66,15 +70,7 @@ export function usePostInput(thread: ThreadRecord) {
                     //@ts-ignore
                     attachment: file,
                 });
-                const resetAction = ThreadActions.updateDaft({
-                    thread_id: thread.id,
-                    space_id: thread.space_id,
-                    params: {
-                        value: "",
-                        files: files,
-                    },
-                });
-                dispatch(resetAction);
+                setDraft("", files);
                 return dispatch(postAction);
             }
         },
