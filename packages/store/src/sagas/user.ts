@@ -2,7 +2,6 @@ import { put, takeEvery, select } from "redux-saga/effects";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as UserActions from "../actions/user";
-import * as MemberActions from "../actions/member";
 import client, { io, Presence } from "@octal/client";
 import { UserSchema } from "../schemas";
 import { State } from "..";
@@ -93,6 +92,7 @@ function* related({ payload }: any): Iterable<any> {
 
 function* subscribe({ payload }: any): Iterable<any> {
     const topic = `user:${payload.id}`;
+    if (client.topic(topic)) return;
     let channel = client.channel(topic);
     yield put(
         UserActions.userConnected({ user_id: payload.id, topic, channel })
@@ -106,6 +106,7 @@ function* subscribe({ payload }: any): Iterable<any> {
 function* syncPresence(): Iterable<any> {
     const topic = "workspace";
 
+    if (client.topic(topic)) return;
     let channel = client.channel(topic);
 
     channel.on("user.updated", (payload: io.User) => {
