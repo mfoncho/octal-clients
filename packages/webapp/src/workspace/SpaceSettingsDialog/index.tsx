@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import clx from "classnames";
 import * as Icons from "@octal/icons";
 import { Dialog, Button } from "@octal/ui";
+import {
+    SpaceRecord,
+    SpacePermissions,
+    useSpacePermissions,
+} from "@octal/store";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import GeneralManager from "./General";
 import RolesPermissionsManager from "./Roles";
@@ -10,12 +15,10 @@ import BoardsManager from "./Boards";
 import MembersManager from "./Members";
 import ShutdownManager from "./Shutdown";
 import TopicsManager from "./Topics";
-import { usePermissionsCombo } from "../Space/hooks";
-import { PermissionsRecord, SpaceRecord } from "@octal/store/lib/records";
 
 export interface SpaceManagerProps {
     space: SpaceRecord;
-    permissions: PermissionsRecord;
+    permissions: SpacePermissions;
 }
 
 export interface SpaceManagerFilterParams extends SpaceManagerProps {}
@@ -51,7 +54,7 @@ interface IDialog {
 export default Dialog.create<IDialog>((props) => {
     const { space } = props;
 
-    const permissions = usePermissionsCombo(space);
+    const permissions = useSpacePermissions(space.id);
 
     const [Manager, setManager] = useState<
         | React.FC<SpaceManagerProps>

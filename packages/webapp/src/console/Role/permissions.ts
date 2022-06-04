@@ -1,9 +1,7 @@
-import { permissions } from "@octal/store";
-
-type PermissionKey = keyof typeof permissions;
+import { Permission } from "@octal/store";
 
 export interface IPermissionConfig {
-    key: PermissionKey;
+    permission: Permission;
     name: string;
     type: string;
     description: string;
@@ -44,13 +42,13 @@ const definitions: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Manage space",
-                key: "manage_space",
+                permission: "space.manage",
                 type: "boolean",
                 description: "Rename the space, change space type",
             },
             {
                 name: "Leave space",
-                key: "leave_space",
+                permission: "space.leave",
                 type: "boolean",
                 description:
                     "Members with this permission can leave the space is they so please",
@@ -63,48 +61,41 @@ const definitions: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Post message",
-                key: "post_message",
+                permission: "message.create",
                 type: "boolean",
                 description: "Post messages to all threads in this space",
             },
             {
                 name: "Edit message",
-                key: "edit_message",
+                permission: "message.edit",
                 type: "boolean",
                 description:
                     "Member can edit messages they posted in any of the spaces threads",
             },
             {
                 name: "Delete message",
-                key: "delete_message",
+                permission: "message.delete",
                 type: "boolean",
                 description:
                     "Members can delete the messages they posted in any space thread",
             },
             {
                 name: "Manage messages",
-                key: "manage_messages",
+                permission: "message.manage",
                 type: "boolean",
                 description:
                     "Members to manage (delete)any message posted in any of the spaces threads",
             },
             {
-                name: "Use markdown",
-                key: "use_markdown",
-                type: "boolean",
-                description:
-                    "Messages sent with this persission will be parsed as rich markdown",
-            },
-            {
                 name: "Pin messages",
-                key: "pin_message",
+                permission: "message.pin",
                 type: "boolean",
                 description:
                     "Pin messages to the space, pinned messages will be visible to all members",
             },
             {
                 name: "Embed link",
-                key: "embed_links",
+                permission: "message.embeds",
                 type: "boolean",
                 description: "Embed links within message will be parsed",
             },
@@ -116,14 +107,14 @@ const definitions: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Max uploadable file size",
-                key: "upload_limit",
+                permission: "message.attachment.max",
                 type: "number",
                 scale: "MB",
                 description: "Max uploadable file size in MB",
             },
             {
                 name: "Upload types",
-                key: "upload_types",
+                permission: "message.attachment.types",
                 type: "string",
                 description:
                     "Types of file extensions the user is allowed to upload enter extension type seperated be commas like png image and word documents will be png,docx ",
@@ -136,13 +127,13 @@ const definitions: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Create card",
-                key: "create_card",
+                permission: "card.create",
                 type: "boolean",
                 description: "Create cards",
             },
             {
                 name: "Manage board",
-                key: "manage_board",
+                permission: "board.manage",
                 type: "boolean",
                 description:
                     "Create columns, Delete cards, move and reorder cards and columns",
@@ -155,12 +146,11 @@ const definitions: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Send invitations",
-                key: "send_invitation",
+                permission: "invitation.send",
                 type: "boolean",
                 description: "Send email invitations",
             },
         ],
     },
 ];
-
 export default definitions;

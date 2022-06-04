@@ -1,16 +1,14 @@
 import React from "react";
-import { List, OrderedMap } from "immutable";
+import { OrderedMap } from "immutable";
 import {
-    PermissionsRecord,
-    CardRecord,
+    SpacePermissions,
     SpaceRecord,
     MemberRecord,
-    ColumnRecord,
     ThreadRecord,
     SpaceRoleRecord,
-} from "@octal/store/lib/records";
+} from "@octal/store";
 
-const Space = React.createContext(new SpaceRecord({ permissions: {} }));
+const Space = React.createContext(new SpaceRecord({}));
 
 export const Members = React.createContext(OrderedMap<string, MemberRecord>());
 
@@ -18,14 +16,14 @@ export const Threads = React.createContext(OrderedMap<string, ThreadRecord>());
 
 export const Roles = React.createContext(OrderedMap<string, SpaceRoleRecord>());
 
-export const Permissions = React.createContext(new PermissionsRecord());
+export const Permissions = React.createContext(SpacePermissions);
 
 export const Member = React.createContext(new MemberRecord());
 
 export const Tool = React.createContext({
     name: null as string | null,
-    open: (tool: any, props: any) => { },
-    close: () => { },
+    open: (tool: any, props: any) => {},
+    close: () => {},
 });
 
 export default Space;

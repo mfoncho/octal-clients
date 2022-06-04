@@ -95,7 +95,7 @@ export default React.memo<IColumns>(() => {
                     .sort(positionSort)
                     .map(renderColumn)}
                 {provided.placeholder}
-                {permissions.manage_board.value && <CreateColumn />}
+                {permissions.get("board.manage") && <CreateColumn />}
             </div>
         );
     }

@@ -76,12 +76,13 @@ export default function Role(props: IRole) {
     }
 
     function renderPermission(permission: IPermission) {
-        const { key } = permission;
+        const key = permission.permission;
+        const enabled = true;
         if (permission.type === "boolean") {
             return (
                 <BooleanPermission
-                    key={permission.key}
-                    enabled={changes.has(key)}
+                    key={key}
+                    enabled={enabled}
                     onClear={handleClearPermission}
                     onChange={handleSetPermission}
                     permission={permission}
@@ -94,8 +95,8 @@ export default function Role(props: IRole) {
                 <NumberPermission
                     min={0}
                     max={1024}
-                    key={permission.key}
-                    enabled={changes.has(key)}
+                    key={key}
+                    enabled={enabled}
                     onClear={handleClearPermission}
                     onChange={handleSetPermission}
                     permission={permission}
@@ -106,8 +107,8 @@ export default function Role(props: IRole) {
         if (permission.type == "string") {
             return (
                 <StringPermission
-                    key={permission.key}
-                    enabled={changes.has(key)}
+                    key={key}
+                    enabled={enabled}
                     onClear={handleClearPermission}
                     onChange={handleSetPermission}
                     permission={permission}

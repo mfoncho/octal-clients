@@ -23,14 +23,14 @@ export default function StringPermission(props: IPermission) {
     function handleInput(e: any) {
         const value = e.target.value.trim();
         setValue(value);
-        props.onChange(props.permission.key, value);
+        props.onChange(props.permission.permission, value);
     }
 
     function handleToggleDefault(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.checked) {
-            props.onChange(props.permission.key, value);
+            props.onChange(props.permission.permission, "");
         } else {
-            props.onClear(props.permission.key);
+            props.onClear(props.permission.permission);
         }
     }
 
@@ -51,7 +51,7 @@ export default function StringPermission(props: IPermission) {
                     {props.permission.name}
                 </span>
                 <Input
-                    value={value}
+                    value={value ?? ""}
                     className="my-2"
                     onChange={handleInput}
                     disabled={!props.enabled}

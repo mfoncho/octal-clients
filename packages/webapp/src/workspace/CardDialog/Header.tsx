@@ -5,8 +5,9 @@ import { CardRecord } from "@octal/store/lib/records";
 import { useAuthId } from "@octal/store";
 import { useInput } from "src/utils";
 import { Button, Text, useScreen, Textarea } from "@octal/ui";
-import { usePermissions, useSpace } from "@workspace/Space";
+import { usePermissions} from "@workspace/Space";
 import { useActions } from "@workspace/Board/Card";
+import { useBoard } from "@workspace/Board";
 
 interface IHeader {
     card: CardRecord;
@@ -48,7 +49,7 @@ export default function Header({ card, ...props }: IHeader) {
 
     const actions = useActions();
 
-    const board = useSpace();
+    const board = useBoard();
 
     const permissions = usePermissions();
 

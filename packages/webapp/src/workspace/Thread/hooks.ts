@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
-import { useThrottledEffect, useDebouncedEffect } from "@octal/hooks";
+import { useThrottledEffect } from "@octal/hooks";
 import { useDispatch } from "react-redux";
 import { ThreadRecord } from "@octal/store";
 import { UIEvent } from "@octal/ui";
@@ -20,8 +20,8 @@ export function usePostInput(thread: ThreadRecord) {
 
     useEffect(() => {
         setAccept({
-            max: permissions.upload_limit.value,
-            types: permissions.upload_types.value,
+            max: permissions.get("message.attachment.max") as number,
+            types: permissions.get("message.attachment.types") as string,
         });
     }, [permissions]);
 
@@ -87,6 +87,6 @@ export function usePostInput(thread: ThreadRecord) {
         onChange,
         onSubmit,
         accept,
-        disabled: !permissions.post_message.value,
+        disabled: !permissions.get("message.create"),
     };
 }

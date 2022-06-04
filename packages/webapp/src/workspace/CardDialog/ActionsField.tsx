@@ -24,7 +24,7 @@ export default function ColumnField({ card, ...props }: IColumnField) {
 
     let owner = card.user_id == authId;
 
-    const moveable = permissions.manage_board || owner;
+    const moveable = permissions.get("board.manage") || owner;
 
     function handleColumnSelect(e: React.MouseEvent, id: string) {
         e.preventDefault();

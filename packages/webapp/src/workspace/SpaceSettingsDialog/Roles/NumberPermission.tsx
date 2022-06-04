@@ -24,14 +24,14 @@ export default function NumberPermission(props: IPermission) {
     }, [props.value]);
 
     function handleChange(e: React.ChangeEvent<{}>, value: any) {
-        props.onChange(props.permission.key, value);
+        props.onChange(props.permission.permission, value);
     }
 
     function handleToggleDefault(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.checked) {
-            props.onChange(props.permission.key, value);
+            props.onChange(props.permission.permission, 0);
         } else {
-            props.onClear(props.permission.key);
+            props.onClear(props.permission.permission);
         }
     }
     return (
@@ -54,7 +54,7 @@ export default function NumberPermission(props: IPermission) {
                     <Range
                         min={props.min}
                         max={props.max}
-                        value={props.value}
+                        value={props.value ?? 0}
                         disabled={!props.enabled}
                         onChange={handleChange}
                         valueLabelDisplay="on"

@@ -4,8 +4,7 @@ import clx from "classnames";
 import * as Icons from "@octal/icons";
 import { Button, Text } from "@octal/ui";
 import { RoleRecord, SpaceRoleRecord } from "@octal/store";
-import { useSpace } from "@octal/store";
-import { useActions } from "@workspace/Space";
+import { useRoleActions } from "@workspace/Space";
 import BooleanPermission from "./BooleanPermission";
 import definitions, { IPermissionsGroup, IPermission } from "./permissions";
 import NumberPermission from "./NumberPermission";
@@ -18,8 +17,8 @@ interface IRole {
 }
 
 export default function Role(props: IRole) {
-    const space = useSpace(props.selected.space_id);
-    const actions = useActions(space);
+    const role = props.selected;
+    const actions = useRoleActions(props.selected);
     const [loading, setLoading] = useState<boolean>(false);
 
     const [changes, setChanges] = useState<Map<string, any>>(
@@ -32,67 +31,31 @@ export default function Role(props: IRole) {
 
     const hasChanges = !changes.equals(overrides);
 
-    useEffect(() => {
-        const custom = props.selected.permissions.reduce(
-            (acc: any, perm: any) => {
-                return acc.set(perm.name, perm.value);
-            },
-            Map()
-        );
-        setChanges(custom);
-        setOverrides(custom);
-    }, [props.selected]);
-
-    function handleSetPermission(key: string, value: any) {
-        const permission = props.selected.permissions.find(
-            (permission) => permission.name == key
-        );
-        if (permission) {
-            if (permission.value == value) {
-                setChanges((changes) => {
-                    return changes.delete(key);
-                });
-            } else {
-                setChanges((changes) => {
-                    return changes.set(key, value);
-                });
-            }
-            return;
-        } else {
-            setChanges((changes) => {
-                return changes.set(key, value);
-            });
-            return;
-        }
+    function handleDeletePermission(key: string) {
+        actions.deletePermission(key);
     }
 
-    function handleClearPermission(key: string) {
-        setChanges((changes) => changes.delete(key));
+    function handleSetPermission(key: string, value: any) {
+        actions.setPermission(key, value);
     }
 
     function handleSaveChanges(e: React.MouseEvent) {
         e.stopPropagation();
         e.preventDefault();
-        actions
-            .setPermissions(props.role.id, changes.toJS() as any)
-            .then(() => {
-                setOverrides(changes);
-            })
-            .finally(() => setLoading(false));
-        setLoading(true);
     }
 
     function renderPermission(permission: IPermission) {
-        const { key } = permission;
+        const value = role.permissions.get(permission.permission);
+        const enabled = value !== undefined && value !== null;
         if (permission.type === "boolean") {
             return (
                 <BooleanPermission
-                    key={permission.key}
-                    enabled={changes.has(key)}
-                    onClear={handleClearPermission}
+                    key={permission.permission}
+                    enabled={enabled}
+                    onClear={handleDeletePermission}
                     onChange={handleSetPermission}
                     permission={permission}
-                    value={changes.get(key, false)}
+                    value={value as any}
                 />
             );
         }
@@ -101,24 +64,24 @@ export default function Role(props: IRole) {
                 <NumberPermission
                     min={0}
                     max={1024}
-                    key={permission.key}
-                    enabled={changes.has(key)}
-                    onClear={handleClearPermission}
+                    key={permission.permission}
+                    enabled={enabled}
+                    onClear={handleDeletePermission}
                     onChange={handleSetPermission}
                     permission={permission}
-                    value={changes.get(key, 0)}
+                    value={value as any}
                 />
             );
         }
         if (permission.type == "string") {
             return (
                 <StringPermission
-                    key={permission.key}
-                    enabled={changes.has(key)}
-                    onClear={handleClearPermission}
+                    key={permission.permission}
+                    enabled={enabled}
+                    onClear={handleDeletePermission}
                     onChange={handleSetPermission}
                     permission={permission}
-                    value={changes.get(key, "")}
+                    value={value as any}
                 />
             );
         }

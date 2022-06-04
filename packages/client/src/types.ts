@@ -110,9 +110,9 @@ export namespace io {
     }
 
     export interface Permission {
-        name: string;
-        base: string;
-        value: boolean | string | number | number[] | string[] | boolean[];
+        permission: string;
+        overwrite?: boolean;
+        value: boolean | string | number;
     }
 
     export interface Config {

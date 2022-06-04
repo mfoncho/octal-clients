@@ -24,7 +24,7 @@ export default function Actions({ card, ...props }: IActions) {
     const permissions = usePermissions();
     const [drawer, drawerActions] = useDrawer(card.id);
     const owner = card.user_id == aid;
-    const canManageBoard = permissions.manage_board;
+    const canManageBoard = permissions.get("board.manage");
 
     const actions = useActions(card);
 

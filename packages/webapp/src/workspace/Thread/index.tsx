@@ -29,13 +29,13 @@ export default React.memo<IThread>((props) => {
 
     useEffect(() => {
         let actions = ["react", "reply", "flag"];
-        if (permissions.pin_message) {
+        if (permissions.get("message.pin")) {
             actions.push("pin");
         }
-        if (permissions.manage_space || permissions.delete_message) {
+        if (permissions.get("space.manage")|| permissions.get("message.delete")) {
             actions.push("delete");
         }
-        if (permissions.edit_message) {
+        if (permissions.get("message.edit")) {
             actions.push("edit");
         }
         setMenu(actions);

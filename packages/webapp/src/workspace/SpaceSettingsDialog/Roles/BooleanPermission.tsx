@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import clx from "classnames";
 import { Switch } from "@octal/ui";
 import { IBooleanPermission } from "./permissions";
@@ -12,24 +12,15 @@ interface IPermission {
 }
 
 export default function BooleanPermission(props: IPermission) {
-    const [value, setValue] = useState<boolean>(props.value);
-
-    useEffect(() => {
-        if (props.value !== value) {
-            setValue(props.value);
-        }
-    }, [props.value]);
-
     function handleToggle() {
-        setValue(!value);
-        props.onChange(props.permission.key, !value);
+        props.onChange(props.permission.permission, !props.value);
     }
 
     function handleToggleDefault(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.checked) {
-            props.onChange(props.permission.key, value);
+            props.onChange(props.permission.permission, false);
         } else {
-            props.onClear(props.permission.key);
+            props.onClear(props.permission.permission);
         }
     }
 
@@ -58,7 +49,7 @@ export default function BooleanPermission(props: IPermission) {
                         {props.permission.description}
                     </span>
                 </div>
-                <Switch checked={value} onChange={handleToggle} />
+                <Switch checked={props.value ?? ""} onChange={handleToggle} />
             </div>
         </div>
     );

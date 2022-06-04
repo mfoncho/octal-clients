@@ -4,9 +4,8 @@ import Space, { Permissions, Members, Member } from "./Context";
 import Main from "./Main";
 import { useParams } from "react-router-dom";
 import { MemberRecord } from "@octal/store/lib/records";
-import { useSpace, useMembers } from "@octal/store";
+import { useSpace, useMembers, useSpacePermissions } from "@octal/store";
 import { loadMembers } from "@octal/store/lib/actions/member";
-import { usePermissionsCombo } from "./hooks";
 export * from "./hooks";
 
 const defaultMember = new MemberRecord({});
@@ -18,7 +17,7 @@ export const Context = React.memo<{ id: string; children?: any }>((props) => {
 
     const members = useMembers(props.id);
 
-    const permissions = usePermissionsCombo(space);
+    const permissions = useSpacePermissions(space.id);
 
     useEffect(() => {
         if (space.id && members.size == 0) {

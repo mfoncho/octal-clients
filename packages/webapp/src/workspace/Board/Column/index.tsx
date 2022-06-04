@@ -53,7 +53,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                 key={card.id}
                 index={index}
                 card={card}
-                draggable={permissions.manage_board.value}
+                draggable={permissions.get("board.manage") as boolean}
             />
         );
     }
@@ -92,7 +92,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
         .toList()
         .map(renderCard);
 
-    const canManageBoard = permissions.manage_board.value;
+    const canManageBoard = permissions.get("board.manage");
 
     const isFull = cards.size >= column.capacity;
 
@@ -142,7 +142,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                             </Tooltip>
                         ) : (
                             column.origin &&
-                            permissions.create_card && (
+                            permissions.get("card.create") && (
                                 <Button
                                     variant="icon"
                                     color="clear"
@@ -211,7 +211,7 @@ export default React.memo<IColumnMain>(({ column, index }) => {
     return (
         <Draggable
             index={index}
-            isDragDisabled={!permissions.manage_board.value}
+            isDragDisabled={!permissions.get("board.manage")}
             draggableId={`column:${column.id}`}>
             {(provided) => (
                 <div

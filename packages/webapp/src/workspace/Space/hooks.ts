@@ -2,7 +2,6 @@ import { useContext, useMemo, useEffect, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { List } from "immutable";
 import Space, { Permissions, Tool, Members, Member } from "./Context";
-import { postMessage, threadActivity } from "@octal/store/lib/actions/thread";
 import * as RoleActions from "@octal/store/lib/actions/role";
 import {
     createTopic as createSpaceTopic,
@@ -11,12 +10,11 @@ import {
 import { createBoard as createSpaceBoard } from "@octal/store/lib/actions/board";
 import emoji from "@octal/emoji";
 import {
-    useThread,
     usePermissionsSet,
-    PermissionsRecord,
     SpaceRecord,
+    SpaceRoleRecord,
     UserRecord,
-    ThreadRecord,
+    SpacePermissions,
     useUsers,
     useSpaceTopicsIndex,
     TopicRecord,
@@ -134,99 +132,13 @@ export function useSpace() {
     return useContext(Space);
 }
 
-export function usePermissionsCombo(
-    { roles }: SpaceRecord = new SpaceRecord({})
-) {
-    const set = usePermissionsSet();
-    return useMemo(() => {
-        return set.reduce((record, value, key) => {
-            let permissions = record ?? value;
-            let role = roles.get(key);
-            if (role) {
-                return role.permissions.reduce(
-                    (permissions: any, perm: any) => {
-                        return permissions.mergeIn([perm.name], perm);
-                    },
-                    permissions
-                );
-            } else if (permissions == record) {
-                return permissions;
-            } else {
-                return permissions.toSeq().reduce((record, item) => {
-                    if (record.has(item.name)) {
-                        return record.update(item.name as any, (perm) => {
-                            const type = typeof perm.value;
-
-                            if (type == "boolean") {
-                                return perm.set(
-                                    "value",
-                                    (item.value as any) || perm.value
-                                );
-                            } else if (type == "string") {
-                                return perm;
-                            }
-                        });
-                    } else {
-                        return record;
-                    }
-                }, permissions);
-            }
-        }, null as any as PermissionsRecord);
-    }, [roles, set]);
-}
-
 export function usePermissions() {
     return useContext(Permissions);
 }
 
 export function useSettings() {
     const permissions = usePermissions();
-    return permissions.manage_space;
-}
-
-export function usePostInput(thread?: ThreadRecord) {
-    const dispatch = useDispatch();
-
-    const permissions = usePermissions();
-
-    const [upload, setUpload] = useState<{ max: number; accept: string }>();
-
-    useEffect(() => {
-        setUpload({
-            max: permissions.upload_limit.value,
-            accept: permissions.upload_types.value,
-        });
-    }, [permissions.upload_limit.value, permissions.upload_types.value]);
-
-    const onChange = useCallback(() => {
-        const action = threadActivity({
-            type: "typing",
-            thread_id: thread!.id,
-            space_id: thread!.space_id,
-        });
-        return dispatch(action);
-    }, [thread?.id]);
-
-    const onSubmit = useCallback(
-        (payload: any, reply_id?: string) => {
-            const params = {
-                content: payload.value,
-                reply_id: reply_id!,
-                space_id: thread?.space_id,
-                thread_id: thread?.id,
-                attachment: payload.file,
-            };
-            return dispatch(postMessage(params));
-        },
-        [thread?.id]
-    );
-
-    return {
-        onChange,
-        onSubmit,
-        upload,
-        disabled: !permissions.post_message.value,
-    };
+    return permissions.get("space.manage") as boolean;
 }
 
 export function useActions(space: SpaceRecord) {
@@ -276,22 +188,82 @@ export function useActions(space: SpaceRecord) {
         [space.id]
     );
 
-    const setPermissions = useCallback(
+    const setPermission = useCallback(
         (
-            id: string,
-            permissions: {
-                [key: string]: string | number | string[] | number[];
-            }
+            role_id: string,
+            permission: string,
+            value: string | boolean | number
         ) => {
-            const action = RoleActions.setSpacePermissions({
+            const action = RoleActions.setSpacePermission({
                 space_id: space.id,
-                role_id: id,
-                params: permissions,
+                role_id: role_id,
+                params: {
+                    value: value,
+                    permission: permission,
+                },
             });
             return dispatch(action);
         },
         [space.id]
     );
 
-    return { createRole, createBoard, deleteRole, setPermissions, createTopic };
+    const deletePermission = useCallback(
+        (role_id: string, permission: string) => {
+            const action = RoleActions.deleteSpacePermission({
+                space_id: space.id,
+                role_id: role_id,
+                permission: permission,
+            });
+            return dispatch(action);
+        },
+        [space.id]
+    );
+
+    return {
+        createRole,
+        createBoard,
+        deleteRole,
+        deletePermission,
+        setPermission,
+        createTopic,
+    };
+}
+
+export function useRoleActions(role: SpaceRoleRecord) {
+    const dispatch = useDispatch();
+    const deleteRole = useCallback(() => {
+        const action = RoleActions.deleteSpaceRole({
+            space_id: role.space_id,
+            role_id: role.role_id,
+        });
+        return dispatch(action);
+    }, [role.id]);
+
+    const setPermission = useCallback(
+        (permission: string, value: string | boolean | number) => {
+            const action = RoleActions.setSpacePermission({
+                space_id: role.space_id,
+                role_id: role.role_id,
+                params: {
+                    value: value,
+                    permission: permission,
+                },
+            });
+            return dispatch(action);
+        },
+        [role.id]
+    );
+
+    const deletePermission = useCallback(
+        (permission: string) => {
+            const action = RoleActions.deleteSpacePermission({
+                space_id: role.space_id,
+                role_id: role.role_id,
+                permission: permission,
+            });
+            return dispatch(action);
+        },
+        [role.id]
+    );
+    return { deleteRole, setPermission, deletePermission };
 }

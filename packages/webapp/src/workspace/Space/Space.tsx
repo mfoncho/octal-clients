@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { Textarea } from "@octal/ui";
 import Chat from "../Chat";
 import Board from "../Board";
 import Topic from "../Topic";
 import { useSpace, useSuggestable } from "./hooks";
-import { purgeSpace } from "@octal/store/lib/actions/space";
-import { useNavigator, useUnmount } from "src/hooks";
+import { useNavigator } from "src/hooks";
 
 function Redirect() {
     const nav = useNavigator();
@@ -23,15 +21,7 @@ function Redirect() {
 export default React.memo(() => {
     const space = useSpace();
 
-    const dispatch = useDispatch();
-
     const mentionable = useSuggestable();
-
-    useUnmount(() => {
-        if (space.is_archived) {
-            dispatch(purgeSpace(space.toJS() as any));
-        }
-    }, [space.is_archived]);
 
     if (space.is_direct) return <Chat space={space} />;
 
