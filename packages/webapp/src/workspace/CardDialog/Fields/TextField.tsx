@@ -92,7 +92,7 @@ export default function TextField({ field, handle, ...props }: IField) {
             ) : (
                 <div
                     className={clx(
-                        "flex flex-col break-word w-full text-gray-800 rounded-lg text-base",
+                        "flex flex-col break-word w-full text-gray-800 rounded-lg text-base mb-4",
                         {
                             ["h-8 bg-gray-100"]: !Boolean(text),
                         }
