@@ -50,10 +50,10 @@ export class SpacesStore extends Record({
         return this;
     }
 
-    deletePermission(payload: any) {
+    unsetPermission(payload: any) {
         let space = this.getSpace(payload.space_id);
         if (space) {
-            space = space.deletePermission(payload.role_id, payload.permission);
+            space = space.unsetPermission(payload.role_id, payload.permission);
             return this.setIn(["entities", space.id], space);
         }
         return this;
@@ -124,11 +124,11 @@ export const reducers = {
         return store.setPermission(payload);
     },
 
-    [Actions.SPACE_PERMISSION_DELETED]: (
+    [Actions.SPACE_PERMISSION_UNSET]: (
         store: SpacesStore,
         { payload }: any
     ) => {
-        return store.deletePermission(payload);
+        return store.unsetPermission(payload);
     },
 
     [Actions.SPACE_ROLE_DELETED]: (store: SpacesStore, { payload }: any) => {

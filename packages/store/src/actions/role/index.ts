@@ -11,8 +11,8 @@ import {
     FETCH_SPACE_ROLES,
     SET_SPACE_PERMISSION,
     SPACE_PERMISSION_SET,
-    DELETE_SPACE_PERMISSION,
-    SPACE_PERMISSION_DELETED,
+    UNSET_SPACE_PERMISSION,
+    SPACE_PERMISSION_UNSET,
     DELETE_SPACE_ROLE,
     SPACE_ROLE_CREATED,
     SPACE_ROLE_UPDATED,
@@ -43,7 +43,7 @@ export interface SetPermissionPayload {
     };
 }
 
-export interface DeleteSpacePermissionPayload {
+export interface UnsetSpacePermissionPayload {
     space_id: string;
     role_id: string;
     permission: string;
@@ -82,9 +82,9 @@ export type DeleteSpaceRoleAction = IOAction<
     any
 >;
 
-export type DeleteSpacePermissionAction = IOAction<
-    DELETE_SPACE_PERMISSION,
-    DeleteSpacePermissionPayload,
+export type UnsetSpacePermissionAction = IOAction<
+    UNSET_SPACE_PERMISSION,
+    UnsetSpacePermissionPayload,
     any
 >;
 
@@ -105,9 +105,9 @@ export type RoleDeletedAction = Action<ROLE_DELETED, { id: string }>;
 export type RoleLoadedAction = Action<ROLE_LOADED, io.Role>;
 export type RolesLoadedAction = Action<ROLES_LOADED, io.Role[]>;
 
-export type SpacePermissionDeletedAction = Action<
-    SPACE_PERMISSION_DELETED,
-    DeleteSpacePermissionPayload
+export type SpacePermissionUnsetAction = Action<
+    SPACE_PERMISSION_UNSET,
+    UnsetSpacePermissionPayload
 >;
 
 export type SpacePermissionSetAction = Action<
@@ -193,19 +193,19 @@ export function spaceRolesLoaded(
     return createAction(SPACE_ROLES_LOADED, roles);
 }
 
-export function deleteSpacePermission(
-    payload: DeleteSpacePermissionPayload
-): DeleteSpacePermissionAction {
-    return createIOAction<DELETE_SPACE_PERMISSION>(
-        DELETE_SPACE_PERMISSION,
+export function unsetSpacePermission(
+    payload: UnsetSpacePermissionPayload
+): UnsetSpacePermissionAction {
+    return createIOAction<UNSET_SPACE_PERMISSION>(
+        UNSET_SPACE_PERMISSION,
         payload
     );
 }
 
-export function spacePermissionDeleted(
-    payload: DeleteSpacePermissionPayload
-): SpacePermissionDeletedAction {
-    return createAction(SPACE_PERMISSION_DELETED, payload);
+export function spacePermissionUnset(
+    payload: UnsetSpacePermissionPayload
+): SpacePermissionUnsetAction {
+    return createAction(SPACE_PERMISSION_UNSET, payload);
 }
 
 export function spacePermissionSet(

@@ -23,7 +23,7 @@ export class SpaceRoleRecord
         return this.setIn(["permissions", permission], value);
     }
 
-    deletePermission(permission: string) {
+    unsetPermission(permission: string) {
         return this.deleteIn(["permissions", permission]);
     }
 
@@ -110,12 +110,12 @@ export class SpaceRecord
         return this;
     }
 
-    deletePermission(role_id: string, permission: string) {
+    unsetPermission(role_id: string, permission: string) {
         const role = this.roles.get(role_id);
         if (role) {
             return this.setIn(
                 ["roles", role.role_id],
-                role.deletePermission(permission)
+                role.unsetPermission(permission)
             );
         }
         return this;

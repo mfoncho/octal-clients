@@ -75,13 +75,13 @@ function* deleteRole({
     }
 }
 
-function* deleteSpacePermission({
+function* unsetSpacePermission({
     payload,
     resolve,
-}: RoleActions.DeleteSpacePermissionAction): Iterable<any> {
+}: RoleActions.UnsetSpacePermissionAction): Iterable<any> {
     try {
         const data = (yield Client.deleteSpaceRolePermission(payload)) as any;
-        yield put(RoleActions.spacePermissionDeleted(payload));
+        yield put(RoleActions.spacePermissionUnset(payload));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -101,8 +101,12 @@ function* spaceSubscribe({
         dispatch(RoleActions.spaceRoleDeleted(payload));
     });
 
-    channel.on("space.role.permissions.updated", (payload: io.SpaceRole) => {
-        dispatch(RoleActions.spaceRoleUpdated(payload));
+    channel.on("space.role.permission.set", (payload: any) => {
+        dispatch(RoleActions.spacePermissionSet(payload));
+    });
+
+    channel.on("space.role.permission.unset", (payload: any) => {
+        dispatch(RoleActions.spacePermissionUnset(payload));
     });
 }
 
@@ -122,8 +126,8 @@ export const tasks = [
     },
     {
         effect: takeEvery,
-        type: Actions.DELETE_SPACE_PERMISSION,
-        handler: deleteSpacePermission,
+        type: Actions.UNSET_SPACE_PERMISSION,
+        handler: unsetSpacePermission,
     },
     { effect: takeEvery, type: Actions.DELETE_SPACE_ROLE, handler: deleteRole },
 ];
