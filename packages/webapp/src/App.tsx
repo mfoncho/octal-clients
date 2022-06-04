@@ -20,12 +20,10 @@ const Main = React.memo(() => {
 
 export default function App() {
     return (
-        <React.StrictMode>
-            <Provider store={store}>
-                <BrowserRouter>
-                    <Main />
-                </BrowserRouter>
-            </Provider>
-        </React.StrictMode>
+        <Provider store={store}>
+            <BrowserRouter>
+                <Main />
+            </BrowserRouter>
+        </Provider>
     );
 }

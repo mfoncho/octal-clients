@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as Icons from "@octal/icons";
 import { useInput } from "src/hooks";
 import { Button, Dialog } from "@octal/ui";
@@ -10,6 +10,7 @@ import LabelsPopper from "./LabelsPopper";
 
 export default React.memo(() => {
     const { filter } = useBoard();
+    console.log(useBoard());
     const input = useInput(filter.term);
     const actions = useBoardActions();
     const labelBtn = React.useRef<HTMLButtonElement | null>();
