@@ -117,7 +117,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                 }>
                 <div
                     {...handle}
-                    className="flex px-3 py-1 flex-row items-center justify-between rounded shadow bg-primary-100 m-1">
+                    className="flex px-3 py-1 flex-row items-center justify-between rounded shadow bg-primary-100 m-1 h-10">
                     <button
                         onClick={canManageBoard ? handleOpenMenu : undefined}
                         className="flex flex-row items-center">
@@ -144,8 +144,8 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                             column.origin &&
                             permissions.get("card.create") && (
                                 <Button
-                                    variant="icon"
                                     color="clear"
+                                    variant="icon"
                                     onClick={handleOpenCreateCardDialog}>
                                     <Icons.Plus />
                                 </Button>

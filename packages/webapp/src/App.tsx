@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { Screen } from "@octal/ui";
@@ -20,10 +20,12 @@ const Main = React.memo(() => {
 
 export default function App() {
     return (
-        <Provider store={store}>
-            <BrowserRouter>
-                <Main />
-            </BrowserRouter>
-        </Provider>
+        <React.StrictMode>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Main />
+                </BrowserRouter>
+            </Provider>
+        </React.StrictMode>
     );
 }
