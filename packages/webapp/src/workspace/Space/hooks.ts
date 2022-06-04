@@ -188,43 +188,10 @@ export function useActions(space: SpaceRecord) {
         [space.id]
     );
 
-    const setPermission = useCallback(
-        (
-            role_id: string,
-            permission: string,
-            value: string | boolean | number
-        ) => {
-            const action = RoleActions.setSpacePermission({
-                space_id: space.id,
-                role_id: role_id,
-                params: {
-                    value: value,
-                    permission: permission,
-                },
-            });
-            return dispatch(action);
-        },
-        [space.id]
-    );
-
-    const deletePermission = useCallback(
-        (role_id: string, permission: string) => {
-            const action = RoleActions.deleteSpacePermission({
-                space_id: space.id,
-                role_id: role_id,
-                permission: permission,
-            });
-            return dispatch(action);
-        },
-        [space.id]
-    );
-
     return {
         createRole,
         createBoard,
         deleteRole,
-        deletePermission,
-        setPermission,
         createTopic,
     };
 }
@@ -254,9 +221,9 @@ export function useRoleActions(role: SpaceRoleRecord) {
         [role.id]
     );
 
-    const deletePermission = useCallback(
+    const unsetPermission = useCallback(
         (permission: string) => {
-            const action = RoleActions.deleteSpacePermission({
+            const action = RoleActions.unsetSpacePermission({
                 space_id: role.space_id,
                 role_id: role.role_id,
                 permission: permission,
@@ -265,5 +232,5 @@ export function useRoleActions(role: SpaceRoleRecord) {
         },
         [role.id]
     );
-    return { deleteRole, setPermission, deletePermission };
+    return { deleteRole, setPermission, unsetPermission };
 }

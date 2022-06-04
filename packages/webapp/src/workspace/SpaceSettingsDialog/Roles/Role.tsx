@@ -32,7 +32,7 @@ export default function Role(props: IRole) {
     const hasChanges = !changes.equals(overrides);
 
     function handleDeletePermission(key: string) {
-        actions.deletePermission(key);
+        actions.unsetPermission(key);
     }
 
     function handleSetPermission(key: string, value: any) {
