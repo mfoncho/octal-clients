@@ -1,60 +1,36 @@
-import { Record } from "immutable";
+import { Record, List } from "immutable";
 import { Unique } from "@octal/client";
 
-export interface IPermission<T = any> {
-    readonly name: string;
+export interface BasePermission<T = any> {
     readonly value: T;
-    readonly base?: string;
+    readonly overwrite: boolean;
 }
 
 export class BooleanPermission
     extends Record({
-        name: "",
         value: true,
-        base: "static",
+        overwrite: false,
     })
-    implements IPermission<boolean>
-{
-    constructor(value = true, base = "static") {
-        super({ value, base });
-    }
-}
+    implements BasePermission<boolean> {}
 
 export class NumberPermission
     extends Record({
-        name: "",
         value: 0,
-        base: "static",
+        overwrite: false,
     })
-    implements IPermission<number>
-{
-    constructor(value = 0, base = "static") {
-        super({ value, base });
-    }
-}
+    implements BasePermission<number> {}
 
 export class ListPermission extends Record({
-    name: "",
     value: [] as any[],
-    base: "static",
-}) {
-    constructor(value = [], base = "static") {
-        super({ value, base });
-    }
-}
+    overwrite: false,
+}) {}
 
 export class StringPermission
     extends Record({
-        name: "",
         value: "",
-        base: "static",
+        overwrite: false,
     })
-    implements IPermission<string>
-{
-    constructor(value = "", base = "static") {
-        super({ value, base });
-    }
-}
+    implements BasePermission<string> {}
 
 const booleanPermission = new BooleanPermission();
 
@@ -65,39 +41,94 @@ const numberPermission = new NumberPermission();
 const stringPermission = new StringPermission();
 
 export const permissions = {
-    upload_limit: numberPermission,
-    upload_types: stringPermission,
-    create_card: booleanPermission,
-    embed_links: booleanPermission,
-    pin_message: booleanPermission,
-    edit_message: booleanPermission,
-    post_reply: booleanPermission,
-    manage_board: booleanPermission,
-    manage_topics: booleanPermission,
-    use_markdown: booleanPermission,
-    post_message: booleanPermission,
-    leave_space: booleanPermission,
-    delete_message: booleanPermission,
-    manage_space: booleanPermission,
-    send_invitation: booleanPermission,
-    manage_messages: booleanPermission,
+    ["message.attachment.max"]: numberPermission,
+    ["message.attachment.types"]: stringPermission,
+    ["message.embeds"]: booleanPermission,
+    ["message.pin"]: booleanPermission,
+    ["message.edit"]: booleanPermission,
+    ["card.create"]: booleanPermission,
+    ["card.move"]: booleanPermission,
+    ["card.delete"]: booleanPermission,
+    ["board.manage"]: booleanPermission,
+    ["space.manage"]: booleanPermission,
+    ["message.manage"]: booleanPermission,
+    ["message.create"]: booleanPermission,
+    ["space.leave"]: booleanPermission,
+    ["message.delete"]: booleanPermission,
+    ["invitation.send"]: booleanPermission,
 };
 
-export class PermissionsRecord extends Record(permissions) {}
+export type BasePermissionScheme = typeof permissions;
+
+export type Permission = keyof BasePermissionScheme;
+
+export class Permissions extends Record(permissions) {}
 
 export class RoleRecord
     extends Record({
         id: "",
         name: "",
+        permissions: new Permissions(),
     })
-    implements Unique {}
+    implements Unique
+{
+    constructor(payload: any) {
+        super(RoleRecord.fromJS(payload));
+    }
+    static make(payload: any) {
+        return new RoleRecord(payload);
+    }
+
+    static fromJS(payload: any) {
+        if (Array.isArray(payload.permissions)) {
+            const permissions = payload.permissions.reduce(
+                (permissions: any, permission: any) => {
+                    let record = permissions.get(permission.permission);
+                    if (record) {
+                        return permissions.set(
+                            permission.permission,
+                            record.merge(permission)
+                        );
+                    }
+                    return permissions;
+                },
+                new Permissions()
+            );
+            payload = { ...payload, permissions };
+        }
+        return payload;
+    }
+}
 
 export class AuthRecord
     extends Record(
         {
             id: "",
             token: "",
+            roles: List<string>(),
         },
         "auth"
     )
-    implements Unique {}
+    implements Unique
+{
+    constructor(payload: any) {
+        super(AuthRecord.fromJS(payload));
+    }
+
+    static make(payload: any) {
+        return new AuthRecord(payload);
+    }
+
+    static fromJS(payload: any) {
+        if (Array.isArray(payload.roles)) {
+            const roles = payload.roles.map((role: any) => {
+                if (typeof role === "string") {
+                    return role;
+                }
+                return role.id;
+            });
+            payload = { ...payload, roles: List(roles) };
+        }
+        return payload;
+    }
+}

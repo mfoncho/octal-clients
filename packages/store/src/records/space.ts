@@ -1,19 +1,47 @@
 import { Record, List, Map } from "immutable";
-import { IPermission } from "./auth";
+import { Permission } from "./auth";
 import { Unique, Id, AccessType } from "@octal/client";
+
+export const SpacePermissions = Map<Permission, string | number | boolean>();
+
+export type SpacePermissions = typeof SpacePermissions;
 
 export class SpaceRoleRecord
     extends Record({
         id: "" as Id,
         role_id: "" as Id,
         space_id: "" as Id,
-        permissions: [] as IPermission[],
+        permissions: SpacePermissions,
     })
     implements Unique
 {
+    constructor(payload?: any) {
+        super(payload ? SpaceRoleRecord.fromJS(payload) : payload);
+    }
+
+    setPermission(permission: string, value: string | number | boolean) {
+        return this.setIn(["permissions", permission], value);
+    }
+
+    deletePermission(permission: string) {
+        return this.deleteIn(["permissions", permission]);
+    }
+
     static make(payload: any) {
-        if (Record.isRecord(payload)) return payload as any as SpaceRoleRecord;
         return new SpaceRoleRecord(payload);
+    }
+
+    static fromJS(payload: any) {
+        if (Record.isRecord(payload)) return payload as any as SpaceRoleRecord;
+        if (Array.isArray(payload.permissions)) {
+            let permissions = payload.permissions.reduce(
+                (acc: any, permission: any) =>
+                    acc.set(permission.permission, permission.value),
+                SpacePermissions
+            );
+            payload = { ...payload, permissions };
+        }
+        return payload;
     }
 }
 
@@ -57,10 +85,6 @@ export class SpaceRecord
         return this.access === "direct";
     }
 
-    get is_archived() {
-        return false;
-    }
-
     toServer() {
         return this.toJS();
     }
@@ -75,19 +99,30 @@ export class SpaceRecord
         });
     }
 
-    patchRole(payload: any) {
-        return this.update("roles", (roles) => {
-            return roles.map((role) => {
-                if (role.id !== payload.id) return role;
-                return new SpaceRoleRecord(payload);
-            });
-        });
+    setPermission(role_id: string, permission: string, value: any) {
+        const role = this.roles.get(role_id);
+        if (role) {
+            return this.setIn(
+                ["roles", role.role_id],
+                role.setPermission(permission, value)
+            );
+        }
+        return this;
     }
 
-    removeRole(id: string) {
-        return this.update("roles", (roles) =>
-            roles.filter((role) => role.id !== id)
-        );
+    deletePermission(role_id: string, permission: string) {
+        const role = this.roles.get(role_id);
+        if (role) {
+            return this.setIn(
+                ["roles", role.role_id],
+                role.deletePermission(permission)
+            );
+        }
+        return this;
+    }
+
+    deleteRole(role_id: string) {
+        return this.deleteIn(["roles", role_id]);
     }
 
     static mapFromJS(data: any) {
@@ -97,7 +132,7 @@ export class SpaceRecord
     static objectFromJS(data: any) {
         if (data.roles) {
             const roles = data.roles.reduce((roles: any, role: any) => {
-                return roles.set(role.role_id, new SpaceRoleRecord(role));
+                return roles.set(role.role_id, SpaceRoleRecord.make(role));
             }, Map());
             data = { ...data, roles };
         }

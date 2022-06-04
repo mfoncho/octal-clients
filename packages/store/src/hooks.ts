@@ -7,6 +7,7 @@ import { Store } from "./reducers";
 
 import selector from "./selectors";
 import {
+    SpacePermissions,
     Presence,
     Calendar,
     CardRecord,
@@ -528,10 +529,6 @@ export function usePermissionsSet() {
     return useSelector(selector.permissions);
 }
 
-export function usePermissions() {
-    return useSelector(selector.permissions);
-}
-
 // Naive
 export function useUserChecklists(user_id: string): List<UserChecklist> {
     const selector = useCallback(
@@ -609,4 +606,37 @@ export function useBoardFilter(id: string) {
 
 export function useCalendarLoaded() {
     return useSelector(selector.calendarLoaded);
+}
+
+export function usePermissions() {
+    return useSelector(selector.permissions);
+}
+
+export function useSpacePermissions(id: string) {
+    const space = useSpace(id);
+    const auth = useAuth();
+    const roles = useRoles();
+    return useMemo(() => {
+        return auth.roles.reduce((permissions, role_id) => {
+            const baseRole = roles.get(role_id);
+            const spacePermissions = space.roles.get(role_id)?.permissions;
+            if (baseRole && spacePermissions) {
+                return baseRole.permissions
+                    .toSeq()
+                    .reduce((permissions, permission, key) => {
+                        if (permission.overwrite)
+                            return permissions.set(key, permission.value);
+
+                        const value = spacePermissions.get(key)!;
+
+                        if (value === null || value == undefined) {
+                            return permissions.set(key, permission.value);
+                        } else {
+                            return permissions.set(key, value);
+                        }
+                    }, permissions);
+            }
+            return permissions;
+        }, SpacePermissions);
+    }, [auth, roles, space.roles]);
 }

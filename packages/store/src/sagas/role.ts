@@ -45,26 +45,43 @@ function* create({
     }
 }
 
-function* update({
+function* setPermission({
     payload,
     resolve,
-}: RoleActions.SetSpacePermissionsAction): Iterable<any> {
+}: RoleActions.SetSpacePermissionAction): Iterable<any> {
     try {
-        const data = (yield Client.updateSpaceRolePermissions(payload)) as any;
-        yield put(RoleActions.spaceRoleUpdated(data));
+        const data = (yield Client.setSpaceRolePermission(payload)) as any;
+        const permission = {
+            value: payload.params.value,
+            permission: payload.params.permission,
+        };
+        yield put(RoleActions.spacePermissionSet({ ...payload, permission }));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
     }
 }
 
-function* destroy({
+function* deleteRole({
     payload,
     resolve,
 }: RoleActions.DeleteSpaceRoleAction): Iterable<any> {
     try {
         const data = (yield Client.deleteSpaceRole(payload)) as any;
         yield put(RoleActions.spaceRoleDeleted(data));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
+function* deleteSpacePermission({
+    payload,
+    resolve,
+}: RoleActions.DeleteSpacePermissionAction): Iterable<any> {
+    try {
+        const data = (yield Client.deleteSpaceRolePermission(payload)) as any;
+        yield put(RoleActions.spacePermissionDeleted(payload));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -100,8 +117,13 @@ export const tasks = [
     { effect: takeEvery, type: Actions.CREATE_SPACE_ROLE, handler: create },
     {
         effect: takeEvery,
-        type: Actions.SET_SPACE_PERMISSIONS,
-        handler: update,
+        type: Actions.SET_SPACE_PERMISSION,
+        handler: setPermission,
     },
-    { effect: takeEvery, type: Actions.DELETE_SPACE_ROLE, handler: destroy },
+    {
+        effect: takeEvery,
+        type: Actions.DELETE_SPACE_PERMISSION,
+        handler: deleteSpacePermission,
+    },
+    { effect: takeEvery, type: Actions.DELETE_SPACE_ROLE, handler: deleteRole },
 ];

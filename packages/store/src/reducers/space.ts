@@ -37,10 +37,23 @@ export class SpacesStore extends Record({
         return this;
     }
 
-    updateRole(payload: any) {
+    setPermission(payload: any) {
         let space = this.getSpace(payload.space_id);
         if (space) {
-            space = space.patchRole(payload);
+            space = space.setPermission(
+                payload.role_id,
+                payload.permission.permission,
+                payload.permission.value
+            );
+            return this.setIn(["entities", space.id], space);
+        }
+        return this;
+    }
+
+    deletePermission(payload: any) {
+        let space = this.getSpace(payload.space_id);
+        if (space) {
+            space = space.deletePermission(payload.role_id, payload.permission);
             return this.setIn(["entities", space.id], space);
         }
         return this;
@@ -49,7 +62,7 @@ export class SpacesStore extends Record({
     removeRole(payload: any) {
         let space = this.getSpace(payload.space_id);
         if (space) {
-            space = space.removeRole(payload.id);
+            space = space.deleteRole(payload.id);
             return this.setIn(["entities", space.id], space);
         }
         return this;
@@ -107,8 +120,15 @@ export const reducers = {
         return store.putRole(payload);
     },
 
-    [Actions.SPACE_ROLE_UPDATED]: (store: SpacesStore, { payload }: any) => {
-        return store.updateRole(payload);
+    [Actions.SPACE_PERMISSION_SET]: (store: SpacesStore, { payload }: any) => {
+        return store.setPermission(payload);
+    },
+
+    [Actions.SPACE_PERMISSION_DELETED]: (
+        store: SpacesStore,
+        { payload }: any
+    ) => {
+        return store.deletePermission(payload);
     },
 
     [Actions.SPACE_ROLE_DELETED]: (store: SpacesStore, { payload }: any) => {

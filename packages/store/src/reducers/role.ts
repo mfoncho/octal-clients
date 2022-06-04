@@ -12,7 +12,7 @@ export type State = Roles;
 export const state = Map() as State;
 
 function put(state: State, { payload }: RoleActions.RoleLoadedAction) {
-    return state.set(payload.id, new RoleRecord(payload));
+    return state.set(payload.id, RoleRecord.make(payload));
 }
 
 function putAuthRoles(state: State, { payload }: SetAuthAction) {
@@ -24,7 +24,7 @@ function putAuthRoles(state: State, { payload }: SetAuthAction) {
 
 function puts(state: State, { payload }: RoleActions.RolesLoadedAction) {
     return payload.reduce((state, role) => {
-        return state.set(role.id, new RoleRecord(role));
+        return state.set(role.id, RoleRecord.make(role));
     }, state);
 }
 

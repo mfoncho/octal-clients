@@ -1,14 +1,14 @@
 import { AuthRecord } from "../records";
 
-const state = new AuthRecord();
+const state = AuthRecord.make({});
 
 export const reducers = {
-    SET_AUTH(state: AuthRecord, { payload }: any) {
-        return state.merge(payload);
+    SET_AUTH(_state: AuthRecord, { payload }: any) {
+        return AuthRecord.make(payload);
     },
 
     LOGOUT() {
-        return new AuthRecord();
+        return AuthRecord.make({});
     },
 };
 

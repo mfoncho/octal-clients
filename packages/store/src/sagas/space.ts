@@ -26,7 +26,9 @@ function* init(): Iterable<any> {
         for (let space of normalized) {
             yield put(SpaceActions.spaceLoaded(space));
         }
-    } catch (e: any) {}
+    } catch (e: any) {
+        console.log(e);
+    }
 }
 
 function* load({

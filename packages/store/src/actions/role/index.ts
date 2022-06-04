@@ -9,7 +9,10 @@ import {
     CREATE_SPACE_ROLE,
     SPACE_ROLE_DELETED,
     FETCH_SPACE_ROLES,
-    SET_SPACE_PERMISSIONS,
+    SET_SPACE_PERMISSION,
+    SPACE_PERMISSION_SET,
+    DELETE_SPACE_PERMISSION,
+    SPACE_PERMISSION_DELETED,
     DELETE_SPACE_ROLE,
     SPACE_ROLE_CREATED,
     SPACE_ROLE_UPDATED,
@@ -25,12 +28,25 @@ export interface CreateSpaceRolePayload {
     role_id: string;
 }
 
-export interface SetPermissionsPayload {
+export interface SpacePermissionSetPayload {
+    space_id: string;
+    role_id: string;
+    permission: io.Permission;
+}
+
+export interface SetPermissionPayload {
     space_id: string;
     role_id: string;
     params: {
-        [key: string]: string | number | boolean | string[] | number[];
+        permission: string;
+        value: string | number | boolean;
     };
+}
+
+export interface DeleteSpacePermissionPayload {
+    space_id: string;
+    role_id: string;
+    permission: string;
 }
 
 export interface DeleteSpaceRolePayload {
@@ -54,15 +70,21 @@ export type CreateSpaceRoleAction = IOAction<
     io.SpaceRole
 >;
 
-export type SetSpacePermissionsAction = IOAction<
-    SET_SPACE_PERMISSIONS,
-    SetPermissionsPayload,
-    io.SpaceRole
+export type SetSpacePermissionAction = IOAction<
+    SET_SPACE_PERMISSION,
+    SetPermissionPayload,
+    io.Permission
 >;
 
 export type DeleteSpaceRoleAction = IOAction<
     DELETE_SPACE_ROLE,
     DeleteSpaceRolePayload,
+    any
+>;
+
+export type DeleteSpacePermissionAction = IOAction<
+    DELETE_SPACE_PERMISSION,
+    DeleteSpacePermissionPayload,
     any
 >;
 
@@ -82,6 +104,16 @@ export type RoleUpdatedAction = Action<ROLE_UPDATED, io.Role>;
 export type RoleDeletedAction = Action<ROLE_DELETED, { id: string }>;
 export type RoleLoadedAction = Action<ROLE_LOADED, io.Role>;
 export type RolesLoadedAction = Action<ROLES_LOADED, io.Role[]>;
+
+export type SpacePermissionDeletedAction = Action<
+    SPACE_PERMISSION_DELETED,
+    DeleteSpacePermissionPayload
+>;
+
+export type SpacePermissionSetAction = Action<
+    SPACE_PERMISSION_SET,
+    SpacePermissionSetPayload
+>;
 
 export type SpaceRoleCreatedAction = Action<SPACE_ROLE_CREATED, io.SpaceRole>;
 
@@ -111,10 +143,10 @@ export function createSpaceRole(
     return createIOAction<CREATE_SPACE_ROLE>(CREATE_SPACE_ROLE, payload);
 }
 
-export function setSpacePermissions(
-    payload: SetPermissionsPayload
-): SetSpacePermissionsAction {
-    return createIOAction(SET_SPACE_PERMISSIONS, payload);
+export function setSpacePermission(
+    payload: SetPermissionPayload
+): SetSpacePermissionAction {
+    return createIOAction(SET_SPACE_PERMISSION, payload);
 }
 
 export function deleteSpaceRole(
@@ -159,4 +191,25 @@ export function spaceRolesLoaded(
     roles: io.SpaceRole[]
 ): SpaceRolesLoadedAction {
     return createAction(SPACE_ROLES_LOADED, roles);
+}
+
+export function deleteSpacePermission(
+    payload: DeleteSpacePermissionPayload
+): DeleteSpacePermissionAction {
+    return createIOAction<DELETE_SPACE_PERMISSION>(
+        DELETE_SPACE_PERMISSION,
+        payload
+    );
+}
+
+export function spacePermissionDeleted(
+    payload: DeleteSpacePermissionPayload
+): SpacePermissionDeletedAction {
+    return createAction(SPACE_PERMISSION_DELETED, payload);
+}
+
+export function spacePermissionSet(
+    payload: SpacePermissionSetPayload
+): SpacePermissionSetAction {
+    return createAction(SPACE_PERMISSION_SET, payload);
 }

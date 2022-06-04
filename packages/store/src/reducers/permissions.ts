@@ -1,7 +1,7 @@
 import { Map } from "immutable";
-import { PermissionsRecord } from "../records";
+import { Permissions } from "../records";
 
-const state = Map<string, PermissionsRecord>();
+const state = Map<string, Permissions>();
 
 export type State = typeof state;
 
@@ -13,7 +13,7 @@ export const reducers = {
                     (record: any, perm: any) => {
                         return record.mergeIn([perm.name], perm);
                     },
-                    new PermissionsRecord()
+                    new Permissions()
                 );
 
                 state.set(role.id, permissions);
