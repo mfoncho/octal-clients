@@ -10,7 +10,6 @@ import LabelsPopper from "./LabelsPopper";
 
 export default React.memo(() => {
     const { filter } = useBoard();
-    console.log(useBoard());
     const input = useInput(filter.term);
     const actions = useBoardActions();
     const labelBtn = React.useRef<HTMLButtonElement | null>();
