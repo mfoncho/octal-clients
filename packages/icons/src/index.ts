@@ -1,4 +1,5 @@
 export { default as Topic } from "./Topic";
+export { default as Image } from "./Image";
 export { default as Pin } from "./Pin";
 export { default as Reply } from "./Reply";
 export { default as Bookmark } from "./Bookmark";
