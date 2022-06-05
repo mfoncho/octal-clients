@@ -6,7 +6,7 @@ export type UpdatePreferencesRequest = Partial<io.Preferences>;
 export interface UpdateUserProfileRequest {
     name?: string;
     about?: string;
-    avatar?: File;
+    avatar?: File | string;
     username?: string;
 }
 
