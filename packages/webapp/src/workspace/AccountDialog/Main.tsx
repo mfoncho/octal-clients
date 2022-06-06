@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import clx from "classnames";
 import { Dialog, Button, Flow } from "@octal/ui";
-import Preferences from "./Preferences";
 import { useUser } from "@octal/store/lib/hooks";
+import Preferences from "./Preferences";
+import Session from "./Session";
 import Profile from "./Profile";
 import Security from "./Security";
 
@@ -11,6 +12,7 @@ interface IDialog {}
 const tabs = [
     { name: "Profile", value: "profile" },
     { name: "Preferences", value: "preferences" },
+    { name: "Session", value: "session" },
 ];
 
 export default Dialog.create<IDialog>((props) => {
@@ -58,6 +60,9 @@ export default Dialog.create<IDialog>((props) => {
                     </Flow.Case>
                     <Flow.Case value="password">
                         <Security user={user} setView={setActive} />
+                    </Flow.Case>
+                    <Flow.Case value="session">
+                        <Session />
                     </Flow.Case>
                 </Flow.Switch>
             </div>
