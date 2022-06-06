@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { UserRecord } from "@octal/store/lib/records";
 import { useInput } from "src/utils";
-import { Dialog, Avatar, Button, Textarea } from "@octal/ui";
+import * as Icons from "@octal/icons";
+import { Dialog, ImageInput, Button, Textarea } from "@octal/ui";
 import * as UserActions from "@octal/store/lib/actions/user";
 import { useDispatch } from "react-redux";
 
@@ -50,10 +51,29 @@ export function Input({ label, as = "input", description, ...props }: IInput) {
 
 export default React.memo<IProfile>(({ user, ...props }) => {
     const dispatch = useDispatch();
+    const imgInputId = React.useId();
     const [loading, setLoading] = useState<boolean>(false);
     const bio = useInput(user.bio);
     const name = useInput(user.name);
+    const avatar = useInput<string | null>(null);
     const username = useInput(user.username);
+
+    React.useEffect(() => {
+        if (loading === false) {
+            if (name.valid) {
+                name.setValue(user.name);
+            }
+            if (username.valid) {
+                username.setValue(user.username);
+            }
+            if (bio.valid) {
+                bio.setValue(user.bio);
+            }
+            if (avatar.valid) {
+                avatar.setValue(null);
+            }
+        }
+    }, [loading]);
     function handleSubmit(e: React.MouseEvent) {
         e.stopPropagation();
         e.preventDefault();
@@ -67,13 +87,16 @@ export default React.memo<IProfile>(({ user, ...props }) => {
         if (bio.valid) {
             params.bio = bio.value;
         }
+        if (avatar.valid) {
+            params.avatar = avatar.value;
+        }
         const action = UserActions.updateProfile(params);
         dispatch(action).finally(() => setLoading(false));
         setLoading(true);
     }
     return (
         <React.Fragment>
-            <Dialog.Content className="overflow-y-auto">
+            <Dialog.Content className="overflow-y-auto overflow-x-hidden">
                 <div className="flex flex-row">
                     <div className="flex flex-col flex-1 pr-8">
                         <div className="flex flex-col">
@@ -91,12 +114,31 @@ export default React.memo<IProfile>(({ user, ...props }) => {
                             />
                         </div>
                     </div>
-                    <div className="flex flex-none flex-col px-4">
-                        <Avatar
-                            className="h-32 w-32"
-                            src={user.avatar}
+                    <div className="relative flex flex-none flex-col px-4">
+                        <ImageInput
+                            id={imgInputId}
                             alt={user.name}
+                            className="h-32 w-32 rounded-full border border-gray-200"
+                            placeholder={user.avatar}
+                            value={avatar.value}
+                            onChange={avatar.setValue}
                         />
+                        <label
+                            role="button"
+                            htmlFor={imgInputId}
+                            className="group absolute h-32 w-32 rounded-full">
+                            <div className="group-hover:visible invisible w-full h-full rounded-full flex justify-center items-center group-hover:bg-primary-800/80 text-white">
+                                <Icons.Image.Add className="w-14 h-14" />
+                            </div>
+                        </label>
+                        {avatar.valid && (
+                            <div
+                                role="button"
+                                onClick={() => avatar.setValue(null)}
+                                className="absolute right-4 -top-3 mt-5 bg-white py-1 px-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-full">
+                                <Icons.CloseCircleSolid />
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col">
@@ -120,7 +162,10 @@ export default React.memo<IProfile>(({ user, ...props }) => {
                     onClick={handleSubmit}
                     color="primary"
                     disabled={
-                        (!name.valid && !bio.valid && !username.valid) ||
+                        (!name.valid &&
+                            !bio.valid &&
+                            !username.valid &&
+                            !avatar.valid) ||
                         loading
                     }>
                     Save
