@@ -163,9 +163,9 @@ export namespace io {
         metas: Presence[];
     }
 
-    export interface Status extends Unique {
-        name: string;
-        icon: string;
+    export interface UserStatus {
+        status: string;
+        timeout: string;
     }
 
     export interface Author extends Unique {
@@ -191,8 +191,9 @@ export namespace io {
         created_at: Timestamp;
     }
 
-    export interface User extends Author {
-        status_id: string;
+    export interface User extends Author, UserStatus {
+        bio: string;
+        created_at: Timestamp;
     }
 
     export interface Task extends Unique {

@@ -16,8 +16,11 @@ export interface UpdatePasswordRequest {
 }
 
 export interface SetUserStatusRequest {
-    status: string;
-    timeout?: string;
+    user_id: string;
+    params: {
+        status: string;
+        timeout?: string;
+    };
 }
 
 export default class UserClient extends BaseClient {
@@ -60,12 +63,9 @@ export default class UserClient extends BaseClient {
     async setUserStatus(
         request: SetUserStatusRequest,
         params?: Params
-    ): Promise<io.User> {
-        const path = `/user/status/${request.status}`;
-        const payload = {
-            timeout: request.timeout,
-        };
-        const { data } = await this.endpoint.post(path, payload, params);
+    ): Promise<io.UserStatus> {
+        const path = `/status`;
+        const { data } = await this.endpoint.post(path, request.params, params);
         return data;
     }
 
