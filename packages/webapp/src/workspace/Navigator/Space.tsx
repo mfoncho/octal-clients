@@ -6,6 +6,7 @@ import TopicCreatorDialog from "../Space/CreateTopic";
 import CreateBoardDialog from "../Space/CreateBoardDialog";
 import paths from "src/paths/workspace";
 import Counter from "./Counter";
+import * as Icons from "@octal/icons";
 import Topic from "./Topic";
 import Board from "./Board";
 import { BsThreeDots as MenuIcon } from "react-icons/bs";
@@ -25,8 +26,10 @@ export interface ISpace {
 }
 
 export interface IMenuItem {
+    icon?: React.ReactNode;
     name: string;
     menu: string;
+    action?: React.ReactNode;
 }
 
 export interface IMenu {
@@ -48,12 +51,21 @@ const Menu = Popper.create<HTMLUListElement, IMenu>((props) => {
             {props.options.map((item, index) => (
                 <li
                     key={String(index)}
+                    role="button"
                     data-menu-name={item.menu}
-                    className="flex group p-1.5 rounded-md flex-row items-center hover:bg-primary-500 hover:text-white"
+                    className="flex group p-1.5 rounded-md flex-row items-center hover:bg-primary-500 hover:text-white justify-between text-gray-600 group hover:shadow"
                     onClick={props.onSelect}>
-                    <span className="px-1 font-semibold text-sm group-hover:text-white">
-                        {item.name}
-                    </span>
+                    <div className="flex flex-row items-center">
+                        {item.icon && (
+                            <div className="overflow-hidden">{item.icon}</div>
+                        )}
+                        <span className="px-1 font-semibold text-sm group-hover:text-white">
+                            {item.name}
+                        </span>
+                    </div>
+                    <div className="flex flex justify-center items-center invisible group-hover:visible">
+                        {item.action}
+                    </div>
                 </li>
             ))}
         </Popper>
@@ -128,19 +140,24 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         let menu: IMenuItem[] = [];
         if (permissions.get("space.manage")) {
             menu.push({
+                icon: <Icons.Board />,
                 menu: "board",
                 name: "Board",
+                action: <Icons.Plus />,
             });
         }
         if (permissions.get("space.manage")) {
             menu.push({
                 menu: "topic",
+                icon: <Icons.Topic />,
                 name: "Topic",
+                action: <Icons.Plus />,
             });
         }
 
         if (permissions.get("invitation.send")) {
             menu.push({
+                icon: <Icons.AddUser />,
                 menu: "invite",
                 name: "Invite",
             });
@@ -148,6 +165,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
         if (permissions.get("space.manage") || authid === space.admin_id) {
             menu.push({
+                icon: <Icons.Settings />,
                 menu: "settings",
                 name: "Settings",
             });
