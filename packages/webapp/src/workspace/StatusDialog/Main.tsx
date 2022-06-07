@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Dialog, Text, Emoji, Button } from "@octal/ui";
 import * as Icons from "@octal/icons";
+import emoji from "@octal/emoji";
 import { setUserStatus } from "@octal/store/lib/actions/user";
 import { useStatus, useAuthId } from "@octal/store";
 import { useDispatch } from "react-redux";
@@ -14,17 +15,16 @@ interface IDialog {
 export default React.memo<IDialog>((props) => {
     const aid = useAuthId();
     const dispatch = useDispatch();
-    const ustatus = useStatus();
+    const ustatus = emoji.prefixed(useStatus());
     const iconBtnRef = useRef<HTMLButtonElement>(null);
     const [picker, setPicker] = useState<boolean>(false);
 
-    const icon = useInput(ustatus.icon);
-    const status = useInput(ustatus.status);
+    const icon = useInput(ustatus[0]);
+    const status = useInput(ustatus[1]);
 
     function updateUserStatus(_event: React.MouseEvent) {
         const action = setUserStatus(aid, {
-            icon: icon.value,
-            status: status.value,
+            status: `${icon.value} ${status.value}`,
         });
         dispatch(action);
     }
@@ -77,7 +77,7 @@ export default React.memo<IDialog>((props) => {
             <Dialog.Actions className="rounded-b-lg">
                 <Button
                     onClick={updateUserStatus}
-                    disabled={!status.valid || !icon.valid}
+                    disabled={!status.valid && !icon.valid}
                     color="primary">
                     Set
                 </Button>

@@ -5,21 +5,16 @@ import { useUser } from "@octal/store";
 
 export default React.memo(function Status() {
     const [dialog, setDialog] = useState(false);
-    const { state } = useUser();
+    const user = useUser();
     return (
         <React.Fragment>
             <button
                 onClick={() => setDialog(!dialog)}
                 className="p-2 border-2 border-gray-300 hover:bg-gray-200 bg-gray-100 rounded-md">
-                {state.icon || state.status ? (
-                    <React.Fragment>
+            {user.status.length > 0 ? (
                         <span>
-                            <Text>{state.icon}</Text>
+                            <Text>{user.status}</Text>
                         </span>
-                        <span className="px-2 text-base font-bold">
-                            {state.status}
-                        </span>
-                    </React.Fragment>
                 ) : (
                     <span className="px-2 text-base font-bold">status</span>
                 )}

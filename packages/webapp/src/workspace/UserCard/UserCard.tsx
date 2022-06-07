@@ -58,15 +58,9 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
                         {user.name}
                     </span>
                     <span className="text-sm font-semibold text-white py-px">
-                        {Boolean(user.state.icon) ||
-                            (Boolean(user.state.status) && (
-                                <React.Fragment>
-                                    <span>
-                                        <Text>{user.state.icon}</Text>
-                                    </span>
-                                    <span>{user.state.status}</span>
-                                </React.Fragment>
-                            ))}
+                        <span>
+                            <Text>{user.status}</Text>
+                        </span>
                     </span>
                 </div>
                 {viewer.id !== user.id && (

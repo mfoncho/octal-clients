@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import * as Icons from "@octal/icons";
+import emoji from "@octal/emoji";
 import { Link } from "react-router-dom";
 import StatusDialog from "../StatusDialog";
 import AccountDialog from "../AccountDialog";
@@ -35,7 +36,7 @@ export interface IPresence {
 }
 
 const Status = React.memo<{}>(() => {
-    const { icon, status } = useStatus();
+    const [icon, status] = emoji.prefixed(useStatus());
     if (Boolean(icon) && Boolean(status)) {
         return (
             <Tooltip
