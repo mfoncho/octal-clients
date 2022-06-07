@@ -41,6 +41,7 @@ export { default as Calendar } from "./Calendar";
 export { default as LeftArrow } from "./LeftArrow";
 export { default as DropdownArrows } from "./DropdownArrows";
 export { default as CloseCircleSolid } from "./CloseCircleSolid";
+export { default as Settings } from "./Settings";
 
 export { default as Forum } from "./Forum";
 export { default as MoveCard } from "./LeftRight";

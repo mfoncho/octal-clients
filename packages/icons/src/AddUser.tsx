@@ -1,1 +1,1 @@
-export { default } from "@material-ui/icons/PersonAdd"
+export { TiUserAddOutline as default } from "react-icons/ti";
