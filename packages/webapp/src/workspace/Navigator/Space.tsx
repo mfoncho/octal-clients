@@ -57,7 +57,9 @@ const Menu = Popper.create<HTMLUListElement, IMenu>((props) => {
                     onClick={props.onSelect}>
                     <div className="flex flex-row items-center">
                         {item.icon && (
-                            <div className="overflow-hidden">{item.icon}</div>
+                            <div className="overflow-hidden px-1">
+                                {item.icon}
+                            </div>
                         )}
                         <span className="px-1 font-semibold text-sm group-hover:text-white">
                             {item.name}
