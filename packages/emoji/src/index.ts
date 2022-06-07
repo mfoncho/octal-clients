@@ -53,6 +53,16 @@ export const suggestable = {
         ),
 };
 
+export function prefixed(text: string): [string, string] {
+    const parts = text.split(" ");
+    if (parts.length >= 1 && test(parts[0])) {
+        const [pre, ...rest] = parts;
+        return [pre, rest.join(" ")];
+    } else {
+        return ["", parts.join(" ")];
+    }
+}
+
 export default {
     index,
     host,
@@ -61,5 +71,6 @@ export default {
     query,
     image,
     test,
+    prefixed,
     suggestable,
 };
