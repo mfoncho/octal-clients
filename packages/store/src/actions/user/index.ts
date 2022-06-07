@@ -56,8 +56,9 @@ export interface SetUserStatusPayload {
 }
 
 export interface StatusUpdatedPayload {
-    id: string;
-    state: IUserState;
+    user_id: string;
+    status: string;
+    timeout?: number;
 }
 
 export interface PresenceLoadedPayload {

@@ -17,17 +17,8 @@ export class Presence extends Record({
     timestamp: "0",
 }) {}
 
-export class StatusRecord extends Record({
-    id: "0",
-    name: "",
-    state: "",
-    timeout: 0,
-}) {}
-
-export class UserStateRecord extends Record({
+export class UserStatusRecord extends Record({
     icon: "",
-    status: "",
-    timeout: 0,
 }) {}
 
 export class UserRecord
@@ -37,11 +28,11 @@ export class UserRecord
             name: "",
             username: "",
             email: "",
-            phone: "",
             verified: false,
             avatar: null as any as string,
             bio: "",
-            state: new UserStateRecord({}),
+            status: "",
+            timeout: 0,
         },
         "user"
     )
@@ -58,7 +49,7 @@ export class UserRecord
     static objectFromJS(payload: any) {
         let data = { ...payload };
         if (data && data.state) {
-            data.state = new UserStateRecord(data.state);
+            data.state = new UserStatusRecord(data.state);
         }
         return data;
     }

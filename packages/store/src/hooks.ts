@@ -250,7 +250,7 @@ export function useStatus(id?: string) {
     const selector = useCallback(
         ({ users, auth }: State) => {
             let user = users.entities.get(id ?? auth.id) ?? defaultUser;
-            return user.state;
+            return user.status;
         },
         [id]
     );

@@ -28,9 +28,14 @@ function* preferences({
 
 function* setStatus({ payload, resolve }: UserActions.SetUserStatusAction) {
     try {
-        const update = { id: payload.user_id, state: payload.params };
+        const update = {
+            user_id: payload.user_id,
+            status: payload.params.status,
+        };
+        //@ts-ignore
+        const data = (yield client.setUserStatus(payload)) as any;
         yield put(UserActions.statusUpdated(update));
-        resolve.success(update);
+        resolve.success(data);
     } catch (e) {
         resolve.error(e);
     }
@@ -113,7 +118,7 @@ function* syncPresence(): Iterable<any> {
         dispatch(UserActions.userUpdated(payload));
     });
 
-    channel.on("status.updated", (payload: io.User) => {
+    channel.on("status.updated", (payload: io.UserStatus) => {
         dispatch(UserActions.statusUpdated(payload as any));
     });
 

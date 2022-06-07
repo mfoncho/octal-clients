@@ -17,6 +17,14 @@ export class UserStore extends Record({
         }
         return this;
     }
+
+    updateStatus(payload: any) {
+        let user = this.entities.get(payload.user_id);
+        if (user) {
+            return this.setIn(["entities", user.id], user.patch(payload));
+        }
+        return this;
+    }
     putUser(payload: any) {
         if (this.entities.has(payload.id)) {
             return this.updateUser(payload);
@@ -33,7 +41,7 @@ export const state = new UserStore({});
 
 export const reducers = {
     [Actions.USER_STATUS_UPDATED]: (store: UserStore, { payload }: any) => {
-        return store.updateUser(payload);
+        return store.updateStatus(payload);
     },
     [Actions.USER_LOADED]: (store: UserStore, { payload }: any) => {
         return store.putUser(payload);
