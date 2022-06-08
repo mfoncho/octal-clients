@@ -47,70 +47,13 @@ function* conversation({
     if (!thread) return;
 
     try {
-        const params: any = {};
-        if (payload.more == "top") {
-            let first = thread.history.first() as any;
-            if (first) {
-                params.before = first.id;
-            }
-            params.last = payload.limit;
-        } else if (payload.more == "bottom") {
-            let last = thread.history.last() as any;
-            if (last) {
-                params.after = last.id;
-            }
-            params.first = payload.limit;
-        }
-        const loading: { top?: boolean; bottom?: boolean } = {};
-
-        if (payload.more == "top") {
-            loading.top = true;
-        } else if (payload.more == "bottom") {
-            loading.bottom = true;
-        } else if (payload.more == "around") {
-            loading.top = true;
-            loading.bottom = true;
-        }
-
-        yield put(
-            ThreadActions.loadingConversation({
-                ...payload,
-                loading,
-            })
-        );
-
-        const data = (yield client.fetchMessages({
-            thread_id: payload.thread_id,
-            params,
-        })) as any;
+        const data = (yield client.fetchMessages(payload)) as any;
         const [normalized, related] = MessageSchema.normalizeMany(data);
         yield put(relatedLoaded(related));
-        if (payload.more == "top") {
-            yield put(
-                ThreadActions.concatConversation({
-                    mode: "prepend",
-                    messages: normalized,
-                    thread_id: payload.thread_id,
-                })
-            );
-        } else if (payload.more == "bottom") {
-            yield put(
-                ThreadActions.concatConversation({
-                    mode: "append",
-                    messages: normalized,
-                    thread_id: payload.thread_id,
-                })
-            );
-        }
-
-        for (let key in loading) {
-            loading[key as keyof typeof loading] =
-                !loading[key as keyof typeof loading];
-        }
         yield put(
-            ThreadActions.loadingConversation({
+            ThreadActions.conversationLoaded({
                 ...payload,
-                loading,
+                messages: normalized,
             })
         );
         meta.success(data);

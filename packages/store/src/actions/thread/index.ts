@@ -4,6 +4,7 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedMessage } from "../../schemas";
 import {
+    CONVERSATION_LOADED,
     THREAD_DRAFT_UPDATED,
     REACTION_CREATED,
     REACTION_DELETED,
@@ -97,12 +98,23 @@ export interface SetConversationPagePayload {
     space_id: string;
 }
 
-export interface LoadConversationPayload {
-    message_id?: string;
-    space_id: string;
+export interface ConversationLoadParams {
+    last?: number;
+    first?: number;
+    after?: string;
+    before?: string;
+    around?: string;
+}
+
+export interface ConversationLoadedPayload {
     thread_id: string;
-    limit: number;
-    more: "top" | "bottom" | "around";
+    params: ConversationLoadParams;
+    messages: NormalizedMessage[];
+}
+
+export interface LoadConversationPayload {
+    thread_id: string;
+    params: ConversationLoadParams;
 }
 
 export interface LoadThreadPayload {
@@ -220,6 +232,11 @@ export interface GetThreadPayload {
 export type MessageReactionAction = Action<
     REACTION_LOADED,
     MessageReactionPayload
+>;
+
+export type ConversationLoadedAction = Action<
+    CONVERSATION_LOADED,
+    ConversationLoadedPayload
 >;
 
 export type ReactionCreated = Action<REACTION_CREATED, MessageReactionPayload>;
@@ -529,13 +546,13 @@ export function threadDeleted(
     return createAction(THREAD_DELETED, payload);
 }
 
-export function loadConversation({
-    limit = 25,
-    ...params
-}: Optional<LoadConversationPayload, "limit">): LoadConversationAction {
+export function loadConversation(
+    id: string,
+    params: ConversationLoadParams
+): LoadConversationAction {
     return createIOAction<LOAD_CONVERSATION>(LOAD_CONVERSATION, {
-        ...params,
-        limit,
+        thread_id: id,
+        params,
     });
 }
 
@@ -567,4 +584,10 @@ export function updateDaft(
     payload: ThreadDraftUpdatedPayload
 ): ThreadDraftUpdatedAction {
     return createAction(THREAD_DRAFT_UPDATED, payload);
+}
+
+export function conversationLoaded(
+    payload: ConversationLoadedPayload
+): ConversationLoadedAction {
+    return createAction(CONVERSATION_LOADED, payload);
 }

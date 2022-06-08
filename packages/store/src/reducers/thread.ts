@@ -213,9 +213,9 @@ export const reducers = {
             state.udpateMessage(partial);
         });
     },
-    [Actions.CONCAT_CONVERSATION]: (
+    [Actions.CONVERSATION_LOADED]: (
         state: Conversations,
-        { payload }: ConcatConversationAction
+        { payload }: ThreadActions.ConversationLoadedAction
     ) => {
         return state.withMutations((state) => {
             if (!state.threads.has(payload.thread_id)) return;
@@ -240,19 +240,24 @@ export const reducers = {
             if (chat.isEmpty()) return;
 
             state.updateIn(path, (val) => {
+                const params = payload.params;
                 const thread = val as any as ThreadRecord;
                 let history = thread.history;
-                switch (payload.mode) {
-                    case "append": {
-                        history = thread.history.concat(chat);
-                        break;
-                    }
+                let first = history.first();
+                let last = history.last();
 
-                    case "prepend": {
-                        history = chat.concat(thread.history);
-                        break;
-                    }
+                if (
+                    (first === undefined || first.id === params.before) &&
+                    params.first
+                ) {
+                    history = chat.concat(thread.history);
+                } else if (
+                    (last === undefined || last.id === params.after) &&
+                    params.first
+                ) {
+                    history = thread.history.concat(chat);
                 }
+
                 return thread.set("history", history);
             });
         });
