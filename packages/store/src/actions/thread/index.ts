@@ -4,6 +4,7 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedMessage } from "../../schemas";
 import {
+    THREAD_PAGE_UPDATED,
     CONVERSATION_LOADED,
     THREAD_DRAFT_UPDATED,
     REACTION_CREATED,
@@ -45,6 +46,18 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface ThreadPageUpdatedPayload {
+    thread_id: string;
+    params: {
+        end?: string;
+        start?: string;
+        pivot?: string;
+        pivoteTop?: number;
+        autoScroll?: boolean;
+        scrollPercentage?: number;
+    };
+}
 
 export interface PostDirectMessagePayload {
     user_id: string;
@@ -237,6 +250,11 @@ export type MessageReactionAction = Action<
 export type ConversationLoadedAction = Action<
     CONVERSATION_LOADED,
     ConversationLoadedPayload
+>;
+
+export type ThreadPageUpdatedAction = Action<
+    THREAD_PAGE_UPDATED,
+    ThreadPageUpdatedPayload
 >;
 
 export type ReactionCreated = Action<REACTION_CREATED, MessageReactionPayload>;
@@ -590,4 +608,11 @@ export function conversationLoaded(
     payload: ConversationLoadedPayload
 ): ConversationLoadedAction {
     return createAction(CONVERSATION_LOADED, payload);
+}
+
+export function updateThreadPage(
+    id: string,
+    params: ThreadPageUpdatedPayload["params"]
+): ThreadPageUpdatedAction {
+    return createAction(THREAD_PAGE_UPDATED, { thread_id: id, params });
 }

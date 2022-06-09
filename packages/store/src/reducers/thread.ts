@@ -4,7 +4,6 @@ import {
     LoadingConversationAction,
     MessageLoadedAction,
     MessagesLoadedAction,
-    ConcatConversationAction,
     SetConversationPageAction,
     TrimConversationAction,
     ThreadLoadedAction,
@@ -256,6 +255,16 @@ export const reducers = {
                     params.first
                 ) {
                     history = thread.history.concat(chat);
+                } else if (
+                    // New Message
+                    params.after === undefined &&
+                    params.before === undefined &&
+                    params.around === undefined &&
+                    params.last === 1 &&
+                    params.first === 1 &&
+                    chat.size === 1
+                ) {
+                    history = thread.history.concat(chat);
                 }
 
                 return thread.set("history", history);
@@ -337,14 +346,14 @@ export const reducers = {
         });
     },
 
-    [Actions.SET_CONVERSATION_PAGE]: (
+    [Actions.THREAD_PAGE_UPDATED]: (
         state: Conversations,
-        { payload }: SetConversationPageAction
+        { payload }: ThreadActions.ThreadPageUpdatedAction
     ) => {
         return state.withMutations((state) => {
             if (state.threads.has(payload.thread_id)) {
                 const path = ["threads", payload.thread_id];
-                state.mergeIn([...path, "view"], payload);
+                state.mergeIn([...path, "page"], payload.params);
             }
         });
     },

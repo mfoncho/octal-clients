@@ -48,10 +48,13 @@ function* created({ payload }: ThreadActions.NewMessageAction): Iterable<any> {
     const [normalized, related] = MessageSchema.normalizeOne(payload);
     yield put(relatedLoaded(related));
     yield put(
-        ThreadActions.concatConversation({
-            mode: "append",
+        ThreadActions.conversationLoaded({
+            thread_id: payload.thread_id,
             messages: [normalized],
-            thread_id: normalized.thread_id!,
+            params: {
+                first: 1,
+                last: 1,
+            },
         })
     );
 }
