@@ -4,10 +4,11 @@ import BaseClient, { Params } from "../base";
 export interface FetchMessagesRequest {
     thread_id: string;
     params?: {
-        after?: string;
         last?: number;
-        before?: string;
         first?: number;
+        after?: string;
+        before?: string;
+        arouned?: string;
     };
 }
 
