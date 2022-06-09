@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import Message from "../Message";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import LoadingRings from "../Animated/Rings";
-import immutable, { Map, OrderedMap } from "immutable";
+import { OrderedMap } from "immutable";
 import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
-import { ThreadRecord, MessageRecord, useAuthId, useMessage } from "@octal/store";
-import { useUnmount, useCurPrev, useDebouncedCallback } from "src/hooks";
-
-window.immutable = immutable;
+import { ThreadRecord, useAuthId, useMessage } from "@octal/store";
+import { useDebouncedEffect, useCurPrev } from "@octal/hooks";
 
 interface IChatMsg {
     id: string;
@@ -25,6 +22,32 @@ interface IConversation {
 
 interface IThread {
     thread: ThreadRecord;
+}
+
+function orderedMapValueAt<T>(
+    map: OrderedMap<string, T>,
+    index: number
+): T | undefined {
+    if (map.size > 0) {
+        const msg = (map as any)._list.get(index);
+        if (msg) {
+            return msg[1];
+        }
+    }
+}
+
+function orderedMapAtIndex<T>(
+    map: OrderedMap<string, T>,
+    index: string
+): number | undefined {
+    if (map.size > 0) {
+        return (map as any)._map.get(index);
+    }
+}
+
+enum Scroll {
+    Down,
+    Up,
 }
 
 /*
@@ -80,34 +103,40 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
 
         const extra = !sameday || !sameauthor || Boolean(message.reply_id);
 
+        let id = `message:${message.id}`;
+
         if (!sameday) {
+            let date = moment(message.timestamp);
             block.push(
                 <div
-                    key="datetime-divider"
+                    id={date.format("DD-MM-YYYY")}
+                    key="divider"
                     className="pt-2 flex flex-row justify-between items-center px-2">
-                    <div className="bg-gray-300 h-px flex-grow rounded" />
-                    <span className="text-white bg-primary-500 text-xs font-bold px-4 rounded-xl">
-                        {moment(message.timestamp).format("LL")}
+                    <div className="bg-slate-300 h-px flex-grow rounded" />
+                    <span className="text-gray-800 bg-slate-200 text-xs font-bold px-4 rounded-xl">
+                        {date.format("ll")}
                     </span>
-                    <div className="bg-gray-300 h-px flex-grow rounded" />
+                    <div className="bg-slate-300 h-px flex-grow rounded" />
                 </div>
             );
         }
 
         if (extra) {
             block.push(
-                <div key="extra-space" className="pt-2">
+                <div key={id} id={id} className="pt-2">
                     <Msg authid={authid} extra={extra} id={message.id} />
                 </div>
             );
         } else {
             block.push(
-                <Msg
-                    authid={authid}
-                    extra={false}
-                    id={message.id}
-                    key={message.id}
-                />
+                <div key={id} id={id}>
+                    <Msg
+                        authid={authid}
+                        extra={false}
+                        id={message.id}
+                        key={message.id}
+                    />
+                </div>
             );
         }
 
@@ -121,42 +150,43 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
 
 Messages.displayName = "Messages";
 
-const defaultPosition = {
-    mid: "",
-    top: 0,
-    follow: true,
+const perPage = 50;
+
+const loadingState = {
+    top: false,
+    bottom: false,
 };
 
-type PositionType = typeof defaultPosition;
+function usePageHistory(thread: ThreadRecord) {
+    return React.useMemo(() => {
+        return thread.historyFrom(
+            thread.page.start,
+            thread.page.autoScroll ? "" : thread.page.end
+        );
+    }, [thread.history, thread.page.start, thread.page.end]);
+}
 
 export default React.memo<IThread>(function ({ thread }) {
     const dispatch = useDispatch();
 
     const authid = useAuthId();
 
-    const [scrollPercentage, setScrollPercentage] = useState<number>(100);
+    const [page, setPage] = useState(thread.page);
 
-    const [, prevScrollPercentage] = useCurPrev(scrollPercentage);
+    const [, prevScrollPercentage] = useCurPrev(page.scrollPercentage);
 
-    const [page, setPage] = useState<PositionType>(() => {
-        return thread ? (thread.view.toJS() as PositionType) : defaultPosition;
-    });
+    const [loading, setLoading] = useState(loadingState);
+
+    const pageHistory = usePageHistory(thread);
 
     const [container, setContainer] = useState<HTMLElement | null>(null);
 
-    const hasMoreTop =
-        thread && thread.history.size > 0
-            ? thread.first_message_id < (thread.history.first() as any).id
-            : false;
-
-    const hasMoreBottom =
-        thread && thread.history.size > 0
-            ? thread.last_message_id > (thread.history.last() as any).id
-            : false;
+    const header = useRef<HTMLDivElement | null>(null);
+    const footer = useRef<HTMLDivElement | null>(null);
 
     function getIdByIndex(index: number): string {
-        if (thread && thread.history.size > 0) {
-            const msg = thread.getHistoryAtIndex(index);
+        if (pageHistory.size > 0) {
+            const msg = orderedMapValueAt(pageHistory, index);
             if (msg) {
                 return msg.id;
             } else {
@@ -169,61 +199,58 @@ export default React.memo<IThread>(function ({ thread }) {
         }
     }
 
+    function messageRect(id: string) {
+        let element = document.getElementById(`message:${id}`);
+        return element?.getBoundingClientRect();
+    }
+
     function track(id: string) {
         let element = document.getElementById(`message:${id}`);
         if (element) {
             let top = element.getBoundingClientRect().top;
-            setPage((page) => ({
-                mid: id,
-                top: top,
-                follow: page.follow as any,
-            }));
+            setPage((page) =>
+                page.merge({
+                    pivot: id,
+                    pivotTop: top,
+                })
+            );
         }
     }
 
     function logPagePosition() {
-        if (thread) {
-            const action = ThreadActionFactory.setConversationPage({
-                ...page,
-                thread_id: thread.id,
-                space_id: thread.space_id,
-            } as any);
+        if (page.pivotTop > 0) {
+            const action = ThreadActionFactory.updateThreadPage(
+                thread.id,
+                page.toObject()
+            );
             dispatch(action);
         }
     }
 
-    useUnmount(logPagePosition, [page]);
+    //useUnmount(logPagePosition, [page]);
 
-    const deboundedLogPagePosition = useDebouncedCallback(
-        logPagePosition,
-        500,
-        [page]
-    );
+    useDebouncedEffect(logPagePosition, 500, [page]);
 
     // Trim message when thread
     // messages out of view
     // when max reached
     useEffect(() => {
-        if (thread) {
-            if (thread.history.size > 75) {
-                if (scrollPercentage > 50) {
-                    const action = ThreadActionFactory.trimConversation({
-                        thread_id: thread!.id,
-                        amount: 50,
-                        mode: "top",
-                    });
-                    dispatch(action);
-                } else {
-                    const action = ThreadActionFactory.trimConversation({
-                        thread_id: thread!.id,
-                        amount: 50,
-                        mode: "bottom",
-                    });
-                    dispatch(action);
-                }
+        if (thread.history.size > 75) {
+            if (page.scrollPercentage > 70) {
+                const action = ThreadActionFactory.updateThreadPage(thread.id, {
+                    start: thread.history.first()!.timestamp,
+                    end: thread.history.take(70)!.last()!.timestamp,
+                });
+                dispatch(action);
+            } else {
+                const action = ThreadActionFactory.updateThreadPage(thread.id, {
+                    start: thread.history.takeLast(70)!.first()!.timestamp,
+                    end: thread.history.last()!.timestamp,
+                });
+                dispatch(action);
             }
         }
-    }, [thread?.history.size]);
+    }, [thread.history]);
 
     /**
      * Init conversation  if
@@ -231,161 +258,141 @@ export default React.memo<IThread>(function ({ thread }) {
      * initialized
      */
     useEffect(() => {
-        if (thread) {
-            {
-                let action = ThreadActionFactory.threadActivity({
-                    type: "viewing",
-                    thread_id: thread.id,
-                    space_id: thread.space_id,
-                });
-                dispatch(action);
-            }
-            if (thread.history.size === 0) {
-                const action = ThreadActionFactory.loadConversation({
-                    space_id: thread.space_id,
-                    thread_id: thread.id,
-                    limit: 50,
-                    more: "top",
-                });
-                dispatch(action);
-            }
-        } else {
-            /**
-             **/
+        {
+            let action = ThreadActionFactory.threadActivity({
+                type: "viewing",
+                thread_id: thread.id,
+                space_id: thread.space_id,
+            });
+            dispatch(action);
         }
-    }, [thread ? true : false]);
+        if (thread.history.size === 0) {
+            setLoading((loading) => ({ ...loading, buttom: true, top: true }));
+            const action = ThreadActionFactory.loadConversation(thread.id, {
+                first: perPage,
+            });
+            dispatch(action).finally(() => {
+                setLoading((loading) => ({
+                    ...loading,
+                    buttom: false,
+                    top: false,
+                }));
+            });
+        }
+    }, []);
 
     /**
      * Component init conversation
-     * thread page position
+     * thread view position
      */
     useEffect(() => {
-        if (container && thread && thread.history.size > 0) {
-            if (!Boolean(page.mid)) {
+        if (container && pageHistory.size > 0) {
+            if (page.pivotTop < 0) {
                 container.scrollTop = container.scrollHeight;
-                const id = getIdByIndex(thread.history.size - 1);
+                const id = getIdByIndex(pageHistory.size - 1);
                 track(id);
+            } else if (page.autoScroll && page.scrollPercentage > 80) {
+                footer.current?.scrollIntoView();
             } else {
-                let element = document.getElementById(`message:${page.mid}`);
+                let element = document.getElementById(`message:${page.pivot}`);
 
                 if (element) {
                     container.scrollTop =
                         element.offsetTop -
-                        (page.top - container.getBoundingClientRect().top);
+                        (page.pivotTop - container.getBoundingClientRect().top);
+                } else {
+                    container.scrollTop = 100;
                 }
             }
         }
-    }, [thread ? thread.history.size > 0 : false, container]);
-
-    /**
-     * Check for conversation chat change.
-     * If thread is locked to bottom
-     * scroll to end of the thread
-     * set new position
-     *
-     */
-    useEffect(() => {
-        if (container && thread && thread.history.size > 0) {
-            // Lock scroll to auto scroll
-            // to most recent post
-            if (page.follow) {
-                container.scrollTop = container.scrollHeight + 64;
-                //container.scrollTo({top: container.scrollHeight, behavior:'smooth'})
-            } else {
-                let prevElement = document.getElementById(
-                    `message:${page.mid}`
-                );
-
-                if (prevElement) {
-                    container.scrollTop =
-                        1 + // Fixes scroll drift "Browser bug" cause by low level floating point rounding
-                        prevElement.offsetTop -
-                        (page.top - container.getBoundingClientRect().top);
-                }
-            }
-        }
-    }, [thread?.history]);
+    }, [pageHistory, container]);
 
     /**
      * handle save thread
      * scroll position
      */
     function handleScrollY(container: HTMLElement) {
-        if (thread) {
-            const percentage =
-                (container.scrollTop * 100) /
-                (container.scrollHeight - container.clientHeight);
+        const percentage =
+            (container.scrollTop * 100) /
+            (container.scrollHeight - container.clientHeight);
 
-            const index = Math.floor((percentage * thread.history.size) / 100);
+        let updatedPage = page.set("scrollPercentage", percentage);
 
-            if (Boolean(page.mid)) {
-                const mid = getIdByIndex(index);
-                track(mid);
-            }
-
-            setScrollPercentage(percentage);
-
-            const direction =
-                scrollPercentage < prevScrollPercentage ? "up" : "down";
-
-            if (percentage > 96) {
-                if (!page.follow) {
-                    setPage((page) => ({ ...page, follow: true }));
-                }
-            } else {
-                if (page.follow) {
-                    setPage((page) => ({ ...page, follow: false }));
-                }
-            }
-
-            if (percentage <= 5) {
-                if (!thread.loading.top && direction == "up" && hasMoreTop) {
-                    const action = ThreadActionFactory.loadConversation({
-                        space_id: thread.space_id,
-                        thread_id: thread.id,
-                        more: "top",
-                    });
-                    dispatch(action);
-                }
-            } else if (percentage > 80) {
-                if (
-                    !thread.loading.bottom &&
-                    direction == "down" &&
-                    hasMoreBottom
-                ) {
-                    const action = ThreadActionFactory.loadConversation({
-                        space_id: thread.space_id,
-                        thread_id: thread.id,
-                        more: "bottom",
-                    });
-                    dispatch(action);
-                }
-            }
-            deboundedLogPagePosition();
+        if (!pageHistory.isEmpty()) {
+            const index = Math.floor((percentage * pageHistory.size) / 100);
+            const pivot = getIdByIndex(index - 1);
+            let rect = messageRect(pivot)!;
+            updatedPage = updatedPage
+                .set("pivot", pivot)
+                .set("pivotTop", rect.top);
         }
+
+        const direction =
+            page.scrollPercentage < prevScrollPercentage
+                ? Scroll.Up
+                : Scroll.Down;
+
+        if (footer.current) {
+            let rect = footer.current.getBoundingClientRect();
+            let containerRect = container.getBoundingClientRect();
+            if (containerRect.bottom - rect.top > -8) {
+                if (!page.autoScroll && !thread.hasMoreBottom && Scroll.Down) {
+                    updatedPage = updatedPage
+                        .set("end", "")
+                        .set("autoScroll", true);
+                }
+            } else if (page.autoScroll === true) {
+                updatedPage = updatedPage.set("autoScroll", false);
+            }
+        }
+
+        if (percentage <= 5) {
+            if (!loading.top && direction == Scroll.Up && thread.hasMoreTop) {
+                setLoading((loading) => ({ ...loading, top: true }));
+                const action = ThreadActionFactory.loadConversation(thread.id, {
+                    first: perPage,
+                    before: thread.history.first()?.id,
+                });
+                dispatch(action).finally(() => {
+                    setLoading((loading) => ({ ...loading, top: false }));
+                });
+            }
+        } else if (percentage > 80) {
+            if (
+                !loading.bottom &&
+                direction == Scroll.Down &&
+                thread.hasMoreBottom
+            ) {
+                setLoading((loading) => ({ ...loading, buttom: true }));
+                const action = ThreadActionFactory.loadConversation(thread.id, {
+                    first: perPage,
+                    after: thread.history.last()?.id,
+                });
+                dispatch(action).finally(() => {
+                    setLoading((loading) => ({ ...loading, buttom: false }));
+                });
+            }
+        }
+        setPage(updatedPage);
     }
 
     function renderConversation() {
-        if (thread == null) return <LoadingRings size={32} />;
-
-        /**
-        if (conversation == null) return <LoadingBars />;
-        **/
-
-        return <Messages authid={authid} messages={thread.history} />;
+        return <Messages authid={authid} messages={pageHistory} />;
     }
 
     return (
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <PerfectScrollbar
-                    options={scrollerOptions}
-                    onScrollY={handleScrollY}
-                    containerRef={setContainer}
-                    className="h-full w-full">
-                    <div className="flex py-12 flex-col min-h-full justify-end">
-                        {renderConversation()}
-                    </div>
-                </PerfectScrollbar>
-            </div>
+        <div className="flex-1 flex flex-col overflow-hidden">
+            <PerfectScrollbar
+                options={scrollerOptions}
+                onScrollY={handleScrollY}
+                containerRef={setContainer}
+                className="h-full w-full">
+                <div className="flex flex-col min-h-full justify-end">
+                    <div className="header h-6" ref={header} />
+                    {renderConversation()}
+                    <div className="footer h-12" ref={footer} />
+                </div>
+            </PerfectScrollbar>
+        </div>
     );
 });
