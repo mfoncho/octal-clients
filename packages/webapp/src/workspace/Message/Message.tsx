@@ -67,7 +67,6 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
     return (
         <div
-            id={`message:${message.id}`}
             onMouseOver={handleHovering}
             onMouseLeave={handleNotHovering}
             className={clx(
