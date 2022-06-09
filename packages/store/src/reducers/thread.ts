@@ -4,7 +4,6 @@ import {
     LoadingConversationAction,
     MessageLoadedAction,
     MessagesLoadedAction,
-    SetConversationPageAction,
     TrimConversationAction,
     ThreadLoadedAction,
     ThreadsLoadedAction,
@@ -236,25 +235,35 @@ export const reducers = {
                 })
                 .sort(sort);
 
-            if (chat.isEmpty()) return;
-
             state.updateIn(path, (val) => {
                 const params = payload.params;
                 const thread = val as any as ThreadRecord;
                 let history = thread.history;
                 let first = history.first();
                 let last = history.last();
+                let hasMoreTop = thread.hasMoreTop;
+                let hasMoreBottom = thread.hasMoreBottom;
 
                 if (
                     (first === undefined || first.id === params.before) &&
                     params.first
                 ) {
-                    history = chat.concat(thread.history);
+                    if (!chat.isEmpty()) {
+                        history = chat.concat(thread.history);
+                    }
+                    if (params.first > chat.size) {
+                        hasMoreTop = false;
+                    }
                 } else if (
                     (last === undefined || last.id === params.after) &&
                     params.first
                 ) {
-                    history = thread.history.concat(chat);
+                    if (!chat.isEmpty()) {
+                        history = thread.history.concat(chat);
+                    }
+                    if (params.first > chat.size) {
+                        hasMoreBottom = false;
+                    }
                 } else if (
                     // New Message
                     params.after === undefined &&
@@ -265,9 +274,13 @@ export const reducers = {
                     chat.size === 1
                 ) {
                     history = thread.history.concat(chat);
+                    hasMoreBottom = false;
                 }
 
-                return thread.set("history", history);
+                return thread
+                    .set("history", history)
+                    .set("hasMoreTop", hasMoreTop)
+                    .set("hasMoreBottom", hasMoreBottom);
             });
         });
     },

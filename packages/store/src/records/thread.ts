@@ -78,6 +78,8 @@ export class ThreadRecord
         highlight: "0",
         loading: new ConversationLoading(),
         page: new ThreadPageView(),
+        hasMoreTop: true,
+        hasMoreBottom: true,
         history: OrderedMap<string, ChatMessage>(),
     })
     implements Unique, BelongsToSpace
