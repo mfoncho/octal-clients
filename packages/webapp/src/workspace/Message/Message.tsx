@@ -82,7 +82,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             role="button"
                             alt={author.name}
                             src={author.avatar}
-                            className="rounded-full w-[40px] h-[40px]"
+                            className="rounded-full w-[40px] h-[40px] my-1.5"
                             onClick={handleOpenCard}
                         />
                     ) : (
