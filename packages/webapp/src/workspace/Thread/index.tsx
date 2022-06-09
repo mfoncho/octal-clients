@@ -77,7 +77,7 @@ export default React.memo<IThread>((props) => {
         <Menu.Reply.Provider value={setReplyId}>
             <Menu.Context.Provider value={menu}>
                 <div className="flex flex-col flex-grow overflow-hidden">
-                    <Conversation thread={thread} />
+                    <Conversation key={thread.id} thread={thread} />
 
                     <div className="relative flex flex-col flex-none p-1 sm:p-4 overflow-hidden">
                         {replyMsg && (
