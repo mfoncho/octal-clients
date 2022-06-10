@@ -612,6 +612,16 @@ export function usePermissions() {
     return useSelector(selector.permissions);
 }
 
+export function useUnreadCount(id: string) {
+    const selector = useCallback(
+        ({ threads: store }: State) => {
+            return store.getThread(id)?.unread_count ?? 0;
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
+
 export function useSpacePermissions(id: string) {
     const space = useSpace(id);
     const auth = useAuth();

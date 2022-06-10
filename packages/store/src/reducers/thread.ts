@@ -220,7 +220,7 @@ export const reducers = {
 
             const path = ["threads", payload.thread_id];
 
-            const thread = state.getIn(path) as ThreadRecord;
+            let thread = state.getIn(path) as ThreadRecord;
 
             const chat = OrderedMap<string, ChatMessage>()
                 .withMutations((partials) => {
@@ -235,53 +235,7 @@ export const reducers = {
                 })
                 .sort(sort);
 
-            state.updateIn(path, (val) => {
-                const params = payload.params;
-                const thread = val as any as ThreadRecord;
-                let history = thread.history;
-                let first = history.first();
-                let last = history.last();
-                let hasMoreTop = thread.hasMoreTop;
-                let hasMoreBottom = thread.hasMoreBottom;
-
-                if (
-                    (first === undefined || first.id === params.before) &&
-                    params.first
-                ) {
-                    if (!chat.isEmpty()) {
-                        history = chat.concat(thread.history);
-                    }
-                    if (params.first > chat.size) {
-                        hasMoreTop = false;
-                    }
-                } else if (
-                    (last === undefined || last.id === params.after) &&
-                    params.first
-                ) {
-                    if (!chat.isEmpty()) {
-                        history = thread.history.concat(chat);
-                    }
-                    if (params.first > chat.size) {
-                        hasMoreBottom = false;
-                    }
-                } else if (
-                    // New Message
-                    params.after === undefined &&
-                    params.before === undefined &&
-                    params.around === undefined &&
-                    params.last === 1 &&
-                    params.first === 1 &&
-                    chat.size === 1
-                ) {
-                    history = thread.history.concat(chat);
-                    hasMoreBottom = false;
-                }
-
-                return thread
-                    .set("history", history)
-                    .set("hasMoreTop", hasMoreTop)
-                    .set("hasMoreBottom", hasMoreBottom);
-            });
+            state.setIn(path, thread.updateHistory(chat, payload.params));
         });
     },
 
@@ -360,15 +314,14 @@ export const reducers = {
     },
 
     [Actions.THREAD_PAGE_UPDATED]: (
-        state: Conversations,
+        store: Conversations,
         { payload }: ThreadActions.ThreadPageUpdatedAction
     ) => {
-        return state.withMutations((state) => {
-            if (state.threads.has(payload.thread_id)) {
-                const path = ["threads", payload.thread_id];
-                state.mergeIn([...path, "page"], payload.params);
-            }
-        });
+        let thread = store.getThread(payload.thread_id);
+        if (thread) {
+            return store.storeThread(thread.updatePage(payload.params));
+        }
+        return store;
     },
 };
 

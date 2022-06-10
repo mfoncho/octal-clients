@@ -1,6 +1,5 @@
-import { Record, fromJS, Map, OrderedMap } from "immutable";
+import { Record, fromJS, OrderedMap } from "immutable";
 import { Unique, BelongsToSpace, Id, ThreadType } from "@octal/client";
-import { MessageRecord } from "./message";
 
 export class ConversationLoading extends Record({
     top: false,
@@ -13,6 +12,47 @@ export class ChatMessage extends Record({
     reply_id: null as any as string,
     timestamp: "",
 }) {}
+
+export class HistoryUpdateOption {
+    after?: string;
+    before?: string;
+    around?: string;
+    first?: number;
+    last?: number;
+}
+
+type History = OrderedMap<string, ChatMessage>;
+
+function updateIsNewMessage(history: History, params: HistoryUpdateOption) {
+    return (
+        params.after === undefined &&
+        params.before === undefined &&
+        params.around === undefined &&
+        params.last === 1 &&
+        params.first === 1 &&
+        history.size === 1
+    );
+}
+
+function updateHasMoreBottom(history: History, params: HistoryUpdateOption) {
+    return (
+        params.first === history.size &&
+        params.last === undefined &&
+        params.after === undefined &&
+        params.before === undefined &&
+        params.around === undefined
+    );
+}
+
+function updateHasMoreTop(history: History, params: HistoryUpdateOption) {
+    return (
+        params.first === history.size &&
+        params.last === undefined &&
+        params.after === undefined &&
+        params.before === undefined &&
+        params.around === undefined
+    );
+}
 
 export class ThreadPageView extends Record({
     end: "",
@@ -70,9 +110,9 @@ export class ThreadRecord
         created_at: "",
         space_id: "0" as Id,
         message_count: 0,
-        last_message_id: "" as Id,
-        first_message_id: "" as Id,
-        unread_message_count: 0,
+        last_seen: "" as Id,
+        last_read: "" as Id,
+        unread_count: 0,
 
         // Virtual fields
         highlight: "0",
@@ -151,5 +191,73 @@ export class ThreadRecord
 
     getHistoryIndex(id: string): number | undefined {
         return orderedMapAtIndex(this.history, id);
+    }
+
+    updateHistory(
+        chat: OrderedMap<string, ChatMessage>,
+        params: HistoryUpdateOption
+    ) {
+        let thread = this;
+
+        let history = thread.history;
+        let first = history.first();
+        let last = history.last();
+        let unread = thread.unread_count;
+        let hasMoreTop = thread.hasMoreTop;
+        let hasMoreBottom = thread.hasMoreBottom;
+
+        if (
+            (first === undefined || first.id === params.before) &&
+            params.first
+        ) {
+            if (!chat.isEmpty()) {
+                history = chat.concat(thread.history);
+            }
+
+            hasMoreTop = updateHasMoreTop(chat, params);
+
+            if (
+                params.first &&
+                params.last === undefined &&
+                params.after === undefined &&
+                params.before === undefined &&
+                params.around === undefined
+            ) {
+                hasMoreBottom = false;
+            }
+        } else if (
+            (last === undefined || last.id === params.after) &&
+            params.first
+        ) {
+            if (!chat.isEmpty()) {
+                history = thread.history.concat(chat);
+            }
+            hasMoreBottom = updateHasMoreBottom(chat, params);
+        } else if (updateIsNewMessage(chat, params)) {
+            history = thread.history.concat(chat);
+            hasMoreBottom = false;
+            if (thread.page.autoScroll === false) {
+                unread = thread.unread_count + 1;
+            }
+        }
+
+        return thread
+            .set("history", history)
+            .set("unread_count", unread)
+            .set("hasMoreTop", hasMoreTop)
+            .set("hasMoreBottom", hasMoreBottom);
+    }
+
+    updatePage(payload: Partial<ThreadPageView>) {
+        let thread = this.update("page", (page) => {
+            return page.merge(payload);
+        });
+        if (thread.page.autoScroll && !thread.hasMoreBottom) {
+            thread = thread
+                .set("unread_count", 0)
+                .set("last_read", this.history.last()?.get("timestamp") ?? "");
+        }
+
+        return thread;
     }
 }
