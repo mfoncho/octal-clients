@@ -112,11 +112,11 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
                     id={date.format("DD-MM-YYYY")}
                     key="divider"
                     className="pt-2 flex flex-row justify-between items-center px-2">
-                    <div className="bg-slate-300 h-px flex-grow rounded" />
+                    <div className="bg-slate-200 h-px flex-grow rounded" />
                     <span className="text-gray-800 bg-slate-200 text-xs font-bold px-4 rounded-xl">
                         {date.format("ll")}
                     </span>
-                    <div className="bg-slate-300 h-px flex-grow rounded" />
+                    <div className="bg-slate-200 h-px flex-grow rounded" />
                 </div>
             );
         }
@@ -150,7 +150,7 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
 
 Messages.displayName = "Messages";
 
-const perPage = 50;
+const perPage = 10;
 
 const loadingState = {
     top: false,
@@ -301,7 +301,7 @@ export default React.memo<IThread>(function ({ thread }) {
                         element.offsetTop -
                         (page.pivotTop - container.getBoundingClientRect().top);
                 } else {
-                    container.scrollTop = 100;
+                    container.scrollTop = container.getBoundingClientRect().top;
                 }
             }
         }
@@ -336,7 +336,7 @@ export default React.memo<IThread>(function ({ thread }) {
             let rect = footer.current.getBoundingClientRect();
             let containerRect = container.getBoundingClientRect();
             if (containerRect.bottom - rect.top > -8) {
-                if (!page.autoScroll && !thread.hasMoreBottom && Scroll.Down) {
+                if (!page.autoScroll && !thread.hasMoreBottom) {
                     updatedPage = updatedPage
                         .set("end", "")
                         .set("autoScroll", true);
