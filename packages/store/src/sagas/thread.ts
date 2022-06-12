@@ -1,12 +1,12 @@
 import { put, select, takeEvery } from "redux-saga/effects";
-import { MessageSchema } from "../schemas";
+import { MessageSchema, NormalizedMessage } from "../schemas";
 import client, { io } from "@octal/client";
-import { dispatch } from "..";
-import { relatedLoaded } from "../actions/app";
+import { dispatch, State } from "..";
+import * as AppActions from "../actions/app";
 import * as SpaceActions from "../actions/space";
 import * as ThreadActions from "../actions/thread";
+import * as TopicActions from "../actions/topic";
 import * as Actions from "../actions/types";
-import { State } from "..";
 
 function* load({
     payload,
@@ -49,7 +49,7 @@ function* conversation({
     try {
         const data = (yield client.fetchMessages(payload)) as any;
         const [normalized, related] = MessageSchema.normalizeMany(data);
-        yield put(relatedLoaded(related));
+        yield put(AppActions.relatedLoaded(related));
         yield put(
             ThreadActions.conversationLoaded({
                 ...payload,
@@ -93,7 +93,9 @@ function* subscribe({
         let ch = client.channel(topic);
 
         ch.on("new.message", (payload: io.UserMessage) => {
-            dispatch(ThreadActions.newMessage(payload));
+            const [normalized, related] = MessageSchema.normalize(payload);
+            dispatch(AppActions.relatedLoaded(related));
+            dispatch(ThreadActions.newMessage(normalized as any));
         });
 
         ch.on("user.reacted", (payload: any) => {
@@ -105,26 +107,33 @@ function* subscribe({
         });
 
         ch.on("message.updated", (payload: io.UserMessage) => {
+            const [normalized, related] = MessageSchema.normalize(payload);
+            dispatch(AppActions.relatedLoaded(related));
+            dispatch(ThreadActions.messageUpdated(normalized as any));
+        });
+
+        ch.on(
+            "message.deleted",
+            (
+                payload: NormalizedMessage & { id: string; thread_id: string }
+            ) => {
+                dispatch(ThreadActions.messageDeleted(payload));
+            }
+        );
+
+        ch.on("message.pinned", (payload: NormalizedMessage) => {
             dispatch(ThreadActions.messageUpdated(payload));
         });
 
-        ch.on("message.deleted", (payload: io.Message) => {
-            dispatch(ThreadActions.messageDeleted(payload));
-        });
-
-        ch.on("message.pinned", (payload: io.Message) => {
+        ch.on("message.flagged", (payload: NormalizedMessage) => {
             dispatch(ThreadActions.messageUpdated(payload));
         });
 
-        ch.on("message.flagged", (payload: io.Message) => {
+        ch.on("message.unpinned", (payload: NormalizedMessage) => {
             dispatch(ThreadActions.messageUpdated(payload));
         });
 
-        ch.on("message.unpinned", (payload: io.Message) => {
-            dispatch(ThreadActions.messageUpdated(payload));
-        });
-
-        ch.on("message.unflagged", (payload: io.Message) => {
+        ch.on("message.unflagged", (payload: NormalizedMessage) => {
             dispatch(ThreadActions.messageUpdated(payload));
         });
 
@@ -138,6 +147,29 @@ function* subscribe({
     }
 }
 
+function* newMessage({
+    payload,
+}: ThreadActions.NewMessageAction): Iterable<any> {
+    const store = (yield select()) as any as State;
+    const thread = store.threads.getThread(payload.thread_id!);
+    if (thread && thread.page.pivotTop > 0) {
+        if (thread.page.autoScroll || payload.user_id === store.auth.id) {
+            const updates = {
+                id: thread.id,
+                unread_count: 0,
+                last_read: payload.timestamp,
+            };
+            yield put(ThreadActions.threadUpdated(updates as any));
+        } else {
+            const updates = {
+                id: thread.id,
+                unread_count: thread.unread_count + 1,
+            };
+            yield put(ThreadActions.threadUpdated(updates as any));
+        }
+    }
+}
+
 function* unsubscribe({
     payload,
 }: ThreadActions.ThreadDeletedAction): Iterable<any> {
@@ -147,6 +179,7 @@ function* unsubscribe({
 }
 
 export const tasks = [
+    { effect: takeEvery, type: Actions.NEW_MESSAGE, handler: newMessage },
     { effect: takeEvery, type: Actions.LOAD_THREAD, handler: load },
     { effect: takeEvery, type: Actions.THREAD_LOADED, handler: subscribe },
     { effect: takeEvery, type: Actions.THREADS_LOADED, handler: subscribe },

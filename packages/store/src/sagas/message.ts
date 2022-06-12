@@ -2,9 +2,9 @@ import { put, select, takeEvery } from "redux-saga/effects";
 import { State } from "..";
 import * as Actions from "../actions/types";
 import client from "@octal/client";
-import { MessageSchema } from "../schemas";
+import { MessageSchema, NormalizedMessage } from "../schemas";
 import * as ThreadActions from "../actions/thread";
-import { relatedLoaded } from "../actions/app";
+import * as AppActions from "../actions/app";
 
 function* fetch({
     payload,
@@ -24,7 +24,9 @@ function* post({
 }: ThreadActions.PostMessageAction): Iterable<any> {
     try {
         const data = (yield client.postMessage(payload)) as any;
-        yield put(ThreadActions.newMessage(data));
+        const [normalized, related] = MessageSchema.normalizeOne(data);
+        yield put(AppActions.relatedLoaded(related));
+        yield put(ThreadActions.newMessage(normalized as any));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -37,26 +39,13 @@ function* postDirect({
 }: ThreadActions.PostDirectMessageAction): Iterable<any> {
     try {
         const data = (yield client.postDirectMessage(payload)) as any;
-        yield put(ThreadActions.newMessage(data));
+        const [normalized, related] = MessageSchema.normalizeOne(data);
+        yield put(AppActions.relatedLoaded(related));
+        yield put(ThreadActions.newMessage(normalized as any));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
     }
-}
-
-function* created({ payload }: ThreadActions.NewMessageAction): Iterable<any> {
-    const [normalized, related] = MessageSchema.normalizeOne(payload);
-    yield put(relatedLoaded(related));
-    yield put(
-        ThreadActions.conversationLoaded({
-            thread_id: payload.thread_id,
-            messages: [normalized],
-            params: {
-                first: 1,
-                last: 1,
-            },
-        })
-    );
 }
 
 function* flag({
@@ -175,6 +164,15 @@ function* update({
     }
 }
 
+function* related({ payload }: any): Iterable<any> {
+    let messages = Object.values(
+        payload[MessageSchema.collect] || {}
+    ) as NormalizedMessage[];
+    if (messages.length > 0) {
+        yield put(ThreadActions.messagesLoaded(messages));
+    }
+}
+
 export const tasks = [
     { effect: takeEvery, type: Actions.FETCH_MESSAGES, handler: fetch },
     { effect: takeEvery, type: Actions.POST_MESSAGE, handler: post },
@@ -183,7 +181,7 @@ export const tasks = [
         type: Actions.POST_DIRECT_MESSAGE,
         handler: postDirect,
     },
-    { effect: takeEvery, type: Actions.NEW_MESSAGE, handler: created },
+    { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.PIN_MESSAGE, handler: pin },
     { effect: takeEvery, type: Actions.FLAG_MESSAGE, handler: flag },
     { effect: takeEvery, type: Actions.UNPIN_MESSAGE, handler: unpin },

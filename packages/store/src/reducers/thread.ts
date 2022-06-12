@@ -211,6 +211,24 @@ export const reducers = {
             state.udpateMessage(partial);
         });
     },
+
+    [Actions.NEW_MESSAGE]: (
+        state: Conversations,
+        { payload }: ThreadActions.NewMessageAction
+    ) => {
+        return state.withMutations((state) => {
+            if (!state.threads.has(payload.thread_id!)) return;
+
+            const path = ["threads", payload.thread_id];
+
+            let thread = state.getIn(path) as ThreadRecord;
+
+            state.storeMessage(new MessageRecord(payload));
+
+            state.setIn(path, thread.appendNewMessage(payload));
+        });
+    },
+
     [Actions.CONVERSATION_LOADED]: (
         state: Conversations,
         { payload }: ThreadActions.ConversationLoadedAction
@@ -272,7 +290,7 @@ export const reducers = {
 
     [Actions.MESSAGE_LOADED]: (
         state: Conversations,
-        { payload }: MessageLoadedAction
+        { payload }: ThreadActions.MessageLoadedAction
     ) => {
         return state.withMutations((state) => {
             const record = new MessageRecord(payload);
@@ -282,7 +300,7 @@ export const reducers = {
 
     [Actions.MESSAGES_LOADED]: (
         state: Conversations,
-        { payload }: MessagesLoadedAction
+        { payload }: ThreadActions.MessagesLoadedAction
     ) => {
         return state.withMutations((state) => {
             payload.forEach((message) => {

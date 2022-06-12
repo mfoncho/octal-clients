@@ -280,7 +280,7 @@ export type ConcatConversationAction = Action<
 
 export type MessageDeletedAction = Action<MESSAGE_DELETED, MinimalMessage>;
 
-export type NewMessageAction = Action<NEW_MESSAGE, io.Message>;
+export type NewMessageAction = Action<NEW_MESSAGE, NormalizedMessage>;
 
 export type LoadingConversationAction = Action<
     LOADING_CONVERSATION,
@@ -291,7 +291,7 @@ export type ThreadLoadedAction = Action<THREAD_LOADED, io.Thread>;
 
 export type ThreadsLoadedAction = Action<THREADS_LOADED, io.Thread[]>;
 
-export type MessageUpdatedAction = Action<MESSAGE_UPDATED, io.Message>;
+export type MessageUpdatedAction = Action<MESSAGE_UPDATED, NormalizedMessage>;
 
 export type GetThreadAction = IOAction<GET_THREAD, GetThreadPayload, io.Thread>;
 
@@ -520,11 +520,13 @@ export function concatConversation(payload: ConcatConversationPayload) {
     return createAction(CONCAT_CONVERSATION, payload);
 }
 
-export function newMessage(payload: io.Message): NewMessageAction {
+export function newMessage(payload: NormalizedMessage): NewMessageAction {
     return createAction(NEW_MESSAGE, payload);
 }
 
-export function messageUpdated(payload: io.Message): MessageUpdatedAction {
+export function messageUpdated(
+    payload: NormalizedMessage
+): MessageUpdatedAction {
     return createAction(MESSAGE_UPDATED, payload);
 }
 

@@ -23,22 +23,11 @@ export class HistoryUpdateOption {
 
 type History = OrderedMap<string, ChatMessage>;
 
-function updateIsNewMessage(history: History, params: HistoryUpdateOption) {
-    return (
-        params.after === undefined &&
-        params.before === undefined &&
-        params.around === undefined &&
-        params.last === 1 &&
-        params.first === 1 &&
-        history.size === 1
-    );
-}
-
 function updateHasMoreBottom(history: History, params: HistoryUpdateOption) {
     return (
+        Boolean(params.after) &&
         params.first === history.size &&
         params.last === undefined &&
-        params.after === undefined &&
         params.before === undefined &&
         params.around === undefined
     );
@@ -46,10 +35,10 @@ function updateHasMoreBottom(history: History, params: HistoryUpdateOption) {
 
 function updateHasMoreTop(history: History, params: HistoryUpdateOption) {
     return (
+        Boolean(params.before) &&
         params.first === history.size &&
         params.last === undefined &&
         params.after === undefined &&
-        params.before === undefined &&
         params.around === undefined
     );
 }
@@ -193,6 +182,16 @@ export class ThreadRecord
         return orderedMapAtIndex(this.history, id);
     }
 
+    appendNewMessage(payload: any) {
+        let thread = this;
+        let history = thread.history;
+        let message = new ChatMessage(payload);
+        if (!thread.hasMoreBottom) {
+            history = thread.history.set(message.id, message);
+        }
+        return thread.set("history", history);
+    }
+
     updateHistory(
         chat: OrderedMap<string, ChatMessage>,
         params: HistoryUpdateOption
@@ -202,48 +201,38 @@ export class ThreadRecord
         let history = thread.history;
         let first = history.first();
         let last = history.last();
-        let unread = thread.unread_count;
         let hasMoreTop = thread.hasMoreTop;
         let hasMoreBottom = thread.hasMoreBottom;
 
         if (
-            (first === undefined || first.id === params.before) &&
+            params.around === undefined &&
+            params.before === undefined &&
+            params.after === undefined &&
+            params.last === undefined &&
             params.first
         ) {
+            if (chat.size >= params.first) {
+                hasMoreTop = true;
+            } else {
+                hasMoreTop = false;
+            }
+            history = chat;
+            hasMoreBottom = false;
+        } else if (first?.id === params.before && params.first) {
             if (!chat.isEmpty()) {
                 history = chat.concat(thread.history);
             }
 
             hasMoreTop = updateHasMoreTop(chat, params);
-
-            if (
-                params.first &&
-                params.last === undefined &&
-                params.after === undefined &&
-                params.before === undefined &&
-                params.around === undefined
-            ) {
-                hasMoreBottom = false;
-            }
-        } else if (
-            (last === undefined || last.id === params.after) &&
-            params.first
-        ) {
+        } else if (last?.id === params.after && params.first) {
             if (!chat.isEmpty()) {
                 history = thread.history.concat(chat);
             }
             hasMoreBottom = updateHasMoreBottom(chat, params);
-        } else if (updateIsNewMessage(chat, params)) {
-            history = thread.history.concat(chat);
-            hasMoreBottom = false;
-            if (thread.page.autoScroll === false) {
-                unread = thread.unread_count + 1;
-            }
         }
 
         return thread
             .set("history", history)
-            .set("unread_count", unread)
             .set("hasMoreTop", hasMoreTop)
             .set("hasMoreBottom", hasMoreBottom);
     }
