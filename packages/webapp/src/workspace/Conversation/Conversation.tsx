@@ -236,13 +236,11 @@ export default React.memo<IThread>(function ({ thread }) {
     }
 
     function logPagePosition() {
-        if (page.pivotTop > 0) {
-            const action = ThreadActionFactory.updateThreadPage(
-                thread.id,
-                page.toObject()
-            );
-            dispatch(action);
-        }
+        const action = ThreadActionFactory.updateThreadPage(
+            thread.id,
+            page.toObject()
+        );
+        dispatch(action);
     }
 
     // Disable autoScroll
@@ -327,17 +325,12 @@ export default React.memo<IThread>(function ({ thread }) {
     useEffect(() => {
         if (container && pageHistory.size > 0) {
             const scrollable = isScrollable();
-            if (page.pivotTop < 0) {
-                container.scrollTop = container.scrollHeight;
-                const id = getIdByIndex(pageHistory.size - 1);
-                track(id);
-            } else if (
-                scrollable &&
-                page.autoScroll &&
-                page.scrollPercentage > 80
-            ) {
+            if (scrollable && page.autoScroll) {
+                // Keep bottom in view
                 footer.current?.scrollIntoView();
-            } else if (scrollable) {
+            } else if (scrollable && Boolean(page.pivot) && page.pivotTop > 0) {
+                // Restore user page scroll location
+                // when autoScroll disabled
                 let element = document.getElementById(`message:${page.pivot}`);
 
                 if (element) {
@@ -347,11 +340,22 @@ export default React.memo<IThread>(function ({ thread }) {
                 } else {
                     container.scrollTop = container.getBoundingClientRect().top;
                 }
+            } else if (scrollable) {
+                // Page init for scrollable page
+                // Try to retore position around last read
+                let lastReadIndex = thread.getNearestIndex(
+                    thread.last_read ?? thread.history.last()!.timestamp
+                );
+                let message = thread.getHistoryAtIndex(lastReadIndex)!;
+                let element = document.getElementById(`message:${message.id}`);
+                if (element) {
+                    element.scrollIntoView();
+                }
             } else {
                 setPage((page) =>
                     page
                         .set("autoScroll", true)
-                        .set("end", pageHistory.last()?.timestamp ?? "")
+                        .set("end", thread.history.last()?.timestamp ?? "")
                 );
             }
         }
