@@ -6,6 +6,28 @@ import client, { io, Presence } from "@octal/client";
 import { UserSchema } from "../schemas";
 import { State } from "..";
 
+function* collectBoardcast(action: any): Iterable<any> {
+    if (action.metadata && action.metadata.broadcast) {
+        yield put(
+            UserActions.userBoardcast({
+                ...action,
+                metadata: { ...action.metadata, broadcast: false },
+            })
+        );
+    }
+}
+
+function* broadcast(action: UserActions.UserBroadcastAction): Iterable<any> {
+    const store = (yield select()) as any as State;
+
+    if (store.auth.id) {
+        let ch = client.topic(`user:${store.auth.id}`);
+        if (ch) {
+            ch.push("broadcast", action.payload);
+        }
+    }
+}
+
 function* getPreferences(): Iterable<any> {
     try {
         const data = (yield client.getPreferences()) as any;
@@ -108,6 +130,17 @@ function* subscribe({ payload }: any): Iterable<any> {
         .receive("error", () => {});
 }
 
+function* connected({
+    payload,
+}: UserActions.UserConnectedAction): Iterable<any> {
+    const { channel } = payload;
+    channel.on("broadcast", (payload: any) => {
+        let metadata = payload.metadata ?? {};
+        metadata.broadcast == false;
+        dispatch({ ...payload, metadata });
+    });
+}
+
 function* syncPresence(): Iterable<any> {
     const topic = "workspace";
 
@@ -150,6 +183,7 @@ function* syncPresence(): Iterable<any> {
 }
 
 export const tasks = [
+    { effect: takeEvery, type: "*", handler: collectBoardcast },
     { effect: takeEvery, type: Actions.INIT, handler: getPreferences },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.SET_USER_PRESENCE, handler: presence },
@@ -164,6 +198,8 @@ export const tasks = [
         type: Actions.UPDATE_PREFERENCES,
         handler: preferences,
     },
+    { effect: takeEvery, type: Actions.USER_CONNECTED, handler: connected },
+    { effect: takeEvery, type: Actions.USER_BROADCAST, handler: broadcast },
     { effect: takeEvery, type: Actions.AUTH, handler: subscribe },
     { effect: takeEvery, type: Actions.AUTH, handler: syncPresence },
     { effect: takeEvery, type: Actions.SET_USER_STATUS, handler: setStatus },

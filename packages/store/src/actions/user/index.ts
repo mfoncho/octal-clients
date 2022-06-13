@@ -4,6 +4,7 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
     USER_CONNECTED,
+    USER_BROADCAST,
     USER_LOADED,
     USERS_LOADED,
     PRESENCE_LOST,
@@ -29,6 +30,12 @@ export interface UserConnectedPayload {
     topic: string;
     user_id: string;
     channel: Channel;
+}
+
+export interface UserBoardcastPayload {
+    type: string;
+    payload: any;
+    metadata?: any;
 }
 
 export interface UpdateUserPasswordPayload {
@@ -116,6 +123,8 @@ export type UpdateUserProfileAction = IOAction<
     UpdateUserProfilePayload,
     io.User
 >;
+
+export type UserBroadcastAction = Action<USER_BROADCAST, UserBoardcastPayload>;
 
 export type PresenceLoadedAction = Action<
     PRESENCE_LOADED,
@@ -216,6 +225,12 @@ export function setUserStatus(
         user_id: id,
         params,
     });
+}
+
+export function userBoardcast(
+    payload: UserBoardcastPayload
+): UserBroadcastAction {
+    return createAction(USER_BROADCAST, payload);
 }
 
 export function userConnected(

@@ -3,6 +3,7 @@ import { MessageSchema, NormalizedMessage } from "../schemas";
 import client, { io } from "@octal/client";
 import { dispatch, State } from "..";
 import * as AppActions from "../actions/app";
+import * as UserActions from "../actions/user";
 import * as SpaceActions from "../actions/space";
 import * as ThreadActions from "../actions/thread";
 import * as Actions from "../actions/types";
@@ -30,10 +31,12 @@ function* fetch(): Iterable<any> {
 function* activity({
     payload,
 }: ThreadActions.ThreadActivityAction): Iterable<any> {
-    const topic = `thread:${payload.thread_id}`;
-    let ch = client.topic(topic);
-    if (ch) {
-        ch.push(payload.type, {});
+    if (payload.type === "read") {
+        const topic = `thread:${payload.thread_id}`;
+        let ch = client.topic(topic);
+        if (ch) {
+            ch.push(payload.type, { timestamp: payload.timestamp });
+        }
     }
 }
 
@@ -146,6 +149,20 @@ function* subscribe({
     }
 }
 
+function* broadcastDraft({
+    type,
+    payload,
+    metadata,
+}: ThreadActions.ThreadDraftUpdatedAction): Iterable<any> {
+    if (metadata.push) {
+        payload = {
+            ...payload,
+            params: { ...payload.params, files: undefined },
+        };
+        yield put(UserActions.userBoardcast({ type, payload }));
+    }
+}
+
 function* newMessage({
     payload,
 }: ThreadActions.NewMessageAction): Iterable<any> {
@@ -178,6 +195,11 @@ function* unsubscribe({
 }
 
 export const tasks = [
+    {
+        effect: takeEvery,
+        type: Actions.THREAD_DRAFT_UPDATED,
+        handler: broadcastDraft,
+    },
     { effect: takeEvery, type: Actions.NEW_MESSAGE, handler: newMessage },
     { effect: takeEvery, type: Actions.LOAD_THREAD, handler: load },
     { effect: takeEvery, type: Actions.THREAD_LOADED, handler: subscribe },

@@ -15,6 +15,9 @@ export type UPDATE_USER = typeof UPDATE_USER;
 export const FETCH_USERS = "FETCH_USERS";
 export type FETCH_USERS = typeof FETCH_USERS;
 
+export const USER_BROADCAST = "USER_BROADCAST";
+export type USER_BROADCAST = typeof USER_BROADCAST;
+
 export const USER_UPDATED = "USER_UPDATED";
 export type USER_UPDATED = "USER_UPDATED";
 

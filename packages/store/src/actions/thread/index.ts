@@ -101,6 +101,7 @@ export interface ThreadActivityPayload {
     type: string;
     thread_id: string;
     timestamp: string;
+    params?: any;
 }
 
 export interface SetConversationPagePayload {
@@ -603,7 +604,7 @@ export function fetchMessages(
 export function updateDaft(
     payload: ThreadDraftUpdatedPayload
 ): ThreadDraftUpdatedAction {
-    return createAction(THREAD_DRAFT_UPDATED, payload);
+    return createAction(THREAD_DRAFT_UPDATED, payload, { push: true });
 }
 
 export function conversationLoaded(
