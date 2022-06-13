@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import immutable from "immutable";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import Message from "../Message";
@@ -7,6 +8,8 @@ import { OrderedMap } from "immutable";
 import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
 import { ThreadRecord, useAuthId, useMessage } from "@octal/store";
 import { useDebouncedEffect, useCurPrev } from "@octal/hooks";
+
+window.Immutable = immutable;
 
 interface IChatMsg {
     id: string;
@@ -163,7 +166,7 @@ function usePageHistory(thread: ThreadRecord) {
     return React.useMemo(() => {
         return thread.historyFrom(
             thread.page.start,
-            thread.page.autoScroll ? "" : thread.page.end
+            thread.page.autoScroll ? undefined : thread.page.end
         );
     }, [thread.history, thread.page.start, thread.page.end]);
 }
@@ -199,6 +202,19 @@ export default React.memo<IThread>(function ({ thread }) {
         } else {
             return "";
         }
+    }
+
+    function isScrollable() {
+        const viewHeight = container?.clientHeight ?? 0;
+        const headerTop =
+            header.current?.getBoundingClientRect().top ?? viewHeight;
+        const footerTop =
+            footer.current?.getBoundingClientRect().top ?? viewHeight;
+
+        const topInView = headerTop > 0 && headerTop < viewHeight;
+        const bottomInView = footerTop > 0 && footerTop - 80.6 < viewHeight;
+
+        return !topInView || !bottomInView;
     }
 
     function messageRect(id: string) {
@@ -310,13 +326,18 @@ export default React.memo<IThread>(function ({ thread }) {
      */
     useEffect(() => {
         if (container && pageHistory.size > 0) {
+            const scrollable = isScrollable();
             if (page.pivotTop < 0) {
                 container.scrollTop = container.scrollHeight;
                 const id = getIdByIndex(pageHistory.size - 1);
                 track(id);
-            } else if (page.autoScroll && page.scrollPercentage > 80) {
+            } else if (
+                scrollable &&
+                page.autoScroll &&
+                page.scrollPercentage > 80
+            ) {
                 footer.current?.scrollIntoView();
-            } else {
+            } else if (scrollable) {
                 let element = document.getElementById(`message:${page.pivot}`);
 
                 if (element) {
@@ -326,6 +347,12 @@ export default React.memo<IThread>(function ({ thread }) {
                 } else {
                     container.scrollTop = container.getBoundingClientRect().top;
                 }
+            } else {
+                setPage((page) =>
+                    page
+                        .set("autoScroll", true)
+                        .set("end", pageHistory.last()?.timestamp ?? "")
+                );
             }
         }
     }, [pageHistory, container]);
@@ -335,6 +362,7 @@ export default React.memo<IThread>(function ({ thread }) {
      * scroll position
      */
     function handleScrollY(container: HTMLElement) {
+        isScrollable();
         const percentage =
             (container.scrollTop * 100) /
             (container.scrollHeight - container.clientHeight);
@@ -367,7 +395,7 @@ export default React.memo<IThread>(function ({ thread }) {
             if (containerRect.bottom - rect.top > -8) {
                 if (!thread.hasMoreBottom) {
                     updatedPage.autoScroll = true;
-                    updatedPage.end = pageHistory.last()?.id ?? "";
+                    updatedPage.end = pageHistory.last()?.timestamp ?? "";
                 }
             } else if (page.autoScroll === true) {
                 updatedPage.autoScroll = false;
@@ -375,7 +403,15 @@ export default React.memo<IThread>(function ({ thread }) {
         }
 
         if (percentage <= 5) {
-            if (!loading.top && direction == Scroll.Up && thread.hasMoreTop) {
+            if (
+                !loading.top &&
+                direction == Scroll.Up &&
+                thread.hasMoreTop &&
+                thread.history.size > 0 &&
+                pageHistory.size > 0 &&
+                pageHistory.first()!.timestamp <=
+                    thread.history.first()!.timestamp
+            ) {
                 setLoading((loading) => ({ ...loading, top: true }));
                 const action = ThreadActionFactory.loadConversation(thread.id, {
                     first: perPage,
@@ -389,7 +425,11 @@ export default React.memo<IThread>(function ({ thread }) {
             if (
                 !loading.bottom &&
                 direction == Scroll.Down &&
-                thread.hasMoreBottom
+                thread.hasMoreBottom &&
+                thread.history.size > 0 &&
+                pageHistory.size > 0 &&
+                pageHistory.last()!.timestamp >=
+                    thread.history.last()!.timestamp
             ) {
                 setLoading((loading) => ({ ...loading, buttom: true }));
                 const action = ThreadActionFactory.loadConversation(thread.id, {
