@@ -24,6 +24,8 @@ interface IThread {
     thread: ThreadRecord;
 }
 
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+
 function orderedMapValueAt<T>(
     map: OrderedMap<string, T>,
     index: number
@@ -150,7 +152,7 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
 
 Messages.displayName = "Messages";
 
-const perPage = 10;
+const perPage = 50;
 
 const loadingState = {
     top: false,
@@ -227,7 +229,36 @@ export default React.memo<IThread>(function ({ thread }) {
         }
     }
 
-    //useUnmount(logPagePosition, [page]);
+    // Disable autoScroll
+    // onUnmount
+    useEffect(() => {
+        let action = ThreadActionFactory.threadActivity({
+            type: "view",
+            thread_id: thread.id,
+            timestamp: new Date().toISOString(),
+        });
+        dispatch(action);
+        return () => {
+            const action = ThreadActionFactory.updateThreadPage(thread.id, {
+                autoScroll: false,
+            });
+            dispatch(action);
+        };
+    }, [thread.id]);
+
+    useEffect(() => {
+        if (!thread.hasMoreBottom && page.autoScroll) {
+            let last = thread.history.last();
+            if (last && last.timestamp < thread.last_read) {
+                let action = ThreadActionFactory.threadActivity({
+                    type: "read",
+                    thread_id: thread.id,
+                    timestamp: last.timestamp,
+                } as any);
+                dispatch(action);
+            }
+        }
+    }, [thread.history.last(), page.autoScroll]);
 
     useDebouncedEffect(logPagePosition, 500, [page]);
 
@@ -242,7 +273,7 @@ export default React.memo<IThread>(function ({ thread }) {
                     end: thread.history.take(70)!.last()!.timestamp,
                 });
                 dispatch(action);
-            } else {
+            } else if (page.scrollPercentage < 40) {
                 const action = ThreadActionFactory.updateThreadPage(thread.id, {
                     start: thread.history.takeLast(70)!.first()!.timestamp,
                     end: thread.history.last()!.timestamp,
@@ -258,14 +289,6 @@ export default React.memo<IThread>(function ({ thread }) {
      * initialized
      */
     useEffect(() => {
-        {
-            let action = ThreadActionFactory.threadActivity({
-                type: "viewing",
-                thread_id: thread.id,
-                space_id: thread.space_id,
-            });
-            dispatch(action);
-        }
         if (thread.history.size === 0) {
             setLoading((loading) => ({ ...loading, buttom: true, top: true }));
             const action = ThreadActionFactory.loadConversation(thread.id, {
@@ -316,15 +339,21 @@ export default React.memo<IThread>(function ({ thread }) {
             (container.scrollTop * 100) /
             (container.scrollHeight - container.clientHeight);
 
-        let updatedPage = page.set("scrollPercentage", percentage);
+        let updatedPage: Partial<Writeable<typeof page>> = {
+            scrollPercentage: percentage,
+        };
 
         if (!pageHistory.isEmpty()) {
             const index = Math.floor((percentage * pageHistory.size) / 100);
             const pivot = getIdByIndex(index - 1);
             let rect = messageRect(pivot)!;
-            updatedPage = updatedPage
-                .set("pivot", pivot)
-                .set("pivotTop", rect.top);
+            if (rect) {
+                updatedPage.pivot = pivot;
+                updatedPage.pivotTop = rect.top;
+            }
+        } else {
+            updatedPage.pivot = "";
+            updatedPage.pivotTop = 0;
         }
 
         const direction =
@@ -336,13 +365,12 @@ export default React.memo<IThread>(function ({ thread }) {
             let rect = footer.current.getBoundingClientRect();
             let containerRect = container.getBoundingClientRect();
             if (containerRect.bottom - rect.top > -8) {
-                if (!page.autoScroll && !thread.hasMoreBottom) {
-                    updatedPage = updatedPage
-                        .set("end", "")
-                        .set("autoScroll", true);
+                if (!thread.hasMoreBottom) {
+                    updatedPage.autoScroll = true;
+                    updatedPage.end = pageHistory.last()?.id ?? "";
                 }
             } else if (page.autoScroll === true) {
-                updatedPage = updatedPage.set("autoScroll", false);
+                updatedPage.autoScroll = false;
             }
         }
 
@@ -373,7 +401,7 @@ export default React.memo<IThread>(function ({ thread }) {
                 });
             }
         }
-        setPage(updatedPage);
+        setPage((page) => page.merge(updatedPage));
     }
 
     function renderConversation() {
