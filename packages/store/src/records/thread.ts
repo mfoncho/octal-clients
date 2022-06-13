@@ -1,4 +1,4 @@
-import { Record, fromJS, OrderedMap } from "immutable";
+import { Record, fromJS, List, OrderedMap } from "immutable";
 import { Unique, BelongsToSpace, Id, ThreadType } from "@octal/client";
 
 export class ConversationLoading extends Record({
@@ -161,11 +161,19 @@ export class ThreadRecord
 
     historyFrom(start: string, end?: string) {
         let { history } = this;
-        let startIndex = ThreadRecord.nearestIndexByTimestamp(history, start);
-        history = history.skip(startIndex);
-        if (end) {
-            let endIndex = ThreadRecord.nearestIndexByTimestamp(history, end);
-            history = history.skipLast(history.size - (endIndex + 1));
+        if (Boolean(start)) {
+            let startIndex = ThreadRecord.nearestIndexByTimestamp(
+                history,
+                start
+            );
+            history = history.skip(startIndex);
+        }
+        if (Boolean(end)) {
+            let endIndex = ThreadRecord.nearestIndexByTimestamp(
+                history.reverse(),
+                end!
+            );
+            history = history.reverse().skip(endIndex).reverse();
         }
         return history;
     }

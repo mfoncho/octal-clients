@@ -1,4 +1,4 @@
-import type { Require, Optional } from "@octal/common";
+import type { Require } from "@octal/common";
 import type { io } from "@octal/client";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
@@ -98,9 +98,9 @@ export interface MessageReactionDeletedPayload {
 }
 
 export interface ThreadActivityPayload {
-    type: "typing" | "viewing";
+    type: string;
     thread_id: string;
-    space_id: string;
+    timestamp: string;
 }
 
 export interface SetConversationPagePayload {

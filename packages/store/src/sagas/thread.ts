@@ -5,7 +5,6 @@ import { dispatch, State } from "..";
 import * as AppActions from "../actions/app";
 import * as SpaceActions from "../actions/space";
 import * as ThreadActions from "../actions/thread";
-import * as TopicActions from "../actions/topic";
 import * as Actions from "../actions/types";
 
 function* load({
@@ -152,7 +151,7 @@ function* newMessage({
 }: ThreadActions.NewMessageAction): Iterable<any> {
     const store = (yield select()) as any as State;
     const thread = store.threads.getThread(payload.thread_id!);
-    if (thread && thread.page.pivotTop > 0) {
+    if (thread) {
         if (thread.page.autoScroll || payload.user_id === store.auth.id) {
             const updates = {
                 id: thread.id,
@@ -160,7 +159,7 @@ function* newMessage({
                 last_read: payload.timestamp,
             };
             yield put(ThreadActions.threadUpdated(updates as any));
-        } else {
+        } else if (!thread.page.autoScroll) {
             const updates = {
                 id: thread.id,
                 unread_count: thread.unread_count + 1,
