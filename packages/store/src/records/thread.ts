@@ -56,7 +56,7 @@ export class ThreadPageView extends Record({
 
     // Follow new messages by
     // auto scroll bottom
-    autoScroll: true,
+    autoScroll: false,
 
     // scrollPercentage
     scrollPercentage: 100,
