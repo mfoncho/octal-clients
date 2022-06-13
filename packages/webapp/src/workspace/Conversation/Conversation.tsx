@@ -222,18 +222,6 @@ export default React.memo<IThread>(function ({ thread }) {
         return element?.getBoundingClientRect();
     }
 
-    function track(id: string) {
-        let element = document.getElementById(`message:${id}`);
-        if (element) {
-            let top = element.getBoundingClientRect().top;
-            setPage((page) =>
-                page.merge({
-                    pivot: id,
-                    pivotTop: top,
-                })
-            );
-        }
-    }
 
     function logPagePosition() {
         const action = ThreadActionFactory.updateThreadPage(
@@ -263,7 +251,7 @@ export default React.memo<IThread>(function ({ thread }) {
     useEffect(() => {
         if (!thread.hasMoreBottom && page.autoScroll) {
             let last = thread.history.last();
-            if (last && last.timestamp < thread.last_read) {
+            if (last && last.timestamp > thread.last_read) {
                 let action = ThreadActionFactory.threadActivity({
                     type: "read",
                     thread_id: thread.id,
