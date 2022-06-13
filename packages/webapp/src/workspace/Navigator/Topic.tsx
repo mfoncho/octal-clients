@@ -12,8 +12,6 @@ interface ITopic {
 }
 
 export default React.memo<ITopic>(({ id }) => {
-    const notification = 0;
-
     const topic = useTopic(id);
 
     const params = useParams<{ topic_id: string }>();
@@ -44,7 +42,7 @@ export default React.memo<ITopic>(({ id }) => {
                 )}>
                 <Text>{topic!.name}</Text>
             </span>
-            <Counter value={notification} />
+            <Counter id={topic.thread_id} />
         </Link>
     );
 });

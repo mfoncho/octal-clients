@@ -3,7 +3,6 @@ import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
 import { Text } from "@octal/ui";
 import paths from "src/paths/workspace";
-import Counter from "./Counter";
 import * as Icons from "@octal/icons";
 import { useBoard } from "@octal/store";
 
@@ -12,8 +11,6 @@ interface IBoard {
 }
 
 export default React.memo<IBoard>(({ id }) => {
-    const notification = 0;
-
     const board = useBoard(id);
 
     const params = useParams<{ board_id: string }>();
@@ -44,7 +41,6 @@ export default React.memo<IBoard>(({ id }) => {
                 )}>
                 <Text>{board!.name}</Text>
             </span>
-            <Counter value={notification} />
         </Link>
     );
 });

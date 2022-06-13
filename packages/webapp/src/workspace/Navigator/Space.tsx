@@ -75,8 +75,6 @@ const Menu = Popper.create<HTMLUListElement, IMenu>((props) => {
 });
 
 export const DirectSpace = React.memo<ISpace>(({ space }) => {
-    const notification = 0;
-
     const authId = useAuthId();
 
     const uid = space.users.find((id) => id != authId);
@@ -110,7 +108,7 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
                 )}>
                 <Text>{user.username}</Text>
             </span>
-            <Counter value={notification} />
+            <Counter id={space.thread_id} />
         </Link>
     );
 });
