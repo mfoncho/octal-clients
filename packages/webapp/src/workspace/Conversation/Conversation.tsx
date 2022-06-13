@@ -222,7 +222,6 @@ export default React.memo<IThread>(function ({ thread }) {
         return element?.getBoundingClientRect();
     }
 
-
     function logPagePosition() {
         const action = ThreadActionFactory.updateThreadPage(
             thread.id,
@@ -251,7 +250,11 @@ export default React.memo<IThread>(function ({ thread }) {
     useEffect(() => {
         if (!thread.hasMoreBottom && page.autoScroll) {
             let last = thread.history.last();
-            if (last && last.timestamp > thread.last_read) {
+            if (
+                last &&
+                (!Boolean(thread.last_read) ||
+                    last.timestamp > thread.last_read)
+            ) {
                 let action = ThreadActionFactory.threadActivity({
                     type: "read",
                     thread_id: thread.id,
