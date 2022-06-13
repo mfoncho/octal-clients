@@ -49,7 +49,7 @@ export function usePostInput(thread: ThreadRecord) {
             const action = ThreadActions.threadActivity({
                 type: "typing",
                 thread_id: thread.id,
-                space_id: thread.space_id,
+                timestamp: new Date().toISOString(),
             });
             return dispatch(action);
         },
