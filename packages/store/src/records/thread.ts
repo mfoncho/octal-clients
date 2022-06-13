@@ -169,11 +169,8 @@ export class ThreadRecord
             history = history.skip(startIndex);
         }
         if (Boolean(end)) {
-            let endIndex = ThreadRecord.nearestIndexByTimestamp(
-                history.reverse(),
-                end!
-            );
-            history = history.reverse().skip(endIndex).reverse();
+            let endIndex = ThreadRecord.nearestIndexByTimestamp(history, end!);
+            history = history.skipLast(history.size - (endIndex + 1));
         }
         return history;
     }
