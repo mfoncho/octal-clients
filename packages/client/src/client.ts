@@ -1,5 +1,5 @@
 import { mixin } from "@octal/common";
-import BaseClient from "./base";
+import { Socket } from "@octal/endpoint";
 import AuthClient from "./auth";
 import BoardClient from "./board";
 import SpaceClient from "./space";
@@ -18,7 +18,16 @@ export interface Interceptor {
     };
 }
 
-class Client extends BaseClient {
+class Client {
+    endpoint: any;
+
+    socket: Socket;
+
+    constructor(endpoint: any, socket: Socket) {
+        this.endpoint = endpoint;
+        this.socket = socket;
+    }
+
     intercept(interceptor: Interceptor) {
         if (interceptor.request) {
             this.endpoint.interceptors.request.use(interceptor.request);
