@@ -1,8 +1,8 @@
-import client from "@octal/client";
+import Endpoint from "@octal/endpoint";
 import { Page } from "src/types";
 import { io } from "./types";
 
-const endpoint = client.endpoint;
+const endpoint = Endpoint.create({ baseURL: "http://192.168.1.2:8080/api" });
 
 export interface FetchUsersRequest {
     page?: number | string;
@@ -165,12 +165,12 @@ export interface FetchUserMembersRequest {
 
 class Client {
     async fetchUsers(params?: FetchUsersRequest): Promise<Page<io.User>> {
-        const { data } = await endpoint.get("/console/users", { params });
+        const { data } = await endpoint.get("/users", { params });
         return data;
     }
 
     async fetchSpaces(params?: FetchBoardsRequest): Promise<Page<io.Space>> {
-        const { data } = await endpoint.get("/console/spaces", { params });
+        const { data } = await endpoint.get("/spaces", { params });
         return data;
     }
 
@@ -179,7 +179,7 @@ class Client {
         ...params
     }: FetchSpaceTopicsRequest): Promise<io.Topic[]> {
         const { data } = await endpoint.get(
-            `/console/spaces/${space_id}/topics`,
+            `/spaces/${space_id}/topics`,
             {
                 params,
             }
@@ -192,7 +192,7 @@ class Client {
         ...params
     }: FetchSpaceTopicsRequest): Promise<io.Member[]> {
         const { data } = await endpoint.get(
-            `/console/spaces/${space_id}/members`,
+            `/spaces/${space_id}/members`,
             {
                 params,
             }
@@ -205,7 +205,7 @@ class Client {
         user_id,
     }: AddSpaceUserRequest): Promise<io.Member> {
         const { data } = await endpoint.post(
-            `/console/spaces/${space_id}/users/${user_id}`
+            `/spaces/${space_id}/users/${user_id}`
         );
         return data;
     }
@@ -215,7 +215,7 @@ class Client {
         member_id,
     }: RemoveSpaceMemberRequest): Promise<any> {
         const { data } = await endpoint.delete(
-            `/console/spaces/${space_id}/members/${member_id}`
+            `/spaces/${space_id}/members/${member_id}`
         );
         return data;
     }
@@ -225,107 +225,107 @@ class Client {
         member_id,
     }: CrownSpaceMemberRequest): Promise<io.Member> {
         const { data } = await endpoint.post(
-            `/console/spaces/${space_id}/admin/${member_id}`
+            `/spaces/${space_id}/admin/${member_id}`
         );
         return data;
     }
 
     async getSpace({ space_id }: GetSpaceRequest): Promise<io.ColabSpace> {
-        const { data } = await endpoint.get(`/console/spaces/${space_id}`);
+        const { data } = await endpoint.get(`/spaces/${space_id}`);
         return data;
     }
 
     async deleteSpace({ space_id }: DeleteSpaceRequest): Promise<any> {
-        const { data } = await endpoint.delete(`/console/spaces/${space_id}`);
+        const { data } = await endpoint.delete(`/spaces/${space_id}`);
         return data;
     }
 
     async restoreSpace({ space_id }: DeleteSpaceRequest): Promise<any> {
         const { data } = await endpoint.post(
-            `/console/spaces/${space_id}/restore`
+            `/spaces/${space_id}/restore`
         );
         return data;
     }
 
     async getWorkspace(): Promise<io.Workspace> {
-        const { data } = await endpoint.get(`/console/workspace`);
+        const { data } = await endpoint.get(`/workspace`);
         return data;
     }
 
     async updateWorkspace(
         params: UpdateWorkspaceRequest
     ): Promise<io.Workspace> {
-        const { data } = await endpoint.patch(`/console/workspace`, params);
+        const { data } = await endpoint.patch(`/workspace`, params);
         return data;
     }
 
     async fetchInvites(params?: FetchInvitesRequest): Promise<Page<io.Invite>> {
-        const { data } = await endpoint.get(`/console/invites`, { params });
+        const { data } = await endpoint.get(`/invites`, { params });
         return data;
     }
 
     async mailInvite({ invite_id }: MailInviteRequest): Promise<io.Invite> {
         const { data } = await endpoint.post(
-            `/console/invites/${invite_id}/mail`
+            `/invites/${invite_id}/mail`
         );
         return data;
     }
 
     async deleteInvite({ invite_id }: DeleteInviteRequest): Promise<any> {
-        const { data } = await endpoint.delete(`/console/invites/${invite_id}`);
+        const { data } = await endpoint.delete(`/invites/${invite_id}`);
         return data;
     }
 
     async fetchWorkspaceUsersAvailable(id: string): Promise<io.RoleUser[]> {
         const { data } = await endpoint.get(
-            `/console/workspaces/${id}/users/available`
+            `/workspaces/${id}/users/available`
         );
         return data;
     }
 
     async getAccount(params: GetUserRequest): Promise<io.Account> {
-        const { data } = await endpoint.get(`/console/users/${params.user_id}`);
+        const { data } = await endpoint.get(`/users/${params.user_id}`);
         return data;
     }
 
     async getUserStats(params: GetUserRequest): Promise<any> {
         const { data } = await endpoint.get(
-            `/console/users/${params.user_id}/stats`
+            `/users/${params.user_id}/stats`
         );
         return data;
     }
 
     async fetchUserSpaces(params: FetchUserSpacesRequest): Promise<io.Space[]> {
         const { data } = await endpoint.get(
-            `/console/users/${params.user_id}/spaces`
+            `/users/${params.user_id}/spaces`
         );
         return data;
     }
 
     async fetchWorkspace(): Promise<io.Workspace> {
-        const { data } = await endpoint.get("/console/workspace");
+        const { data } = await endpoint.get("/workspace");
         return data;
     }
 
     async updateSiteInfo(params: Partial<io.SiteInfo>): Promise<io.SiteInfo> {
-        const { data } = await endpoint.patch("/console/site/info", params);
+        const { data } = await endpoint.patch("/site/info", params);
         return data;
     }
 
     async getSiteConfig(): Promise<io.SiteConfig> {
-        const { data } = await endpoint.get("/console/site/config");
+        const { data } = await endpoint.get("/site/config");
         return data;
     }
 
     async updateSiteConfig(
         params: Partial<io.SiteConfig>
     ): Promise<io.SiteConfig> {
-        const { data } = await endpoint.patch("/console/site/config", params);
+        const { data } = await endpoint.patch("/site/config", params);
         return data;
     }
 
     async fetchRoles(): Promise<io.Role[]> {
-        const { data } = await endpoint.get("/console/roles");
+        const { data } = await endpoint.get("/roles");
         return data;
     }
 
@@ -333,13 +333,13 @@ class Client {
         role_id,
     }: FetchRolePermissionsRequestst): Promise<io.Permission[]> {
         const { data } = await endpoint.get(
-            `/console/roles/${role_id}/permissions`
+            `/roles/${role_id}/permissions`
         );
         return data;
     }
 
     async createRole(params: CreateRoleRequest): Promise<io.Role> {
-        const { data } = await endpoint.post(`/console/roles`, params);
+        const { data } = await endpoint.post(`/roles`, params);
         return data;
     }
 
@@ -348,14 +348,14 @@ class Client {
         role_id,
     }: AddRoleUserRequest): Promise<io.RoleUser> {
         const { data } = await endpoint.post(
-            `/console/roles/${role_id}/users/${user_id}`
+            `/roles/${role_id}/users/${user_id}`
         );
         return data;
     }
 
     async updateRole({ role_id, params }: UpdateRoleRequest): Promise<io.Role> {
         const { data } = await endpoint.patch(
-            `/console/roles/${role_id}`,
+            `/roles/${role_id}`,
             params
         );
         return data;
@@ -366,7 +366,7 @@ class Client {
         role_id,
     }: RemoveRoleUserRequest): Promise<any> {
         const { data } = await endpoint.delete(
-            `/console/roles/${role_id}/users/${user_id}`
+            `/roles/${role_id}/users/${user_id}`
         );
         return data;
     }
@@ -374,17 +374,17 @@ class Client {
     async fetchRoleUsers({
         role_id,
     }: FetchRolesUsersRequest): Promise<io.RoleUser[]> {
-        const { data } = await endpoint.get(`/console/roles/${role_id}/users`);
+        const { data } = await endpoint.get(`/roles/${role_id}/users`);
         return data;
     }
 
     async getRole({ role_id }: GetRolesRequest): Promise<io.Role> {
-        const { data } = await endpoint.get(`/console/roles/${role_id}`);
+        const { data } = await endpoint.get(`/roles/${role_id}`);
         return data;
     }
 
     async deleteRole({ role_id }: DeleteRoleRequest): Promise<any> {
-        const { data } = await endpoint.delete(`/console/roles/${role_id}`);
+        const { data } = await endpoint.delete(`/roles/${role_id}`);
         return data;
     }
 
@@ -393,7 +393,7 @@ class Client {
         permissions,
     }: SetRolePermissionsRequest): Promise<io.Permission[]> {
         const { data } = await endpoint.post(
-            `/console/roles/${role_id}/permissions`,
+            `/roles/${role_id}/permissions`,
             permissions
         );
         return data;
@@ -403,23 +403,23 @@ class Client {
         space_id,
     }: FetchSpaceBoards): Promise<io.Board[]> {
         const { data } = await endpoint.get(
-            `/console/spaces/${space_id}/boards`
+            `/spaces/${space_id}/boards`
         );
         return data;
     }
 
     async getRoomCounters(): Promise<io.RoomCounters> {
-        const { data } = await endpoint.get(`/console/counters/rooms`);
+        const { data } = await endpoint.get(`/counters/rooms`);
         return data;
     }
 
     async getBoardCounters(): Promise<io.BoardCounters> {
-        const { data } = await endpoint.get(`/console/counters/boards`);
+        const { data } = await endpoint.get(`/counters/boards`);
         return data;
     }
 
     async getWorkspaceCounters(): Promise<io.WorkspaceCounters> {
-        const { data } = await endpoint.get(`/console/counters`);
+        const { data } = await endpoint.get(`/counters`);
         return data;
     }
 }
