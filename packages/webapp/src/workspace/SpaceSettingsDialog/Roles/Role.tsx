@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Map } from "immutable";
-import clx from "classnames";
+import React from "react";
 import * as Icons from "@octal/icons";
-import { Button, Text } from "@octal/ui";
+import { Text } from "@octal/ui";
 import { RoleRecord, SpaceRoleRecord } from "@octal/store";
 import { useRoleActions } from "@workspace/Space";
 import BooleanPermission from "./BooleanPermission";
@@ -19,17 +17,6 @@ interface IRole {
 export default function Role(props: IRole) {
     const role = props.selected;
     const actions = useRoleActions(props.selected);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const [changes, setChanges] = useState<Map<string, any>>(
-        Map<string, any>()
-    );
-
-    const [overrides, setOverrides] = useState<Map<string, any>>(
-        Map<string, any>()
-    );
-
-    const hasChanges = !changes.equals(overrides);
 
     function handleDeletePermission(key: string) {
         actions.unsetPermission(key);
@@ -37,11 +24,6 @@ export default function Role(props: IRole) {
 
     function handleSetPermission(key: string, value: any) {
         actions.setPermission(key, value);
-    }
-
-    function handleSaveChanges(e: React.MouseEvent) {
-        e.stopPropagation();
-        e.preventDefault();
     }
 
     function renderPermission(permission: IPermission) {
@@ -111,21 +93,6 @@ export default function Role(props: IRole) {
                     <span className="font-bold text-gray-700 mx-2">
                         <Text>{props.role.name}</Text>
                     </span>
-                </div>
-                <div
-                    className={clx(
-                        "sticky top-0 flex flex-row items-center bg-white justify-between",
-                        hasChanges ? "visible" : "invisible"
-                    )}>
-                    <span className="font-semibold text-sm text-gray-500 px-2">
-                        You have made some changes
-                    </span>
-                    <Button
-                        color="primary"
-                        disabled={loading}
-                        onClick={handleSaveChanges}>
-                        Save
-                    </Button>
                 </div>
             </div>
             {definitions.map(renderPermissionGroup)}
