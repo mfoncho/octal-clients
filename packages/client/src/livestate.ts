@@ -34,7 +34,7 @@ export default class LiveState {
 
     init<T = any>(params: Object) {
         if (this.channel.open || this.channel.opening) {
-            return Promise.resolve() as any as Promise<T>;
+            return this.state<T>();
         }
         return new Promise<T>((resolve, reject) => {
             this.channel
@@ -53,6 +53,16 @@ export default class LiveState {
         return new Promise<T>((resolve, reject) => {
             this.channel
                 .push(`call:${proc}`, params, timeout)
+                .receive("ok", resolve)
+                .receive("error", reject)
+                .receive("timeout", reject);
+        });
+    }
+
+    state<T = any>() {
+        return new Promise<T>((resolve, reject) => {
+            this.channel
+                .push("state", {})
                 .receive("ok", resolve)
                 .receive("error", reject)
                 .receive("timeout", reject);
