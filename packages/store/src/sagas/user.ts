@@ -139,6 +139,14 @@ function* connected({
         metadata.broadcast == false;
         dispatch({ ...payload, metadata });
     });
+
+    channel.on("role.assigned", (payload: UserActions.AssignedPayload) => {
+        dispatch(UserActions.userAssigned(payload));
+    });
+
+    channel.on("role.unassigned", (payload: UserActions.AssignedPayload) => {
+        dispatch(UserActions.userUnassigned(payload));
+    });
 }
 
 function* syncPresence(): Iterable<any> {

@@ -9,6 +9,12 @@ export type USER_LOADED = typeof USER_LOADED;
 export const USERS_LOADED = "USERS_LOADED";
 export type USERS_LOADED = typeof USERS_LOADED;
 
+export const USER_ASSIGNED = "USER_ASSIGNED";
+export type USER_ASSIGNED = typeof USER_ASSIGNED;
+
+export const USER_UNASSIGNED = "USER_UNASSIGNED";
+export type USER_UNASSIGNED = typeof USER_UNASSIGNED;
+
 export const UPDATE_USER = "UPDATE_USER";
 export type UPDATE_USER = typeof UPDATE_USER;
 

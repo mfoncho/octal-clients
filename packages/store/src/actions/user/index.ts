@@ -3,6 +3,8 @@ import type { Channel } from "@octal/endpoint";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
+    USER_ASSIGNED,
+    USER_UNASSIGNED,
     USER_CONNECTED,
     USER_BROADCAST,
     USER_LOADED,
@@ -25,6 +27,11 @@ export * from "./types";
 export type PreferencesUpdatedPayload = Partial<io.Preferences>;
 
 export type UpdatePreferencesPayload = Partial<io.Preferences>;
+
+export interface AssignedPayload {
+    user_id: string;
+    role_id: string;
+}
 
 export interface UserConnectedPayload {
     topic: string;
@@ -123,6 +130,10 @@ export type UpdateUserProfileAction = IOAction<
     UpdateUserProfilePayload,
     io.User
 >;
+
+export type UserAssignedAction = Action<USER_ASSIGNED, AssignedPayload>;
+
+export type UserUnassignedAction = Action<USER_UNASSIGNED, AssignedPayload>;
 
 export type UserBroadcastAction = Action<USER_BROADCAST, UserBoardcastPayload>;
 
@@ -237,4 +248,12 @@ export function userConnected(
     payload: UserConnectedPayload
 ): UserConnectedAction {
     return createAction(USER_CONNECTED, payload);
+}
+
+export function userAssigned(payload: AssignedPayload): UserAssignedAction {
+    return createAction(USER_ASSIGNED, payload);
+}
+
+export function userUnassigned(payload: AssignedPayload): UserUnassignedAction {
+    return createAction(USER_UNASSIGNED, payload);
 }
