@@ -1,92 +1,113 @@
 import React, { useEffect, useState } from "react";
-import { Map } from "immutable";
-import { Button } from "@octal/ui";
+import { io } from "@console/types";
+import client from "@console/client";
+import { Permissions } from "@octal/store";
 import definitions, { IPermissionsGroup, IPermission } from "./permissions";
-import { permissions } from "@octal/store";
 import NumberPermission from "./NumberPermission";
 import StringPermission from "./StringPermission";
 import BooleanPermission from "./BooleanPermission";
-import { io } from "@console/types";
-import client from "@console/client";
 
 interface IRole {
     role: io.Role;
 }
 
-type PermissionKey = keyof typeof permissions;
+const defaultPermissions = new Permissions();
 
 export default function Role(props: IRole) {
     const { role } = props;
-    const [permissions, setPermissions] = useState<io.Permission[]>([]);
-
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const [changes, setChanges] = useState<Map<string, any>>(
-        Map<string, any>()
-    );
-
-    const [overrides, setOverrides] = useState<Map<string, any>>(
-        Map<string, any>()
-    );
-
-    const hasChanges = !changes.equals(overrides);
+    const [permissions, setPermissions] = useState(defaultPermissions);
 
     useEffect(() => {
-        if (props.role) {
+        if (role) {
             fetchPermissions();
         }
     }, [Boolean(role)]);
 
-    useEffect(() => {
-        const custom = permissions.reduce((acc: any, perm: any) => {
-            return acc.set(perm.name, perm.value);
-        }, Map());
-        setChanges(custom);
-        setOverrides(custom);
-    }, [permissions]);
-
     function fetchPermissions() {
         client.fetchRolePermissions({ role_id: role.id }).then((data) => {
-            setPermissions(data);
+            let loadedPermissions = data.reduce(
+                (permissions: any, permission: any) => {
+                    let record = permissions.get(permission.permission);
+                    if (record) {
+                        return permissions.set(
+                            permission.permission,
+                            record.merge(permission)
+                        );
+                    }
+                    return permissions;
+                },
+                permissions
+            );
+            setPermissions(loadedPermissions);
         });
     }
 
     function handleSetPermission(key: string, value: any) {
-        setChanges((changes) => {
-            return changes.set(key, value);
+        let permission = permissions.get(key as any);
+        setPermissions((permissions) => {
+            let permission = permissions.get(key as any);
+            if (permission) {
+                return permissions.set(
+                    //@ts-ignore
+                    key,
+                    permission.set("value", value)
+                );
+            }
+            return permissions;
         });
-    }
-
-    function handleClearPermission(key: string) {
-        setChanges((changes) => changes.delete(key));
-    }
-
-    function handleSaveChanges(e: React.MouseEvent) {
-        e.stopPropagation();
-        e.preventDefault();
-        client
-            .setRolePermissions({
+        if (permission) {
+            const params = {
+                value: value,
+                overwrite: permission.overwrite,
+            };
+            client.setRolePermissions({
+                params,
                 role_id: role.id,
-                permissions: changes.toJS(),
-            })
-            .then((data) => setPermissions(data))
-            .catch(() => {})
-            .finally(() => setLoading(false));
-        setLoading(true);
+                permission: key,
+            });
+        }
+    }
+
+    function handleToggleOverwrite(key: string) {
+        let permission = permissions.get(key as any);
+        setPermissions((permissions) => {
+            let permission = permissions.get(key as any);
+            if (permission) {
+                return permissions.set(
+                    //@ts-ignore
+                    key,
+                    permission.set("overwrite", !permission.overwrite)
+                );
+            }
+            return permissions;
+        });
+        if (permission) {
+            const params = {
+                value: permission.value,
+                overwrite: !permission.overwrite,
+            };
+            client.setRolePermissions({
+                params,
+                role_id: role.id,
+                permission: key,
+            });
+        }
     }
 
     function renderPermission(permission: IPermission) {
         const key = permission.permission;
-        const enabled = true;
+        const perm = permissions.get(key);
+        const value = perm.value as any;
+        const overwrite = perm.overwrite;
         if (permission.type === "boolean") {
             return (
                 <BooleanPermission
                     key={key}
-                    enabled={enabled}
-                    onClear={handleClearPermission}
+                    value={value}
+                    overwrite={overwrite}
+                    onOverwrite={handleToggleOverwrite}
                     onChange={handleSetPermission}
                     permission={permission}
-                    value={changes.get(key, false)}
                 />
             );
         }
@@ -96,11 +117,11 @@ export default function Role(props: IRole) {
                     min={0}
                     max={1024}
                     key={key}
-                    enabled={enabled}
-                    onClear={handleClearPermission}
+                    value={value}
+                    overwrite={overwrite}
+                    onOverwrite={handleToggleOverwrite}
                     onChange={handleSetPermission}
                     permission={permission}
-                    value={changes.get(key, 0)}
                 />
             );
         }
@@ -108,11 +129,11 @@ export default function Role(props: IRole) {
             return (
                 <StringPermission
                     key={key}
-                    enabled={enabled}
-                    onClear={handleClearPermission}
+                    value={value}
+                    overwrite={overwrite}
+                    onOverwrite={handleToggleOverwrite}
                     onChange={handleSetPermission}
                     permission={permission}
-                    value={changes.get(key, "")}
                 />
             );
         }
@@ -133,21 +154,6 @@ export default function Role(props: IRole) {
     return (
         <div className="flex flex-col px-2">
             {definitions.map(renderPermissionGroup)}
-            {hasChanges && (
-                <div
-                    className="fixed flex bottom-4 flex-row items-center p-4 bg-white justify-between"
-                    style={{ width: "550px" }}>
-                    <span className="font-semibold text-sm text-gray-500">
-                        You have made some changes
-                    </span>
-                    <Button
-                        disabled={loading}
-                        color="primary"
-                        onClick={handleSaveChanges}>
-                        Save
-                    </Button>
-                </div>
-            )}
         </div>
     );
 }

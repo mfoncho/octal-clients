@@ -68,7 +68,11 @@ export interface UpdateRolesRequest {
 
 export interface SetRolePermissionsRequest {
     role_id: string;
-    permissions: { [key: string]: any };
+    permission: string;
+    params: {
+        value: any;
+        overwrite: boolean;
+    };
 }
 
 export interface DeleteRoleRequest {
@@ -178,12 +182,9 @@ class Client {
         space_id,
         ...params
     }: FetchSpaceTopicsRequest): Promise<io.Topic[]> {
-        const { data } = await endpoint.get(
-            `/spaces/${space_id}/topics`,
-            {
-                params,
-            }
-        );
+        const { data } = await endpoint.get(`/spaces/${space_id}/topics`, {
+            params,
+        });
         return data;
     }
 
@@ -191,12 +192,9 @@ class Client {
         space_id,
         ...params
     }: FetchSpaceTopicsRequest): Promise<io.Member[]> {
-        const { data } = await endpoint.get(
-            `/spaces/${space_id}/members`,
-            {
-                params,
-            }
-        );
+        const { data } = await endpoint.get(`/spaces/${space_id}/members`, {
+            params,
+        });
         return data;
     }
 
@@ -241,9 +239,7 @@ class Client {
     }
 
     async restoreSpace({ space_id }: DeleteSpaceRequest): Promise<any> {
-        const { data } = await endpoint.post(
-            `/spaces/${space_id}/restore`
-        );
+        const { data } = await endpoint.post(`/spaces/${space_id}/restore`);
         return data;
     }
 
@@ -265,9 +261,7 @@ class Client {
     }
 
     async mailInvite({ invite_id }: MailInviteRequest): Promise<io.Invite> {
-        const { data } = await endpoint.post(
-            `/invites/${invite_id}/mail`
-        );
+        const { data } = await endpoint.post(`/invites/${invite_id}/mail`);
         return data;
     }
 
@@ -289,16 +283,12 @@ class Client {
     }
 
     async getUserStats(params: GetUserRequest): Promise<any> {
-        const { data } = await endpoint.get(
-            `/users/${params.user_id}/stats`
-        );
+        const { data } = await endpoint.get(`/users/${params.user_id}/stats`);
         return data;
     }
 
     async fetchUserSpaces(params: FetchUserSpacesRequest): Promise<io.Space[]> {
-        const { data } = await endpoint.get(
-            `/users/${params.user_id}/spaces`
-        );
+        const { data } = await endpoint.get(`/users/${params.user_id}/spaces`);
         return data;
     }
 
@@ -332,9 +322,7 @@ class Client {
     async fetchRolePermissions({
         role_id,
     }: FetchRolePermissionsRequestst): Promise<io.Permission[]> {
-        const { data } = await endpoint.get(
-            `/roles/${role_id}/permissions`
-        );
+        const { data } = await endpoint.get(`/roles/${role_id}/permissions`);
         return data;
     }
 
@@ -354,10 +342,7 @@ class Client {
     }
 
     async updateRole({ role_id, params }: UpdateRoleRequest): Promise<io.Role> {
-        const { data } = await endpoint.patch(
-            `/roles/${role_id}`,
-            params
-        );
+        const { data } = await endpoint.patch(`/roles/${role_id}`, params);
         return data;
     }
 
@@ -388,13 +373,12 @@ class Client {
         return data;
     }
 
-    async setRolePermissions({
-        role_id,
-        permissions,
-    }: SetRolePermissionsRequest): Promise<io.Permission[]> {
+    async setRolePermissions(
+        request: SetRolePermissionsRequest
+    ): Promise<io.Permission[]> {
         const { data } = await endpoint.post(
-            `/roles/${role_id}/permissions`,
-            permissions
+            `/roles/${request.role_id}/permissions/${request.permission}`,
+            request.params
         );
         return data;
     }
@@ -402,9 +386,7 @@ class Client {
     async fetchSpaceBoards({
         space_id,
     }: FetchSpaceBoards): Promise<io.Board[]> {
-        const { data } = await endpoint.get(
-            `/spaces/${space_id}/boards`
-        );
+        const { data } = await endpoint.get(`/spaces/${space_id}/boards`);
         return data;
     }
 
