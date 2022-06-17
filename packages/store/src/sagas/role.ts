@@ -2,10 +2,11 @@ import { put, takeEvery } from "redux-saga/effects";
 import Client, { io } from "@octal/client";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
-import * as SpaceActions from "../actions/space";
+import * as AppActions from "../actions/app";
 import * as RoleActions from "../actions/role";
+import * as SpaceActions from "../actions/space";
 
-function* fetch({
+function* fetchSpaceRole({
     payload,
     resolve: meta,
 }: RoleActions.FetchSpaceRolesAction): Iterable<any> {
@@ -17,7 +18,7 @@ function* fetch({
     }
 }
 
-function* load({
+function* loadSpaceRole({
     payload,
     resolve: meta,
 }: RoleActions.LoadSpaceRolesAction): Iterable<any> {
@@ -32,7 +33,7 @@ function* load({
     }
 }
 
-function* create({
+function* createSpaceRole({
     payload,
     resolve: meta,
 }: RoleActions.CreateSpaceRoleAction): Iterable<any> {
@@ -45,7 +46,7 @@ function* create({
     }
 }
 
-function* setPermission({
+function* setSpacePermission({
     payload,
     resolve,
 }: RoleActions.SetSpacePermissionAction): Iterable<any> {
@@ -62,7 +63,7 @@ function* setPermission({
     }
 }
 
-function* deleteRole({
+function* deleteSpaceRole({
     payload,
     resolve,
 }: RoleActions.DeleteSpaceRoleAction): Iterable<any> {
@@ -86,6 +87,27 @@ function* unsetSpacePermission({
     } catch (e) {
         resolve.error(e);
     }
+}
+
+function* workspaceConnected({
+    payload,
+}: AppActions.WorkspaceConnectedAction): Iterable<any> {
+    const { channel } = payload;
+    channel.on("role.created", (payload: io.Role) => {
+        //dispatch(RoleActions.spaceRoleCreated(payload));
+    });
+
+    channel.on("role.updated", (payload: io.Role) => {
+        //dispatch(RoleActions.spaceRoleDeleted(payload));
+    });
+
+    channel.on("role.deleted", (payload: io.Role) => {
+        //dispatch(RoleActions.spaceRoleDeleted(payload));
+    });
+
+    channel.on("role.permission.set", (payload: any) => {
+        //dispatch(RoleActions.spacePermissionSet(payload));
+    });
 }
 
 function* spaceSubscribe({
@@ -113,21 +135,42 @@ function* spaceSubscribe({
 export const tasks = [
     {
         effect: takeEvery,
+        type: Actions.WORKSPACE_CONNECTED,
+        handler: workspaceConnected,
+    },
+    {
+        effect: takeEvery,
         type: Actions.SPACE_CONNECTED,
         handler: spaceSubscribe,
     },
-    { effect: takeEvery, type: Actions.LOAD_SPACE_ROLES, handler: load },
-    { effect: takeEvery, type: Actions.FETCH_SPACE_ROLES, handler: fetch },
-    { effect: takeEvery, type: Actions.CREATE_SPACE_ROLE, handler: create },
+    {
+        effect: takeEvery,
+        type: Actions.LOAD_SPACE_ROLES,
+        handler: loadSpaceRole,
+    },
+    {
+        effect: takeEvery,
+        type: Actions.FETCH_SPACE_ROLES,
+        handler: fetchSpaceRole,
+    },
+    {
+        effect: takeEvery,
+        type: Actions.CREATE_SPACE_ROLE,
+        handler: createSpaceRole,
+    },
     {
         effect: takeEvery,
         type: Actions.SET_SPACE_PERMISSION,
-        handler: setPermission,
+        handler: setSpacePermission,
     },
     {
         effect: takeEvery,
         type: Actions.UNSET_SPACE_PERMISSION,
         handler: unsetSpacePermission,
     },
-    { effect: takeEvery, type: Actions.DELETE_SPACE_ROLE, handler: deleteRole },
+    {
+        effect: takeEvery,
+        type: Actions.DELETE_SPACE_ROLE,
+        handler: deleteSpaceRole,
+    },
 ];

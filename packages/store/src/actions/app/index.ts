@@ -1,4 +1,5 @@
 import type { io } from "@octal/client";
+import type { Channel } from "@octal/endpoint";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedRelated } from "../../schemas";
@@ -19,6 +20,7 @@ import {
     LOAD_WORKSPACE,
     WORKSPACE_UPDATED,
     WORKSPACE_LOADED,
+    WORKSPACE_CONNECTED,
 } from "./types";
 
 export * from "./types";
@@ -27,6 +29,11 @@ export interface IAuth {
     id: string;
     token: string;
     timestamp: string;
+}
+
+export interface WorkspaceConnectedPayload {
+    topic: string;
+    channel: Channel;
 }
 
 export interface ILoginPayload {
@@ -40,6 +47,11 @@ export interface CollectionLoadedPayload {
     data?: any;
     collection: string;
 }
+
+export type WorkspaceConnectedAction = Action<
+    WORKSPACE_CONNECTED,
+    WorkspaceConnectedPayload
+>;
 
 export type CollectionLoadedAction = Action<
     COLLECTION_LOADED,
@@ -72,7 +84,7 @@ export type LoadConfigAction = IOAction<LOAD_CONFIG, any, io.Config>;
 
 export type WorkspaceUpdatedAction = Action<WORKSPACE_UPDATED, io.Workspace>;
 
-export type PutWorkspaceAction = Action<WORKSPACE_LOADED, io.Workspace>;
+export type WorkspaceLoadedAction = Action<WORKSPACE_LOADED, io.Workspace>;
 
 export type LoadWorkspaceAction = IOAction<LOAD_WORKSPACE, {}, io.Workspace>;
 
@@ -128,7 +140,9 @@ export function collectionLoaded(
     return createAction(COLLECTION_LOADED, { collection, type, data });
 }
 
-export function workspaceLoaded(workspace: io.Workspace): PutWorkspaceAction {
+export function workspaceLoaded(
+    workspace: io.Workspace
+): WorkspaceLoadedAction {
     return createAction(WORKSPACE_LOADED, workspace);
 }
 
@@ -136,6 +150,13 @@ export function workspaceUpdated(
     payload: io.Workspace
 ): WorkspaceUpdatedAction {
     return createAction(WORKSPACE_UPDATED, payload);
+}
+
+export function workspaceConnected(
+    channel: Channel,
+    topic = "workspace"
+): WorkspaceConnectedAction {
+    return createAction(WORKSPACE_CONNECTED, { topic, channel });
 }
 
 export function loadWorkspace(): LoadWorkspaceAction {
