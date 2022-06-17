@@ -629,9 +629,10 @@ export function useSpacePermissions(id: string) {
     return useMemo(() => {
         return auth.roles
             .map((id) => roles.get(id)!)
+            .filter(Boolean)
             .filter((role) => {
                 if (space.is_direct) {
-                    return role.name === "everyone";
+                    return role.is_default;
                 }
                 return true;
             })
