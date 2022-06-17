@@ -283,28 +283,6 @@ export namespace io {
         description: string;
     }
 
-    export interface Permissions {
-        add_reaction: boolean;
-        create_card: boolean;
-        delete_message: boolean;
-        edit_message: boolean;
-        embed_links: boolean;
-        flag_message: boolean;
-        leave_channel: boolean;
-        manage_board: boolean;
-        manage_channel: boolean;
-        manage_messages: boolean;
-        mention_members: boolean;
-        pin_message: boolean;
-        post_message: boolean;
-        send_invitation: boolean;
-        post_reply: boolean;
-        upload_file: boolean;
-        upload_limit: number;
-        upload_types: string;
-        use_markdown: boolean;
-    }
-
     export interface Role extends Unique {
         name: string;
         icon: string;
