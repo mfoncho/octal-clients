@@ -1,16 +1,10 @@
 import React from "react";
 import { Text, Dialog, Tooltip } from "@octal/ui";
 import emoji from "@octal/emoji";
-import { useUser, usePresence} from "@octal/store";
+import { useUser } from "@octal/store";
 import StatusDialog from "../StatusDialog";
-import { presence as colors } from "src/colors";
-import { GoPrimitiveDot as PresenceDotIcon } from "react-icons/go";
 
-interface IPresence {
-    className?: string;
-}
-
-const Status = React.memo<{status: string}>((props) => {
+const Status = React.memo<{ status: string }>((props) => {
     const [icon, status] = emoji.prefixed(props.status);
     if (Boolean(icon) && Boolean(status)) {
         return (
@@ -26,16 +20,6 @@ const Status = React.memo<{status: string}>((props) => {
     return <span />;
 });
 
-const Presence = React.memo<IPresence>((props) => {
-    const presence = usePresence();
-    return (
-        <PresenceDotIcon
-            className={props.className}
-            style={{ color: colors.get(presence.state) }}
-        />
-    );
-});
-
 export default React.memo(() => {
     const user = useUser();
 
@@ -44,7 +28,6 @@ export default React.memo(() => {
         <button
             onClick={dialog.opener("status")}
             className="flex flex-row items-center">
-            <Presence className="w-4 h-4" />
             <span className="text-sm font-semibold text-gray-700 pr-2 ">
                 {user.username}
             </span>
