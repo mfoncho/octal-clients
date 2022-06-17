@@ -641,14 +641,14 @@ export function useSpacePermissions(id: string) {
                 if (permissions) {
                     return permissions.toSeq().reduce((role, value, key) => {
                         let permission = role.permissions.get(key);
-                        if(permission){
+                        if (permission) {
                             if (permission.overwrite) {
                                 return role;
                             }
                             let path = ["permissions", key, "value"];
                             return role.setIn(path, value);
                         }
-                        return role
+                        return role;
                     }, role);
                 }
 
