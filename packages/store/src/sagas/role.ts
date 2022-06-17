@@ -94,15 +94,15 @@ function* workspaceConnected({
 }: AppActions.WorkspaceConnectedAction): Iterable<any> {
     const { channel } = payload;
     channel.on("role.created", (payload: io.Role) => {
-        //dispatch(RoleActions.spaceRoleCreated(payload));
+        dispatch(RoleActions.roleLoaded(payload));
     });
 
     channel.on("role.updated", (payload: io.Role) => {
-        //dispatch(RoleActions.spaceRoleDeleted(payload));
+        dispatch(RoleActions.roleUpated(payload));
     });
 
     channel.on("role.deleted", (payload: io.Role) => {
-        //dispatch(RoleActions.spaceRoleDeleted(payload));
+        dispatch(RoleActions.roleDeleted(payload));
     });
 
     channel.on("role.permission.set", (payload: any) => {
