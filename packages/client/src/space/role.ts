@@ -32,12 +32,6 @@ export interface FetchSpaceRolesRequest {
 }
 
 export default class RoleClient extends BaseClient {
-    async fetchRoles(params?: Params): Promise<io.Role[]> {
-        const path = `/roles`;
-        const { data } = await this.endpoint.get(path, params);
-        return data;
-    }
-
     async fetchSpaceRoles(
         request: FetchSpaceRolesRequest,
         params?: Params

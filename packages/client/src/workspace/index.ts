@@ -21,4 +21,9 @@ export default class WorkspaceClient extends BaseClient {
         const { data } = await this.endpoint.get("/trackers");
         return data;
     }
+
+    async fetchRoles(): Promise<io.Role[]> {
+        const { data } = await this.endpoint.get("/roles");
+        return data;
+    }
 }
