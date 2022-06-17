@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Dialog, Text, Emoji, Button } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import emoji from "@octal/emoji";
@@ -15,16 +15,24 @@ interface IDialog {
 export default React.memo<IDialog>((props) => {
     const aid = useAuthId();
     const dispatch = useDispatch();
-    const ustatus = emoji.prefixed(useStatus());
     const iconBtnRef = useRef<HTMLButtonElement>(null);
     const [picker, setPicker] = useState<boolean>(false);
+    const value = useStatus();
 
-    const icon = useInput(ustatus[0]);
-    const status = useInput(ustatus[1]);
+    const icon = useInput("");
+    const text = useInput("");
+
+    let fullstatus = `${icon.value} ${text.value}`.trim();
+
+    useEffect(() => {
+        const [valuicon, valuetext] = emoji.prefixed(value);
+        icon.setValue(valuicon ?? "");
+        text.setValue(valuetext ?? "");
+    }, [value]);
 
     function updateUserStatus(_event: React.MouseEvent) {
         const action = setUserStatus(aid, {
-            status: `${icon.value} ${status.value}`,
+            status: fullstatus,
         });
         dispatch(action);
     }
@@ -51,7 +59,7 @@ export default React.memo<IDialog>((props) => {
                 <div className="relative flex flex-row">
                     <input
                         className="form-input font-semibold w-full text-gray-800 pl-11 rounded-md border-gray-400"
-                        {...status.props}
+                        {...text.props}
                     />
                     <div className="absolute h-full py-2 px-1.5 flex items-center justify-center">
                         <Button
@@ -77,9 +85,9 @@ export default React.memo<IDialog>((props) => {
             <Dialog.Actions className="rounded-b-lg">
                 <Button
                     onClick={updateUserStatus}
-                    disabled={!status.valid && !icon.valid}
+                    disabled={fullstatus === value}
                     color="primary">
-                    Set
+                    Save
                 </Button>
             </Dialog.Actions>
         </Dialog.Base>
