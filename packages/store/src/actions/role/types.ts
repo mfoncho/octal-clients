@@ -12,6 +12,9 @@ export type ROLE_LOADED = typeof ROLE_LOADED;
 export const ROLES_LOADED = "ROLES_LOADED";
 export type ROLES_LOADED = typeof ROLES_LOADED;
 
+export const ROLE_PERMISSION_SET = "ROLE_PERISSION_SET";
+export type ROLE_PERMISSION_SET = typeof ROLE_PERMISSION_SET;
+
 export const GET_SPACE_ROLE = "GET_SPACE_ROLE";
 export type GET_SPACE_ROLE = typeof GET_SPACE_ROLE;
 

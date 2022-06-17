@@ -72,6 +72,7 @@ export class Permissions extends Record(permissions) {}
 export class RoleRecord
     extends Record({
         id: "",
+        icon: "",
         name: "",
         is_default: false,
         permissions: new Permissions(),
@@ -81,6 +82,39 @@ export class RoleRecord
     constructor(payload: any) {
         super(RoleRecord.fromJS(payload));
     }
+
+    setPermission(payload: any) {
+        let permission = this.permissions.get(payload.permission);
+        if (permission) {
+            permission = permission.merge(payload);
+            return this.setIn(
+                ["permissions", permission.permission],
+                permission
+            );
+        }
+        return this;
+    }
+
+    patch(payload: any) {
+        if (Array.isArray(payload.permissions)) {
+            const permissions = payload.permissions.reduce(
+                (permissions: any, permission: any) => {
+                    let record = permissions.get(permission.permission);
+                    if (record) {
+                        return permissions.set(
+                            permission.permission,
+                            record.merge(permission)
+                        );
+                    }
+                    return permissions;
+                },
+                this.permissions
+            );
+            payload = { ...payload, permissions };
+        }
+        return this.merge(payload);
+    }
+
     static make(payload: any) {
         return new RoleRecord(payload);
     }

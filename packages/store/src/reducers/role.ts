@@ -29,6 +29,10 @@ function puts(state: State, { payload }: RoleActions.RolesLoadedAction) {
 }
 
 function patch(state: State, { payload }: RoleActions.RoleUpdatedAction) {
+    let role = state.get(payload.id);
+    if (role) {
+        return state.set(role.id, role.patch(payload));
+    }
     return state.mergeIn([payload.id], payload);
 }
 
@@ -42,6 +46,17 @@ export const reducers = {
     [Actions.ROLES_LOADED]: puts,
     [Actions.ROLE_UPDATED]: patch,
     [Actions.ROLE_DELETED]: remove,
+    [Actions.ROLE_PERMISSION_SET]: (
+        store: State,
+        { payload }: RoleActions.RolePermissionSetAction
+    ) => {
+        let role = store.get(payload.role_id);
+        if (role) {
+            role = role.setPermission(payload.permission);
+            return store.set(role.id, role);
+        }
+        return store;
+    },
 };
 
 export default { state, reducers };

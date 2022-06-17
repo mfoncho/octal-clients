@@ -19,6 +19,7 @@ import {
     SPACE_ROLE_LOADED,
     SPACE_ROLES_LOADED,
     LOAD_SPACE_ROLES,
+    ROLE_PERMISSION_SET,
 } from "./types";
 
 export * from "./types";
@@ -26,6 +27,11 @@ export * from "./types";
 export interface CreateSpaceRolePayload {
     space_id: string;
     role_id: string;
+}
+
+export interface RolePermissionSetPayload {
+    role_id: string;
+    permission: io.Permission;
 }
 
 export interface SpacePermissionSetPayload {
@@ -98,6 +104,11 @@ export type LoadSpaceRolesAction = IOAction<
     LOAD_SPACE_ROLES,
     FetchSpaceRolesPayload,
     io.SpaceRole[]
+>;
+
+export type RolePermissionSetAction = Action<
+    ROLE_PERMISSION_SET,
+    RolePermissionSetPayload
 >;
 
 export type RoleUpdatedAction = Action<ROLE_UPDATED, io.Role>;
@@ -212,4 +223,10 @@ export function spacePermissionSet(
     payload: SpacePermissionSetPayload
 ): SpacePermissionSetAction {
     return createAction(SPACE_PERMISSION_SET, payload);
+}
+
+export function rolePermissionSet(
+    payload: RolePermissionSetPayload
+): RolePermissionSetAction {
+    return createAction(ROLE_PERMISSION_SET, payload);
 }

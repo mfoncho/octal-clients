@@ -1,5 +1,5 @@
 import { put, takeEvery } from "redux-saga/effects";
-import Client, { io } from "@octal/client";
+import client, { io } from "@octal/client";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as AppActions from "../actions/app";
@@ -11,11 +11,18 @@ function* fetchSpaceRole({
     resolve: meta,
 }: RoleActions.FetchSpaceRolesAction): Iterable<any> {
     try {
-        const data = (yield Client.fetchSpaceRoles(payload)) as any;
+        const data = (yield client.fetchSpaceRoles(payload)) as any;
         meta.success(data);
     } catch (e) {
         meta.error(e);
     }
+}
+
+function* loadRoles(_action: AppActions.AuthAction): Iterable<any> {
+    try {
+        const roles = (yield client.fetchRoles()) as any;
+        yield put(RoleActions.rolesLoaded(roles));
+    } catch (e) {}
 }
 
 function* loadSpaceRole({
@@ -38,7 +45,7 @@ function* createSpaceRole({
     resolve: meta,
 }: RoleActions.CreateSpaceRoleAction): Iterable<any> {
     try {
-        const data = (yield Client.createSpaceRole(payload)) as any;
+        const data = (yield client.createSpaceRole(payload)) as any;
         yield put(RoleActions.spaceRoleCreated(data));
         meta.success(data);
     } catch (e) {
@@ -51,7 +58,7 @@ function* setSpacePermission({
     resolve,
 }: RoleActions.SetSpacePermissionAction): Iterable<any> {
     try {
-        const data = (yield Client.setSpaceRolePermission(payload)) as any;
+        const data = (yield client.setSpaceRolePermission(payload)) as any;
         const permission = {
             value: payload.params.value,
             permission: payload.params.permission,
@@ -68,7 +75,7 @@ function* deleteSpaceRole({
     resolve,
 }: RoleActions.DeleteSpaceRoleAction): Iterable<any> {
     try {
-        const data = (yield Client.deleteSpaceRole(payload)) as any;
+        const data = (yield client.deleteSpaceRole(payload)) as any;
         yield put(RoleActions.spaceRoleDeleted(data));
         resolve.success(data);
     } catch (e) {
@@ -81,7 +88,7 @@ function* unsetSpacePermission({
     resolve,
 }: RoleActions.UnsetSpacePermissionAction): Iterable<any> {
     try {
-        const data = (yield Client.deleteSpaceRolePermission(payload)) as any;
+        const data = (yield client.deleteSpaceRolePermission(payload)) as any;
         yield put(RoleActions.spacePermissionUnset(payload));
         resolve.success(data);
     } catch (e) {
@@ -105,9 +112,12 @@ function* workspaceConnected({
         dispatch(RoleActions.roleDeleted(payload));
     });
 
-    channel.on("role.permission.set", (payload: any) => {
-        //dispatch(RoleActions.spacePermissionSet(payload));
-    });
+    channel.on(
+        "role.permission.set",
+        (payload: RoleActions.RolePermissionSetPayload) => {
+            dispatch(RoleActions.rolePermissionSet(payload));
+        }
+    );
 }
 
 function* spaceSubscribe({
@@ -137,6 +147,11 @@ export const tasks = [
         effect: takeEvery,
         type: Actions.WORKSPACE_CONNECTED,
         handler: workspaceConnected,
+    },
+    {
+        effect: takeEvery,
+        type: Actions.AUTH,
+        handler: loadRoles,
     },
     {
         effect: takeEvery,
