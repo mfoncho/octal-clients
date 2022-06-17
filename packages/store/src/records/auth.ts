@@ -8,7 +8,7 @@ export interface BasePermission<T = any> {
 
 export class BooleanPermission
     extends Record({
-        value: true,
+        value: false,
         overwrite: false,
     })
     implements BasePermission<boolean> {}
