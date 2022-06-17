@@ -623,30 +623,39 @@ export function useUnreadCount(id: string) {
 }
 
 export function useSpacePermissions(id: string) {
-    const space = useSpace(id);
     const auth = useAuth();
     const roles = useRoles();
+    const space = useSpace(id);
     return useMemo(() => {
-        return auth.roles.reduce((permissions, role_id) => {
-            const baseRole = roles.get(role_id);
-            const spacePermissions = space.roles.get(role_id)?.permissions;
-            if (baseRole && spacePermissions) {
-                return baseRole.permissions
+        return auth.roles
+            .map((id) => roles.get(id)!)
+            .filter((role) => {
+                if (space.is_direct) {
+                    return role.name === "everyone";
+                }
+                return true;
+            })
+            .map((role) => {
+                const permissions = space.roles.get(role.id)?.permissions;
+                if (permissions) {
+                    return permissions.toSeq().reduce((role, value, key) => {
+                        let permission = role.permissions.get(key);
+                        if (permission.overwrite) {
+                            return role;
+                        }
+                        let path = ["permissions", key, "value"];
+                        return role.setIn(path, value);
+                    }, role);
+                }
+
+                return role;
+            })
+            .reduce((permissions, role) => {
+                return role.permissions
                     .toSeq()
                     .reduce((permissions, permission, key) => {
-                        if (permission.overwrite)
-                            return permissions.set(key, permission.value);
-
-                        const value = spacePermissions.get(key)!;
-
-                        if (value === null || value == undefined) {
-                            return permissions.set(key, permission.value);
-                        } else {
-                            return permissions.set(key, value);
-                        }
+                        return permissions.set(key, permission.value);
                     }, permissions);
-            }
-            return permissions;
-        }, SpacePermissions);
+            }, SpacePermissions);
     }, [auth, roles, space.roles]);
 }

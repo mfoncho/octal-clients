@@ -4,10 +4,12 @@ import { Unique } from "@octal/client";
 export interface BasePermission<T = any> {
     readonly value: T;
     readonly overwrite: boolean;
+    readonly permission: string;
 }
 
 export class BooleanPermission
     extends Record({
+        permission: "",
         value: false,
         overwrite: false,
     })
@@ -17,18 +19,21 @@ export class NumberPermission
     extends Record({
         value: 0,
         overwrite: false,
+        permission: "",
     })
     implements BasePermission<number> {}
 
 export class ListPermission extends Record({
     value: [] as any[],
     overwrite: false,
+    permission: "",
 }) {}
 
 export class StringPermission
     extends Record({
         value: "",
         overwrite: false,
+        permission: "",
     })
     implements BasePermission<string> {}
 
@@ -68,6 +73,7 @@ export class RoleRecord
     extends Record({
         id: "",
         name: "",
+        is_default: false,
         permissions: new Permissions(),
     })
     implements Unique
