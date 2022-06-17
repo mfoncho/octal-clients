@@ -28,7 +28,7 @@ export function usePostInput(thread: ThreadRecord) {
     }
 
     useEffect(() => {
-        if (!permissions.get("message.create")) {
+        if (!permissions.get("message.post")) {
             setDraft("", []);
         }
         setAccept({
@@ -83,6 +83,6 @@ export function usePostInput(thread: ThreadRecord) {
         onChange,
         onSubmit,
         accept,
-        disabled: !permissions.get("message.create"),
+        disabled: !permissions.get("message.post"),
     };
 }

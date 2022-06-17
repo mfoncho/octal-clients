@@ -1,25 +1,26 @@
-import { Permission } from "@octal/store";
-export interface IPermissionConfig {
+import { Permission } from "./auth";
+
+export interface IPermissionInfo {
     permission: Permission;
     name: string;
     type: string;
     description: string;
 }
 
-export interface IBooleanPermission extends IPermissionConfig {
+export interface IBooleanPermission extends IPermissionInfo {
     type: "boolean";
 }
 
-export interface IBooleanPermission extends IPermissionConfig {
+export interface IBooleanPermission extends IPermissionInfo {
     type: "boolean";
 }
 
-export interface INumberPermission extends IPermissionConfig {
+export interface INumberPermission extends IPermissionInfo {
     type: "number";
     scale: string;
 }
 
-export interface IStringPermission extends IPermissionConfig {
+export interface IStringPermission extends IPermissionInfo {
     type: "string";
 }
 
@@ -34,7 +35,7 @@ export interface IPermissionsGroup {
     permissions: Array<IPermission>;
 }
 
-const definitions: IPermissionsGroup[] = [
+export const PermissionGroups: IPermissionsGroup[] = [
     {
         key: "general",
         name: "General",
@@ -60,7 +61,7 @@ const definitions: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Post message",
-                permission: "message.create",
+                permission: "message.post",
                 type: "boolean",
                 description: "Post messages to all threads in this space",
             },
@@ -152,5 +153,3 @@ const definitions: IPermissionsGroup[] = [
         ],
     },
 ];
-
-export default definitions;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Input } from "@octal/ui";
-import { IStringPermission } from "./permissions";
+import { IStringPermission } from "@octal/store";
 import { useDebouncedEffect } from "@octal/hooks";
 
 interface IPermission {

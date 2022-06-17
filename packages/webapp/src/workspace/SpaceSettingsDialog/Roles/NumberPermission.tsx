@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import clx from "classnames";
 import { Range } from "@octal/ui";
 import NumberLabel from "./NumberLabel";
-import { INumberPermission } from "./permissions";
+import { INumberPermission } from "@octal/store";
 
 interface IPermission {
     value: number;

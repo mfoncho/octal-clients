@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import clx from "classnames";
 import { Input } from "@octal/ui";
-import { IStringPermission } from "./permissions";
+import { IStringPermission } from "@octal/store";
 
 interface IPermission {
     value: string;

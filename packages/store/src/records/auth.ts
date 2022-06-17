@@ -46,19 +46,19 @@ const numberPermission = new NumberPermission();
 const stringPermission = new StringPermission();
 
 export const permissions = {
+    ["space.manage"]: booleanPermission,
+    ["space.leave"]: booleanPermission,
+    ["card.create"]: booleanPermission,
+    ["card.move"]: booleanPermission,
+    ["card.delete"]: booleanPermission,
+    ["board.manage"]: booleanPermission,
     ["message.attachment.max"]: numberPermission,
     ["message.attachment.types"]: stringPermission,
     ["message.embeds"]: booleanPermission,
     ["message.pin"]: booleanPermission,
     ["message.edit"]: booleanPermission,
-    ["card.create"]: booleanPermission,
-    ["card.move"]: booleanPermission,
-    ["card.delete"]: booleanPermission,
-    ["board.manage"]: booleanPermission,
-    ["space.manage"]: booleanPermission,
+    ["message.post"]: booleanPermission,
     ["message.manage"]: booleanPermission,
-    ["message.create"]: booleanPermission,
-    ["space.leave"]: booleanPermission,
     ["message.delete"]: booleanPermission,
     ["invitation.send"]: booleanPermission,
 };

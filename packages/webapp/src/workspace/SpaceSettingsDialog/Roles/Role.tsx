@@ -4,7 +4,7 @@ import { Text } from "@octal/ui";
 import { RoleRecord, SpaceRoleRecord } from "@octal/store";
 import { useRoleActions } from "@workspace/Space";
 import BooleanPermission from "./BooleanPermission";
-import definitions, { IPermissionsGroup, IPermission } from "./permissions";
+import { PermissionGroups, IPermissionsGroup, IPermission } from "@octal/store";
 import NumberPermission from "./NumberPermission";
 import StringPermission from "./StringPermission";
 
@@ -95,7 +95,7 @@ export default function Role(props: IRole) {
                     </span>
                 </div>
             </div>
-            {definitions.map(renderPermissionGroup)}
+            {PermissionGroups.map(renderPermissionGroup)}
         </div>
     );
 }

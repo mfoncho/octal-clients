@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { io } from "@console/types";
 import client from "@console/client";
-import { Permissions } from "@octal/store";
-import definitions, { IPermissionsGroup, IPermission } from "./permissions";
+import {
+    Permissions,
+    PermissionGroups,
+    IPermissionsGroup,
+    IPermission,
+} from "@octal/store";
 import NumberPermission from "./NumberPermission";
 import StringPermission from "./StringPermission";
 import BooleanPermission from "./BooleanPermission";
@@ -153,7 +157,7 @@ export default function Role(props: IRole) {
 
     return (
         <div className="flex flex-col px-2">
-            {definitions.map(renderPermissionGroup)}
+            {PermissionGroups.map(renderPermissionGroup)}
         </div>
     );
 }

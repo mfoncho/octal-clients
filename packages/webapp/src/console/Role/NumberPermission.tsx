@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Range } from "@octal/ui";
 import NumberLabel from "./NumberLabel";
-import { INumberPermission } from "./permissions";
+import { INumberPermission } from "@octal/store";
 import { useDebouncedEffect } from "@octal/hooks";
 
 interface IPermission {
