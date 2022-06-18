@@ -8,6 +8,7 @@ import * as Role from "./role";
 import * as App from "./app";
 import * as Space from "./space";
 import * as Thread from "./thread";
+import * as Bookmark from "./bookmark";
 
 export * from "./calendar";
 export * from "./board";
@@ -19,6 +20,7 @@ export * from "./role";
 export * from "./app";
 export * from "./space";
 export * from "./thread";
+export * from "./bookmark";
 
 export default {
     Calendar,
@@ -31,4 +33,5 @@ export default {
     App,
     Space,
     Thread,
-}
+    Bookmark,
+};

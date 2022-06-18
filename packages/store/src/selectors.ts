@@ -66,10 +66,6 @@ export function threads({ threads, route }: State) {
     return threads.threads.get(route.params.get("space_id"));
 }
 
-export function permissions({ permissions }: State) {
-    return permissions;
-}
-
 export function calendarLoaded({ calendars }: State) {
     return calendars.loaded;
 }
@@ -90,5 +86,4 @@ export default {
     calendarLoaded,
     workspace,
     preferences,
-    permissions,
 };

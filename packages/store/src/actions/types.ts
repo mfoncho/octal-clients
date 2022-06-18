@@ -8,3 +8,4 @@ export * from "./role/types";
 export * from "./space/types";
 export * from "./app/types";
 export * from "./thread/types";
+export * from "./bookmark/types";

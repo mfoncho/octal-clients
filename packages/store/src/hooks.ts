@@ -525,10 +525,6 @@ export function useLabels(id: string) {
     return labels;
 }
 
-export function usePermissionsSet() {
-    return useSelector(selector.permissions);
-}
-
 // Naive
 export function useUserChecklists(user_id: string): List<UserChecklist> {
     const selector = useCallback(
@@ -608,14 +604,40 @@ export function useCalendarLoaded() {
     return useSelector(selector.calendarLoaded);
 }
 
-export function usePermissions() {
-    return useSelector(selector.permissions);
-}
-
 export function useUnreadCount(id: string) {
     const selector = useCallback(
         ({ threads: store }: State) => {
             return store.getThread(id)?.unread_count ?? 0;
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
+
+export function useBookmark(id: string) {
+    const selector = useCallback(
+        ({ bookmarks: store }: State) => {
+            return store.entities.get(id);
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
+
+export function useEntityBookmark(id: string) {
+    const selector = useCallback(
+        ({ bookmarks: store }: State) => {
+            return store.getEntityBookmark(id);
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
+
+export function useBookmarked(id: string) {
+    const selector = useCallback(
+        ({ bookmarks: store }: State) => {
+            return store.isBookmarked(id);
         },
         [id]
     );

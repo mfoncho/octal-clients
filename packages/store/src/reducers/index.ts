@@ -3,7 +3,7 @@ import { Action } from "redux";
 import config from "./config";
 import role from "./role";
 import user from "./user";
-import permissions from "./permissions";
+import bookmark from "./bookmark";
 import board from "./board";
 import topics from "./topics";
 import auth from "./auth";
@@ -40,8 +40,8 @@ const RootStates = {
     roles: role.state,
     auth: auth.state,
     route: route.state,
+    bookmarks: bookmark.state,
     users: user.state,
-    permissions: permissions.state,
     cards: card.state,
     boards: board.state,
     members: member.state,
@@ -93,7 +93,7 @@ function createReducer<T>(
 }
 
 const reducers = {
-    permissions: createReducer(permissions.reducers, permissions.state),
+    bookmarks: createReducer(bookmark.reducers, bookmark.state),
     config: createReducer(config.reducers, config.state),
     calendars: createReducer(calendar.reducers, calendar.state),
     roles: createReducer(role.reducers, role.state),

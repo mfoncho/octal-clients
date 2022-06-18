@@ -1,0 +1,22 @@
+/* eslint-disable @typescript-eslint/no-redeclare */
+
+export const CREATE_BOOKMARK = "CREATE_BOOKMARK";
+export type CREATE_BOOKMARK = typeof CREATE_BOOKMARK;
+
+export const UPDATE_BOOKMARK = "UPDATE_BOOKMAKR";
+export type UPDATE_BOOKMARK = typeof UPDATE_BOOKMARK;
+
+export const DELETE_BOOKMARK = "DELETE_BOOKMARK";
+export type DELETE_BOOKMARK = typeof DELETE_BOOKMARK;
+
+export const BOOKMARK_LOADED = "BOOKMARK_LOADED";
+export type BOOKMARK_LOADED = typeof BOOKMARK_LOADED;
+
+export const BOOKMARK_CREATED = "BOOKMARK_CREATED";
+export type BOOKMARK_CREATED = typeof BOOKMARK_CREATED;
+
+export const BOOKMARK_DELETED = "BOOKMARK_DELETED";
+export type BOOKMARK_DELETED = typeof BOOKMARK_DELETED;
+
+export const BOOKMARK_UPDATED = "BOOKMARK_UPDATED";
+export type BOOKMARK_UPDATED = typeof BOOKMARK_UPDATED;

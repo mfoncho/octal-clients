@@ -13,4 +13,5 @@ export * from "./member";
 export * from "./topic";
 export * from "./message";
 export * from "./thread";
+export * from "./bookmark";
 export * from "./permissions";
