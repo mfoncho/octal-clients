@@ -23,6 +23,25 @@ export interface SetUserStatusRequest {
     };
 }
 
+export interface CreateBookmarkRequest {
+    entity_id: string;
+    params: {
+        type: string;
+        notes?: string;
+    };
+}
+
+export interface UpdateBookmarkRequest {
+    bookmark_id: string;
+    params: {
+        notes: string;
+    };
+}
+
+export interface DeleteBookmarkRequest {
+    bookmark_id: string;
+}
+
 export default class UserClient extends BaseClient {
     async fetchUsers(params?: Params): Promise<io.User[]> {
         const { data } = await this.endpoint.get(`/users`, params);
@@ -83,6 +102,35 @@ export default class UserClient extends BaseClient {
             payload,
             params
         );
+        return data;
+    }
+
+    async createBookmark(
+        req: CreateBookmarkRequest,
+        params?: Params
+    ): Promise<io.Bookmark> {
+        const { data } = await this.endpoint.post(
+            `/bookmarks/${req.entity_id}`,
+            req.params,
+            params
+        );
+        return data;
+    }
+
+    async updateBookmark(
+        req: UpdateBookmarkRequest,
+        params?: Params
+    ): Promise<io.Bookmark> {
+        const { data } = await this.endpoint.patch(
+            `/bookmarks/${req.bookmark_id}`,
+            req.params,
+            params
+        );
+        return data;
+    }
+
+    async deleteBookmark(id: string, params?: Params): Promise<any> {
+        const { data } = await this.endpoint.delete(`/bookmarks/${id}`, params);
         return data;
     }
 }

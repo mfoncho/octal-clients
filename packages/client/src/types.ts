@@ -70,6 +70,14 @@ export namespace io {
     export interface Trackers {
         [key: string]: string[];
     }
+
+    export interface Bookmark{
+        type: string;
+        notes: string;
+        user_id: string;
+        entity_id: string;
+    }
+
     export interface BoardTemplate {
         id: string;
         name: string;
