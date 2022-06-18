@@ -33,7 +33,7 @@ export function useActions(message: MessageRecord, authid: string = "") {
                 return dispatch(action);
             }
         },
-        [message.id, message.flagged, Boolean(bookmark)]
+        [message.id, Boolean(bookmark)]
     );
 
     const onPin = useCallback(() => {
