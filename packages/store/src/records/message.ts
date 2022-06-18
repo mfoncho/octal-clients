@@ -28,7 +28,6 @@ export class MessageRecord
         pinned: false,
         attachement: null as any,
         embedded: [],
-        flagged: false,
         user_id: "" as Id,
         markdown: false,
         timestamp: "",

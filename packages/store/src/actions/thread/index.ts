@@ -20,8 +20,6 @@ import {
     DELETE_MESSAGE,
     REACT_MESSAGE,
     UNREACT_MESSAGE,
-    FLAG_MESSAGE,
-    UNFLAG_MESSAGE,
     PIN_MESSAGE,
     THREAD_ACTIVITY,
     UNPIN_MESSAGE,
@@ -356,17 +354,6 @@ export type UnpinMessageAction = IOAction<
     io.Message
 >;
 
-export type FlagMessageAction = IOAction<
-    FLAG_MESSAGE,
-    FlagMessagePayload,
-    io.Message
->;
-
-export type UnflagMessageAction = IOAction<
-    UNFLAG_MESSAGE,
-    UnflagMessagePayload,
-    io.Message
->;
 
 export type PostMessageAction = IOAction<
     POST_MESSAGE,
@@ -435,16 +422,6 @@ export function messageLoaded(payload: NormalizedMessage): MessageLoadedAction {
 
 export function postMessage(payload: NormalizedMessage): PostMessageAction {
     return createIOAction<POST_MESSAGE>(POST_MESSAGE, payload);
-}
-
-export function flagMesssag(payload: FlagMessagePayload): FlagMessageAction {
-    return createIOAction<FLAG_MESSAGE>(FLAG_MESSAGE, payload);
-}
-
-export function unflagMesssag(
-    payload: UnflagMessagePayload
-): UnflagMessageAction {
-    return createIOAction<UNFLAG_MESSAGE>(UNFLAG_MESSAGE, payload);
 }
 
 export function pinMesssag(payload: PinMessagePayload): PinMessageAction {

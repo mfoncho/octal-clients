@@ -39,14 +39,8 @@ export type POST_MESSAGE = typeof POST_MESSAGE;
 export const POST_DIRECT_MESSAGE = "POST_DIRECT_MESSAGE";
 export type POST_DIRECT_MESSAGE = typeof POST_DIRECT_MESSAGE;
 
-export const FLAG_MESSAGE = "FLAG_MESSAGE";
-export type FLAG_MESSAGE = typeof FLAG_MESSAGE;
-
 export const PIN_MESSAGE = "PIN_MESSAGE";
 export type PIN_MESSAGE = typeof PIN_MESSAGE;
-
-export const UNFLAG_MESSAGE = "UNFLAG_MESSAGE";
-export type UNFLAG_MESSAGE = typeof UNFLAG_MESSAGE;
 
 export const UNPIN_MESSAGE = "UNPIN_MESSAGE";
 export type UNPIN_MESSAGE = typeof UNPIN_MESSAGE;

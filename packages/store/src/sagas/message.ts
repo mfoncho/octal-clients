@@ -48,38 +48,12 @@ function* postDirect({
     }
 }
 
-function* flag({
-    payload,
-    resolve,
-}: ThreadActions.FlagMessageAction): Iterable<any> {
-    try {
-        const data = (yield client.flagMessage(payload)) as any;
-        yield put(ThreadActions.messageUpdated(data));
-        resolve.success(data);
-    } catch (e) {
-        resolve.error(e);
-    }
-}
-
 function* pin({
     payload,
     resolve,
 }: ThreadActions.PinMessageAction): Iterable<any> {
     try {
         const data = (yield client.pinMessage(payload)) as any;
-        yield put(ThreadActions.messageUpdated(data));
-        resolve.success(data);
-    } catch (e) {
-        resolve.error(e);
-    }
-}
-
-function* unflag({
-    payload,
-    resolve,
-}: ThreadActions.UnflagMessageAction): Iterable<any> {
-    try {
-        const data = (yield client.unflagMessage(payload)) as any;
         yield put(ThreadActions.messageUpdated(data));
         resolve.success(data);
     } catch (e) {
@@ -183,9 +157,7 @@ export const tasks = [
     },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.PIN_MESSAGE, handler: pin },
-    { effect: takeEvery, type: Actions.FLAG_MESSAGE, handler: flag },
     { effect: takeEvery, type: Actions.UNPIN_MESSAGE, handler: unpin },
-    { effect: takeEvery, type: Actions.UNFLAG_MESSAGE, handler: unflag },
     { effect: takeEvery, type: Actions.REACT_MESSAGE, handler: react },
     { effect: takeEvery, type: Actions.UNREACT_MESSAGE, handler: unreact },
     { effect: takeEvery, type: Actions.UPDATE_MESSAGE, handler: update },
