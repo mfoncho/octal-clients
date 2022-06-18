@@ -23,12 +23,14 @@ export interface SetUserStatusRequest {
     };
 }
 
+export interface FetchBookmarksRequest {
+    type?: string;
+}
+
 export interface CreateBookmarkRequest {
-    entity_id: string;
-    params: {
-        type: string;
-        notes?: string;
-    };
+    entity: string;
+    type: string;
+    notes?: string;
 }
 
 export interface UpdateBookmarkRequest {
@@ -105,15 +107,19 @@ export default class UserClient extends BaseClient {
         return data;
     }
 
+    async fetchBookmarks(
+        req: FetchBookmarksRequest,
+        params?: Params
+    ): Promise<io.Bookmark[]> {
+        const { data } = await this.endpoint.get(`/bookmarks`, req, params);
+        return data;
+    }
+
     async createBookmark(
         req: CreateBookmarkRequest,
         params?: Params
     ): Promise<io.Bookmark> {
-        const { data } = await this.endpoint.post(
-            `/bookmarks/${req.entity_id}`,
-            req.params,
-            params
-        );
+        const { data } = await this.endpoint.post(`/bookmarks`, req, params);
         return data;
     }
 

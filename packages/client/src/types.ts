@@ -71,11 +71,14 @@ export namespace io {
         [key: string]: string[];
     }
 
-    export interface Bookmark{
+    export interface Bookmark {
+        id: string;
         type: string;
         notes: string;
+        entity: string;
         user_id: string;
-        entity_id: string;
+        created_at: string;
+        updated_at: string;
     }
 
     export interface BoardTemplate {
