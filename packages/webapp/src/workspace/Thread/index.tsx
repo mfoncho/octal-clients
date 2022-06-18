@@ -28,7 +28,7 @@ export default React.memo<IThread>((props) => {
     const postInput = usePostInput(thread ?? defaultThread);
 
     useEffect(() => {
-        let actions = ["react", "reply", "flag"];
+        let actions = ["react", "reply", "bookmark"];
         if (permissions.get("message.pin")) {
             actions.push("pin");
         }

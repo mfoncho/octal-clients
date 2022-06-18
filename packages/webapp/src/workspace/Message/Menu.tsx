@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import Popover from "@material-ui/core/Popover";
+import { BookmarkRecord } from "@octal/store";
 import { Picker as EmojiPicker, EmojiData } from "emoji-mart";
 import { Tooltip } from "@octal/ui";
 import * as Icons from "@octal/icons";
@@ -7,7 +8,7 @@ import Editor from "./Editor";
 
 export type ActionT =
     | "react"
-    | "flag"
+    | "bookmark"
     | "pin"
     | "reply"
     | "edit"
@@ -40,11 +41,11 @@ export interface IMenu {
     open?: boolean;
     pinned?: boolean;
     buttons: ActionT[];
-    flagged?: boolean;
+    bookmark?: BookmarkRecord;
     anchor: HTMLElement;
     onPin?: (e: React.MouseEvent) => void;
     onEdit?: (e: React.MouseEvent) => void;
-    onFlag?: (e: React.MouseEvent) => void;
+    onBookmark?: (e?: string) => void;
     onJump?: (e: React.MouseEvent) => void;
     onReply?: () => void;
     onReact?: (reaction: string) => void;
@@ -57,7 +58,11 @@ enum PopupType {
     EDITOR,
 }
 
-export const Context = React.createContext<string[]>(["jump", "flag", "pin"]);
+export const Context = React.createContext<string[]>([
+    "jump",
+    "bookmark",
+    "pin",
+]);
 
 export const Reply = React.createContext<
     (id: string, e: React.MouseEvent) => void
@@ -151,11 +156,12 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
                         onClick: handleReact,
                     };
 
-                case "flag":
+                case "bookmark":
                     return {
-                        name: props.flagged ? "Unflag Message" : "Flag Message",
+                        name: "Bookmark",
                         icon: Icons.Bookmark,
-                        onClick: props.onFlag,
+                        onClick: () =>
+                            props.onBookmark ? props.onBookmark() : null,
                     };
 
                 case "pin":

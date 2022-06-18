@@ -10,11 +10,9 @@ import {
 import { createBoard as createSpaceBoard } from "@octal/store/lib/actions/board";
 import emoji from "@octal/emoji";
 import {
-    usePermissionsSet,
     SpaceRecord,
     SpaceRoleRecord,
     UserRecord,
-    SpacePermissions,
     useUsers,
     useSpaceTopicsIndex,
     TopicRecord,

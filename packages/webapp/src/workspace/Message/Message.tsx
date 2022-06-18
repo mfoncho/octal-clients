@@ -27,7 +27,7 @@ const viewerMessageActions: ActionT[] = [
     "react",
     "edit",
     "reply",
-    "flag",
+    "bookmark",
     "pin",
     "delete",
 ];
@@ -35,7 +35,7 @@ const userMessageActions: ActionT[] = [
     "react",
     "reply",
     "edit",
-    "flag",
+    "bookmark",
     "pin",
     "delete",
 ];
@@ -116,7 +116,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             {message.pinned && (
                                 <Icons.Pin className="h-2.5 w-2.5" />
                             )}
-                            {message.flagged && (
+                            {Boolean(actions.bookmark) && (
                                 <Icons.Bookmark className="h-2.5 w-2.5" />
                             )}
                         </div>
@@ -152,7 +152,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                     id={message.id}
                     open={hovering}
                     onPin={actions.onPin}
-                    onFlag={actions.onFlag}
+                    onBookmark={actions.onBookmark}
                     onReact={actions.onReact}
                     onDelete={actions.onDelete}
                     anchor={anchor.current!}
@@ -162,7 +162,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             : userMessageActions
                     }
                     pinned={message.pinned}
-                    flagged={message.flagged}
+                    bookmark={actions.bookmark}
                 />
                 {card}
             </div>

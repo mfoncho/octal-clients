@@ -1,9 +1,8 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { MessageRecord } from "@octal/store";
+import { MessageRecord, useEntityBookmark } from "@octal/store";
+import * as BookmarkActions from "@octal/store/lib/actions/bookmark";
 import {
-    flagMesssag,
-    unflagMesssag,
     pinMesssag,
     updateMessage,
     unpinMesssag,
@@ -15,17 +14,27 @@ import {
 export function useActions(message: MessageRecord, authid: string = "") {
     const dispatch = useDispatch();
 
-    const onFlag = useCallback(() => {
-        const params = {
-            message_id: message.id,
-            thread_id: message.thread_id,
-            space_id: message.space_id,
-        };
-        const action = message.flagged
-            ? unflagMesssag(params)
-            : flagMesssag(params);
-        return dispatch(action);
-    }, [message.id, message.flagged]);
+    const bookmark = useEntityBookmark(message.id);
+
+    const onBookmark = useCallback(
+        (notes: string = "") => {
+            if (bookmark) {
+                const action = BookmarkActions.deleteBookmark({
+                    id: bookmark!.id,
+                    entity: message.id,
+                });
+                return dispatch(action);
+            } else {
+                const action = BookmarkActions.createBookmark({
+                    type: "message",
+                    notes: notes,
+                    entity: message.id,
+                });
+                return dispatch(action);
+            }
+        },
+        [message.id, message.flagged, Boolean(bookmark)]
+    );
 
     const onPin = useCallback(() => {
         const params = {
@@ -82,5 +91,5 @@ export function useActions(message: MessageRecord, authid: string = "") {
         [message.id]
     );
 
-    return { onPin, onFlag, onDelete, onUpdate, onReact };
+    return { onPin, onBookmark, onDelete, onUpdate, bookmark, onReact };
 }
