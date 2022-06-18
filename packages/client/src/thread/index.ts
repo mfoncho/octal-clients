@@ -55,16 +55,6 @@ export interface UnpinMessageRequest {
     message_id: string;
 }
 
-export interface FlagMessageRequest {
-    thread_id: string;
-    message_id: string;
-}
-
-export interface UnflagMessageRequest {
-    thread_id: string;
-    message_id: string;
-}
-
 export interface UpdateMessageRequest {
     message_id: string;
     thread_id: string;
@@ -148,24 +138,6 @@ export default class ThreadClient extends BaseClient {
         params?: Params
     ): Promise<io.Message> {
         const path = `/threads/${request.thread_id}/messages/${request.message_id}/pin`;
-        const { data } = await this.endpoint.delete(path, params);
-        return data;
-    }
-
-    async flagMessage(
-        request: FlagMessageRequest,
-        params?: Params
-    ): Promise<io.Message> {
-        const path = `/threads/${request.thread_id}/messages/${request.message_id}/flag`;
-        const { data } = await this.endpoint.put(path, params);
-        return data;
-    }
-
-    async unflagMessage(
-        request: UnflagMessageRequest,
-        params?: Params
-    ): Promise<io.Message> {
-        const path = `/threads/${request.thread_id}/messages/${request.message_id}/flag`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }
