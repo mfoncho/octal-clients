@@ -67,10 +67,6 @@ export namespace io {
         | "busy"
         | "dnd";
 
-    export interface Trackers {
-        [key: string]: string[];
-    }
-
     export interface Bookmark {
         id: string;
         type: string;
@@ -79,6 +75,14 @@ export namespace io {
         user_id: string;
         created_at: string;
         updated_at: string;
+    }
+
+    export interface Tracker {
+        id: string;
+        event: string;
+        entity: string;
+        target: string;
+        created_at: string;
     }
 
     export interface BoardTemplate {
