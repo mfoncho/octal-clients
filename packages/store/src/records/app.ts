@@ -1,6 +1,13 @@
 import { Record } from "immutable";
 import { io } from "@octal/client";
 
+export class TrackerRecord extends Record({
+    id: "",
+    event: "",
+    target: "",
+    entity: "",
+}) {}
+
 export class ConfigRecord extends Record<io.Config>({
     locale: "en_US",
     lpack: {},

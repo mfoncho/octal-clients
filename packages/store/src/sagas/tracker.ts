@@ -1,28 +1,23 @@
 import { put, takeEvery } from "redux-saga/effects";
 import client from "@octal/client";
 import * as Actions from "../actions/types";
-import * as BoardActions from "../actions/board";
+import * as AppActions from "../actions/app";
 
 function* init(): Iterable<any> {
     try {
         const data = (yield client.fetchTrackers()) as any;
-        yield put(BoardActions.trackersLoaded(data));
-    } catch (e) { }
+        yield put(AppActions.trackersLoaded(data));
+    } catch (e) {}
 }
 
 function* track({
     resolve,
     payload,
-}: BoardActions.CreateTrackerAction): Iterable<any> {
+}: AppActions.CreateTrackerAction): Iterable<any> {
     try {
-        yield client.trackCard(payload);
-        yield put(
-            BoardActions.trackerCreated({
-                entity_id: payload.entity_id,
-                event: payload.params.event,
-            })
-        );
-        resolve.success(payload);
+        const tracker = (yield client.createTracker(payload)) as any;
+        yield put(AppActions.trackerCreated(tracker));
+        resolve.success(tracker);
     } catch (e) {
         resolve.error(e);
     }
@@ -31,15 +26,10 @@ function* track({
 function* untrack({
     resolve,
     payload,
-}: BoardActions.DeleteTrackerAction): Iterable<any> {
+}: AppActions.DeleteTrackerAction): Iterable<any> {
     try {
-        yield client.untrackCard(payload);
-        yield put(
-            BoardActions.trackerDeleted({
-                entity_id: payload.entity_id,
-                event: payload.params.event,
-            })
-        );
+        yield client.deleteTracker(payload.id);
+        yield put(AppActions.trackerDeleted(payload.id));
         resolve.success(payload);
     } catch (e) {
         console.log(e);

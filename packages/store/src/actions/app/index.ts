@@ -6,24 +6,40 @@ import { NormalizedRelated } from "../../schemas";
 import {
     ROUTE,
     LOGIN,
-    COLLECTION_LOADED,
     AUTH,
-    RELATED_LOADED,
-    SET_SITE,
     LOGOUT,
-    SET_CONFIG,
     SET_AUTH,
+    SET_SITE,
     LOAD_SITE,
-    LOAD_CONFIG,
-    STORE_INIT,
     LOAD_AUTH,
+    SET_CONFIG,
+    STORE_INIT,
+    LOAD_CONFIG,
+    RELATED_LOADED,
     LOAD_WORKSPACE,
+    CREATE_TRACKER,
+    DELETE_TRACKER,
+    TRACKER_LOADED,
+    TRACKERS_LOADED,
+    TRACKER_CREATED,
+    TRACKER_DELETED,
+    COLLECTION_LOADED,
     WORKSPACE_UPDATED,
     WORKSPACE_LOADED,
     WORKSPACE_CONNECTED,
 } from "./types";
 
 export * from "./types";
+
+export interface DeleteTrackerPayload {
+    id: string;
+}
+
+export interface CreateTrackerPayload {
+    event: string;
+    target: string;
+    entity: string;
+}
 
 export interface IAuth {
     id: string;
@@ -47,6 +63,14 @@ export interface CollectionLoadedPayload {
     data?: any;
     collection: string;
 }
+
+export type TrackerCreatedAction = Action<TRACKER_CREATED, io.Tracker>;
+
+export type TrackerLoadedAction = Action<TRACKER_LOADED, io.Tracker>;
+
+export type TrackersLoadedAction = Action<TRACKERS_LOADED, io.Tracker[]>;
+
+export type TrackerDeletedAction = Action<TRACKER_DELETED, { id: string }>;
 
 export type WorkspaceConnectedAction = Action<
     WORKSPACE_CONNECTED,
@@ -87,6 +111,18 @@ export type WorkspaceUpdatedAction = Action<WORKSPACE_UPDATED, io.Workspace>;
 export type WorkspaceLoadedAction = Action<WORKSPACE_LOADED, io.Workspace>;
 
 export type LoadWorkspaceAction = IOAction<LOAD_WORKSPACE, {}, io.Workspace>;
+
+export type CreateTrackerAction = IOAction<
+    CREATE_TRACKER,
+    CreateTrackerPayload,
+    io.Tracker
+>;
+
+export type DeleteTrackerAction = IOAction<
+    DELETE_TRACKER,
+    DeleteTrackerPayload,
+    any
+>;
 
 export function setSite(payload: Partial<io.Site>): SetSiteAction {
     return createAction(SET_SITE, payload);
@@ -161,4 +197,30 @@ export function workspaceConnected(
 
 export function loadWorkspace(): LoadWorkspaceAction {
     return createIOAction<LOAD_WORKSPACE>(LOAD_WORKSPACE, {});
+}
+
+export function createTracker(
+    payload: CreateTrackerPayload
+): CreateTrackerAction {
+    return createIOAction<CREATE_TRACKER>(CREATE_TRACKER, payload);
+}
+
+export function deleteTracker(id: string): DeleteTrackerAction {
+    return createIOAction<DELETE_TRACKER>(DELETE_TRACKER, { id });
+}
+
+export function trackerDeleted(id: string): TrackerDeletedAction {
+    return createAction(TRACKER_DELETED, { id });
+}
+
+export function trackerCreated(payload: io.Tracker): TrackerCreatedAction {
+    return createAction(TRACKER_CREATED, payload);
+}
+
+export function trackerLoaded(payload: io.Tracker): TrackerLoadedAction {
+    return createAction(TRACKER_LOADED, payload);
+}
+
+export function trackersLoaded(payload: io.Tracker[]): TrackersLoadedAction {
+    return createAction(TRACKERS_LOADED, payload);
 }

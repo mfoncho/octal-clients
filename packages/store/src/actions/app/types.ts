@@ -9,6 +9,24 @@ export type INIT = typeof INIT;
 export const COLLECTION_LOADED = "COLLECTION_LOADED";
 export type COLLECTION_LOADED = typeof COLLECTION_LOADED;
 
+export const CREATE_TRACKER = "CREATE_TRACKER";
+export type CREATE_TRACKER = typeof CREATE_TRACKER;
+
+export const DELETE_TRACKER = "DELETE_TRACKER";
+export type DELETE_TRACKER = typeof DELETE_TRACKER;
+
+export const TRACKER_CREATED = "TRACKER_CREATED";
+export type TRACKER_CREATED = typeof TRACKER_CREATED;
+
+export const TRACKER_DELETED = "TRACKER_DELETED";
+export type TRACKER_DELETED = typeof TRACKER_DELETED;
+
+export const TRACKER_LOADED = "TRACKER_LOADED";
+export type TRACKER_LOADED = typeof TRACKER_LOADED;
+
+export const TRACKERS_LOADED = "TRACKERS_LOADED";
+export type TRACKERS_LOADED = typeof TRACKERS_LOADED;
+
 export const SET_SITE = "SET_SITE";
 export type SET_SITE = typeof SET_SITE;
 

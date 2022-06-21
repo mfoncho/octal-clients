@@ -14,7 +14,6 @@ import {
     BOARD_CONNECTED,
     LOAD_BOARD,
     LOAD_BOARDS,
-    TRACKERS_LOADED,
     BOARD_COLUMNS_LOADED,
     BOARD_CARDS_LOADED,
     BOARD_DELETED,
@@ -97,10 +96,6 @@ import {
     CARD_FIELD_VALUE_CREATED,
     UNASSIGN_CHECKLIST,
     CHECKLIST_UNASSIGNED,
-    CREATE_TRACKER,
-    DELETE_TRACKER,
-    TRACKER_CREATED,
-    TRACKER_DELETED,
     BOARD_UPDATED,
 } from "./types";
 
@@ -159,30 +154,6 @@ export interface BoardColumnsLoadedPayload {
 export interface BoardCardsLoadedPayload {
     board_id: string;
     cards: NormalizedCard[];
-}
-
-export interface CreateTrackerPayload {
-    entity_id: string;
-    params: {
-        event: string;
-    };
-}
-
-export interface DeleteTrackerPayload {
-    entity_id: string;
-    params: {
-        event: string;
-    };
-}
-
-export interface TrackerCreatedPayload {
-    entity_id: string;
-    event: string;
-}
-
-export interface TrackerDeletedPayload {
-    entity_id: string;
-    event: string;
 }
 
 export interface AssignChecklistPayload {
@@ -858,18 +829,6 @@ export type BoardColumnsLoadedAction = Action<
 
 export type ColumnsReorderedAction = Action<COLUMNS_REORDERED, CardPosition[]>;
 
-export type TrackersLoadedAction = Action<TRACKERS_LOADED, io.Trackers>;
-
-export type TrackerCreatedAction = Action<
-    TRACKER_CREATED,
-    TrackerCreatedPayload
->;
-
-export type TrackerDeletedAction = Action<
-    TRACKER_DELETED,
-    TrackerDeletedPayload
->;
-
 export type LoadColumnsAction = IOAction<
     LOAD_COLUMNS,
     LoadColumnsPayload,
@@ -917,18 +876,6 @@ export type CreateBoardAction = IOAction<
     CREATE_BOARD,
     CreateBoardPayload,
     io.Board
->;
-
-export type CreateTrackerAction = IOAction<
-    CREATE_TRACKER,
-    CreateTrackerPayload,
-    any
->;
-
-export type DeleteTrackerAction = IOAction<
-    DELETE_TRACKER,
-    DeleteTrackerPayload,
-    any
 >;
 
 export type CardMovedAction = Action<CARD_MOVED, CardMovedPayload>;
@@ -1338,34 +1285,6 @@ export function cardMoved(payload: CardMovedPayload): CardMovedAction {
 
 export function columnMoved(payload: ColumnMovedPayload): ColumnMovedAction {
     return createAction(COLUMN_MOVED, payload);
-}
-
-export function createTracker(
-    payload: CreateTrackerPayload
-): CreateTrackerAction {
-    return createIOAction<CREATE_TRACKER>(CREATE_TRACKER, payload);
-}
-
-export function deleteTracker(
-    payload: DeleteTrackerPayload
-): DeleteTrackerAction {
-    return createIOAction<DELETE_TRACKER>(DELETE_TRACKER, payload);
-}
-
-export function trackerCreated(
-    payload: TrackerCreatedPayload
-): TrackerCreatedAction {
-    return createAction(TRACKER_CREATED, payload);
-}
-
-export function trackerDeleted(
-    payload: TrackerDeletedPayload
-): TrackerDeletedAction {
-    return createAction(TRACKER_DELETED, payload);
-}
-
-export function trackersLoaded(payload: io.Trackers): TrackersLoadedAction {
-    return createAction(TRACKERS_LOADED, payload);
 }
 
 export function boardCardsLoaded(

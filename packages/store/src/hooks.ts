@@ -5,7 +5,7 @@ import { useCallback, useMemo } from "react";
 import { State } from "./index";
 import { Store } from "./reducers";
 
-import selector from "./selectors";
+import selectors from "./selectors";
 import {
     SpacePermissions,
     Presence,
@@ -124,23 +124,23 @@ export function useStore(store: Store) {
 }
 
 export function useTopicsStore() {
-    return useSelector(selector.topics);
+    return useSelector(selectors.topics);
 }
 
 export function useCardsStore() {
-    return useSelector(selector.cards);
+    return useSelector(selectors.cards);
 }
 
 export function useColumnsStore() {
-    return useSelector(selector.columns);
+    return useSelector(selectors.columns);
 }
 
 export function useBoardsStore() {
-    return useSelector(selector.boards);
+    return useSelector(selectors.boards);
 }
 
 export function usePreferences() {
-    return useSelector(selector.preferences);
+    return useSelector(selectors.preferences);
 }
 
 export function useSpaceTopicsIndex(
@@ -152,16 +152,6 @@ export function useSpaceTopicsIndex(
             return topics.spaces.get(space_id, defaultValue);
         },
         [space_id]
-    );
-    return useSelector(selector);
-}
-
-export function useTrackers(id: string) {
-    const selector = useCallback(
-        ({ trackers }: State) => {
-            return trackers.entities.get(id, defaultStringList);
-        },
-        [id]
     );
     return useSelector(selector);
 }
@@ -241,7 +231,7 @@ export function usePresence(id?: string) {
 }
 
 export function useWorkspace() {
-    return useSelector(selector.workspace);
+    return useSelector(selectors.workspace);
 }
 
 export const useSite = useWorkspace;
@@ -263,14 +253,14 @@ export function useMembers(id?: string) {
             ? ({ members }: State) => {
                   return members.get(id, defaultMembers);
               }
-            : selector.members,
+            : selectors.members,
         [id]
     );
     return useSelector(select);
 }
 
 export function useRoles() {
-    return useSelector(selector.roles);
+    return useSelector(selectors.roles);
 }
 
 export function useThreadProp<T = any>(
@@ -301,11 +291,11 @@ export function useThread(id: string) {
 }
 
 export function useConfig() {
-    return useSelector(selector.config);
+    return useSelector(selectors.config);
 }
 
 export function useBoardStore() {
-    return useSelector(selector.boards);
+    return useSelector(selectors.boards);
 }
 
 export function useBoard(id: string, defaultValue = defaultBoard) {
@@ -343,7 +333,7 @@ export function useUser(id?: string) {
 }
 
 export function useUsers(ids?: Array<string> | List<string>) {
-    const users = useSelector(selector.users);
+    const users = useSelector(selectors.users);
 
     return useMemo(() => {
         if (ids && List.isList(ids)) {
@@ -372,7 +362,7 @@ export function useThreads(id?: string) {
 }
 
 export function useAuth() {
-    return useSelector(selector.auth);
+    return useSelector(selectors.auth);
 }
 
 export function useAuthId() {
@@ -443,7 +433,7 @@ export function useSpace(id: string, defaultValue = defaultSpace) {
 }
 
 export function useSpaces() {
-    return useSelector(selector.spaces);
+    return useSelector(selectors.spaces);
 }
 
 export function useDirectSpaces() {}
@@ -601,7 +591,7 @@ export function useBoardFilter(id: string) {
 }
 
 export function useCalendarLoaded() {
-    return useSelector(selector.calendarLoaded);
+    return useSelector(selectors.calendarLoaded);
 }
 
 export function useUnreadCount(id: string) {
@@ -644,6 +634,51 @@ export function useBookmarked(id: string) {
     return useSelector(selector);
 }
 
+export function useTracker(id: string) {
+    const selector = useCallback(
+        ({ trackers: store }: State) => {
+            return store.trackers.get(id);
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
+
+export function useTrackers(id: string) {
+    const selector = useCallback(
+        ({ trackers: store }: State) => {
+            return store.entities.get(id, defaultStringList);
+        },
+        [id]
+    );
+
+    const store = useSelector(selectors.trackers);
+
+    const targets = useSelector(selector);
+
+    return useMemo(() => {
+        return targets
+            .map((id) => {
+                return store.trackers.get(id)!;
+            })
+            .filter(Boolean);
+    }, [targets, store]);
+}
+
+export function useActionTrackers(id: string) {
+    const trackers = useTrackers(id);
+
+    return useMemo(() => {
+        return trackers
+            .toMap()
+            .mapKeys((_key, tracker) => {
+                return `${tracker.target}:${tracker.event}`;
+            })
+            .map((tracker) => {
+                return tracker.id;
+            });
+    }, [trackers]);
+}
 export function useSpacePermissions(id: string) {
     const auth = useAuth();
     const roles = useRoles();

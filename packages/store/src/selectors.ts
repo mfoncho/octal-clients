@@ -62,6 +62,10 @@ export function spaces({ spaces }: State) {
     return spaces.entities;
 }
 
+export function trackers({ trackers }: State) {
+    return trackers;
+}
+
 export function threads({ threads, route }: State) {
     return threads.threads.get(route.params.get("space_id"));
 }
@@ -72,6 +76,7 @@ export function calendarLoaded({ calendars }: State) {
 
 export default {
     auth,
+    trackers,
     users,
     space,
     roles,

@@ -1,23 +1,38 @@
 import { Record, Map, List } from "immutable";
+import { TrackerRecord } from "../records";
 import * as Actions from "../actions/types";
-import * as BoardActions from "../actions/board";
+import * as AppActions from "../actions/app";
 
 export class TrackersStore extends Record({
     entities: Map<string, List<string>>(),
+    trackers: Map<string, TrackerRecord>(),
 }) {
-    addTracker(id: string, event: string) {
-        const events = this.entities.get(id, List<string>());
-        if (events.includes(event)) return this;
-        return this.setIn(["entities", id], events.push(event));
+    addTracker(tracker: any) {
+        let record = this.trackers.get(tracker.id);
+        if (record) {
+            return this;
+        }
+        let entities = this.entities.get(tracker.entity, List<string>());
+        if (!entities.includes(tracker.id))
+            entities = entities.push(tracker.id);
+        return this.setIn(
+            ["trackers", tracker.id],
+            new TrackerRecord(tracker)
+        ).setIn(["entities", tracker.entity], entities);
     }
 
-    removeTracker(id: string, event: string) {
-        const events = this.entities.get(id, List<string>());
-        if (!events.includes(event)) return this;
-        return this.setIn(
-            ["entities", id],
-            events.filter((ev) => ev !== event)
-        );
+    removeTracker(id: string) {
+        let record = this.trackers.get(id);
+        if (record) {
+            let trackers = this.entities
+                .get(record.entity, List<string>())
+                .filter((id) => id !== record?.id);
+            return this.deleteIn(["trackers", id]).setIn(
+                ["entities", record.entity],
+                trackers
+            );
+        }
+        return this;
     }
 }
 
@@ -26,28 +41,24 @@ export const state = new TrackersStore();
 export const reducers = {
     [Actions.TRACKERS_LOADED]: (
         store: TrackersStore,
-        { payload }: BoardActions.TrackersLoadedAction
+        { payload }: AppActions.TrackersLoadedAction
     ) => {
-        const keys = Object.keys(payload);
-        return keys.reduce((store, key) => {
-            let events = payload[key]!;
-            return events.reduce((store, event) => {
-                return store.addTracker(key, event);
-            }, store);
+        return payload.reduce((store, value) => {
+            return store.addTracker(value);
         }, store);
     },
     [Actions.TRACKER_CREATED]: (
         store: TrackersStore,
-        { payload }: BoardActions.TrackerCreatedAction
+        { payload }: AppActions.TrackerCreatedAction
     ) => {
-        return store.addTracker(payload.entity_id, payload.event);
+        return store.addTracker(payload);
     },
 
     [Actions.TRACKER_DELETED]: (
         store: TrackersStore,
-        { payload }: BoardActions.TrackerDeletedAction
+        { payload }: AppActions.TrackerDeletedAction
     ) => {
-        return store.removeTracker(payload.entity_id, payload.event);
+        return store.removeTracker(payload.id);
     },
 };
 
