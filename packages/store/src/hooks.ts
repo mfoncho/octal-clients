@@ -680,7 +680,31 @@ export function useSpacePermissions(id: string) {
                 return role.permissions
                     .toSeq()
                     .reduce((permissions, permission, key) => {
-                        return permissions.set(key, permission.value);
+                        switch (typeof permission.value) {
+                            case "number": {
+                                let value = permissions.get(
+                                    key,
+                                    permission.value
+                                );
+                                return permissions.set(
+                                    key,
+                                    Math.max(permission.value, value as number)
+                                );
+                            }
+                            case "boolean": {
+                                let value = permissions.get(
+                                    key,
+                                    permission.value
+                                );
+                                return permissions.set(
+                                    key,
+                                    permission.value || value
+                                );
+                            }
+
+                            default:
+                                return permissions.set(key, permission.value);
+                        }
                     }, permissions);
             }, SpacePermissions);
     }, [auth, roles, space.roles]);
