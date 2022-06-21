@@ -60,7 +60,8 @@ export const permissions = {
     ["message.post"]: booleanPermission,
     ["message.manage"]: booleanPermission,
     ["message.delete"]: booleanPermission,
-    ["invitation.send"]: booleanPermission,
+    ["invite.mail.send"]: booleanPermission,
+    ["invite.link.create"]: booleanPermission,
 };
 
 export type BasePermissionScheme = typeof permissions;

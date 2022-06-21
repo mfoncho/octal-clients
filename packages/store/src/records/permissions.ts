@@ -145,8 +145,14 @@ export const PermissionGroups: IPermissionsGroup[] = [
         name: "Invitations",
         permissions: [
             {
-                name: "Send invitations",
-                permission: "invitation.send",
+                name: "Invitation link",
+                permission: "invite.link.create",
+                type: "boolean",
+                description: "Create invitation link",
+            },
+            {
+                name: "Send email invitations",
+                permission: "invite.mail.send",
                 type: "boolean",
                 description: "Send email invitations",
             },
