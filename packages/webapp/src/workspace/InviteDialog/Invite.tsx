@@ -10,7 +10,7 @@ import { FaCheck as InvitedIcon } from "react-icons/fa";
 import { Dialog, Button, Flow } from "@octal/ui";
 import { useInput } from "src/utils";
 import client, { io } from "@octal/client";
-import { SpaceRecord } from "@octal/store";
+import { SpaceRecord, useSpacePermissions } from "@octal/store";
 
 type ModeType = "email" | "link";
 
@@ -215,6 +215,8 @@ export default Dialog.create<IInvite>((props) => {
 
     const [mode, setMode] = React.useState<ModeType>("link");
 
+    const permissions = useSpacePermissions(props.space.id);
+
     React.useEffect(getSpaceInvite, []);
 
     function getSpaceInvite() {
@@ -225,6 +227,12 @@ export default Dialog.create<IInvite>((props) => {
             })
             .catch(() => {});
     }
+
+    React.useEffect(() => {
+        if (mode === "email" && !permissions.get("invite.mail.send")) {
+            setMode("link");
+        }
+    }, [mode, permissions.get("invite.mail.send")]);
 
     return (
         <Dialog

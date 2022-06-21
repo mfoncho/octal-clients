@@ -155,7 +155,10 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
             });
         }
 
-        if (permissions.get("invitation.send")) {
+        if (
+            permissions.get("invite.link.create") ||
+            permissions.get("invite.mail.send")
+        ) {
             menu.push({
                 icon: <Icons.AddUser />,
                 menu: "invite",
@@ -170,6 +173,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                 name: "Settings",
             });
         }
+        console.log(permissions);
         setMenu(menu);
     }, [permissions]);
 
@@ -265,7 +269,8 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                     onClose={dialog.close}
                 />
             )}
-            {permissions.get("invitation.send") && (
+            {(permissions.get("invite.mail.send") ||
+                permissions.get("invite.link.create")) && (
                 <InviteDialog
                     open={dialog.invite}
                     space={space}
