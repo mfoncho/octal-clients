@@ -2,6 +2,7 @@ import { CardRecord, ColumnRecord, CardFieldRecord } from "@octal/store";
 import { OrderedMap } from "immutable";
 import { useContext, useCallback, useMemo } from "react";
 import * as BoardAction from "@octal/store/lib/actions/board";
+import * as AppAction from "@octal/store/lib/actions/app";
 import Context, { Cards, Dragged } from "./Context";
 import { useDispatch } from "react-redux";
 import { useDrawer as useWorkspaceDrawer } from "src/hooks";
@@ -70,15 +71,17 @@ export function useBoardActions() {
         [board.id]
     );
 
-    const filter = useCallback((filter: string, value: string| string[]) => {
+    const filter = useCallback(
+        (filter: string, value: string | string[]) => {
             const action = BoardAction.updateBoardFilter({
                 filter: filter,
                 board_id: board.id,
                 value: value,
             });
             return dispatch(action);
-
-    }, [board.id])
+        },
+        [board.id]
+    );
     const createLabel = useCallback(
         (params: BoardAction.CreateLabelParams) => {
             const action = BoardAction.createLabel(board.id, params);
@@ -309,32 +312,6 @@ export function useCardActions(card: CardRecord) {
         []
     );
 
-    const trackEvent = useCallback(
-        (event: string) => {
-            const action = BoardAction.createTracker({
-                entity_id: card.id,
-                params: {
-                    event,
-                },
-            });
-            return dispatch(action);
-        },
-        [card.id]
-    );
-
-    const untrackEvent = useCallback(
-        (event: string) => {
-            const action = BoardAction.deleteTracker({
-                entity_id: card.id,
-                params: {
-                    event,
-                },
-            });
-            return dispatch(action);
-        },
-        [card.id]
-    );
-
     const moveField = useCallback((id: string, position: number) => {
         const action = BoardAction.moveCardField({
             field_id: id,
@@ -423,8 +400,6 @@ export function useCardActions(card: CardRecord) {
     const actions = {
         createField,
         updateField,
-        trackEvent,
-        untrackEvent,
         moveField,
         uncompleteCard,
         destroyCard,

@@ -2,37 +2,47 @@ import React from "react";
 import { Switch, Dialog } from "@octal/ui";
 import { CardRecord, useTrackers } from "@octal/store";
 import { useActions } from "./hooks";
+import { useTrackerActions } from "@workspace/hooks";
 
 interface ITracker {
     name: string;
     event: string;
+    target: string;
     description: string;
 }
+
+const actionName = (tracker: { event: string; target: string }) =>
+    `${tracker.target}:${tracker.event}`;
 
 const trackers: ITracker[] = [
     {
         name: "Card Complete",
-        event: "card:complete",
+        event: "complete",
+        target: "card",
         description: "Track card complete status",
     },
     {
         name: "Tasks Done",
-        event: "card.checklist.task:done",
+        target: "card.checklist.task",
+        event: "done",
         description: "Track task done status",
     },
     {
         name: "Ranking",
-        event: "card.position:change",
+        target: "card.position",
+        event: "change",
         description: "Track card ranking within collection",
     },
     {
         name: "Collection",
-        event: "card.collection:change",
+        target: "card.collection",
+        event: "change",
         description: "Track card collection changes",
     },
     {
         name: "Checklist Complete",
-        event: "card.checklist:complete",
+        target: "card.checklist",
+        event: "complete",
         // I don't really know how to word this
         // but i hope this lands
         description: "Track checklist with all tasks done",
@@ -44,15 +54,17 @@ interface IDialog {
 }
 
 export default Dialog.create<IDialog>(({ card, ...props }) => {
-    const events = useTrackers(card.id);
-    const actions = useActions(card);
+    const trackerActions = useTrackerActions(card.id);
 
-    function handleToggleTracker(tracker: string, event: React.ChangeEvent) {
-        if (events.includes(tracker)) {
-            actions.untrackEvent(tracker);
+    function handleToggleTracker(tracker: ITracker, event: React.ChangeEvent) {
+        let tracked = trackerActions.trackers.has(actionName(tracker));
+        if (tracked) {
+            trackerActions.untrack(tracker.target, tracker.event);
         } else {
-            actions.trackEvent(tracker);
+            trackerActions.track(tracker.target, tracker.event);
         }
+        event.stopPropagation();
+        event.preventDefault();
     }
 
     return (
@@ -63,9 +75,9 @@ export default Dialog.create<IDialog>(({ card, ...props }) => {
             fullWidth={false}
             onClose={props.onClose}>
             <Dialog.Content className="flex flex-col pb-8">
-                {trackers.map((tracker) => (
+                {trackers.map((tracker, index) => (
                     <div
-                        key={tracker.event}
+                        key={String(index)}
                         className="flex flex-row items-center p-4 justify-between rounded-md bg-gray-50 my-1 border-2 border-gray-200">
                         <div className="flex flex-col pr-8">
                             <span className="font-semibold">
@@ -77,10 +89,10 @@ export default Dialog.create<IDialog>(({ card, ...props }) => {
                         </div>
 
                         <Switch
-                            checked={events.includes(tracker.event)}
-                            onChange={(e) =>
-                                handleToggleTracker(tracker.event, e)
-                            }
+                            checked={trackerActions.trackers.has(
+                                actionName(tracker)
+                            )}
+                            onChange={(e) => handleToggleTracker(tracker, e)}
                         />
                     </div>
                 ))}

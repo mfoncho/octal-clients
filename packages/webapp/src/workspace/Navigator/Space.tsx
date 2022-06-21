@@ -173,7 +173,6 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                 name: "Settings",
             });
         }
-        console.log(permissions);
         setMenu(menu);
     }, [permissions]);
 

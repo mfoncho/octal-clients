@@ -47,32 +47,6 @@ export function useActions(card: CardRecord) {
         []
     );
 
-    const trackEvent = useCallback(
-        (event: string) => {
-            const action = BoardAction.createTracker({
-                entity_id: card.id,
-                params: {
-                    event,
-                },
-            });
-            return dispatch(action);
-        },
-        [card.id]
-    );
-
-    const untrackEvent = useCallback(
-        (event: string) => {
-            const action = BoardAction.deleteTracker({
-                entity_id: card.id,
-                params: {
-                    event,
-                },
-            });
-            return dispatch(action);
-        },
-        [card.id]
-    );
-
     const moveField = useCallback((id: string, position: number) => {
         const action = BoardAction.moveCardField({
             field_id: id,
@@ -165,8 +139,6 @@ export function useActions(card: CardRecord) {
     const actions = {
         createField,
         updateField,
-        trackEvent,
-        untrackEvent,
         moveField,
         uncompleteCard,
         destroyCard,
