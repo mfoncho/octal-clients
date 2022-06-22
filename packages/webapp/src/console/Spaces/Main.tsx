@@ -84,11 +84,6 @@ export default React.memo(() => {
                                 CREATED
                             </div>
                         </th>
-                        <th scope="col" className="text-center px-6 py-3">
-                            <div className="text-xs font-medium text-gray-500 uppercase">
-                                ACTIONS
-                            </div>
-                        </th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -117,7 +112,6 @@ export default React.memo(() => {
                                     {moment(space.created_at).format("ll")}
                                 </span>
                             </td>
-                            <td className="text-center px-6 py-3"></td>
                         </tr>
                     ))}
                 </tbody>

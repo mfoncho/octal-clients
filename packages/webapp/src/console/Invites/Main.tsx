@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useInput } from "src/utils";
+import { io } from "@console/types";
+import * as Icons from "@octal/icons";
 import { Button } from "@octal/ui";
 import Pagination from "@material-ui/lab/Pagination";
 import { Page } from "src/types";
-import {
-    MdOutlineEmail as MailIcon,
-    MdOutlineMarkEmailRead as MailedIcon,
-} from "react-icons/md";
-import { RiMailSendFill as SendMailIcon } from "react-icons/ri";
-import { IoMdLink as LinkIcon } from "react-icons/io";
-import { BiTrash as DeleteIcon } from "react-icons/bi";
 import Layout from "@console/Layout";
 import client, { FetchInvitesRequest } from "@console/client";
-import { io } from "@console/types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNavigator } from "@console/hooks";
 
@@ -117,55 +110,38 @@ export default React.memo(() => {
         <Layout className="flex flex-grow flex-col p-2">
             <div className="flex flex flex-col divide-y divide-gray-100">
                 <div className="grid grid-cols-6 py-4 text-gray-700 rounded-t-md text-sm font-semibold bg-gray-100">
-                    <div className="px-6 overflow-hidden">USER</div>
-                    <div className="px-6 overflow-hidden">SPACE</div>
                     <div className="col-span-2 px-6 overflow-hidden">
-                        LINK/EMAIL
+                        Invite
                     </div>
-                    <div className="px-6 overflow-hidden flex justify-center">
-                        EXIPRE
-                    </div>
+                    <div className="px-6 overflow-hidden">Space</div>
+                    <div className="px-6 overflow-hidden"></div>
+                    <div className="px-6 overflow-hidden flex justify-center"></div>
                     <div />
                 </div>
                 {page.data.map((invite) => (
                     <div
                         key={invite.id}
-                        className="grid grid-cols-6 text-gray-700 hover:bg-primary-50 text-sm">
-                        <div className="px-6 py-3 overflow-hidden">
-                            <div
-                                onClick={handleOpenUser(invite.user)}
-                                className="flex flex-row items-center">
-                                <img
-                                    alt={invite.user.name}
-                                    src={invite.user.avatar}
-                                    className="inline-block h-8 w-8 rounded-full"
-                                />
-                                <div className="flex flex-col">
-                                    <span className="px-2 font-semibold">
-                                        {invite.user.username}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex flex-row items-center overflow-hidden">
-                            {invite.space && (
-                                <p
-                                    className="truncate px-2 font-semibold"
-                                    onClick={handleOpenSpace(invite.space)}>
-                                    {invite.space.name}
-                                </p>
-                            )}
-                        </div>
+                        className="grid grid-cols-6 text-gray-700 hover:bg-primary-50 text-sm space-x-4">
                         <div className="col-span-2 flex flex-row overflow-hidden">
                             <div className="flex flex-row items-center px-4">
                                 {invite.email && invite.mailed && (
-                                    <MailedIcon className="w-5 h-5 text-gray-500" />
+                                    <div className="p-1.5">
+                                        <Icons.Mail.Sent className="w-5 h-5 text-gray-500" />
+                                    </div>
                                 )}
                                 {invite.email && !invite.mailed && (
-                                    <MailIcon className="w-5 h-5 text-gray-500" />
+                                    <Button
+                                        disabled={loading.includes(invite.id)}
+                                        onClick={handleMailInvite(invite)}
+                                        variant="icon"
+                                        color="clear">
+                                        <Icons.Mail.Send className="w-5 h-5 hover:text-primary-500" />
+                                    </Button>
                                 )}
                                 {invite.link && (
-                                    <LinkIcon className="w-5 h-5 text-gray-500" />
+                                    <div className="p-1.5">
+                                        <Icons.Link className="w-5 h-5 text-gray-500" />
+                                    </div>
                                 )}
                             </div>
                             <div className="flex flex-1 items-center overflow-hidden">
@@ -175,27 +151,40 @@ export default React.memo(() => {
                                 </p>
                             </div>
                         </div>
+                        <div className="flex flex-row items-center overflow-hidden">
+                            {invite.space && (
+                                <p
+                                    role="button"
+                                    className="truncate px-2 font-semibold"
+                                    onClick={handleOpenSpace(invite.space)}>
+                                    {invite.space.name}
+                                </p>
+                            )}
+                        </div>
+                        <div className="px-6 py-3 overflow-hidden">
+                            <div
+                                role="button"
+                                onClick={handleOpenUser(invite.user)}
+                                className="flex flex-row items-center">
+                                <div className="flex flex-col">
+                                    <span className="text-primary-700 px-2 font-semibold">
+                                        @{invite.user.username}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                         <div className="flex flex-row items-center justify-center px-6">
                             <span className="text-xs font-semibold">
                                 {moment(invite.expire_at).format("l")}
                             </span>
                         </div>
                         <div className="flex space-x-2 flex-row items-center justify-end px-6">
-                            {invite.email && !invite.mailed && (
-                                <Button
-                                    disabled={loading.includes(invite.id)}
-                                    onClick={handleMailInvite(invite)}
-                                    variant="icon"
-                                    color="clear">
-                                    <SendMailIcon className="w-5 h-5 hover:text-primary-500" />
-                                </Button>
-                            )}
                             <Button
                                 disabled={loading.includes(invite.id)}
                                 onClick={handleDeleteInvite(invite)}
                                 variant="icon"
                                 color="clear">
-                                <DeleteIcon className="w-5 h-5 hover:text-red-600" />
+                                <Icons.Delete />
                             </Button>
                         </div>
                     </div>

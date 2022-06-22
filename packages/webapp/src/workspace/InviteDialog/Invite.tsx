@@ -3,10 +3,6 @@ import moment from "moment";
 import capitalize from "lodash/capitalize";
 import * as patterns from "@octal/patterns";
 import * as Icons from "@octal/icons";
-import { BsPlusLg as AddIcon } from "react-icons/bs";
-import { IoMdCopy as CopyIcon, IoMdLink as LinkIcon } from "react-icons/io";
-import { BiTrash as DeleteIcon } from "react-icons/bi";
-import { FaCheck as InvitedIcon } from "react-icons/fa";
 import { Dialog, Button, Flow } from "@octal/ui";
 import { useInput } from "src/utils";
 import client, { io } from "@octal/client";
@@ -105,7 +101,7 @@ function EmailInvite(props: IInviteMode) {
                                     disabled={!email.valid || loading}
                                     onClick={handleAddEmail}
                                     variant="icon">
-                                    <AddIcon className="text-gray-600" />
+                                    <Icons.Plus className="text-gray-600" />
                                 </Button>
                             </div>
                         </div>
@@ -129,13 +125,13 @@ function EmailInvite(props: IInviteMode) {
                                 </span>
                                 {invited.includes(email) ? (
                                     <button className="px-4">
-                                        <InvitedIcon className="text-green-800" />
+                                        <Icons.Check className="text-green-800" />
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleRemoveEmail(email)}
                                         className="px-4">
-                                        <DeleteIcon className="text-gray-500" />
+                                        <Icons.Delete className="text-gray-500" />
                                     </button>
                                 )}
                             </div>
@@ -179,13 +175,13 @@ function InviteLink(props: IInviteMode) {
                         className="form-input font-semibold w-full text-gray-600 pr-12 pl-8 rounded-md border-gray-400"
                     />
                     <div className="absolute pointer-events-none w-full flex flex-row justify-between text-gray-600 h-full py-2 px-2 flex items-center justify-center">
-                        <LinkIcon />
+                        <Icons.Link />
                         <Button
                             color="primary"
                             className="text-lg pointer-events-auto"
                             onClick={handleCopyLink}
                             variant="icon">
-                            <CopyIcon className="text-white" />
+                            <Icons.Copy className="text-white" />
                         </Button>
                     </div>
                 </div>

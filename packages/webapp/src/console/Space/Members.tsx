@@ -1,7 +1,7 @@
 import React from "react";
 import { io } from "@console/types";
-import { BiTrash } from "react-icons/bi";
-import { FaCrown } from "react-icons/fa";
+import { Label } from "@octal/ui";
+import * as Icons from "@octal/icons";
 import { Dialog, Button } from "@octal/ui";
 import { useNavigator } from "@console/hooks";
 import moment from "moment";
@@ -117,20 +117,14 @@ export default function Members({ space, updateSpace }: IMembers) {
                 className="flex justify-between text-gray-500 flex-row px-4 py-2 items-center hover:bg-primary-50">
                 <div className="flex flex-row flex-1 justify-between items-center">
                     <div
+                        role="button"
                         className="flex flex-row items-center"
                         onClick={handleOpenUser(user)}>
-                        <div className="relative">
-                            <img
-                                alt={user.name}
-                                src={user.avatar}
-                                className="inline-block h-8 w-8 rounded-full"
-                            />
-                            {user.id == space.admin.id && (
-                                <div className="w-3 h-3 rounded-full bg-white absolute left-1 top-1">
-                                    <FaCrown className="w-3 h-3 text-yellow-300" />
-                                </div>
-                            )}
-                        </div>
+                        <img
+                            alt={user.name}
+                            src={user.avatar}
+                            className="inline-block h-8 w-8 rounded-full"
+                        />
                         <span className="px-4 text-gray-800 font-semibold text-base">
                             @{user.username}
                         </span>
@@ -141,24 +135,28 @@ export default function Members({ space, updateSpace }: IMembers) {
                         </span>
                     </div>
                 </div>
-                <div className="flex flex-row justify-end px-4 w-40 items-center">
-                    {user.id !== space.admin.id && !loading.includes(user.id) && (
-                        <>
-                            <Button
-                                variant="icon"
-                                color="clear"
-                                onClick={handleCrownMember(member)}
-                                className="px-2">
-                                <FaCrown />
-                            </Button>
-                            <Button
-                                variant="icon"
-                                color="clear"
-                                onClick={handleRemoveMember(member)}
-                                className="px-2">
-                                <BiTrash />
-                            </Button>
-                        </>
+                <div className="flex flex-row justify-end px-4 w-40 items-center space-x-2">
+                    {user.id === space.admin.id ? (
+                        <Label color="red">ADMIN</Label>
+                    ) : (
+                        !loading.includes(user.id) && (
+                            <>
+                                <Button
+                                    variant="icon"
+                                    color="clear"
+                                    onClick={handleCrownMember(member)}
+                                    className="px-2">
+                                    <Icons.Crown />
+                                </Button>
+                                <Button
+                                    variant="icon"
+                                    color="clear"
+                                    onClick={handleRemoveMember(member)}
+                                    className="px-2">
+                                    <Icons.Delete />
+                                </Button>
+                            </>
+                        )
                     )}
                 </div>
             </div>

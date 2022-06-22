@@ -83,7 +83,6 @@ export default React.memo(() => {
             icon={icon}
             title={space.name}
             className="flex flex-grow flex-col p-2">
-            <div className="flex flex-row">{space.name}</div>
             {space.is_shutdown && (
                 <div className="flex flex-row justify-end py-4">
                     <Button
