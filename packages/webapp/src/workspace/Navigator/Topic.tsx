@@ -30,14 +30,14 @@ export default React.memo<ITopic>(({ id }) => {
                 "flex px-2 py-1 flex-row items-center",
                 selected
                     ? "bg-primary-500 text-white"
-                    : "text-gray-500 hover:bg-slate-200"
+                    : "text-primary-200 hover:bg-primary-800"
             )}>
             <Icons.Topic className="w-5 h-5 mx-1" />
             <span
                 className={clx(
                     "pl-2 font-semibold text-sm flex-inline flex-grow overflow-x-hidden",
                     {
-                        ["text-gray-500"]: !selected,
+                        ["text-primary-200"]: !selected,
                     }
                 )}>
                 <Text>{topic!.name}</Text>

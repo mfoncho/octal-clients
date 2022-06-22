@@ -28,7 +28,9 @@ export default React.memo(function Header() {
         <div className="flex flex-row items-center overflow-hidden p-4">
             <Logo src={icon} alt={name} />
             <div className="flex-1 flex flex-col px-2">
-                <Link to="/spaces" className="text-lg font-bold text-gray-800">
+                <Link
+                    to="/spaces"
+                    className="text-lg font-bold text-primary-200">
                     {name}
                 </Link>
                 <Viewer />

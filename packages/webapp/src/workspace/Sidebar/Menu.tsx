@@ -131,8 +131,12 @@ export default React.memo(() => {
 
     return (
         <div role="button">
-            <Button onClick={handleOpenMenu} variant="icon" color="clear">
-                <Icons.Menu.Bugger />
+            <Button
+                onClick={handleOpenMenu}
+                className="group"
+                variant="icon"
+                color="clear">
+                <Icons.Menu.Bugger className="text-white group-hover:text-gray-600" />
             </Button>
             <Menu
                 open={Boolean(menu)}

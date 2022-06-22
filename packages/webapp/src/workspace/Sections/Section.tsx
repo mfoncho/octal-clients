@@ -22,7 +22,7 @@ export default React.memo<ISection>(function Section({
                 className={cls(
                     "flex flex-row justify-between my-0.5 items-center py-1 px-2 font-semibold",
                     {
-                        ["text-gray-600 hover:bg-slate-200"]:
+                        ["text-primary-200 hover:bg-primary-800"]:
                             location.pathname !== props.path,
                         ["bg-primary-500 text-white"]:
                             location.pathname == props.path,

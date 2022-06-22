@@ -31,20 +31,14 @@ const Manager = React.memo<IManager>((props) => {
         <Link
             to={props.path}
             className={clx(
-                "flex flex-row px-4 py-2 items-center hover:bg-primary-50",
+                "flex flex-row px-4 py-1 items-center hover:bg-primary-800",
                 {
-                    ["bg-primary-100 text-primary-700"]: selected,
-                    ["text-gray-500"]: !selected,
+                    ["text-white bg-primary-500"]: selected,
+                    ["text-primary-200"]: !selected,
                 }
             )}>
-            <div
-                className={clx(
-                    "flex items-center justify-center w-8 h-8 rounded-md",
-                    {
-                        ["bg-primary-500 text-white"]: selected,
-                    }
-                )}>
-                <Icon className="h-6 w-6" />
+            <div className="flex items-center justify-center w-6 h-6 mx-2 rounded-md">
+                <Icon className="h-4 w-4" />
             </div>
             <span className="font-bold text-sm px-2">
                 <Text>{props.name}</Text>

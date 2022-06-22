@@ -21,12 +21,10 @@ const Site = React.memo(() => {
 
 export default React.memo(() => {
     return (
-        <div className="flex flex-col w-16 items-center justify-between bg-gray-200 flex-none">
+        <div className="flex flex-col w-16 items-center justify-between bg-primary-200 flex-none">
             <div className="flex flex-col py-4 items-center">
                 <Site />
-                <Link
-                    to={paths.console.dashboard}
-                    className="my-3 text-gray-500">
+                <Link to={paths.console.dashboard} className="my-3 text-white">
                     <Icons.Console />
                 </Link>
             </div>

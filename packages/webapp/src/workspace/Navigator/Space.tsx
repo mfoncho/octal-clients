@@ -94,7 +94,7 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
             to={path}
             className={clx(
                 "flex flex-row pl-2 px-2 items-center h-8 py-2",
-                selected ? "bg-primary-500" : "hover:bg-slate-200"
+                selected ? "bg-primary-500" : "hover:bg-primary-800"
             )}>
             <img
                 alt={user.username}
@@ -104,7 +104,7 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
             <span
                 className={clx(
                     "flex-grow px-2 font-bold text-sm",
-                    selected ? "text-white" : "text-gray-500"
+                    selected ? "text-white" : "text-primary-200"
                 )}>
                 <Text>{user.username}</Text>
             </span>
@@ -218,7 +218,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                     onClick={handleToggleExpanded}
                     className={clx(
                         "flex-grow text-xs font-semibold",
-                        highlight ? "text-white" : "text-gray-500"
+                        highlight ? "text-white" : "text-primary-200"
                     )}>
                     <Text>{space.name.toUpperCase()}</Text>
                 </span>
