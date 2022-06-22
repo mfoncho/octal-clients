@@ -3,6 +3,7 @@ import clx from "classnames";
 import * as Icons from "@octal/icons";
 import { Dialog, Button } from "@octal/ui";
 import {
+    useAuthId,
     SpaceRecord,
     SpacePermissions,
     useSpacePermissions,
@@ -54,6 +55,8 @@ interface IDialog {
 export default Dialog.create<IDialog>((props) => {
     const { space } = props;
 
+    const authid = useAuthId();
+
     const permissions = useSpacePermissions(space.id);
 
     const [Manager, setManager] = useState<
@@ -69,6 +72,9 @@ export default Dialog.create<IDialog>((props) => {
 
         const critical = menu.name.toLowerCase() == "shutdown";
 
+        if (space.admin_id !== authid && critical) {
+            return null;
+        }
         return (
             <li
                 key={String(index)}
