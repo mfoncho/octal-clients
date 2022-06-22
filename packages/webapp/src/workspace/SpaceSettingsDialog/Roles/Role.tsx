@@ -71,6 +71,7 @@ export default function Role(props: IRole) {
     }
 
     function renderPermissionGroup(group: IPermissionsGroup) {
+        if (group.key === "system") return null;
         return (
             <div key={group.key} className="flex flex-col my-2 ">
                 <span className="font-bold text-gray-600">{group.name}</span>
