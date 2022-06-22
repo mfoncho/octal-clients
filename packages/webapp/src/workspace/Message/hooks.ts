@@ -1,5 +1,7 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { usePermissions } from "../Space";
+import { ActionT } from "./Menu";
 import { MessageRecord, useEntityBookmark } from "@octal/store";
 import * as BookmarkActions from "@octal/store/lib/actions/bookmark";
 import {
@@ -11,10 +13,47 @@ import {
     unreactMessage,
 } from "@octal/store/lib/actions/thread";
 
+//"react",
+//"bookmark",
+//"reply",
+//"pin",
+//"edit",
+//"delete",
+
 export function useActions(message: MessageRecord, authid: string = "") {
     const dispatch = useDispatch();
 
+    let authored = message.user_id === authid;
+
     const bookmark = useEntityBookmark(message.id);
+
+    const permissions = usePermissions();
+
+    const [buttons, setButtons] = useState<ActionT[]>([]);
+
+    useEffect(() => {
+        let buttons: ActionT[] = ["react"];
+        if (authored) {
+            buttons.push("bookmark");
+            buttons.push("reply");
+        } else {
+            buttons.push("reply");
+            buttons.push("bookmark");
+        }
+        if (permissions.get("thread.manage")) buttons.push("pin");
+
+        if (authored && permissions.get("message.edit")) {
+            buttons.push("edit");
+        }
+
+        if (
+            (authored && permissions.get("message.delete")) ||
+            permissions.get("thread.manage")
+        )
+            buttons.push("delete");
+
+        setButtons(buttons);
+    }, [permissions]);
 
     const onBookmark = useCallback(
         (notes: string = "") => {
@@ -91,5 +130,13 @@ export function useActions(message: MessageRecord, authid: string = "") {
         [message.id]
     );
 
-    return { onPin, onBookmark, onDelete, onUpdate, bookmark, onReact };
+    return {
+        onPin,
+        onBookmark,
+        buttons,
+        onDelete,
+        onUpdate,
+        bookmark,
+        onReact,
+    };
 }

@@ -6,6 +6,7 @@ import RenameBoardDialog from "./RenameBoardDialog";
 import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
 import { RiArchiveDrawerFill as DrawerIcon } from "react-icons/ri";
 import { useNavigatorDrawer } from "src/hooks";
+import { useSpacePermissions } from "@octal/store";
 
 const ArchiveIcon = React.memo(() => (
     <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -18,22 +19,13 @@ const ArchiveIcon = React.memo(() => (
     </svg>
 ));
 
-const SearchIcon = () => (
-    <svg width="24" height="24" fill="none" className="text-gray-400">
-        <path
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"></path>
-    </svg>
-);
-
 export default React.memo(() => {
     const board = useBoard();
     const [, navbar] = useNavigatorDrawer();
     const [drawer, drawerActions] = useDrawer(board.id);
     const dialog = Dialog.useDialog();
+
+    const permissions = useSpacePermissions(board.space_id);
 
     function handleToggleArchive() {
         if (drawer.props.type != "archive" || !drawer.open) {
@@ -46,6 +38,9 @@ export default React.memo(() => {
     function handleToggleDrawer() {
         navbar.open({});
     }
+
+    if (dialog.rename && permissions.get("space.manage", false) === false)
+        dialog.close({} as any);
 
     return (
         <header className="flex border-b flex-none border-gray-200 flex-row items-center h-14 sm:h-20  justify-between">

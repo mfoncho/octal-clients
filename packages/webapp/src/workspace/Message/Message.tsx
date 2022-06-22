@@ -23,18 +23,17 @@ export interface IMessage {
     message: MessageRecord;
 }
 
-const viewerMessageActions: ActionT[] = [
+const authorMenuActions: ActionT[] = [
     "react",
-    "edit",
-    "reply",
     "bookmark",
+    "reply",
     "pin",
+    "edit",
     "delete",
 ];
-const userMessageActions: ActionT[] = [
+const userMenuActions: ActionT[] = [
     "react",
     "reply",
-    "edit",
     "bookmark",
     "pin",
     "delete",
@@ -156,11 +155,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                     onReact={actions.onReact}
                     onDelete={actions.onDelete}
                     anchor={anchor.current!}
-                    buttons={
-                        message.user_id == props.authid
-                            ? viewerMessageActions
-                            : userMessageActions
-                    }
+                    buttons={actions.buttons}
                     pinned={message.pinned}
                     bookmark={actions.bookmark}
                 />

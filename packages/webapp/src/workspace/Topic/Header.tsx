@@ -1,9 +1,8 @@
 import React from "react";
 import { Dialog, Text, Button } from "@octal/ui";
 import * as Icons from "@octal/icons";
-import { useTopic } from "@octal/store";
+import { useTopic, useSpacePermissions } from "@octal/store";
 import RenameTopicDialog from "./RenameTopicDialog";
-import InviteDialog from "../InviteDialog";
 import SearchDialog from "./Search";
 import { useParams } from "react-router-dom";
 import { useSpace } from "../Space/hooks";
@@ -16,6 +15,11 @@ export default React.memo(() => {
     const dialog = Dialog.useDialog();
     const params = useParams<{ topic_id: string }>();
     const topic = useTopic(params.topic_id!);
+    const permissions = useSpacePermissions(space.id);
+
+    if (dialog.rename && permissions.get("space.manage", false) === false)
+        dialog.close({} as any);
+
     return (
         <header className="flex flex-none border-b border-gray-200 flex-row items-center h-14 sm:h-20 justify-between">
             <div className="flex flex-row items-center pl-1 sm:pl-8 pr-2">
@@ -52,11 +56,6 @@ export default React.memo(() => {
                     <RenameTopicDialog
                         topic={topic}
                         open={dialog.rename}
-                        onClose={dialog.close}
-                    />
-                    <InviteDialog
-                        space={space}
-                        open={dialog.invite}
                         onClose={dialog.close}
                     />
                     <SearchDialog

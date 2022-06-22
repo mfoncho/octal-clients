@@ -6,7 +6,6 @@ import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
 import { Textarea } from "@octal/ui";
 import Menu from "@workspace/Message/Menu";
 import ReplyPreview from "./ReplyPreview";
-import { usePermissions } from "../Space/hooks";
 import { usePostInput } from "./hooks";
 import Conversation from "../Conversation";
 
@@ -18,31 +17,12 @@ export interface IThread {
 const defaultThread = new ThreadRecord();
 
 export default React.memo<IThread>((props) => {
-    const permissions = usePermissions();
     const dispatch = useDispatch();
     const params = useParams<{ space_id: string }>();
-    const [menu, setMenu] = useState<string[]>(props.menu ?? []);
     const [replyId, setReplyId] = useState<string>("");
     const thread = useThread(props.id);
     const replyMsg = useMessage(replyId ?? "");
     const postInput = usePostInput(thread ?? defaultThread);
-
-    useEffect(() => {
-        let actions = ["react", "reply", "bookmark"];
-        if (permissions.get("message.pin")) {
-            actions.push("pin");
-        }
-        if (
-            permissions.get("space.manage") ||
-            permissions.get("message.delete")
-        ) {
-            actions.push("delete");
-        }
-        if (permissions.get("message.edit")) {
-            actions.push("edit");
-        }
-        setMenu(actions);
-    }, [permissions]);
 
     /**
      * Fetch thread if thread
@@ -75,29 +55,27 @@ export default React.memo<IThread>((props) => {
 
     return (
         <Menu.Reply.Provider value={setReplyId}>
-            <Menu.Context.Provider value={menu}>
-                <div className="flex flex-col flex-grow overflow-hidden">
-                    <Conversation key={thread.id} thread={thread} />
+            <div className="flex flex-col flex-grow overflow-hidden">
+                <Conversation key={thread.id} thread={thread} />
 
-                    <div className="relative flex flex-col flex-none p-1 sm:p-4 overflow-hidden">
-                        {replyMsg && (
-                            <div className="relative w-full -top-1">
-                                <ReplyPreview
-                                    message={replyMsg}
-                                    onClose={() => setReplyId("")}
-                                />
-                            </div>
-                        )}
-                        {!postInput.disabled && (
-                            <Textarea.Post
-                                {...postInput}
-                                key={thread.id}
-                                onSubmit={handleSubmit}
+                <div className="relative flex flex-col flex-none p-1 sm:p-4 overflow-hidden">
+                    {replyMsg && (
+                        <div className="relative w-full -top-1">
+                            <ReplyPreview
+                                message={replyMsg}
+                                onClose={() => setReplyId("")}
                             />
-                        )}
-                    </div>
+                        </div>
+                    )}
+                    {!postInput.disabled && (
+                        <Textarea.Post
+                            {...postInput}
+                            key={thread.id}
+                            onSubmit={handleSubmit}
+                        />
+                    )}
                 </div>
-            </Menu.Context.Provider>
+            </div>
         </Menu.Reply.Provider>
     );
 });

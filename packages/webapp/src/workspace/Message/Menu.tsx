@@ -58,12 +58,6 @@ enum PopupType {
     EDITOR,
 }
 
-export const Context = React.createContext<string[]>([
-    "jump",
-    "bookmark",
-    "pin",
-]);
-
 export const Reply = React.createContext<
     (id: string, e: React.MouseEvent) => void
 >(() => {});
@@ -94,8 +88,6 @@ function EmojiPopover(props: IEmojiPopover) {
 const present = 2;
 
 const Menu = React.memo<IMenu>(({ open, ...props }) => {
-    const actions = useContext(Context);
-
     const onReply = useContext(Reply);
 
     const [popup, setPopup] = useState<PopupType>(PopupType.CLOSE);
@@ -140,14 +132,8 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
         );
     }
 
-    const buttons: Array<IButton> = props.buttons
-        .filter((action: ActionT) => {
-            const active = actions.includes(action);
-            if (action === "delete" && active === false)
-                return action.includes("destroy");
-            return active;
-        })
-        .map((button: ActionT): IButton => {
+    const buttons: Array<IButton> = props.buttons.map(
+        (button: ActionT): IButton => {
             switch (button) {
                 case "react":
                     return {
@@ -205,7 +191,8 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
                         onClick: () => {},
                     };
             }
-        });
+        }
+    );
 
     const collapsable = buttons.length > present;
 
@@ -243,9 +230,8 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
     );
 });
 
-type FCMenu = typeof Menu & { Context: typeof Context; Reply: typeof Reply };
+type FCMenu = typeof Menu & { Reply: typeof Reply };
 
-(Menu as FCMenu).Context = Context;
 (Menu as FCMenu).Reply = Reply;
 
 export default Menu as FCMenu;
