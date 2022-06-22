@@ -109,11 +109,11 @@ function EmailInvite(props: IInviteMode) {
                                 </Button>
                             </div>
                         </div>
-                        <div className="flex flex-row justify-end py-2">
+                        <div className="flex flex-row justify-end p-2">
                             <button
                                 onClick={() => props.setMode("link")}
                                 className="text-sm font-bold text-primary-500">
-                                Invite Link
+                                Link
                             </button>
                         </div>
                     </React.Fragment>
@@ -203,7 +203,7 @@ function InviteLink(props: IInviteMode) {
             </Dialog.Content>
             <Dialog.Actions className="rounded-b-lg">
                 <Button onClick={() => props.setMode("email")} color="primary">
-                    Invite Email
+                    Email
                 </Button>
             </Dialog.Actions>
         </React.Fragment>
