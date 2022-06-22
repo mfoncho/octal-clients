@@ -101,7 +101,7 @@ export interface RemoveSpaceMemberRequest {
 
 export interface CrownSpaceMemberRequest {
     space_id: string;
-    member_id: string;
+    user_id: string;
 }
 
 export interface FetchBoardsRequest {
@@ -218,12 +218,12 @@ class Client {
         return data;
     }
 
-    async crownSpaceMember({
+    async electSpaceUser({
         space_id,
-        member_id,
-    }: CrownSpaceMemberRequest): Promise<io.Member> {
+        user_id,
+    }: CrownSpaceMemberRequest): Promise<io.Space> {
         const { data } = await endpoint.post(
-            `/spaces/${space_id}/admin/${member_id}`
+            `/spaces/${space_id}/admin/${user_id}`
         );
         return data;
     }

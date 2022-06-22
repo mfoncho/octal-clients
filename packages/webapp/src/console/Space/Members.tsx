@@ -78,12 +78,12 @@ export default function Members({ space, updateSpace }: IMembers) {
     function handleCrownMember(member: io.Member) {
         return () => {
             client
-                .crownSpaceMember({
+                .electSpaceUser({
                     space_id: member.space_id,
-                    member_id: member.id,
+                    user_id: member.user.id,
                 })
                 .then((data) => {
-                    updateSpace({ ...space, admin: data.user });
+                    updateSpace({ ...space, ...data });
                 })
                 .finally(() => {
                     unlockUser(member.user.id);
