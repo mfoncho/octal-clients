@@ -679,6 +679,48 @@ export function useActionTrackers(id: string) {
             });
     }, [trackers]);
 }
+
+export function usePermissions() {
+    const auth = useAuth();
+    const roles = useRoles();
+    return useMemo(() => {
+        return auth.roles
+            .map((id) => roles.get(id)!)
+            .filter(Boolean)
+            .reduce((permissions, role) => {
+                return role.permissions
+                    .toSeq()
+                    .reduce((permissions, permission, key) => {
+                        switch (typeof permission.value) {
+                            case "number": {
+                                let value = permissions.get(
+                                    key,
+                                    permission.value
+                                );
+                                return permissions.set(
+                                    key,
+                                    Math.max(permission.value, value as number)
+                                );
+                            }
+                            case "boolean": {
+                                let value = permissions.get(
+                                    key,
+                                    permission.value
+                                );
+                                return permissions.set(
+                                    key,
+                                    permission.value || value
+                                );
+                            }
+
+                            default:
+                                return permissions.set(key, permission.value);
+                        }
+                    }, permissions);
+            }, SpacePermissions);
+    }, [auth, roles]);
+}
+
 export function useSpacePermissions(id: string) {
     const auth = useAuth();
     const roles = useRoles();

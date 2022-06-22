@@ -37,6 +37,18 @@ export interface IPermissionsGroup {
 
 export const PermissionGroups: IPermissionsGroup[] = [
     {
+        key: "system",
+        name: "System",
+        permissions: [
+            {
+                name: "Create Space",
+                permission: "space.create",
+                type: "boolean",
+                description: "Create new space",
+            },
+        ],
+    },
+    {
         key: "general",
         name: "General",
         permissions: [
@@ -44,14 +56,13 @@ export const PermissionGroups: IPermissionsGroup[] = [
                 name: "Manage space",
                 permission: "space.manage",
                 type: "boolean",
-                description: "Rename the space, change space type",
+                description: "User can adminster the space",
             },
             {
                 name: "Leave space",
                 permission: "space.leave",
                 type: "boolean",
-                description:
-                    "Members with this permission can leave the space is they so please",
+                description: "Users can leave any space at will",
             },
         ],
     },
@@ -63,7 +74,7 @@ export const PermissionGroups: IPermissionsGroup[] = [
                 name: "Post message",
                 permission: "message.post",
                 type: "boolean",
-                description: "Post messages to all threads in this space",
+                description: "Post messages, participate in thread conversations",
             },
             {
                 name: "Embed link",

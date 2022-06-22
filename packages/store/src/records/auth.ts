@@ -46,6 +46,7 @@ const numberPermission = new NumberPermission();
 const stringPermission = new StringPermission();
 
 export const permissions = {
+    ["space.create"]: booleanPermission,
     ["space.manage"]: booleanPermission,
     ["space.leave"]: booleanPermission,
     ["card.create"]: booleanPermission,
