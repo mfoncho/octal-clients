@@ -56,8 +56,8 @@ export const PermissionGroups: IPermissionsGroup[] = [
         ],
     },
     {
-        key: "message",
-        name: "Message",
+        key: "thread",
+        name: "Thread",
         permissions: [
             {
                 name: "Post message",
@@ -66,38 +66,29 @@ export const PermissionGroups: IPermissionsGroup[] = [
                 description: "Post messages to all threads in this space",
             },
             {
+                name: "Embed link",
+                permission: "message.embeds",
+                type: "boolean",
+                description: "Embed links within message will be parsed",
+            },
+            {
                 name: "Edit message",
                 permission: "message.edit",
                 type: "boolean",
-                description:
-                    "Member can edit messages they posted in any of the spaces threads",
+                description: "Authors can edit their messages",
             },
             {
                 name: "Delete message",
                 permission: "message.delete",
                 type: "boolean",
-                description:
-                    "Members can delete the messages they posted in any space thread",
+                description: "Authors can delete their message",
             },
             {
-                name: "Manage messages",
-                permission: "message.manage",
+                name: "Thread moderator",
+                permission: "thread.manage",
                 type: "boolean",
                 description:
-                    "Members to manage (delete)any message posted in any of the spaces threads",
-            },
-            {
-                name: "Pin messages",
-                permission: "message.pin",
-                type: "boolean",
-                description:
-                    "Pin messages to the space, pinned messages will be visible to all members",
-            },
-            {
-                name: "Embed link",
-                permission: "message.embeds",
-                type: "boolean",
-                description: "Embed links within message will be parsed",
+                    "Thread moderators can delete and pin and unpin messages",
             },
         ],
     },
