@@ -13,13 +13,6 @@ import {
     unreactMessage,
 } from "@octal/store/lib/actions/thread";
 
-//"react",
-//"bookmark",
-//"reply",
-//"pin",
-//"edit",
-//"delete",
-
 export function useActions(message: MessageRecord, authid: string = "") {
     const dispatch = useDispatch();
 
