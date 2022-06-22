@@ -16,6 +16,7 @@ export { default as CloseQuote } from "./CloseQuote";
 export { default as Stack } from "./Stack";
 export { default as Queue } from "./Queue";
 export { default as Role } from "./Role";
+export { default as Crown } from "./Crown";
 export { default as Edit } from "./Edit";
 export { default as Check } from "./Check";
 export { default as Archive } from "./Archive";
