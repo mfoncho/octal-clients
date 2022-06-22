@@ -143,7 +143,7 @@ function EmailInvite(props: IInviteMode) {
                     </div>
                 )}
             </Dialog.Content>
-            <Dialog.Actions>
+            <Dialog.Actions className="rounded-b-lg">
                 {invited.length > 0 ? (
                     <Button onClick={handleResetForm} color="primary">
                         Reset
@@ -201,7 +201,7 @@ function InviteLink(props: IInviteMode) {
                     )}
                 </div>
             </Dialog.Content>
-            <Dialog.Actions>
+            <Dialog.Actions className="rounded-b-lg">
                 <Button onClick={() => props.setMode("email")} color="primary">
                     Invite Email
                 </Button>
@@ -229,17 +229,36 @@ export default Dialog.create<IInvite>((props) => {
     }
 
     React.useEffect(() => {
-        if (mode === "email" && !permissions.get("invite.mail.send")) {
-            setMode("link");
+        if (
+            permissions.get("invite.mail.send") ||
+            permissions.get("invite.link.create")
+        ) {
+            if (mode === "email" && !permissions.get("invite.mail.send")) {
+                setMode("link");
+            }
+            if (mode === "link" && !permissions.get("invite.link.create")) {
+                setMode("email");
+            }
+        } else {
+            props.onClose({});
         }
-    }, [mode, permissions.get("invite.mail.send")]);
+    }, [mode, permissions]);
 
     return (
-        <Dialog
-            title={`Invite ${capitalize(mode)}`}
-            maxWidth="xs"
-            open={props.open}
-            onClose={props.onClose}>
+        <Dialog.Base maxWidth="xs" open={props.open} onClose={props.onClose}>
+            <div className="flex max-w-full flex-none flex-row h-20 px-6 items-center justify-between">
+                <div className="flex flex-row items-center overflow-hidden">
+                    <Icons.AddUser className="h-6 w-6 text-gray-500" />
+                    <span className="font-extrabold truncate text-xl px-2 text-gray-800">
+                        {`${capitalize(mode)}`}
+                    </span>
+                </div>
+                <button
+                    className="ml-2 rounded-md hover:bg-gray-200 w-8 h-8 flex justify-center items-center"
+                    onClick={props.onClose}>
+                    <Icons.Close />
+                </button>
+            </div>
             <Flow.Switch value={mode}>
                 <Flow.Case value="email">
                     <EmailInvite space={props.space} setMode={setMode} />
@@ -252,6 +271,6 @@ export default Dialog.create<IInvite>((props) => {
                     />
                 </Flow.Case>
             </Flow.Switch>
-        </Dialog>
+        </Dialog.Base>
     );
 });
