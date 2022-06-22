@@ -43,6 +43,9 @@ export { default as LeftArrow } from "./LeftArrow";
 export { default as DropdownArrows } from "./DropdownArrows";
 export { default as CloseCircleSolid } from "./CloseCircleSolid";
 export { default as Settings } from "./Settings";
+export { default as Copy } from "./Copy";
+export { default as Link } from "./Link";
+export { default as Mail } from "./Mail";
 
 export { default as Forum } from "./Forum";
 export { default as MoveCard } from "./LeftRight";
