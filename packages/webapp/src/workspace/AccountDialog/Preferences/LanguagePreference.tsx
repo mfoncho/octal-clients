@@ -5,12 +5,13 @@ export default React.memo<IPreference>((props) => {
     function handleSetLocale(event: React.ChangeEvent<{ value: unknown }>) {
         event.stopPropagation();
         event.preventDefault();
-        props.setPreference("locale", event.target.value as string);
+        props.setPreference("language", event.target.value as string);
     }
     return (
         <div className="flex flex-col py-6">
             <div className="mt-1 relative flex flex-col">
                 <select
+                    value={props.preferences.get("language")}
                     onChange={handleSetLocale}
                     className="block appearance-none border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                     <option value="en">English</option>

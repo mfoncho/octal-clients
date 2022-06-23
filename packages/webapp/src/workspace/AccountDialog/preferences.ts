@@ -1,7 +1,7 @@
 import { io } from "@octal/client";
 
 interface IPreference {
-    key: keyof io.Preferences;
+    key: keyof io.Preference;
     name: string;
     description: string;
 }

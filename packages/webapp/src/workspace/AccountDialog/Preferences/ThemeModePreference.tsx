@@ -1,14 +1,16 @@
 import React from "react";
 import { IPreference, noop } from "./hooks";
 
+const preference = "webapp.theme.mode";
+
 export default function ThemeModePreference(props: IPreference) {
-    const { preferences: preference, setPreference } = props;
+    const { preferences, setPreference } = props;
 
     function handleSetThemeMode(type: string) {
         return (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            setPreference("theme_mode", type);
+            setPreference(preference, type);
         };
     }
     function renderMode(mode: string) {
@@ -23,7 +25,7 @@ export default function ThemeModePreference(props: IPreference) {
                     type="checkbox"
                     className="form-checkbox rounded-full mx-2"
                     onChange={noop}
-                    checked={mode == preference.theme_mode}
+                    checked={mode == preferences.get(preference)}
                 />
                 <span className="text-base text-gray-600 font-semibold">
                     {label}

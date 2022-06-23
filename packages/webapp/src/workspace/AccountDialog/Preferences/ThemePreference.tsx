@@ -4,12 +4,14 @@ import { noop, IPreference } from "./hooks";
 
 type ColorT = keyof typeof colors;
 
+const preference = "webapp.theme.color";
+
 export default React.memo<IPreference>((props) => {
     function handleSetTheme(type: string) {
         return (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            props.setPreference("theme", type);
+            props.setPreference(preference, type);
         };
     }
     return (
@@ -17,7 +19,7 @@ export default React.memo<IPreference>((props) => {
             {Object.keys(colors).map((color) => (
                 <input
                     onChange={noop}
-                    checked={props.preferences.theme == color}
+                    checked={props.preferences.get(preference) == color}
                     onClick={handleSetTheme(color)}
                     key={color}
                     type="checkbox"

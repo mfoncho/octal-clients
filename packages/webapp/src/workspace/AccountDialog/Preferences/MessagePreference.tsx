@@ -1,10 +1,12 @@
 import React from "react";
 import Message from "@workspace/Message";
 import { noop, IPreference } from "./hooks";
-import { MessageRecord } from "@octal/store";
+import { MessageRecord, Preference } from "@octal/store";
+
+const preference: Preference = "webapp.message.view";
 
 export default React.memo<IPreference>((props) => {
-    const { user, preferences: preference, setPreference } = props;
+    const { user, preferences, setPreference } = props;
     const sampleMessage = new MessageRecord({
         id: "0",
         user_id: user.id,
@@ -18,7 +20,7 @@ export default React.memo<IPreference>((props) => {
         return (e: React.MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            setPreference("message_type", type);
+            setPreference(preference, type);
         };
     }
 
@@ -40,7 +42,9 @@ export default React.memo<IPreference>((props) => {
                             type="checkbox"
                             className="form-checkbox rounded-full mx-2"
                             onChange={noop}
-                            checked={option.value == preference.message_type}
+                            checked={
+                                option.value == preferences.get(preference)
+                            }
                         />
                         <span className="text-base text-gray-600 font-semibold">
                             {option.name}
