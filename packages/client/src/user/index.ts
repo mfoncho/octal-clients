@@ -1,13 +1,18 @@
 import { io } from "../types";
 import BaseClient, { Params } from "../base";
 
-export type UpdatePreferencesRequest = Partial<io.Preferences>;
+export type PreferenceValue = string | number | boolean;
 
 export interface UpdateUserProfileRequest {
     name?: string;
     about?: string;
     avatar?: File | string;
     username?: string;
+}
+
+export interface SetPreferenceRequest {
+    preference: string;
+    value: PreferenceValue | PreferenceValue[];
 }
 
 export interface UpdatePasswordRequest {
@@ -90,15 +95,15 @@ export default class UserClient extends BaseClient {
         return data;
     }
 
-    async getPreferences(params?: Params): Promise<io.Preferences> {
+    async getPreferences(params?: Params): Promise<io.Preference[]> {
         const { data } = await this.endpoint.get("/preferences", params);
         return data;
     }
 
-    async updatePreferences(
-        payload: UpdatePreferencesRequest,
+    async setPreference(
+        payload: SetPreferenceRequest,
         params?: Params
-    ): Promise<io.Preferences> {
+    ): Promise<io.Preference> {
         const { data } = await this.endpoint.patch(
             "/preferences",
             payload,

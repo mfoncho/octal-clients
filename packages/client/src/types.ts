@@ -14,6 +14,8 @@ export type AccessType = "public" | "private" | "direct";
 
 export type Id = string;
 
+export type PreferenceValue = string | number | boolean;
+
 export interface Unique {
     id: Id;
 }
@@ -157,14 +159,9 @@ export namespace io {
         resolved_at?: string;
     }
 
-    export interface Preferences {
-        theme: string;
-        locale: string;
-        timezone: string;
-        time_format: "12" | "24";
-        message_type: "default" | "compact";
-        theme_mode: "light" | "dark";
-        notifications: boolean;
+    export interface Preference {
+        preference: string;
+        value: PreferenceValue | PreferenceValue[];
     }
 
     export interface Presence {
@@ -311,7 +308,7 @@ export namespace io {
         user: User;
         roles: UserRole[];
         token: string;
-        preferences: Preferences;
+        preferences: Preference[];
     }
 
     export interface SpaceRole extends Unique, BelongsToSpace {
