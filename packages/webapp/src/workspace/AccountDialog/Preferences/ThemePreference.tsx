@@ -1,8 +1,6 @@
 import React from "react";
-import colors from "src/colors";
+import { colors } from "src/theme";
 import { noop, IPreference } from "./hooks";
-
-type ColorT = keyof typeof colors;
 
 const preference = "webapp.theme.color";
 
@@ -14,21 +12,29 @@ export default React.memo<IPreference>((props) => {
             props.setPreference(preference, type);
         };
     }
-    return (
-        <div className="flex flex-row flex-wrap py-8">
-            {Object.keys(colors).map((color) => (
+
+    function renderColor(key: string) {
+        //@ts-ignore
+        let palette = colors[key as any];
+        if (typeof palette === "object") {
+            return (
                 <input
+                    key={key}
                     onChange={noop}
-                    checked={props.preferences.get(preference) == color}
-                    onClick={handleSetTheme(color)}
-                    key={color}
+                    checked={props.preferences.get(preference) == key}
+                    onClick={handleSetTheme(key)}
                     type="checkbox"
                     className="form-checkbox border-transparent m-2 w-8 h-8 rounded-full"
                     style={{
-                        backgroundColor: colors[color as ColorT]["A400"],
+                        backgroundColor: palette["700"],
                     }}
                 />
-            ))}
+            );
+        }
+    }
+    return (
+        <div className="flex flex-row flex-wrap py-8">
+            {Object.keys(colors).map(renderColor)}
         </div>
     );
 });
