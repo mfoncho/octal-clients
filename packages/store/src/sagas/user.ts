@@ -31,17 +31,17 @@ function* broadcast(action: UserActions.UserBroadcastAction): Iterable<any> {
 function* getPreferences(): Iterable<any> {
     try {
         const data = (yield client.getPreferences()) as any;
-        yield put(UserActions.preferencesUpdated(data));
+        yield put(UserActions.preferenceSet(data));
     } catch (e) {}
 }
 
-function* preferences({
+function* setPreference({
     payload,
     resolve,
-}: UserActions.UpdatePreferencesAction): Iterable<any> {
+}: UserActions.SetPreferenceAction): Iterable<any> {
     try {
-        const data = (yield client.updatePreferences(payload)) as any;
-        yield put(UserActions.preferencesUpdated(data));
+        yield put(UserActions.preferenceSet(payload));
+        const data = (yield client.setPreference(payload)) as any;
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -203,8 +203,8 @@ export const tasks = [
     },
     {
         effect: takeEvery,
-        type: Actions.UPDATE_PREFERENCES,
-        handler: preferences,
+        type: Actions.SET_PREFERENCE,
+        handler: setPreference,
     },
     { effect: takeEvery, type: Actions.USER_CONNECTED, handler: connected },
     { effect: takeEvery, type: Actions.USER_BROADCAST, handler: broadcast },

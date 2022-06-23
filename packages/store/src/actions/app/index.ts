@@ -82,7 +82,7 @@ export type CollectionLoadedAction = Action<
     CollectionLoadedPayload
 >;
 
-export type AuthAction = Action<AUTH, io.Auth | {}>;
+export type AuthAction = Action<AUTH, io.Auth>;
 
 export type StoreIntAction = Action<STORE_INIT, {}>;
 

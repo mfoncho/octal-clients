@@ -1,4 +1,4 @@
-import type { io } from "@octal/client";
+import type { io, PreferenceValue } from "@octal/client";
 import type { Channel } from "@octal/endpoint";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
@@ -17,16 +17,17 @@ import {
     PRESENCE_LOADED,
     PRESENCE_UPDATED,
     UPDATE_USER_PROFILE,
-    PREFERENCES_UPDATED,
+    PREFERENCE_SET,
     UPDATE_USER_PASSWORD,
-    UPDATE_PREFERENCES,
+    SET_PREFERENCE,
 } from "./types";
 
 export * from "./types";
 
-export type PreferencesUpdatedPayload = Partial<io.Preferences>;
-
-export type UpdatePreferencesPayload = Partial<io.Preferences>;
+export interface SetPreferencePayload {
+    preference: string;
+    value: PreferenceValue;
+}
 
 export interface AssignedPayload {
     user_id: string;
@@ -107,10 +108,10 @@ export type SetUserStatusAction = IOAction<
     any
 >;
 
-export type UpdatePreferencesAction = IOAction<
-    UPDATE_PREFERENCES,
-    UpdatePreferencesPayload,
-    io.Preferences
+export type SetPreferenceAction = IOAction<
+    SET_PREFERENCE,
+    SetPreferencePayload,
+    io.Preference
 >;
 
 export type SetUserPresenceAction = IOAction<
@@ -147,10 +148,7 @@ export type PresenceUpdatedAction = Action<
     PresenceUpdatedPayload
 >;
 
-export type PreferencesUpdatedAction = Action<
-    PREFERENCES_UPDATED,
-    PreferencesUpdatedPayload
->;
+export type PreferenceSetAction = Action<PREFERENCE_SET, io.Preference>;
 
 export type UserConnectedAction = Action<USER_CONNECTED, UserConnectedPayload>;
 
@@ -200,16 +198,18 @@ export function presenceUpdated(
     return createAction(PRESENCE_UPDATED, payload);
 }
 
-export function preferencesUpdated(
-    payload: PreferencesUpdatedPayload
-): PreferencesUpdatedAction {
-    return createAction(PREFERENCES_UPDATED, payload);
+export function preferenceSet(payload: io.Preference): PreferenceSetAction {
+    return createAction(PREFERENCE_SET, payload);
 }
 
-export function updatePreferences(
-    payload: UpdatePreferencesPayload
-): UpdatePreferencesAction {
-    return createIOAction<UPDATE_PREFERENCES>(UPDATE_PREFERENCES, payload);
+export function setPreference(
+    preference: string,
+    value: PreferenceValue
+): SetPreferenceAction {
+    return createIOAction<SET_PREFERENCE>(SET_PREFERENCE, {
+        preference,
+        value,
+    });
 }
 
 export function removePresence(

@@ -2,16 +2,6 @@ import { Record, fromJS } from "immutable";
 import { Unique, Id } from "@octal/client";
 import { io } from "@octal/client";
 
-export class PreferencesRecord extends Record<io.Preferences>({
-    theme: "",
-    locale: "",
-    timezone: "",
-    time_format: "12",
-    theme_mode: "dark",
-    message_type: "default",
-    notifications: true,
-}) {}
-
 export class Presence extends Record({
     state: "offline" as io.PresenceState,
     timestamp: "0",

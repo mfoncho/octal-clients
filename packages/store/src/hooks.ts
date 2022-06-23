@@ -10,6 +10,7 @@ import {
     SpacePermissions,
     Presence,
     Calendar,
+    Preference,
     CardRecord,
     ColumnRecord,
     ThreadRecord,
@@ -141,6 +142,16 @@ export function useBoardsStore() {
 
 export function usePreferences() {
     return useSelector(selectors.preferences);
+}
+
+export function usePreference(preference: Preference) {
+    const selector = useCallback(
+        ({ preferences }: State) => {
+            return preferences.get(preference);
+        },
+        [preference]
+    );
+    return useSelector(selector);
 }
 
 export function useSpaceTopicsIndex(
