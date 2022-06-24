@@ -67,6 +67,12 @@ function* loadBoardCards({
     }
 }
 
+function* boardLoadedLoadBoardCards({
+    payload,
+}: BoardActions.BoardLoadedAction): Iterable<any> {
+    yield put(BoardActions.loadBoardCards({ board_id: payload.id }));
+}
+
 function* create({
     payload,
     resolve,
@@ -255,6 +261,12 @@ export const tasks = [
     { effect: takeEvery, type: Actions.CREATE_CARD, handler: create },
 
     { effect: takeEvery, type: Actions.LOAD_CARDS, handler: loadBoardCards },
+
+    {
+        effect: takeEvery,
+        type: Actions.BOARD_LOADED,
+        handler: boardLoadedLoadBoardCards,
+    },
 
     { effect: takeEvery, type: Actions.STORE_CARDS, handler: store },
 

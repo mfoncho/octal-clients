@@ -36,6 +36,12 @@ function* fetch({
     }
 }
 
+function* boardLoadedLoadBoardColumns({
+    payload,
+}: BoardActions.BoardLoadedAction): Iterable<any> {
+    yield put(BoardActions.loadBoardColumns({ board_id: payload.id }));
+}
+
 function* loadBoardColumns({
     payload,
     resolve,
@@ -179,6 +185,12 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
 
 export const tasks = [
     { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+
+    {
+        effect: takeEvery,
+        type: Actions.BOARD_LOADED,
+        handler: boardLoadedLoadBoardColumns,
+    },
 
     { effect: takeEvery, type: Actions.CREATE_COLUMN, handler: create },
 
