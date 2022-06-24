@@ -43,7 +43,7 @@ export default React.memo(() => {
         dialog.close({} as any);
 
     return (
-        <header className="flex border-b flex-none border-gray-200 flex-row items-center h-14 sm:h-20  justify-between">
+        <header className="flex border-b flex-none border-gray-200 flex-row items-center h-14 sm:h-20  justify-between bg-primary-50">
             <div className="flex flex-row items-center pl-1 sm:pl-8 pr-2">
                 <Button
                     variant="icon"
