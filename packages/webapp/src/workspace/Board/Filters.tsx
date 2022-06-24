@@ -60,7 +60,7 @@ export default React.memo(() => {
                 <input
                     {...input.props}
                     placeholder="Quick search board"
-                    className="pl-8 font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700 focus:ring-primary-500 border-gray-400 ring rounded py-1 px-2 focus:shadow"
+                    className="pl-8 bg-white font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700 focus:ring-primary-500 border-gray-400 ring rounded py-1 px-2 focus:shadow"
                 />
                 <div className="px-2 absolute">
                     <Icons.Filter className="text-gray-500" />
