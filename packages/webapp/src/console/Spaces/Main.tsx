@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useInput } from "src/utils";
 import moment from "moment";
 import * as Icons from "@octal/icons";
-import { SearchInput, Label } from "@octal/ui";
+import { Label } from "@octal/ui";
 import Pagination from "@material-ui/lab/Pagination";
 import { Page } from "src/types";
 import Layout from "@console/Layout";
@@ -20,7 +19,6 @@ const defaultPage: Page<io.Space> = {
 };
 
 export default React.memo(() => {
-    const search = useInput("");
     const navigate = useNavigate();
     const location = useLocation();
     const navigator = useNavigator();
@@ -65,23 +63,23 @@ export default React.memo(() => {
     }
 
     return (
-        <Layout className="flex flex-grow flex-col p-2">
-            <table className="p-2">
+        <Layout className="flex flex-grow flex-col p-4 bg-slate-200">
+            <table className="p-2 rounded-md overflow-hidden shadow">
                 <thead className="bg-gray-50">
                     <tr>
-                        <th scope="col px-6 py-3">
-                            <div>
-                                <SearchInput {...search.props} />
+                        <th scope="col">
+                            <div className="px-6 text-left text-xs w-full font-medium text-gray-500 uppercase">
+                                Space
                             </div>
                         </th>
                         <th scope="col" className="text-center px-6 py-3">
                             <div className="text-xs font-medium text-gray-500 uppercase">
-                                ACCESS
+                                Access
                             </div>
                         </th>
                         <th scope="col" className="text-right px-6 py-3">
                             <div className="text-xs font-medium text-gray-500 uppercase">
-                                CREATED
+                                Created
                             </div>
                         </th>
                     </tr>

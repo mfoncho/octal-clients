@@ -107,13 +107,13 @@ export default React.memo(() => {
     }
 
     return (
-        <Layout className="flex flex-grow flex-col p-2">
-            <div className="flex flex flex-col divide-y divide-gray-100">
-                <div className="grid grid-cols-6 py-4 text-gray-700 rounded-t-md text-sm font-semibold bg-gray-100">
+        <Layout className="flex flex-grow flex-col p-4 bg-slate-200">
+            <div className="flex flex flex-col divide-y divide-gray-100 rounded-md overflow-hidden shadow">
+                <div className="grid grid-cols-6 py-3 text-gray-700 rounded-t-md text-xs font-semibold bg-gray-100">
                     <div className="col-span-2 px-6 overflow-hidden">
-                        Invite
+                        INVITE
                     </div>
-                    <div className="px-6 overflow-hidden">Space</div>
+                    <div className="px-6 overflow-hidden">SPACE</div>
                     <div className="px-6 overflow-hidden"></div>
                     <div className="px-6 overflow-hidden flex justify-center"></div>
                     <div />
@@ -121,7 +121,7 @@ export default React.memo(() => {
                 {page.data.map((invite) => (
                     <div
                         key={invite.id}
-                        className="grid grid-cols-6 text-gray-700 hover:bg-primary-50 text-sm space-x-4">
+                        className="grid grid-cols-6 text-gray-700 hover:bg-primary-50 text-sm space-x-4 bg-white">
                         <div className="col-span-2 flex flex-row overflow-hidden">
                             <div className="flex flex-row items-center px-4">
                                 {invite.email && invite.mailed && (

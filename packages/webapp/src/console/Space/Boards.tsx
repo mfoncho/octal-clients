@@ -44,11 +44,13 @@ export default function Boards({ space }: IBoards) {
     }
 
     return (
-        <div className="flex flex-col my-4 border-2 rounded-md border-gray-200">
+        <div className="flex flex-col shadow overflow-hidden rounded-md bg-white">
             <div className="py-4 bg-gray-100 flex flex-row justify-between">
                 <span className="font-bold px-4 text-gray-800">Boards</span>
             </div>
-            <div>{boards.map(renderTopic)}</div>
+            <div className="flex flex-col divide-y divide-slate-200">
+                {boards.map(renderTopic)}
+            </div>
         </div>
     );
 }

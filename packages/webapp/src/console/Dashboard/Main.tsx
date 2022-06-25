@@ -27,8 +27,6 @@ const defaultWorkspaceCounters = {
     complete_cards: 0,
 };
 
-const noop = () => {};
-
 export interface IInfoCard {
     name: string;
     count: number;
@@ -53,7 +51,7 @@ function InfoCard(props: IInfoCard) {
     const Icon = props.icon ?? BlankIcon;
 
     return (
-        <div className="flex flex-col overflow-hidden shadow rounded-lg">
+        <div className="flex flex-col overflow-hidden shadow rounded-lg bg-white">
             <div className="flex flex-row p-4 items-center">
                 <div className="flex justify-center items-center rounded-lg w-12 h-12 bg-primary-500 text-white">
                     <Icon className="h-6 w-6" />
@@ -78,7 +76,7 @@ function InfoCard(props: IInfoCard) {
 function LinkCard(props: ILinkCard) {
     const Icon = props.icon ?? BlankIcon;
     return (
-        <div className="flex flex-col overflow-hidden shadow rounded-lg">
+        <div className="flex flex-col overflow-hidden shadow rounded-lg bg-white">
             <div className="flex flex-row p-4 items-center">
                 <div className="flex justify-center items-center rounded-lg w-12 h-12 bg-primary-500 text-white">
                     <Icon className="h-8 w-8" />
@@ -187,17 +185,7 @@ export default function Main() {
     });
 
     return (
-        <Layout className="flex flex-col p-4">
-            <div className="flex flex-col items-center pb-4 justify-center">
-                <img
-                    alt={workspace.get("name")}
-                    src={workspace.get("icon")}
-                    className="h-24 h-24 rounded-lg shadow"
-                />
-                <span className="text-lg font-bold py-2 text-gray-800">
-                    {workspace.get("name")}
-                </span>
-            </div>
+        <Layout className="flex flex-col p-4 bg-slate-200">
             <div className="grid grid-cols-2 gap-4 py-4">
                 {linkCards.map((lcard) => (
                     <LinkCard key={lcard.name} {...lcard} />

@@ -146,9 +146,13 @@ export default function Role(props: IRole) {
 
     function renderPermissionGroup(group: IPermissionsGroup) {
         return (
-            <div key={group.key} className="flex flex-col my-2 ">
-                <span className="font-bold text-gray-600">{group.name}</span>
-                <div className="group flex flex-col divide-y-1 divide-cool-gray-100 divide-solid py-4 border-2 border-gray-200 rounded-lg">
+            <div
+                key={group.key}
+                className="flex flex-col my-2 bg-white rounded-md shadow divide-y divide-slate-200">
+                <span className="font-bold text-gray-600 px-4 py-2">
+                    {group.name}
+                </span>
+                <div className="group flex flex-col divide-y divide-slate-200">
                     {group.permissions.map(renderPermission)}
                 </div>
             </div>

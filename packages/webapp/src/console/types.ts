@@ -166,8 +166,8 @@ export namespace io {
 
     export interface Account extends User {
         status: string;
-        phone: string;
         about: string;
+        roles: Role[];
         presence: Presence;
         created_at: string;
         suspended_at: string;

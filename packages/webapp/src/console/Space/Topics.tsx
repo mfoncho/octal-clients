@@ -45,11 +45,13 @@ export default function Topics({ space }: ITopics) {
     }
 
     return (
-        <div className="flex flex-col my-4 border-2 rounded-md border-gray-200">
+        <div className="flex flex-col shadow rounded-md bg-white overflow-hidden">
             <div className="py-4 bg-gray-100 flex flex-row justify-between">
                 <span className="font-bold px-4 text-gray-800">Topics</span>
             </div>
-            <div>{topics.map(renderTopic)}</div>
+            <div className="flex flex-col divide-y divide-slate-200">
+                {topics.map(renderTopic)}
+            </div>
         </div>
     );
 }

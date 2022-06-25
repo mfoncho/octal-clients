@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@console/Layout";
-import { Avatar } from "@octal/ui";
 import { io } from "@console/types";
 import client from "@console/client";
 import { useParams } from "react-router-dom";
+import Roles from "./Roles";
 import Profile from "./Profile";
 import UserSpaces from "./Workspaces";
 
@@ -26,12 +26,10 @@ export default React.memo(() => {
     if (!user) return <></>;
     return (
         <Layout
-            icon={<Avatar alt={user.name} src={user.avatar} />}
             title={user.name}
-            className="flex flex-col p-4">
-            <div className="pb-8">
-                <Profile user={user} />
-            </div>
+            className="flex flex-col p-4 bg-slate-200 space-y-4">
+            <Profile user={user} />
+            <Roles roles={user.roles} />
             <UserSpaces id={params.user_id!} />
         </Layout>
     );

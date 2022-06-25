@@ -41,13 +41,15 @@ export default React.memo<{ id: string }>((props) => {
         );
     }
     return (
-        <div className="flex flex-col border-2 rounded border-gray-200">
+        <div className="flex flex-col rounded-md bg-white shadow overflow-hidden">
             <div className="py-4 bg-gray-100">
                 <span className="font-bold py-4 px-4 text-gray-800">
                     Spaces
                 </span>
             </div>
-            <div>{spaces.map(renderSpace)}</div>
+            <div className="flex flex-col divide-y divide-slate-200">
+                {spaces.map(renderSpace)}
+            </div>
         </div>
     );
 });

@@ -164,7 +164,7 @@ export default function Members({ space, updateSpace }: IMembers) {
     }
 
     return (
-        <div className="flex flex-col my-4 border-2 rounded-md border-gray-200">
+        <div className="flex flex-col rounded-md overflow-hidden bg-white shadow">
             <UsersDialog
                 loading={loading}
                 onSelect={handleAddUser}
@@ -185,7 +185,9 @@ export default function Members({ space, updateSpace }: IMembers) {
                     </Button>
                 </div>
             </div>
-            <div>{members.map(renderMember)}</div>
+            <div className="flex flex-col divide-y divide-slate-200">
+                {members.map(renderMember)}
+            </div>
         </div>
     );
 }

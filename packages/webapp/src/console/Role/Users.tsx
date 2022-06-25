@@ -1,6 +1,6 @@
 import React from "react";
+import * as Icons from "@octal/icons";
 import { io } from "@console/types";
-import { BiTrash } from "react-icons/bi";
 import { Dialog, Button } from "@octal/ui";
 import { useNavigator } from "@console/hooks";
 import moment from "moment";
@@ -123,7 +123,7 @@ export default function Members({ role }: IMembers) {
                                 color="clear"
                                 onClick={handleRemoveUser(user)}
                                 className="px-2">
-                                <BiTrash />
+                                <Icons.Delete />
                             </Button>
                         )}
                     </div>
@@ -133,7 +133,7 @@ export default function Members({ role }: IMembers) {
     }
 
     return (
-        <div className="flex flex-col my-4 border-2 rounded-md border-gray-200">
+        <div className="flex flex-col shadow rounded-md bg-white overflow-hidden">
             <UsersDialog
                 loading={loading}
                 onSelect={handleAddUser}
@@ -143,7 +143,7 @@ export default function Members({ role }: IMembers) {
             />
             <div className="py-2 bg-gray-100 flex flex-row justify-between">
                 <div className="flex flex-row flex-1 justify-between items-center px-4">
-                    <span className="font-bold px-4 text-gray-800">Users</span>
+                    <span className="font-bold px-4 text-gray-800">User</span>
                     <span className="font-semibold text-sm px-4 text-gray-600">
                         JOINED
                     </span>
@@ -158,7 +158,9 @@ export default function Members({ role }: IMembers) {
                     </div>
                 )}
             </div>
-            <div>{rusers.map(renderUser)}</div>
+            <div className="divide-y divide-slate-200">
+                {rusers.map(renderUser)}
+            </div>
         </div>
     );
 }

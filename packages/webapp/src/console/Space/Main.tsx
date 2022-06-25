@@ -82,7 +82,7 @@ export default React.memo(() => {
         <Layout
             icon={icon}
             title={space.name}
-            className="flex flex-grow flex-col p-2">
+            className="flex flex-grow flex-col p-4 bg-slate-200 space-y-6">
             {space.is_shutdown && (
                 <div className="flex flex-row justify-end py-4">
                     <Button

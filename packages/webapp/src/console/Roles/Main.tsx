@@ -29,13 +29,13 @@ export default React.memo(() => {
     }
 
     return (
-        <Layout className="flex flex-grow flex-col p-2">
+        <Layout className="flex flex-grow flex-col p-4 bg-slate-200">
             <div className="flex flex-row py-4 justify-end items-center">
                 <Button color="primary" onClick={dialog.opener("create")}>
                     Create
                 </Button>
             </div>
-            <div className="flex flex-col rounded-md border-2 border-gray-200 divide-y-2 divide-solid divide-gray-200">
+            <div className="flex flex-col divide-y divide-solid divide-gray-200 rounded-md bg-white overflow-hidden shadow">
                 {roles.map((role) => (
                     <div
                         key={role.id}
