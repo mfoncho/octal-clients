@@ -31,7 +31,7 @@ const Manager = React.memo<IManager>((props) => {
         <Link
             to={props.path}
             className={clx(
-                "flex flex-row px-4 py-1 items-center hover:bg-primary-800",
+                "flex flex-row px-2 py-1 items-center hover:bg-primary-800",
                 {
                     ["text-white bg-primary-500"]: selected,
                     ["text-primary-200"]: !selected,
@@ -50,8 +50,20 @@ const Manager = React.memo<IManager>((props) => {
 export default React.memo(() => {
     return (
         <div className="flex flex-grow flex-col overflow-hidden">
-            <Scrollbars autoHide className="flex flex-col pb-4 pt-12">
-                {managers.map(renderManager)}
+            <div className="flex flex-col py-4 px-5 border-y border-primary-400">
+                <span className="font-black text-primary-100 text-lg">
+                    Admin Console
+                </span>
+            </div>
+            <Scrollbars autoHide className="flex flex-col pb-4">
+                <div className="flex flex-col">
+                    <div className="flex flex-col py-2 px-5 border-y border-primary-400">
+                        <span className="text-sm font-bold text-primary-100">
+                            General
+                        </span>
+                    </div>
+                    {managers.map(renderManager)}
+                </div>
             </Scrollbars>
         </div>
     );

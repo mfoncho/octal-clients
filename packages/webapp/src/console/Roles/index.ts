@@ -1,4 +1,4 @@
-import { GiSecurityGate as icon } from "react-icons/gi";
+import * as Icons from "@octal/icons";
 import paths from "@console/paths";
 import main from "./Main";
 
@@ -6,7 +6,7 @@ const name = "Roles";
 const path = paths.roles;
 
 export default {
-    icon,
+    icon: Icons.Role,
     main,
     name,
     path,

@@ -6,7 +6,7 @@ const name = "Users";
 const path = paths.users;
 
 export default {
-    icon: Icons.User,
+    icon: Icons.Users,
     main,
     name,
     path,
