@@ -1,4 +1,5 @@
 const admin = "/console";
+const dashboard = `${admin}/dashboard`;
 const users = `${admin}/users`;
 const roles = `${admin}/roles`;
 const role = `${roles}/:role_id`;
@@ -7,7 +8,6 @@ const spaces = `${admin}/spaces`;
 const space = `${spaces}/:space_id`;
 const settings = `${admin}/settings`;
 const workspace = `${admin}/workspace`;
-const dashboard = `${admin}/dashboard`;
 const invitations = `${admin}/invitations`;
 
 const paths = {

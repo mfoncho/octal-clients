@@ -1,5 +1,6 @@
 import { MdDashboard as icon } from "react-icons/md";
 import paths from "@console/paths";
+import { route } from "../types";
 import main from "./Main";
 
 const name = "Dashboard";
@@ -10,4 +11,5 @@ export default {
     main,
     name,
     path,
+    type: route.general,
 };

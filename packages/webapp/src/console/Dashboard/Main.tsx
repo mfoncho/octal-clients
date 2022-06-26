@@ -43,7 +43,7 @@ export interface ILinkCard extends IInfoCard {
     path: string;
 }
 
-function BlankIcon(props: any) {
+function BlankIcon(_props: any) {
     return <></>;
 }
 
@@ -76,7 +76,9 @@ function InfoCard(props: IInfoCard) {
 function LinkCard(props: ILinkCard) {
     const Icon = props.icon ?? BlankIcon;
     return (
-        <div className="flex flex-col overflow-hidden shadow rounded-lg bg-white">
+        <Link
+            to={props.path}
+            className="flex flex-col overflow-hidden shadow rounded-lg bg-white hover:bg-gray-100">
             <div className="flex flex-row p-4 items-center">
                 <div className="flex justify-center items-center rounded-lg w-12 h-12 bg-primary-500 text-white">
                     <Icon className="h-8 w-8" />
@@ -94,19 +96,11 @@ function LinkCard(props: ILinkCard) {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row py-2 px-4 bg-primary-50">
-                <Link
-                    to={props.path}
-                    className="font-bold text-sm text-primary-500">
-                    view all
-                </Link>
-            </div>
-        </div>
+        </Link>
     );
 }
 
 export default function Main() {
-    const workspace = useWorkspace();
     const [counters, setCounters] = useState<io.WorkspaceCounters>(
         defaultWorkspaceCounters
     );
@@ -135,17 +129,17 @@ export default function Main() {
     const infoCards: IInfoCard[] = [];
 
     linkCards.push({
-        name: "Spaces",
-        path: paths.spaces,
-        count: counters.spaces,
-        icon: spacesmodule.icon,
-    });
-
-    linkCards.push({
         name: "Users",
         path: paths.users,
         count: counters.users,
         icon: usersmodule.icon,
+    });
+
+    linkCards.push({
+        name: "Spaces",
+        path: paths.spaces,
+        count: counters.spaces,
+        icon: spacesmodule.icon,
     });
 
     infoCards.push({

@@ -1,6 +1,7 @@
 import * as Icons from "@octal/icons";
 import paths from "@console/paths";
 import main from "./Main";
+import { route } from "../types";
 
 const name = "User";
 const path = paths.user;
@@ -10,4 +11,5 @@ export default {
     main,
     name,
     path,
+    type: route.general,
 };

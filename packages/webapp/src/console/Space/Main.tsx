@@ -83,6 +83,16 @@ export default React.memo(() => {
             icon={icon}
             title={space.name}
             className="flex flex-grow flex-col p-4 bg-slate-200 space-y-6">
+            <Boards space={space} />
+            <Topics space={space} />
+            <Members space={space} updateSpace={setSpace} />
+            <WarningDialog
+                onConfirm={handleDeleteSpace}
+                loading={loading}
+                space={space}
+                open={dialog.destroy}
+                onClose={dialog.close}
+            />
             {space.is_shutdown && (
                 <div className="flex flex-row justify-end py-4">
                     <Button
@@ -100,16 +110,6 @@ export default React.memo(() => {
                     </Button>
                 </div>
             )}
-            <Boards space={space} />
-            <Topics space={space} />
-            <Members space={space} updateSpace={setSpace} />
-            <WarningDialog
-                onConfirm={handleDeleteSpace}
-                loading={loading}
-                space={space}
-                open={dialog.destroy}
-                onClose={dialog.close}
-            />
         </Layout>
     );
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
+import cls from "classnames";
 import * as Icons from "@octal/icons";
 import { Label } from "@octal/ui";
 import Pagination from "@material-ui/lab/Pagination";
@@ -88,8 +89,12 @@ export default React.memo(() => {
                     {page.data.map((space) => (
                         <tr
                             key={space.id}
+                            role="button"
                             onClick={handleOpenSpace(space)}
-                            className="hover:bg-primary-50 text-sm">
+                            className={cls(
+                                "hover:bg-primary-50 text-sm",
+                                space.is_shutdown && "bg-gray-100 text-gray-500"
+                            )}>
                             <td className="px-6 py-3">
                                 <div className="flex flex-row items-center">
                                     <div className="w-8 h-8 flex justify-center items-center text-white bg-primary-500 rounded-lg">

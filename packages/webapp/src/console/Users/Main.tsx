@@ -98,6 +98,7 @@ export default React.memo(() => {
                     {page.data.map((user) => (
                         <tr
                             key={user.id}
+                            role="button"
                             className="hover:bg-primary-50 text-sm"
                             onClick={handleOpenUser(user)}>
                             <td className="px-6 py-3">

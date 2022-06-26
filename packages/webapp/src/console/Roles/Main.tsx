@@ -39,6 +39,7 @@ export default React.memo(() => {
                 {roles.map((role) => (
                     <div
                         key={role.id}
+                        role="button"
                         onClick={handleOpenRole(role)}
                         className="hover:bg-primary-50 py-4">
                         <span className="px-4 font-semibold">

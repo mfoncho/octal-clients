@@ -28,6 +28,7 @@ export default React.memo<{ id: string }>((props) => {
     function renderSpace(space: io.Space) {
         return (
             <div
+                role="button"
                 key={space.id}
                 className="flex flex-row px-4 py-2 items-center hover:bg-primary-50"
                 onClick={handleOpenSpace(space)}>

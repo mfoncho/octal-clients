@@ -1,3 +1,7 @@
+export const route = {
+    general: "General",
+    workspace: "Workspace",
+};
 export type PresenceState = "online" | "offline" | "busy" | "dnd" | "away";
 
 export namespace io {
