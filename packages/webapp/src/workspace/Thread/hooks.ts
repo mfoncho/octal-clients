@@ -63,12 +63,13 @@ export function usePostInput(thread: ThreadRecord) {
             if (target.value.length > 0 || target.files.length > 0) {
                 const [file, ...files] = target.files;
                 const postAction = ThreadActions.postMessage({
-                    content: target.value,
                     reply_id: reply_id!,
                     space_id: thread.space_id,
                     thread_id: thread.id,
-                    //@ts-ignore
-                    attachment: file,
+                    params: {
+                        attachment: file,
+                        content: target.value,
+                    },
                 });
                 setDraft("", files);
                 return dispatch(postAction);

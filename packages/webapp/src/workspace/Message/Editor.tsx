@@ -19,7 +19,9 @@ export default React.memo<IEditor>((props: any) => {
     function handleSavePost(e: any) {
         if (e.target.value.trim().length < 1) {
             const params = {
-                content: e.target.value.trim(),
+                params: {
+                    content: e.target.value.trim(),
+                },
                 thread_id: message!.thread_id,
                 message_id: message!.id,
                 space_id: message!.space_id,

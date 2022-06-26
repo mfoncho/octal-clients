@@ -112,7 +112,9 @@ export function useActions(message: MessageRecord, authid: string = "") {
     const onUpdate = useCallback(
         (text: string) => {
             const params = {
-                content: text.trim(),
+                params: {
+                    content: text.trim(),
+                },
                 thread_id: message!.thread_id,
                 message_id: message!.id,
                 space_id: message!.space_id,
