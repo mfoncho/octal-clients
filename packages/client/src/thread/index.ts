@@ -20,6 +20,16 @@ export interface PostDirectMessageRequest {
     };
 }
 
+export interface PostMessageRequest {
+    reply_id?: string;
+    thread_id: string;
+    params: {
+        content: string;
+        embeds?: any[];
+        attachment?: File;
+    };
+}
+
 export interface ReactMessageRequest {
     thread_id: string;
     message_id: string;
@@ -30,14 +40,6 @@ export interface UnreactMessageRequest {
     thread_id: string;
     message_id: string;
     reaction: string;
-}
-
-export interface PostMessageRequest {
-    content: string;
-    attachemnt?: File;
-    embeds: any;
-    reply_id?: string;
-    thread_id: string;
 }
 
 export interface DeleteMessageRequest {
@@ -58,8 +60,9 @@ export interface UnpinMessageRequest {
 export interface UpdateMessageRequest {
     message_id: string;
     thread_id: string;
-    content: string;
-    markdown?: boolean;
+    params: {
+        content: string;
+    };
 }
 
 export interface LoadThreadRequest {
@@ -75,9 +78,9 @@ export default class ThreadClient extends BaseClient {
             ? `/threads/${request.thread_id}/messages/${request.reply_id}/reply`
             : `/threads/${request.thread_id}/messages`;
         const form = new FormData();
-        form.append("content", request.content);
-        if (request.attachemnt) {
-            form.append("attachment", request.attachemnt);
+        form.append("content", request.params.content);
+        if (request.params.attachment) {
+            form.append("attachment", request.params.attachment);
         }
         const { data } = await this.endpoint.post(path, form, params);
         return data;
@@ -156,10 +159,11 @@ export default class ThreadClient extends BaseClient {
         params?: Params
     ): Promise<io.Message> {
         const path = `/threads/${request.thread_id}/messages/${request.message_id}`;
-        const payload = {
-            content: request.content,
-        };
-        const { data } = await this.endpoint.patch(path, payload, params);
+        const { data } = await this.endpoint.patch(
+            path,
+            request.params,
+            params
+        );
         return data;
     }
 
