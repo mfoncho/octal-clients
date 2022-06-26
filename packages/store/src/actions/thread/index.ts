@@ -135,11 +135,12 @@ export interface LoadThreadPayload {
 }
 
 export interface UpdateMessagePayload {
-    markdown?: boolean;
-    content: string;
+    space_id?: string;
     thread_id: string;
-    space_id: string;
     message_id: string;
+    params: {
+        content: string;
+    };
 }
 
 export interface ConcatConversationPayload {
@@ -149,12 +150,14 @@ export interface ConcatConversationPayload {
 }
 
 export interface PostMessagePayload {
-    embeds: [];
-    content: string;
-    attachment?: File;
-    markdown?: boolean;
-    thread_id: string;
+    params: {
+        embeds?: [];
+        content: string;
+        attachment?: File;
+    };
     space_id: string;
+    reply_id?: string;
+    thread_id: string;
 }
 
 export type ThreadDeletedPayload = Require<
@@ -354,7 +357,6 @@ export type UnpinMessageAction = IOAction<
     io.Message
 >;
 
-
 export type PostMessageAction = IOAction<
     POST_MESSAGE,
     PostMessagePayload,
@@ -420,7 +422,7 @@ export function messageLoaded(payload: NormalizedMessage): MessageLoadedAction {
     };
 }
 
-export function postMessage(payload: NormalizedMessage): PostMessageAction {
+export function postMessage(payload: PostMessagePayload): PostMessageAction {
     return createIOAction<POST_MESSAGE>(POST_MESSAGE, payload);
 }
 
