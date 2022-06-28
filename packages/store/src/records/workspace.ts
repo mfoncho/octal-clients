@@ -6,9 +6,10 @@ export class FileRecord extends Record({
     ext: "",
     name: "",
     size: 0,
-    bucket: "",
-    preview: "",
     filename: "",
+    bucket_id: "",
+    preview_url: "",
+    download_url: "",
 }) {
     get humanSize() {
         let decimals = 2;
