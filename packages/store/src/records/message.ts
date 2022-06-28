@@ -1,4 +1,5 @@
 import { Record, List, fromJS } from "immutable";
+import { FileRecord } from "./workspace";
 import { Unique, Id, Timestamped, BelongsToThread } from "@octal/client";
 import { Slater } from "@octal/markdown";
 
@@ -26,7 +27,7 @@ export class MessageRecord
         id: "" as Id,
         content: "",
         pinned: false,
-        attachement: null as any,
+        attachment: null as FileRecord | null,
         embedded: [],
         user_id: "" as Id,
         markdown: false,
@@ -80,6 +81,13 @@ export class MessageRecord
                 ),
             };
         }
+        if (data.attachment) {
+            data = {
+                ...data,
+                attachment: new FileRecord(data.attachment),
+            };
+        }
+
         return data;
     }
 }
