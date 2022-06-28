@@ -12,7 +12,7 @@ export default function Attachment(props: IAttachment) {
         window.open(props.file.download_url, "_blank");
     }
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row py-1">
             <div className="flex flex-row border-2 rounded-md border-slate-200 items-center py-1 bg-slate-100 space-x-4">
                 <div className="flex flex-row items-center space-x-1">
                     {props.file.preview_url ? (
