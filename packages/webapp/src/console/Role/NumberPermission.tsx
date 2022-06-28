@@ -24,8 +24,12 @@ export default function NumberPermission(props: IPermission) {
             }
         },
         700,
-        [value, props.value]
+        [value]
     );
+
+    React.useEffect(() => {
+        setValue(props.value);
+    }, [props.value]);
 
     function handleChange(_e: React.ChangeEvent<{}>, value: any) {
         setValue(value);

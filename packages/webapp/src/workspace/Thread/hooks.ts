@@ -32,8 +32,8 @@ export function usePostInput(thread: ThreadRecord) {
             setDraft("", []);
         }
         setAccept({
-            max: permissions.get("message.attachment.max") as number,
-            types: permissions.get("message.attachment.types") as string,
+            max: permissions.get("upload.size") as number,
+            types: permissions.get("upload.types") as string,
         });
     }, [permissions]);
 
