@@ -11,6 +11,7 @@ import { Markdown, Text } from "@octal/ui";
 import UserCard from "@workspace/UserCard";
 import { useUser } from "@octal/store";
 import { useActions } from "./hooks";
+import Attachment from "./Attachment";
 import { MessageRecord } from "@octal/store/lib/records";
 
 export interface IMessage {
@@ -129,6 +130,10 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             </div>
                         )}
                     </div>
+
+                    {message.attachment && (
+                        <Attachment file={message.attachment} />
+                    )}
 
                     <div className="flex flex-row flex-wrap ">
                         {message.reactions.map((reaction) => (
