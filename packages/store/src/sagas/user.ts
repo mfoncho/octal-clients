@@ -208,8 +208,8 @@ export const tasks = [
     },
     { effect: takeEvery, type: Actions.USER_CONNECTED, handler: connected },
     { effect: takeEvery, type: Actions.USER_BROADCAST, handler: broadcast },
-    { effect: takeEvery, type: Actions.AUTH, handler: subscribe },
-    { effect: takeEvery, type: Actions.AUTH, handler: syncPresence },
+    { effect: takeEvery, type: Actions.AUTH_LOADED, handler: subscribe },
+    { effect: takeEvery, type: Actions.AUTH_LOADED, handler: syncPresence },
     { effect: takeEvery, type: Actions.SET_USER_STATUS, handler: setStatus },
     //{ effect: takeEvery, type: "STORE_USERS", handler: store },
 ];

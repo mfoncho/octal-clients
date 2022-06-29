@@ -77,7 +77,7 @@ function* subscribe({
 export const tasks = [
     {
         effect: takeEvery,
-        type: Actions.AUTH,
+        type: Actions.AUTH_LOADED,
         handler: loadBookmarks,
     },
     {

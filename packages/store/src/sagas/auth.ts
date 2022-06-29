@@ -3,8 +3,7 @@ import client, { io } from "@octal/client";
 import { userLoaded } from "../actions/user";
 import * as Actions from "../actions/types";
 import {
-    setAuth,
-    authenticate,
+    authLoaded,
     LoginAction,
     LogoutAction,
     AuthAction,
@@ -13,14 +12,7 @@ import {
 
 function* auth({ payload }: AuthAction): Iterable<any> {
     if ("user" in payload && "token" in payload && "roles" in payload) {
-        let data = (payload as any) as io.Auth;
-        if (!Array.isArray(data.roles) || data.roles.length < 1) return false;
-        if (typeof data.user !== "object") return false;
-        if (typeof data.token !== "string") return false;
-        if (typeof data.token === "string" && data.token.length === 0)
-            return false;
-
-        yield put(setAuth(data));
+        let data = payload as any as io.Auth;
         yield put(userLoaded(data.user));
         return true;
     }
@@ -30,7 +22,7 @@ function* auth({ payload }: AuthAction): Iterable<any> {
 function* loadAuth({ resolve: meta }: LoadAuthAction): Iterable<any> {
     try {
         const data = (yield client.getAuth()) as any;
-        yield put(authenticate(data));
+        yield put(authLoaded(data));
         meta.success(data);
     } catch (e) {
         meta.error(e);
@@ -40,7 +32,7 @@ function* loadAuth({ resolve: meta }: LoadAuthAction): Iterable<any> {
 function* doLogin({ payload, resolve: meta }: LoginAction): Iterable<any> {
     try {
         const data = (yield client.login(payload)) as any;
-        yield put(authenticate(data));
+        yield put(authLoaded(data));
         meta.success(data);
     } catch (e) {
         meta.error(e);
@@ -59,7 +51,7 @@ function* doLogout({ resolve: meta }: LogoutAction): Iterable<any> {
 
 export const tasks = [
     //{ effect: takeEvery, type: INIT, handler: init },
-    { effect: takeEvery, type: Actions.AUTH, handler: auth },
+    { effect: takeEvery, type: Actions.AUTH_LOADED, handler: auth },
     { effect: takeEvery, type: Actions.LOGIN, handler: doLogin },
     { effect: takeEvery, type: Actions.LOGOUT, handler: doLogout },
     { effect: takeEvery, type: Actions.LOAD_AUTH, handler: loadAuth },

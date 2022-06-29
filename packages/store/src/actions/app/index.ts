@@ -6,7 +6,7 @@ import { NormalizedRelated } from "../../schemas";
 import {
     ROUTE,
     LOGIN,
-    AUTH,
+    AUTH_LOADED,
     LOGOUT,
     SET_AUTH,
     SET_SITE,
@@ -82,7 +82,7 @@ export type CollectionLoadedAction = Action<
     CollectionLoadedPayload
 >;
 
-export type AuthAction = Action<AUTH, io.Auth>;
+export type AuthAction = Action<AUTH_LOADED, io.Auth>;
 
 export type StoreIntAction = Action<STORE_INIT, {}>;
 
@@ -128,8 +128,8 @@ export function setSite(payload: Partial<io.Site>): SetSiteAction {
     return createAction(SET_SITE, payload);
 }
 
-export function authenticate(payload: io.Auth): AuthAction {
-    return createAction(AUTH, payload);
+export function authLoaded(payload: io.Auth): AuthAction {
+    return createAction(AUTH_LOADED, payload);
 }
 
 export function loadAuth(): LoadAuthAction {

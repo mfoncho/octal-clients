@@ -1,4 +1,4 @@
-import { Permission } from "./auth";
+import { Record } from "immutable";
 
 export interface IPermissionInfo {
     permission: Permission;
@@ -34,6 +34,75 @@ export interface IPermissionsGroup {
     name: string;
     permissions: Array<IPermission>;
 }
+
+export interface BasePermission<T = any> {
+    readonly value: T;
+    readonly overwrite: boolean;
+    readonly permission: string;
+}
+
+export class BooleanPermission
+    extends Record({
+        permission: "",
+        value: false,
+        overwrite: false,
+    })
+    implements BasePermission<boolean> {}
+
+export class NumberPermission
+    extends Record({
+        value: 0,
+        overwrite: false,
+        permission: "",
+    })
+    implements BasePermission<number> {}
+
+export class ListPermission extends Record({
+    value: [] as any[],
+    overwrite: false,
+    permission: "",
+}) {}
+
+export class StringPermission
+    extends Record({
+        value: "",
+        overwrite: false,
+        permission: "",
+    })
+    implements BasePermission<string> {}
+
+const booleanPermission = new BooleanPermission();
+
+const numberPermission = new NumberPermission();
+
+//const listPermission = new ListPermission();
+
+const stringPermission = new StringPermission();
+
+export const permissions = {
+    ["space.create"]: booleanPermission,
+    ["space.manage"]: booleanPermission,
+    ["space.leave"]: booleanPermission,
+    ["card.create"]: booleanPermission,
+    ["card.move"]: booleanPermission,
+    ["card.delete"]: booleanPermission,
+    ["board.manage"]: booleanPermission,
+    ["upload.size"]: numberPermission,
+    ["upload.types"]: stringPermission,
+    ["message.embeds"]: booleanPermission,
+    ["message.edit"]: booleanPermission,
+    ["message.post"]: booleanPermission,
+    ["thread.manage"]: booleanPermission,
+    ["message.delete"]: booleanPermission,
+    ["invite.mail.send"]: booleanPermission,
+    ["invite.link.create"]: booleanPermission,
+};
+
+export type BasePermissionScheme = typeof permissions;
+
+export type Permission = keyof BasePermissionScheme;
+
+export class Permissions extends Record(permissions) {}
 
 export const PermissionGroups: IPermissionsGroup[] = [
     {
@@ -74,7 +143,8 @@ export const PermissionGroups: IPermissionsGroup[] = [
                 name: "Post message",
                 permission: "message.post",
                 type: "boolean",
-                description: "Post messages, participate in thread conversations",
+                description:
+                    "Post messages, participate in thread conversations",
             },
             {
                 name: "Embed link",
@@ -109,14 +179,14 @@ export const PermissionGroups: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Max uploadable file size",
-                permission: "message.attachment.max",
+                permission: "upload.size",
                 type: "number",
                 scale: "MB",
                 description: "Max uploadable file size in MB",
             },
             {
                 name: "Upload types",
-                permission: "message.attachment.types",
+                permission: "upload.types",
                 type: "string",
                 description:
                     "Types of file extensions the user is allowed to upload enter extension type seperated be commas like png image and word documents will be png,docx ",

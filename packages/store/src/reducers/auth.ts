@@ -5,11 +5,11 @@ import * as UserActions from "../actions/user";
 const state = AuthRecord.make({});
 
 export const reducers = {
-    SET_AUTH(_state: AuthRecord, { payload }: any) {
+    [Actions.AUTH_LOADED](_state: AuthRecord, { payload }: any) {
         return AuthRecord.make(payload);
     },
 
-    LOGOUT() {
+    [Actions.LOGOUT]() {
         return AuthRecord.make({});
     },
     [Actions.USER_ASSIGNED](

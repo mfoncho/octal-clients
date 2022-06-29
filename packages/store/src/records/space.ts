@@ -1,5 +1,5 @@
 import { Record, List, Map } from "immutable";
-import { Permission } from "./auth";
+import { Permission } from "./permissions";
 import { Unique, Id, AccessType } from "@octal/client";
 
 export const SpacePermissions = Map<Permission, string | number | boolean>();

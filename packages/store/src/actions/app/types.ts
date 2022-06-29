@@ -42,8 +42,8 @@ export type SET_CONFIG = typeof SET_CONFIG;
 export const LOAD_SITE = "LOAD_SITE";
 export type LOAD_SITE = typeof LOAD_SITE;
 
-export const AUTH = "AUTH";
-export type AUTH = typeof AUTH;
+export const AUTH_LOADED = "AUTH";
+export type AUTH_LOADED = typeof AUTH_LOADED;
 
 export const LOAD_CONFIG = "LOAD_CONFIG";
 export type LOAD_CONFIG = typeof LOAD_CONFIG;
