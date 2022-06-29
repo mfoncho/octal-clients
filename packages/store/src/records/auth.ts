@@ -78,6 +78,7 @@ export class AuthRecord
         {
             id: "",
             token: "",
+            email: "",
             claimed: false,
             timestamp: "",
             roles: List<string>(),
