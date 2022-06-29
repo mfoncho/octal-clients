@@ -91,8 +91,8 @@ export const Menu = Popper.create<HTMLDivElement, IMenu>((props) => {
         <Popper
             as="div"
             open={props.open}
-            placement="right-end"
-            className="flex z-10 flex-col min-w-[220px] shadow-md rounded-md border border-gray-200 bg-white p-2"
+            placement="bottom-end"
+            className="flex z-10 flex-col min-w-[220px] shadow-md rounded-md border border-gray-200 bg-white p-2 shadow-md"
             anchorEl={props.anchorEl}
             onHoverAway={props.onHoverAway}
             onClickAway={props.onClickAway}>
