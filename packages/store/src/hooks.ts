@@ -737,6 +737,8 @@ export function useSpacePermissions(id: string) {
     const roles = useRoles();
     const space = useSpace(id);
     return useMemo(() => {
+        if (!auth.claimed) return SpacePermissions;
+
         return auth.roles
             .map((id) => roles.get(id)!)
             .filter(Boolean)
