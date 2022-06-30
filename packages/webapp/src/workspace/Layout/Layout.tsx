@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Suggestion, { Mention } from "../Mention";
 import Home from "../Home";
+import Claim from "../ClaimDialog";
 import Calendar from "../Calendar";
 import Workspace from "../Workspace";
 import paths from "src/paths";
@@ -16,6 +17,7 @@ import { Elements } from "@octal/ui";
 import { route } from "@octal/store/lib/actions/app";
 import Console from "src/console";
 import Sidebar from "@workspace/Sidebar";
+import { useAuth } from "@octal/store";
 import { useNavigatorDrawer } from "src/hooks";
 
 const elements = {
@@ -48,6 +50,7 @@ const RouteListener = React.memo(() => {
 });
 
 export default React.memo(function Layout() {
+    const auth = useAuth();
     return (
         <Elements.Provider value={elements}>
             <Sidebar>
@@ -93,6 +96,7 @@ export default React.memo(function Layout() {
                     <Route path="/spaces" element={<Home />} />
                     <Route path={paths.sections.home} element={<Home />} />
                 </Routes>
+                <Claim open={!auth.claimed} onClose={() => ({})} />
             </main>
             <RouteListener />
         </Elements.Provider>
