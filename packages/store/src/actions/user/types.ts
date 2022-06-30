@@ -6,6 +6,12 @@ export type GET_USER = typeof GET_USER;
 export const USER_LOADED = "USER_LOADED";
 export type USER_LOADED = typeof USER_LOADED;
 
+export const CLAIM_ACCOUNT = "CLAIM_ACCOUNT";
+export type CLAIM_ACCOUNT = typeof CLAIM_ACCOUNT;
+
+export const ACCOUNT_CLAIMED = "ACCOUNT_CLAIMED";
+export type ACCOUNT_CLAIMED = typeof ACCOUNT_CLAIMED;
+
 export const USERS_LOADED = "USERS_LOADED";
 export type USERS_LOADED = typeof USERS_LOADED;
 

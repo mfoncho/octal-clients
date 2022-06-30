@@ -4,6 +4,8 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
     USER_ASSIGNED,
+    CLAIM_ACCOUNT,
+    ACCOUNT_CLAIMED,
     USER_UNASSIGNED,
     USER_CONNECTED,
     USER_BROADCAST,
@@ -23,6 +25,11 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface ClaimAccountPayload {
+    email: string;
+    password: string;
+}
 
 export interface SetPreferencePayload {
     preference: string;
@@ -96,6 +103,12 @@ export interface SetUserPresencePayload {
     presence: io.PresenceState;
 }
 
+export type ClaimAccountAction = IOAction<
+    CLAIM_ACCOUNT,
+    ClaimAccountPayload,
+    ClaimAccountPayload
+>;
+
 export type UserStatusUpdatedAction = IOAction<
     USER_STATUS_UPDATED,
     StatusUpdatedPayload,
@@ -131,6 +144,8 @@ export type UpdateUserProfileAction = IOAction<
     UpdateUserProfilePayload,
     io.User
 >;
+
+export type AccountClaimedAction = Action<ACCOUNT_CLAIMED, ClaimAccountPayload>;
 
 export type UserAssignedAction = Action<USER_ASSIGNED, AssignedPayload>;
 
@@ -256,4 +271,14 @@ export function userAssigned(payload: AssignedPayload): UserAssignedAction {
 
 export function userUnassigned(payload: AssignedPayload): UserUnassignedAction {
     return createAction(USER_UNASSIGNED, payload);
+}
+
+export function claimAccount(payload: ClaimAccountPayload): ClaimAccountAction {
+    return createIOAction<CLAIM_ACCOUNT>(CLAIM_ACCOUNT, payload);
+}
+
+export function accountClaimed(
+    payload: ClaimAccountPayload
+): AccountClaimedAction {
+    return createIOAction<ACCOUNT_CLAIMED>(ACCOUNT_CLAIMED, payload);
 }

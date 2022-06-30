@@ -5,6 +5,9 @@ import * as UserActions from "../actions/user";
 const state = AuthRecord.make({});
 
 export const reducers = {
+    [Actions.ACCOUNT_CLAIMED](state: AuthRecord, { payload }: any) {
+        return state.merge(payload).set("claimed", true);
+    },
     [Actions.AUTH_LOADED](_state: AuthRecord, { payload }: any) {
         return AuthRecord.make(payload);
     },
