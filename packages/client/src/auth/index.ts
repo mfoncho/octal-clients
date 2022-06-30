@@ -1,6 +1,11 @@
 import { io } from "../types";
 import BaseClient, { Params } from "../base";
 
+export interface ClaimAccountRequest {
+    email: string;
+    password: string;
+}
+
 export interface LoginRequest {
     email: string;
     password: string;
@@ -10,6 +15,18 @@ export interface LoginRequest {
 export default class AuthClient extends BaseClient {
     async getAuth(params?: Params): Promise<io.Auth> {
         const { data } = await this.endpoint.get("/auth", params);
+        return data;
+    }
+
+    async claimAuth(
+        request: ClaimAccountRequest,
+        params?: Params
+    ): Promise<io.Auth> {
+        const { data } = await this.endpoint.post(
+            "/auth/claim",
+            request,
+            params
+        );
         return data;
     }
 
