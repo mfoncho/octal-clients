@@ -37,10 +37,6 @@ export interface FetchRolePermissionsRequestst {
     role_id: string;
 }
 
-export interface MailInviteRequest {
-    invite_id: string;
-}
-
 export interface DeleteInviteRequest {
     invite_id: string;
 }
@@ -257,11 +253,6 @@ class Client {
 
     async fetchInvites(params?: FetchInvitesRequest): Promise<Page<io.Invite>> {
         const { data } = await endpoint.get(`/invites`, { params });
-        return data;
-    }
-
-    async mailInvite({ invite_id }: MailInviteRequest): Promise<io.Invite> {
-        const { data } = await endpoint.post(`/invites/${invite_id}/mail`);
         return data;
     }
 

@@ -64,28 +64,6 @@ export default React.memo(() => {
         };
     }
 
-    function handleMailInvite(invite: io.Invite) {
-        return () => {
-            client
-                .mailInvite({ invite_id: invite.id })
-                .finally(() => {
-                    setLoading((loading) =>
-                        loading.filter((id) => id != invite.id)
-                    );
-                })
-                .then((data) => {
-                    setPage((page) => ({
-                        ...page,
-                        data: page.data.map((inv) =>
-                            inv.id == data.id ? data : inv
-                        ),
-                    }));
-                })
-                .catch(() => {});
-            setLoading((loading) => loading.concat([invite.id]));
-        };
-    }
-
     function handleDeleteInvite(invite: io.Invite) {
         return () => {
             client
@@ -130,13 +108,9 @@ export default React.memo(() => {
                                     </div>
                                 )}
                                 {invite.email && !invite.mailed && (
-                                    <Button
-                                        disabled={loading.includes(invite.id)}
-                                        onClick={handleMailInvite(invite)}
-                                        variant="icon"
-                                        color="clear">
+                                    <div className="p-1.5">
                                         <Icons.Mail.Send className="w-5 h-5 hover:text-primary-500" />
-                                    </Button>
+                                    </div>
                                 )}
                                 {invite.link && (
                                     <div className="p-1.5">
