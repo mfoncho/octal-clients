@@ -7,7 +7,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { OrderedMap } from "immutable";
 import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
 import { ThreadRecord, useAuthId, useMessage } from "@octal/store";
-import { useDebouncedEffect, useCurPrev } from "@octal/hooks";
+import { useCurPrev } from "@octal/hooks";
 
 window.Immutable = immutable;
 
@@ -28,27 +28,6 @@ interface IThread {
 }
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-
-function orderedMapValueAt<T>(
-    map: OrderedMap<string, T>,
-    index: number
-): T | undefined {
-    if (map.size > 0) {
-        const msg = (map as any)._list.get(index);
-        if (msg) {
-            return msg[1];
-        }
-    }
-}
-
-function orderedMapAtIndex<T>(
-    map: OrderedMap<string, T>,
-    index: string
-): number | undefined {
-    if (map.size > 0) {
-        return (map as any)._map.get(index);
-    }
-}
 
 enum Scroll {
     Down,
@@ -174,6 +153,7 @@ export default React.memo<IThread>(function ({ thread }) {
 
     const [loading, setLoading] = useState(loadingState);
 
+    const [, prevLastMessage] = useCurPrev(thread.history.last());
     const [, prevScrollPercentage] = useCurPrev(page.scrollPercentage);
 
     const pageHistory = React.useMemo(() => {
@@ -292,9 +272,15 @@ export default React.memo<IThread>(function ({ thread }) {
     }, []);
 
     useEffect(() => {
-        if (container && init) {
-            let msg = thread.getMessageByTimestamp(page.pivot);
+        if (container && init && thread.history.size > 0) {
+            if (
+                page.autoScroll &&
+                thread.history.last()!.timestamp > prevLastMessage?.timestamp
+            ) {
+                return footer.current?.scrollIntoView();
+            }
 
+            let msg = thread.getMessageByTimestamp(page.pivot);
             if (msg) {
                 let element = document.getElementById(`message:${msg.id}`);
                 if (element) {
@@ -314,10 +300,7 @@ export default React.memo<IThread>(function ({ thread }) {
         if (container && !pageHistory.isEmpty() && !init) {
             const scrollable = isScrollable();
             if (scrollable) {
-                if (thread.history.last()?.id === page.pivot) {
-                    // Keep bottom in view
-                    footer.current?.scrollIntoView();
-                } else if (Boolean(page.pivot)) {
+                if (Boolean(page.pivot)) {
                     // Restore user page scroll location
                     // when autoScroll disabled
                     let msg = thread.getMessageByTimestamp(page.pivot);
