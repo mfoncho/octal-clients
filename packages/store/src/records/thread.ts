@@ -83,7 +83,6 @@ function viewAround<T extends ListLike>(
 }
 
 export class ThreadPageView extends Record({
-
     // pivote identifier
     pivot: "",
 
@@ -236,6 +235,14 @@ export class ThreadRecord
 
     updateDraft(draft: any) {
         return this.update("draft", (daft) => daft.merge(draft));
+    }
+
+    patch(payload: any) {
+        let thread = this.merge(payload);
+        if (thread.last_read > this.last_read && !this.hasMoreBottom) {
+            thread = thread.set("unread_count", 0);
+        }
+        return thread;
     }
 
     getMessageByTimestamp(timestamp: string) {

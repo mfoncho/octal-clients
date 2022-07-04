@@ -232,24 +232,6 @@ export default React.memo<IThread>(function ({ thread }) {
         };
     }, [thread.id]);
 
-    useEffect(() => {
-        if (!thread.hasMoreBottom && page.autoScroll) {
-            let last = thread.history.last();
-            if (
-                last &&
-                (!Boolean(thread.last_read) ||
-                    last.timestamp > thread.last_read)
-            ) {
-                let action = ThreadActionFactory.threadActivity({
-                    type: "read",
-                    thread_id: thread.id,
-                    timestamp: last.timestamp,
-                } as any);
-                dispatch(action);
-            }
-        }
-    }, [thread.history.last(), page.autoScroll]);
-
     /**
      * Init conversation  if
      * conversation has not yet been
@@ -271,18 +253,35 @@ export default React.memo<IThread>(function ({ thread }) {
         }
     }, []);
 
+    // Auto read last message and
+    // mentain scroll position
+    // or scroll to new thread message
     useEffect(() => {
         if (container && init && thread.history.size > 0) {
-            if (
-                page.autoScroll &&
-                thread.history.last()!.timestamp > prevLastMessage?.timestamp
-            ) {
-                return footer.current?.scrollIntoView();
-            }
+            // Scroll to bottom on
+            // new message and autoScroll
+            if (page.autoScroll) {
+                let lastMessage = thread.history.last()!;
+                if (lastMessage.timestamp > thread.last_read) {
+                    let action = ThreadActionFactory.threadActivity({
+                        type: "read",
+                        thread_id: thread.id,
+                        timestamp: lastMessage.timestamp,
+                    } as any);
+                    dispatch(action);
+                }
 
-            let msg = thread.getMessageByTimestamp(page.pivot);
-            if (msg) {
-                let element = document.getElementById(`message:${msg.id}`);
+                if (lastMessage.timestamp > prevLastMessage?.timestamp) {
+                    return footer.current?.scrollIntoView();
+                }
+                return;
+            }
+            //console.log(page.autoScroll);
+
+            // Mentiain scroll position
+            let message = thread.getMessageByTimestamp(page.pivot);
+            if (message) {
+                let element = document.getElementById(`message:${message.id}`);
                 if (element) {
                     container.scrollTop =
                         element.offsetTop -
@@ -290,7 +289,7 @@ export default React.memo<IThread>(function ({ thread }) {
                 }
             }
         }
-    }, [pageHistory]);
+    }, [pageHistory, page.autoScroll]);
 
     /**
      * Component init conversation
@@ -298,8 +297,7 @@ export default React.memo<IThread>(function ({ thread }) {
      */
     useEffect(() => {
         if (container && !pageHistory.isEmpty() && !init) {
-            const scrollable = isScrollable();
-            if (scrollable) {
+            if (isScrollable()) {
                 if (Boolean(page.pivot)) {
                     // Restore user page scroll location
                     // when autoScroll disabled
@@ -320,10 +318,9 @@ export default React.memo<IThread>(function ({ thread }) {
                 } else {
                     // Page init for scrollable page
                     // Try to retore position around last read
-                    let lastReadIndex = thread.getNearestIndex(
+                    let message = thread.getMessageByTimestamp(
                         thread.last_read ?? thread.history.last()!.timestamp
-                    );
-                    let message = thread.getMessageByIndex(lastReadIndex)!;
+                    )!;
                     let element = document.getElementById(
                         `message:${message.id}`
                     );
@@ -357,8 +354,8 @@ export default React.memo<IThread>(function ({ thread }) {
                 (percentage * (pageHistory.size - 1)) / 100
             );
             const message = ThreadRecord.messageAtIndex(pageHistory, index)!;
-            let rect = messageRect(message.id)!;
-            if (rect) {
+            if (message) {
+                let rect = messageRect(message.id)!;
                 updatedPage.pivot = message.timestamp;
                 updatedPage.pivotTop = rect.top;
             }

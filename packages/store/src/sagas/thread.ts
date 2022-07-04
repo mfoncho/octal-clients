@@ -37,6 +37,11 @@ function* activity({
         if (ch) {
             ch.push(payload.type, { timestamp: payload.timestamp });
         }
+        const updates = {
+            id: payload.thread_id,
+            last_read: payload.timestamp,
+        };
+        yield put(ThreadActions.threadUpdated(updates as any));
     }
 }
 

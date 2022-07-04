@@ -86,7 +86,7 @@ export class Conversations extends Record(
     updateThread(partial: Partial<ThreadRecord>) {
         if (this.threads.has(partial.id!)) {
             return this.updateIn(["threads", partial.id], (thread) => {
-                return (thread as ThreadRecord).merge(partial);
+                return (thread as ThreadRecord).patch(partial);
             });
         }
         return this;
