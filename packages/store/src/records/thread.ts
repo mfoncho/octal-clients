@@ -1,6 +1,12 @@
 import { Record, fromJS, List, OrderedMap } from "immutable";
 import { Unique, BelongsToSpace, Id, ThreadType } from "@octal/client";
 
+interface ListLike {
+    size: number;
+    skipLast(val: number): ListLike;
+    skip(val: number): ListLike;
+}
+
 export class ConversationLoading extends Record({
     top: false,
     bottom: false,
@@ -43,10 +49,40 @@ function updateHasMoreTop(history: History, params: HistoryUpdateOption) {
     );
 }
 
-export class ThreadPageView extends Record({
-    end: "",
+function viewAround<T extends ListLike>(
+    list: T,
+    pivot: number,
+    take: number
+): T {
+    let minTake = Math.floor(take / 2);
+    let skipFirst = pivot - minTake;
+    let skipLast = list.size - (pivot + minTake + 1);
 
-    start: "",
+    let fillTop = skipFirst;
+    let fillBottom = skipLast;
+
+    if (skipFirst < 0) {
+        skipFirst = 0;
+    } else if (skipFirst > 0 && fillBottom < 0) {
+        skipFirst = skipFirst - Math.abs(fillBottom);
+        if (skipFirst < 0) {
+            skipFirst = 0;
+        }
+    }
+
+    if (skipLast < 0) {
+        skipLast = 0;
+    } else if (skipLast > 0 && fillTop < 0) {
+        skipLast = skipLast - Math.abs(fillTop);
+        if (skipLast < 0) {
+            skipLast = 0;
+        }
+    }
+
+    return list.skip(skipFirst).skipLast(skipLast) as T;
+}
+
+export class ThreadPageView extends Record({
 
     // pivote identifier
     pivot: "",
@@ -67,7 +103,7 @@ export class ThreadDraft extends Record({
     files: [] as File[],
 }) {}
 
-function orderedMapValueAt<T>(
+function getValueByIndex<T>(
     map: OrderedMap<string, T>,
     index: number
 ): T | undefined {
@@ -79,7 +115,7 @@ function orderedMapValueAt<T>(
     }
 }
 
-function orderedMapAtIndex<T>(
+function getIndexByKey<T>(
     map: OrderedMap<string, T>,
     index: string
 ): number | undefined {
@@ -121,6 +157,18 @@ export class ThreadRecord
         return data;
     }
 
+    static messageAtIndex(
+        history: History,
+        index: number
+    ): ChatMessage | undefined {
+        if (history.size > 0) {
+            const msg = (history as any)._list.get(index);
+            if (msg) {
+                return msg[1];
+            }
+        }
+    }
+
     static nearestIndexByTimestamp<T extends { id: string; timestamp: string }>(
         source: OrderedMap<string, T>,
         timestamp: string
@@ -128,20 +176,20 @@ export class ThreadRecord
         let history = source;
         while (history.size > 1) {
             let mid = Math.floor(history.size / 2);
-            let middle = orderedMapValueAt(history, mid)!;
+            let middle = getValueByIndex(history, mid)!;
 
             if (middle.timestamp === timestamp) {
                 history = OrderedMap({ [middle.id]: middle });
             } else if (middle.timestamp < timestamp) {
-                history = history.skip(orderedMapAtIndex(history, middle.id)!);
+                history = history.skip(getIndexByKey(history, middle.id)!);
             } else if (middle.timestamp > timestamp) {
                 history = history.skipLast(
-                    history.size - orderedMapAtIndex(history, middle.id)!
+                    history.size - getIndexByKey(history, middle.id)!
                 );
             }
         }
         if (history.size > 0) {
-            return orderedMapAtIndex(source, history.first()!.id)!;
+            return getIndexByKey(source, history.first()!.id)!;
         } else {
             return -1;
         }
@@ -157,6 +205,17 @@ export class ThreadRecord
 
     getNearestIndex(timestamp: string) {
         return ThreadRecord.nearestIndexByTimestamp(this.history, timestamp);
+    }
+
+    historyAround(timestamp: string, take = 24) {
+        if (this.history.isEmpty()) {
+            return this.history;
+        }
+        let index = ThreadRecord.nearestIndexByTimestamp(
+            this.history,
+            timestamp
+        );
+        return viewAround(this.history, index, take);
     }
 
     historyFrom(start: string, end?: string) {
@@ -179,12 +238,20 @@ export class ThreadRecord
         return this.update("draft", (daft) => daft.merge(draft));
     }
 
-    getHistoryAtIndex(index: number): ChatMessage | undefined {
-        return orderedMapValueAt(this.history, index);
+    getMessageByTimestamp(timestamp: string) {
+        let index = ThreadRecord.nearestIndexByTimestamp(
+            this.history,
+            timestamp
+        );
+        return this.getMessageByIndex(index);
     }
 
-    getHistoryIndex(id: string): number | undefined {
-        return orderedMapAtIndex(this.history, id);
+    getMessageByIndex(index: number): ChatMessage | undefined {
+        return getValueByIndex(this.history, index);
+    }
+
+    getMessageIndexById(id: string): number | undefined {
+        return getIndexByKey(this.history, id);
     }
 
     appendNewMessage(payload: any) {
