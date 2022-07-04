@@ -162,15 +162,6 @@ const loadingState = {
     bottom: false,
 };
 
-function usePageHistory(thread: ThreadRecord) {
-    return React.useMemo(() => {
-        return thread.historyFrom(
-            thread.page.start,
-            thread.page.autoScroll ? undefined : thread.page.end
-        );
-    }, [thread.history, thread.page.start, thread.page.end]);
-}
-
 export default React.memo<IThread>(function ({ thread }) {
     const dispatch = useDispatch();
 
@@ -178,31 +169,27 @@ export default React.memo<IThread>(function ({ thread }) {
 
     const [page, setPage] = useState(thread.page);
 
-    const [, prevScrollPercentage] = useCurPrev(page.scrollPercentage);
+    const pageRef = React.useRef<typeof page>(page);
+    pageRef.current = page;
 
     const [loading, setLoading] = useState(loadingState);
 
-    const pageHistory = usePageHistory(thread);
+    const [, prevScrollPercentage] = useCurPrev(page.scrollPercentage);
+
+    const pageHistory = React.useMemo(() => {
+        if (thread.page.pivot) {
+            return thread.historyAround(thread.page.pivot, perPage);
+        }
+
+        return thread.history.takeLast(41);
+    }, [thread.history, thread.page.pivot]);
 
     const [container, setContainer] = useState<HTMLElement | null>(null);
 
     const header = useRef<HTMLDivElement | null>(null);
     const footer = useRef<HTMLDivElement | null>(null);
 
-    function getIdByIndex(index: number): string {
-        if (pageHistory.size > 0) {
-            const msg = orderedMapValueAt(pageHistory, index);
-            if (msg) {
-                return msg.id;
-            } else {
-                // Should never happed but hey shit happens
-                // and somehow someone will hit this.
-                return "";
-            }
-        } else {
-            return "";
-        }
-    }
+    const [init, setInit] = useState(false);
 
     function isScrollable() {
         const viewHeight = container?.clientHeight ?? 0;
@@ -222,13 +209,30 @@ export default React.memo<IThread>(function ({ thread }) {
         return element?.getBoundingClientRect();
     }
 
-    function logPagePosition() {
-        const action = ThreadActionFactory.updateThreadPage(
-            thread.id,
-            page.toObject()
-        );
-        dispatch(action);
-    }
+    useEffect(() => {
+        if (!thread.history.isEmpty()) {
+            let lastPageId = pageHistory.last()?.id;
+            let firstPageId = pageHistory.first()?.id;
+            let lastThreadId = thread.history.last()?.id;
+            let firstThreadId = thread.history.first()?.id;
+            let reachedThreadLast = lastPageId === lastThreadId;
+            let reachedThreadFirst = firstPageId === firstThreadId;
+
+            if (page.scrollPercentage > 80 && !reachedThreadLast) {
+                const action = ThreadActionFactory.updateThreadPage(
+                    thread.id,
+                    page.toObject()
+                );
+                dispatch(action);
+            } else if (page.scrollPercentage < 30 && !reachedThreadFirst) {
+                const action = ThreadActionFactory.updateThreadPage(
+                    thread.id,
+                    page.toObject()
+                );
+                dispatch(action);
+            }
+        }
+    }, [thread.history, page.pivot]);
 
     // Disable autoScroll
     // onUnmount
@@ -241,6 +245,7 @@ export default React.memo<IThread>(function ({ thread }) {
         dispatch(action);
         return () => {
             const action = ThreadActionFactory.updateThreadPage(thread.id, {
+                ...pageRef.current.toObject(),
                 autoScroll: false,
             });
             dispatch(action);
@@ -265,29 +270,6 @@ export default React.memo<IThread>(function ({ thread }) {
         }
     }, [thread.history.last(), page.autoScroll]);
 
-    useDebouncedEffect(logPagePosition, 500, [page]);
-
-    // Trim message when thread
-    // messages out of view
-    // when max reached
-    useEffect(() => {
-        if (thread.history.size > 75) {
-            if (page.scrollPercentage > 70) {
-                const action = ThreadActionFactory.updateThreadPage(thread.id, {
-                    start: thread.history.first()!.timestamp,
-                    end: thread.history.take(70)!.last()!.timestamp,
-                });
-                dispatch(action);
-            } else if (page.scrollPercentage < 40) {
-                const action = ThreadActionFactory.updateThreadPage(thread.id, {
-                    start: thread.history.takeLast(70)!.first()!.timestamp,
-                    end: thread.history.last()!.timestamp,
-                });
-                dispatch(action);
-            }
-        }
-    }, [thread.history]);
-
     /**
      * Init conversation  if
      * conversation has not yet been
@@ -309,55 +291,76 @@ export default React.memo<IThread>(function ({ thread }) {
         }
     }, []);
 
+    useEffect(() => {
+        if (container && init) {
+            let msg = thread.getMessageByTimestamp(page.pivot);
+
+            if (msg) {
+                let element = document.getElementById(`message:${msg.id}`);
+                if (element) {
+                    container.scrollTop =
+                        element.offsetTop -
+                        (page.pivotTop - container.getBoundingClientRect().top);
+                }
+            }
+        }
+    }, [pageHistory]);
+
     /**
      * Component init conversation
      * thread view position
      */
     useEffect(() => {
-        if (container && pageHistory.size > 0) {
+        if (container && !pageHistory.isEmpty() && !init) {
             const scrollable = isScrollable();
-            if (scrollable && page.autoScroll) {
-                // Keep bottom in view
-                footer.current?.scrollIntoView();
-            } else if (scrollable && Boolean(page.pivot) && page.pivotTop > 0) {
-                // Restore user page scroll location
-                // when autoScroll disabled
-                let element = document.getElementById(`message:${page.pivot}`);
+            if (scrollable) {
+                if (thread.history.last()?.id === page.pivot) {
+                    // Keep bottom in view
+                    footer.current?.scrollIntoView();
+                } else if (Boolean(page.pivot)) {
+                    // Restore user page scroll location
+                    // when autoScroll disabled
+                    let msg = thread.getMessageByTimestamp(page.pivot);
+                    if (msg) {
+                        let element = document.getElementById(
+                            `message:${msg.id}`
+                        )!;
 
-                if (element) {
-                    container.scrollTop =
-                        element.offsetTop -
-                        (page.pivotTop - container.getBoundingClientRect().top);
+                        container.scrollTop =
+                            element.offsetTop -
+                            (page.pivotTop -
+                                container.getBoundingClientRect().top);
+                    } else {
+                        container.scrollTop =
+                            container.getBoundingClientRect().top;
+                    }
                 } else {
-                    container.scrollTop = container.getBoundingClientRect().top;
-                }
-            } else if (scrollable) {
-                // Page init for scrollable page
-                // Try to retore position around last read
-                let lastReadIndex = thread.getNearestIndex(
-                    thread.last_read ?? thread.history.last()!.timestamp
-                );
-                let message = thread.getHistoryAtIndex(lastReadIndex)!;
-                let element = document.getElementById(`message:${message.id}`);
-                if (element) {
-                    element.scrollIntoView();
+                    // Page init for scrollable page
+                    // Try to retore position around last read
+                    let lastReadIndex = thread.getNearestIndex(
+                        thread.last_read ?? thread.history.last()!.timestamp
+                    );
+                    let message = thread.getMessageByIndex(lastReadIndex)!;
+                    let element = document.getElementById(
+                        `message:${message.id}`
+                    );
+                    if (element) {
+                        element.scrollIntoView();
+                    }
                 }
             } else {
-                setPage((page) =>
-                    page
-                        .set("autoScroll", true)
-                        .set("end", thread.history.last()?.timestamp ?? "")
-                );
+                setPage((page) => page.set("autoScroll", true));
             }
+
+            setInit(true);
         }
-    }, [pageHistory, container]);
+    }, [thread.history.isEmpty(), container]);
 
     /**
      * handle save thread
      * scroll position
      */
     function handleScrollY(container: HTMLElement) {
-        isScrollable();
         const percentage =
             (container.scrollTop * 100) /
             (container.scrollHeight - container.clientHeight);
@@ -367,15 +370,16 @@ export default React.memo<IThread>(function ({ thread }) {
         };
 
         if (!pageHistory.isEmpty()) {
-            const index = Math.floor((percentage * pageHistory.size) / 100);
-            const pivot = getIdByIndex(index - 1);
-            let rect = messageRect(pivot)!;
+            const index = Math.floor(
+                (percentage * (pageHistory.size - 1)) / 100
+            );
+            const message = ThreadRecord.messageAtIndex(pageHistory, index)!;
+            let rect = messageRect(message.id)!;
             if (rect) {
-                updatedPage.pivot = pivot;
+                updatedPage.pivot = message.timestamp;
                 updatedPage.pivotTop = rect.top;
             }
         } else {
-            updatedPage.pivot = "";
             updatedPage.pivotTop = 0;
         }
 
@@ -390,7 +394,6 @@ export default React.memo<IThread>(function ({ thread }) {
             if (containerRect.bottom - rect.top > -8) {
                 if (!thread.hasMoreBottom) {
                     updatedPage.autoScroll = true;
-                    updatedPage.end = pageHistory.last()?.timestamp ?? "";
                 }
             } else if (page.autoScroll === true) {
                 updatedPage.autoScroll = false;
