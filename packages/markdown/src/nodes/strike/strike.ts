@@ -1,4 +1,5 @@
 import type { IComponent, IMarkdown, Context } from "../../types";
+import { repad } from "../utils";
 import pattern from "./pattern";
 
 const name = "strike";
@@ -28,6 +29,7 @@ export default class Component implements IComponent {
     }
 
     serialize(block: any, markdown: IMarkdown): string {
-        return `~~${markdown.serialize(block.children, "")}~~`;
+        let serialized = markdown.serialize(block.children, "");
+        return repad(serialized, "~~");
     }
 }
