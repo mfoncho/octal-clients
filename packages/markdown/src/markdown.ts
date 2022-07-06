@@ -88,6 +88,7 @@ export default class Markdown implements IMarkdown {
     }
 
     parse(doc: string, opts = this.blocks): Node[] {
+        doc = doc.split("\r\n").join("\n");
         let nodes: Node[] = [];
         let mode = opts.includes("text") ? "span" : "block";
         let basecomp = this.components.find(
