@@ -62,7 +62,6 @@ export default function reslate(
             return {
                 type: "list",
                 ordered: root.ordered,
-
                 children: children,
             };
 
@@ -91,7 +90,9 @@ export default function reslate(
         case "mention":
             return {
                 type: "mention",
+                name: root.name,
                 value: root.value,
+                entity: root.entity,
                 children: [{ text: "" }],
             };
 

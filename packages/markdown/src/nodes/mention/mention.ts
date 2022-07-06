@@ -20,9 +20,12 @@ export default class Component implements IComponent {
     }
 
     process(doc: string, _context: Context, _markdown: IMarkdown) {
+        let match = new RegExp(patterns.mention).exec(doc)!;
         return {
             type: this.name,
+            name: match[1],
             value: doc,
+            entity: match[2],
         };
     }
 

@@ -21,14 +21,27 @@ export default class Component implements IComponent {
 
     process(doc: string, { types }: Context, markdown: IMarkdown) {
         let match = new RegExp(pattern).exec(doc)!;
+        let pure = false;
+        let content = "";
+        let url = match[0];
+        if (match[0] == match[6]) {
+            pure = true;
+            url = match[0];
+            content = match[0];
+        } else {
+            pure = false;
+            url = match[5];
+            content = match[2];
+        }
         return {
-            url: match[5] ?? match[6],
+            url: url,
             type: this.name,
-            pure:
-                (match[5] ?? match[6]).trim() == (match[2] ?? match[6]).trim(),
+            pure: pure,
             children: markdown.parse(
-                match[2] ?? match[6],
-                types.filter((type) => type !== this.name)
+                content,
+                pure
+                    ? types.filter((type) => type === "text")
+                    : types.filter((type) => type !== this.name)
             ),
         };
     }
@@ -36,8 +49,8 @@ export default class Component implements IComponent {
     serialize(node: any, markdown: IMarkdown): string {
         if (node.pure && node.children.length == 1) {
             const [child] = node.children;
-            if (child.type === "text" && child.value.trim() === "") {
-                return child.text;
+            if (child.type === "text") {
+                return child.value;
             }
         }
         return `[${markdown.serialize(node.children, "")}](${node.url})`;

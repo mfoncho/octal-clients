@@ -1,1 +1,1 @@
-export default "((^)|(?<=\n))([> ] .*\n?)+";
+export default "((^)|(?<=\n))(> .*\n?)+";

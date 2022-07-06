@@ -1,4 +1,12 @@
-export const url =
-    "(([a-zA-Z]+:\\/\\/)((\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}:\\d{1,5})|(([a-zA-Z0-9\\.]+)\\.[a-zA-Z]+))(\\/\\S{0,})?)";
-export const link = "((?<!\\!)\\[((\\w)([\\w\\s])+\\w)\\]\\((.*)\\))";
-export default `${link}|${url}`;
+export const path =
+    /(([a-zA-Z]+:\/\/)?(((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?)|(([a-zA-Z0-9]+\.)?(\w+\.[a-zA-Z]+)))(\/\S+)?)/
+        .toString()
+        .replace(/^\//, "")
+        .replace(/.$/, "");
+
+export const link = /((?<!\!)\[((\w)([\w\s])+\w)\]\((.*)\))/
+    .toString()
+    .replace(/^\//, "")
+    .replace(/.$/, "");
+
+export default `${link}|${path}`;

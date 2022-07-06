@@ -7,7 +7,8 @@ export default function reast(node: any): any {
                 acc.push(val);
             } else {
                 let last = acc[acc.length - 1];
-                if (last.type !== val.type) {
+                //fuse types except paragraphs
+                if (val.type == "paragraph" || last.type !== val.type) {
                     acc.push(val);
                 } else {
                     last.children = last.children.concat(val.children);
