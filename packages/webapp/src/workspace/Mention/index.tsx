@@ -26,15 +26,14 @@ export function TopicMentioned({ id }: IMentioned) {
 }
 
 export function Mention({ attributes, children, element }: any) {
-    const id = element.value.substring(1);
     let mentioned: any = null;
-    switch (element.value[0]) {
-        case "@":
-            mentioned = <Username id={id} />;
+    switch (element.name) {
+        case "user":
+            mentioned = <Username id={element.entity} />;
             break;
 
-        case "#":
-            mentioned = <TopicMentioned id={id} />;
+        case "topic":
+            mentioned = <TopicMentioned id={element.entity} />;
             break;
 
         default:

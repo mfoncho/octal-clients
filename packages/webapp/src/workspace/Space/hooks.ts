@@ -69,7 +69,7 @@ export function useUserSuggestable() {
                     })
                     .toList()
                     .map((user) => {
-                        let value = "@" + user.id;
+                        let value = `<user:${user.id}>`;
                         return { value, user };
                     })
                     .toJS();
@@ -91,7 +91,7 @@ export function useTopicSuggestable() {
                         return topic.name.includes(name);
                     })
                     .map((topic) => {
-                        let value = "#" + topic.id;
+                        let value = `<topic:${topic.id}>`;
                         return { value, topic };
                     })
                     .toJS();
