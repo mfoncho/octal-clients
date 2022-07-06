@@ -51,14 +51,14 @@ export function useReflection(
 
     React.useEffect(() => {
         if (props.value === undefined || props.value === null) return;
-        let value = (props.value ?? "").trim();
+        let value = (props.value ?? "").split("\r\n").join("\n").trim();
         if (value != state.value.trim()) {
             let data = slater.parse(value!);
             const { selection } = editor;
             Transforms.deselect(editor);
             clearEditor(editor);
-            Transforms.unwrapNodes(editor);
-            Transforms.insertFragment(editor, data);
+            Transforms.removeNodes(editor, { at: [0] });
+            Transforms.insertNodes(editor, data);
             if (selection) {
                 const end = Editor.end(editor, [data.length - 1]);
                 const [node, path] = Editor.node(editor, {
