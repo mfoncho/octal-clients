@@ -13,19 +13,27 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof Input> = (args) => {
     const [value, setValue] = React.useState(args.value);
+    const [data, setData] = React.useState<any>([]);
     React.useEffect(() => {
         setValue(args.value ?? "");
     }, [args.value?.trim()]);
+    React.useEffect(() => {
+        console.log(value, data);
+    }, [value]);
     return (
         <Input
             {...args}
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+                setData(e.target.data);
+                setValue(e.target.value);
+            }}
         />
     );
 };
 
-const text = "post sample";
+const text = `> hello
+> we are one`;
 
 export const Post = Template.bind({});
 Post.args = {

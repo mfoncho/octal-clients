@@ -5,9 +5,10 @@ import {
     Editor,
     Range,
 } from "slate";
+import * as patterns from "@octal/patterns";
 import emoji from "@octal/emoji";
 
-const LIST_TYPES = ["numbered-list", "bulleted-list"];
+const LIST_TYPES = ["list"];
 
 export const toggleMark = (editor: Editor, format: string) => {
     const isActive = isMarkActive(editor, format);
@@ -56,24 +57,59 @@ export const isBlockActive = (editor: Editor, format: string) => {
 export const toggleBlock = (editor: Editor, format: string) => {
     const isActive = isBlockActive(editor, format);
     const isList = LIST_TYPES.includes(format);
+    const isBlockquote = format == "blockquote";
 
-    Transforms.unwrapNodes(editor, {
-        match: (n) =>
-            LIST_TYPES.includes(
-                !Editor.isEditor(n) && SlateElement.isElement(n) ? n.type : ""
-            ),
-        split: true,
-    });
+    if (isBlockquote) {
+        let nearestBlockParent = Editor.above(editor, {
+            match: (n) => SlateElement.isElement(n),
+        })!;
+        if (!Boolean(nearestBlockParent)) {
+            // User selected multiple things
+            return;
+        }
+        if (isActive) {
+            let [, path] = Editor.above(editor, {
+                match: (n) =>
+                    //@ts-ignore
+                    SlateElement.isElement(n) && n.type == "blockquote",
+            })!;
+            Transforms.unwrapNodes(editor, {
+                at: path,
+                split: true,
+            });
+        } else {
+            let [block] = nearestBlockParent;
+            //@ts-ignore
+            if (block.type == "paragraph") {
+                const block = { type: format, children: [] };
+                Transforms.wrapNodes(editor, block as any);
+            } else {
+                const blockquote = { type: format, children: [] };
+                const paragraph = { type: "paragraph" };
+                Transforms.setNodes(editor, paragraph as any);
+                Transforms.wrapNodes(editor, blockquote as any);
+            }
+        }
+    } else {
+        const newProperties = {
+            type: isActive ? "paragraph" : isList ? "list-item" : format,
+        };
 
-    const newProperties = {
-        type: isActive ? "paragraph" : isList ? "list-item" : format,
-    };
+        Transforms.unwrapNodes(editor, {
+            match: (n) =>
+                LIST_TYPES.includes(
+                    !Editor.isEditor(n) && SlateElement.isElement(n)
+                        ? n.type
+                        : ""
+                ),
+            split: true,
+        });
 
-    Transforms.setNodes(editor, newProperties as any);
-
-    if (!isActive && isList) {
-        const block = { type: format, children: [] };
-        Transforms.wrapNodes(editor, block as any);
+        Transforms.setNodes(editor, newProperties as any);
+        if (!isActive && isList) {
+            const block = { type: format, children: [] };
+            Transforms.wrapNodes(editor, block as any);
+        }
     }
 };
 
@@ -146,9 +182,12 @@ export function insertEmoji(editor: Editor, value: any) {
 }
 
 export function insertMention(editor: Editor, value: string) {
+    let match = new RegExp(patterns.mention).exec(value)!;
     const mentioned = {
         value: value,
         type: "mention",
+        name: match[1],
+        entity: match[2],
         children: [{ text: "" }],
     };
     const nodes = [mentioned, { text: " " }];

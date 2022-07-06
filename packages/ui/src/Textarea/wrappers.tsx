@@ -3,6 +3,8 @@ import {
     Range,
     Element as SlateElement,
     Point,
+    Node,
+    Path,
     Transforms,
 } from "slate";
 import { Slater } from "@octal/markdown";
@@ -31,6 +33,8 @@ const MENTION_TYPE = "mention";
 const LINK_TYPE = "link";
 
 const EMOJI_TYPE = "emoji";
+
+const LIST_TYPE = "list";
 
 const SHORTCUTS = {
     "*": "list-item",
@@ -221,6 +225,14 @@ export const withShortcuts = (editor: Editor) => {
                     type,
                 };
                 switch (beforeText.trim()) {
+                    case ">":
+                        newProperties.children = [
+                            {
+                                type: "paragraph",
+                                children: [{ text: "" }],
+                            },
+                        ];
+                        break;
                     case "+":
                         newProperties.ordered = true;
                         newProperties.spread = false;
@@ -265,6 +277,14 @@ export const withShortcuts = (editor: Editor) => {
                             SlateElement.isElement(n) &&
                             (n as any).type === "list-item",
                     });
+                } else if (type === "blockquote") {
+                    const list: any = {
+                        type: "paragraph",
+                        children: [],
+                    };
+                    Transforms.wrapNodes(editor, list, {
+                        match: (n) => !Editor.isEditor(n),
+                    });
                 }
 
                 return;
@@ -285,6 +305,7 @@ export const withShortcuts = (editor: Editor) => {
             if (match) {
                 const [block, path] = match as [any, any];
                 const start = Editor.start(editor, path);
+                let [parent, ppath] = Editor.parent(editor, path);
 
                 if (
                     !Editor.isEditor(block) &&
@@ -308,6 +329,25 @@ export const withShortcuts = (editor: Editor) => {
                     }
 
                     return;
+                } else if (
+                    !Editor.isEditor(parent) &&
+                    SlateElement.isElement(block) &&
+                    block.type == "paragraph" &&
+                    //@ts-ignore
+                    parent.type !== "paragraph" &&
+                    Point.equals(selection.anchor, start)
+                ) {
+                    if (parent.type == "blockquote") {
+                        if (parent.children.length == 1) {
+                            return Transforms.unwrapNodes(editor, {
+                                at: ppath,
+                            });
+                        } else {
+                            return Transforms.moveNodes(editor, {
+                                to: Path.next(ppath),
+                            });
+                        }
+                    }
                 }
             }
 

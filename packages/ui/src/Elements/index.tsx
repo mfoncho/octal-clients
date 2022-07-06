@@ -1,6 +1,5 @@
 import React from "react";
 import clx from "classnames";
-import * as Icons from "@octal/icons";
 import Text from "../Text";
 
 function Suggestion({ selected, value }: any) {
@@ -74,20 +73,14 @@ function Emoji({ attributes, children, element }: any) {
 
 function Blockquote({ attributes, children }: any) {
     return (
-        <div className="flex flex-col w-full py-2 text-gray-500">
+        <div className="flex flex-row w-full">
             <div
                 contentEditable={false}
-                className="flex flex-row justify-start">
-                <Icons.OpenQuote className="h-5 w-6 text-gray-500" />
-            </div>
-            <blockquote {...attributes} className="pl-8">
+                className="flex flex-row justify-start w-2 rounded-md bg-gray-300"
+            />
+            <blockquote {...attributes} className="pl-2">
                 {children}
             </blockquote>
-            <div
-                contentEditable={false}
-                className="flex flex-row justify-end pr-8">
-                <Icons.CloseQuote className="h-5 w-6 text-gray-500" />
-            </div>
         </div>
     );
 }
@@ -127,19 +120,22 @@ function ListItem({ attributes, children }: any) {
 }
 
 function Link({ attributes, children, element }: any) {
+    let href = element.url.startsWith("http")
+        ? element.url
+        : `//${element.url}`;
     return (
-        <a {...attributes} href={element.url} className="text-primary-800">
+        <a
+            {...attributes}
+            href={href}
+            target="_blank"
+            className="text-primary-800">
             {children}
         </a>
     );
 }
 
 function Paragraph({ attributes, children }: any) {
-    return (
-        <p {...attributes} className="min-h-[20px]">
-            {children}
-        </p>
-    );
+    return <p {...attributes}>{children}</p>;
 }
 
 function Code({ children }: any) {
@@ -267,6 +263,9 @@ const Element = (props: any) => {
 
         case "list-item":
             return <Elements.ListItem {...props} />;
+
+        case "inline-code":
+            return <Elements.Code {...props} />;
 
         case "inline-code":
             return <Elements.Code {...props} />;

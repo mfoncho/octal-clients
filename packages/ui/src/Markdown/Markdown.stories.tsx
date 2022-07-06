@@ -26,9 +26,14 @@ const text = `## Features
 Markdown is a lightweight markup language based on the formatting conventions
 that people naturally use in email.
 As [John Gruber] writes on the _link http://sample.com_`;
+//
+
+const text2 = `> clay pools job was done right 
+> 🥤
+> `;
 
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary = Template.bind({});
 Primary.args = {
-    children: text,
+    children: text2,
 };

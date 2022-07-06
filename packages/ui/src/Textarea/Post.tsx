@@ -92,11 +92,7 @@ const FORMAT_ACTIONS = [
     },
     {
         type: "block",
-        format: "numbered-list",
-    },
-    {
-        type: "block",
-        format: "bulleted-list",
+        format: "list",
     },
 ];
 
@@ -367,14 +363,13 @@ export default React.memo<InputProps>((props) => {
                     anchorEl={rootRef.current}
                 />
                 <div className="flex flex-row justify-between bg-gray-100 border-t-2 border-gray-200 p-1">
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center space-x-1">
                         {FORMAT_ACTIONS.map((format, index) => {
                             if (format.type == "mark") {
                                 return (
                                     <Button
                                         color="clear"
                                         variant="icon"
-                                        className="mr-1"
                                         key={String(index)}
                                         onMouseDown={(event) => {
                                             event.preventDefault();
@@ -391,7 +386,6 @@ export default React.memo<InputProps>((props) => {
                                     <Button
                                         color="clear"
                                         variant="icon"
-                                        className="mr-1"
                                         key={String(index)}
                                         onMouseDown={(event) => {
                                             event.preventDefault();
@@ -472,10 +466,7 @@ function BlockIcon({ editor, format }: { editor: Editor; format: string }) {
         ? "text-xs text-gray-800"
         : "text-xs text-gray-500";
     switch (format) {
-        case "numbered-list":
-            return <Icons.Editor.OrderedList className={className} />;
-
-        case "bulleted-list":
+        case "list":
             return <Icons.Editor.UnorderedList className={className} />;
 
         case "heading-five":
