@@ -5,7 +5,6 @@ import { Slater } from "@octal/markdown";
 
 const slater = Slater.create();
 
-console.log(slater);
 export class UsersReactionRecord extends Record({
     reaction: "",
     users: List<Id>(),
