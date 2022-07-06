@@ -5,6 +5,7 @@ import { Slater } from "@octal/markdown";
 
 const slater = Slater.create();
 
+console.log(slater);
 export class UsersReactionRecord extends Record({
     reaction: "",
     users: List<Id>(),
@@ -40,11 +41,11 @@ export class MessageRecord
     })
     implements Unique, Timestamped, BelongsToThread
 {
-    _parsed: any;
+    __parsed__: any;
 
     constructor(params: any) {
         super(MessageRecord.mapFromJS(params) as any);
-        this._parsed = null;
+        this.__parsed__ = null;
     }
 
     patch(data: any) {
@@ -56,14 +57,14 @@ export class MessageRecord
     }
 
     get parsed(): any {
-        if (Boolean(this._parsed)) {
-            return this._parsed;
+        if (Boolean(this.__parsed__)) {
+            return this.__parsed__;
         }
         if (Boolean(this.content)) {
-            (this as any)._parsed = slater.parse(this.content);
-            return this._parsed;
+            (this as any).__parsed__ = slater.parse(this.content);
+            return this.__parsed__;
         }
-        return this._parsed;
+        return this.__parsed__;
     }
 
     static mapFromJS(data: any) {
