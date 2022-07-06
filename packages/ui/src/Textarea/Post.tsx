@@ -80,11 +80,7 @@ const FORMAT_ACTIONS = [
     },
     {
         type: "block",
-        format: "heading-five",
-    },
-    {
-        type: "block",
-        format: "heading-six",
+        format: "heading",
     },
     {
         type: "block",
@@ -469,10 +465,7 @@ function BlockIcon({ editor, format }: { editor: Editor; format: string }) {
         case "list":
             return <Icons.Editor.UnorderedList className={className} />;
 
-        case "heading-five":
-            return <Icons.Editor.Heading className={className} />;
-
-        case "heading-six":
+        case "heading":
             return <Icons.Editor.Heading className={className} />;
 
         case "blockquote":

@@ -56,6 +56,7 @@ export function useReflection(
             let data = slater.parse(value!);
             const { selection } = editor;
             clearEditor(editor);
+            Transforms.unwrapNodes(editor);
             Transforms.insertFragment(editor, data, { at: [] });
             if (selection) {
                 const end = Editor.end(editor, []);

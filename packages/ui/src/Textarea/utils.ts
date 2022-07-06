@@ -91,9 +91,13 @@ export const toggleBlock = (editor: Editor, format: string) => {
             }
         }
     } else {
-        const newProperties = {
+        const newProperties: any = {
             type: isActive ? "paragraph" : isList ? "list-item" : format,
         };
+
+        if (format === "heading") {
+            newProperties.depth = 5;
+        }
 
         Transforms.unwrapNodes(editor, {
             match: (n) =>

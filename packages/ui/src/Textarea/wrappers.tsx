@@ -68,14 +68,19 @@ export const withPaste = (slater: Slater) => {
         };
 
         editor.insertData = (data: any) => {
-            const text = data.getData("text/plain");
+            const text = data.getData("text/plain").trim();
             if (Boolean(text)) {
                 let parsed = slater.parse(text);
-                if (parsed.length > 0) {
-                    if (Boolean(parsed[parsed.length - 1].emoji))
-                        parsed.push({ text: "" });
-                    return Transforms.insertNodes(editor, parsed);
+                let [head, ...rest] = parsed;
+                if (head.type === "paragraph") {
+                    Transforms.insertFragment(editor, head.children);
+                } else {
+                    rest = parsed;
                 }
+                if (rest.length > 0) {
+                    return Transforms.insertNodes(editor, rest);
+                }
+                return;
             }
             return insertData(data);
         };

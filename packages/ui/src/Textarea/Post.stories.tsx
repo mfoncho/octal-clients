@@ -17,13 +17,12 @@ const Template: ComponentStory<typeof Input> = (args) => {
     React.useEffect(() => {
         setValue(args.value ?? "");
     }, [args.value?.trim()]);
-    React.useEffect(() => {
-        console.log(value, data);
-    }, [value]);
+    React.useEffect(() => {}, [value, data]);
     return (
         <Input
             {...args}
             value={value}
+            onSubmit={(_e) => setValue("")}
             onChange={(e) => {
                 setData(e.target.data);
                 setValue(e.target.value);

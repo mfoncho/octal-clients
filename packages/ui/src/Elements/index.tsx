@@ -88,15 +88,15 @@ function Blockquote({ attributes, children }: any) {
 function Heading({ attributes, children, element }: any) {
     if (element.depth > 4) {
         return (
-            <h5 {...attributes} className="font-semibold">
+            <h5 {...attributes} className="font-bold">
                 {children}
             </h5>
         );
     }
     return (
-        <h5 {...attributes} className="font-bold">
+        <h4 {...attributes} className="font-black">
             {children}
-        </h5>
+        </h4>
     );
 }
 
