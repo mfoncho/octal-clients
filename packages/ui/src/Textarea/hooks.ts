@@ -55,11 +55,12 @@ export function useReflection(
         if (value != state.value.trim()) {
             let data = slater.parse(value!);
             const { selection } = editor;
+            Transforms.deselect(editor);
             clearEditor(editor);
             Transforms.unwrapNodes(editor);
-            Transforms.insertFragment(editor, data, { at: [] });
+            Transforms.insertFragment(editor, data);
             if (selection) {
-                const end = Editor.end(editor, []);
+                const end = Editor.end(editor, [data.length - 1]);
                 const [node, path] = Editor.node(editor, {
                     anchor: end,
                     focus: end,
@@ -77,6 +78,13 @@ export function useReflection(
                             offset,
                         },
                     });
+                }
+
+                if (value == "") {
+                    Transforms.setNodes(editor, { type: "paragraph" });
+                    Editor.removeMark(editor, "code");
+                    Editor.removeMark(editor, "bold");
+                    Editor.removeMark(editor, "italic");
                 }
             }
             setState((state) => ({
