@@ -38,7 +38,10 @@ export default class Component implements IComponent {
         return {
             type: name,
             depth: depth,
-            children: markdown.parse(title, markdown.spans),
+            // match title can be undefined
+            // if title is black line
+            // eg: ###
+            children: markdown.parse(title ?? "", markdown.spans),
         };
     }
 

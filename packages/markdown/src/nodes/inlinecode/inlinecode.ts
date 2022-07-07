@@ -1,4 +1,5 @@
 import type { IComponent, IMarkdown, Context } from "../../types";
+import { repad } from "../utils";
 import pattern from "./pattern";
 
 const name = "inlinecode";
@@ -30,6 +31,6 @@ export default class Component implements IComponent {
     }
 
     serialize(block: any, markdown: IMarkdown): string {
-        return `\`${markdown.serialize(block.children, "")}\``;
+        return repad(markdown.serialize(block.children, ""), "`");
     }
 }
