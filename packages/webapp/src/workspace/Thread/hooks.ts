@@ -68,7 +68,7 @@ export function usePostInput(thread: ThreadRecord) {
                     thread_id: thread.id,
                     params: {
                         attachment: file,
-                        content: target.value,
+                        content: target.value.trim(),
                     },
                 });
                 setDraft("", files);
