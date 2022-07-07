@@ -1,3 +1,5 @@
+//fuse types
+const fuse = ["text"];
 export default function reast(node: any): any {
     if (Array.isArray(node)) {
         return node.map(reast);
@@ -7,11 +9,11 @@ export default function reast(node: any): any {
                 acc.push(val);
             } else {
                 let last = acc[acc.length - 1];
-                //fuse types except paragraphs
-                if (val.type == "paragraph" || last.type !== val.type) {
-                    acc.push(val);
-                } else {
+                //fuse fuseable
+                if (fuse.includes(val.type) && last.type === val.type) {
                     last.children = last.children.concat(val.children);
+                } else {
+                    acc.push(val);
                 }
             }
             return acc;
@@ -37,6 +39,12 @@ export default function reast(node: any): any {
                 default:
                     break;
             }
+        }
+        if (node.code) {
+            return {
+                type: "inlinecode",
+                children: [{ type: "text", value: node.text }],
+            };
         }
         return { type: "text", value: node.text };
     }

@@ -23,6 +23,7 @@ export default class Slater {
         const emoji = new nodes.Emoji();
         const strike = new nodes.Strike();
         const italic = new nodes.Italic();
+        const inlinecode = new nodes.InlineCode();
         const mention = new nodes.Mention();
         const heading = new nodes.Heading();
         const paragraph = new nodes.Paragraph();
@@ -42,6 +43,7 @@ export default class Slater {
         slater.add(italic);
         slater.add(code);
         slater.add(blockquote);
+        slater.add(inlinecode);
         return slater;
     }
 

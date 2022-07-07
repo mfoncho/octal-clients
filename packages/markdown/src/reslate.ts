@@ -103,15 +103,13 @@ export default function reslate(
             }
             return { type: "blockquote", children: children };
 
-        case "inline-code":
-            children = [{ text: root.children![0].value }] as any;
+        case "inlinecode":
             return {
-                type: "inline-code",
-                children: root.children!.map((node) => reslate(node)),
+                text: root.children![0].value,
+                code: true,
             };
 
         case "code":
-            //children = [{ text: root.value }] as any;
             return {
                 type: "code",
                 lang: root.lang,

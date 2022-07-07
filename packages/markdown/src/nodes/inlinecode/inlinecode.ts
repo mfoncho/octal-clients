@@ -1,7 +1,7 @@
 import type { IComponent, IMarkdown, Context } from "../../types";
 import pattern from "./pattern";
 
-const name = "inline-code";
+const name = "inlinecode";
 
 export default class Component implements IComponent {
     readonly name = name;

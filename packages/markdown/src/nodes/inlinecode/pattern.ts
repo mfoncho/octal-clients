@@ -1,2 +1,2 @@
-export const underscore = "(?<!`)`([^`\n]+?)`(?!`)";
+export const underscore = "(?<!\\`)\\`([^\\`\n]+?)\\`(?!\\`)";
 export default `${underscore}`;

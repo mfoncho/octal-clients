@@ -12,3 +12,4 @@ export { default as Heading } from "./heading";
 export { default as Mention } from "./mention";
 export { default as Paragraph } from "./paragraph";
 export { default as Blockquote } from "./blockquote";
+export { default as InlineCode } from "./inlinecode";
