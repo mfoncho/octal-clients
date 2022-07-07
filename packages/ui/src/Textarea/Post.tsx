@@ -315,6 +315,32 @@ export default React.memo<InputProps>((props) => {
         );
     }
 
+    function renderUploadUI() {
+        if (Boolean(file)) {
+            return renderFile(file!);
+        }
+        if (props.accept) {
+            return (
+                <React.Fragment>
+                    <label
+                        htmlFor={fid}
+                        className="cursor-pointer flex justify-center items-center w-10 h-10 bg-gray-100 text-gray-500 hover:bg-gray-200 rounded-md">
+                        <Icons.Editor.Attach className="h-5 w-5" />
+                    </label>
+                    <input
+                        id={fid}
+                        type="file"
+                        accept={accept}
+                        multiple={true}
+                        onChange={handleFileInput}
+                        className="w-0 h-0 invisible"
+                    />
+                </React.Fragment>
+            );
+        }
+        return <React.Fragment />;
+    }
+
     return (
         <Slate editor={editor} value={state.data} onChange={handleChange}>
             <div
@@ -322,26 +348,7 @@ export default React.memo<InputProps>((props) => {
                 className="flex flex-col rounded-md ring-2 text-base ring-gray-300 overflow-hidden">
                 {Dialog && <Dialog onClose={handleCloseDialog} />}
                 <div className="flex flex-row p-1.5 overflow-hidden">
-                    {Boolean(file) ? (
-                        renderFile(file!)
-                    ) : (
-                        <React.Fragment>
-                            <label
-                                htmlFor={fid}
-                                className="cursor-pointer flex justify-center items-center w-10 h-10 bg-gray-100 text-gray-500 hover:bg-gray-200 rounded-md">
-                                <Icons.Editor.Attach className="h-5 w-5" />
-                            </label>
-                            <input
-                                id={fid}
-                                type="file"
-                                accept={accept}
-                                multiple={true}
-                                onChange={handleFileInput}
-                                className="w-0 h-0 invisible"
-                            />
-                        </React.Fragment>
-                    )}
-
+                    {renderUploadUI()}
                     <Editable
                         autoFocus={true}
                         className="p-2 flex-1 break-all"
