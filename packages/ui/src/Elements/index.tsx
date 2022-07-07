@@ -155,6 +155,9 @@ function Italic({ children }: any) {
 }
 
 function Span({ attributes, children }: any) {
+    if (typeof children === "string" && children.length == 0) {
+        return <span {...attributes}>{"﻿"}</span>;
+    }
     return <span {...attributes}>{children}</span>;
 }
 
