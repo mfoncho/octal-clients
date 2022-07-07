@@ -94,7 +94,7 @@ export function useReflection(
                 files: props.files ?? state.files,
             }));
         }
-    }, [props.value, state.data]);
+    }, [props.value, state.value]);
 
     React.useEffect(() => {
         if (Boolean(props.files) && props.files !== state.files) {

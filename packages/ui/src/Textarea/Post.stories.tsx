@@ -31,8 +31,11 @@ const Template: ComponentStory<typeof Input> = (args) => {
     );
 };
 
-const text = `> hello
-> we are one`;
+const text = `##### the new line
+like this is \`okay\` too right?
+> for me like **that** so what
+> price but who will pay?
+> 1) but milk`;
 
 export const Post = Template.bind({});
 Post.args = {

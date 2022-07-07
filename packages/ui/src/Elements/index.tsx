@@ -234,7 +234,7 @@ const Leaf = ({ leaf, attributes, readonly, children }: any) => {
 
 const Element = (props: any) => {
     const {
-        element: { type },
+        element: { type, code = false },
     } = props;
 
     const Elements = useElements();
@@ -264,12 +264,6 @@ const Element = (props: any) => {
         case "list-item":
             return <Elements.ListItem {...props} />;
 
-        case "inline-code":
-            return <Elements.Code {...props} />;
-
-        case "inline-code":
-            return <Elements.Code {...props} />;
-
         case "list":
             return <Elements.List {...props} />;
 
@@ -283,7 +277,11 @@ const Element = (props: any) => {
             return <Elements.Paragraph {...props} />;
 
         default:
-            return <Elements.Span {...props} />;
+            if (code) {
+                return <Elements.Code {...props} />;
+            } else {
+                return <Elements.Span {...props} />;
+            }
     }
 };
 
