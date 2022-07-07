@@ -16,7 +16,8 @@ export function usePostInput(thread: ThreadRecord) {
 
     const permissions = usePermissions();
 
-    const [accept, setAccept] = useState<{ max: number; types: string }>();
+    const [accept, setAccept] =
+        useState<{ max: number; types: string } | undefined>();
 
     function setDraft(value: string, files: File[] = []) {
         const action = ThreadActions.updateDaft({
@@ -31,10 +32,14 @@ export function usePostInput(thread: ThreadRecord) {
         if (!permissions.get("message.post")) {
             setDraft("", []);
         }
-        setAccept({
-            max: permissions.get("upload.size") as number,
-            types: permissions.get("upload.types") as string,
-        });
+        if (permissions.get("upload.size", 0) < 1) {
+            setAccept(() => undefined);
+        } else {
+            setAccept({
+                max: permissions.get("upload.size") as number,
+                types: permissions.get("upload.types") as string,
+            });
+        }
     }, [permissions]);
 
     const onChange = useCallback(
