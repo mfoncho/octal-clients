@@ -118,7 +118,8 @@ function* move({
             );
         }
         const data = (yield Client.moveCard(payload)) as any;
-        yield put(BoardActions.cardUpdated({ ...data, archived_at: null }));
+        let card = yield* normalize(data);
+        yield put(BoardActions.cardUpdated({ ...card, archived_at: null }));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -180,20 +181,6 @@ function* undone({
     try {
         const data = (yield Client.uncompleteCard(payload)) as any;
         yield updated(data);
-        resolve.success(data);
-    } catch (e) {
-        resolve.error(e);
-    }
-}
-
-function* unarchive({
-    payload,
-    resolve,
-}: BoardActions.UnarchiveCardAction): Iterable<any> {
-    try {
-        const data = (yield Client.unarchiveCard(payload)) as any;
-        let card = yield* normalize(data);
-        yield put(BoardActions.cardUnarchived(card));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -277,8 +264,6 @@ export const tasks = [
     { effect: takeEvery, type: Actions.COMPLETE_CARD, handler: done },
 
     { effect: takeEvery, type: Actions.UNCOMPLETE_CARD, handler: undone },
-
-    { effect: takeEvery, type: Actions.UNARCHIVE_CARD, handler: unarchive },
 
     { effect: takeEvery, type: Actions.ARCHIVE_CARD, handler: archive },
 

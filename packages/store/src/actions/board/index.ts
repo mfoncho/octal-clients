@@ -32,7 +32,6 @@ import {
     LABEL_LOADED,
     LABELS_LOADED,
     MOVE_CARD,
-    UNARCHIVE_CARD,
     ARCHIVE_COLUMN,
     STORE_COLUMNS,
     UNARCHIVE_COLUMN,
@@ -404,10 +403,6 @@ export interface CreateCardPayload {
 export interface ArchiveCardPayload {
     card_id: string;
     board_id: string;
-}
-
-export interface UnarchiveCardPayload extends ArchiveCardPayload {
-    column_id: string;
 }
 
 export interface CompleteCardPayload {
@@ -783,12 +778,6 @@ export type ArchiveCardAction = IOAction<
     io.Card
 >;
 
-export type UnarchiveCardAction = IOAction<
-    UNARCHIVE_CARD,
-    UnarchiveCardPayload,
-    io.Card
->;
-
 export type CardArchivedAction = Action<CARD_ARCHIVED, io.Card>;
 
 export type CardUnarchivedAction = Action<CARD_UNARCHIVED, io.Card>;
@@ -1000,11 +989,6 @@ export function delelteCard(payload: DeleteCardPayload): DeleteCardAction {
     return createIOAction<DELETE_CARD>(DELETE_CARD, payload);
 }
 
-export function unarchiveCard(
-    payload: UnarchiveCardPayload
-): UnarchiveCardAction {
-    return createIOAction<UNARCHIVE_CARD>(UNARCHIVE_CARD, payload);
-}
 export function columnDeleted(
     column: Unique & BelongsToBoard
 ): ColumnDeletedAction {
