@@ -146,7 +146,7 @@ export default class CardFieldClient extends BaseClient {
         request: AssignChecklistRequest,
         params?: Params
     ): Promise<io.CardField> {
-        const path = `/checklists/${request.field_id}/users/${request.user_id}`;
+        const path = `/fields/${request.field_id}/assign/${request.user_id}`;
         const { data } = await this.endpoint.put(path, {}, params);
         return data;
     }
@@ -155,7 +155,7 @@ export default class CardFieldClient extends BaseClient {
         request: UnassignChecklistRequest,
         params?: Params
     ): Promise<io.CardField> {
-        const path = `/checklists/${request.field_id}/users/${request.user_id}`;
+        const path = `/fields/${request.field_id}/assign/${request.user_id}`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }
