@@ -5,8 +5,10 @@ import * as Icons from "@octal/icons";
 import { MdCancel as CancelIcon } from "react-icons/md";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { useInput } from "src/utils";
+import { useAuthId } from "@octal/store";
 import { Text, Textarea } from "@octal/ui";
 import MembersPopper from "@workspace/Space/MembersPopper";
+import { useCardCapability } from "../hooks";
 import {
     CardTaskValueRecord,
     CardFieldRecord,
@@ -37,6 +39,7 @@ export interface ITaskCreator {
 
 export interface ITask {
     task: CardTaskValueRecord;
+    onCheck?: (id: string, checked: boolean) => void;
     onUpdate?: (id: string, params: Partial<ITaskParams>) => void;
     onDelete?: (id: string) => void;
 }
@@ -59,9 +62,9 @@ function Task({ task, ...props }: ITask) {
         }
     }
 
-    function handleToggleTask() {
-        if (props.onUpdate) {
-            props.onUpdate(task.id, { done: !task.done });
+    function handleCheckTask() {
+        if (props.onCheck) {
+            props.onCheck(task.id, !task.done);
         }
     }
 
@@ -79,7 +82,7 @@ function Task({ task, ...props }: ITask) {
     return (
         <div className="group flex py-0.5 flex-row items-center rounded-md hover:bg-gray-100">
             <div className="flex flex-grow flex-row items-center">
-                <button onClick={handleToggleTask}>
+                <button onClick={handleCheckTask}>
                     {task.done ? (
                         <Icons.Task.DoneSolid className="h-5 w-5 text-primary-500" />
                     ) : (
@@ -102,16 +105,20 @@ function Task({ task, ...props }: ITask) {
             </div>
             {!edit && (
                 <div className="flex flex-row items-center">
-                    <button
-                        onClick={() => setEdit(true)}
-                        className="group-hover:visible invisible mr-2">
-                        <Icons.Edit className="h-4 w-4 text-gray-500" />
-                    </button>
-                    <button
-                        className="group-hover:visible invisible"
-                        onClick={handleDelete}>
-                        <Icons.CloseCircleSolid className="h-4 w-4 text-gray-500" />
-                    </button>
+                    {props.onUpdate && (
+                        <button
+                            onClick={() => setEdit(true)}
+                            className="group-hover:visible invisible mr-2">
+                            <Icons.Edit className="h-4 w-4 text-gray-500" />
+                        </button>
+                    )}
+                    {props.onDelete && (
+                        <button
+                            className="group-hover:visible invisible"
+                            onClick={handleDelete}>
+                            <Icons.CloseCircleSolid className="h-4 w-4 text-gray-500" />
+                        </button>
+                    )}
                 </div>
             )}
         </div>
@@ -182,7 +189,11 @@ const User = React.memo<{ id: string }>((props) => {
 export default function ChecklistField({ field, handle, ...props }: IField) {
     const fieldRef = useRef<HTMLButtonElement>(null);
 
+    const aid = useAuthId();
+
     const [popper, setPopper] = useState<boolean>(false);
+
+    const can = useCardCapability(field.card_id);
 
     const actions = useFieldAction(field);
 
@@ -196,6 +207,12 @@ export default function ChecklistField({ field, handle, ...props }: IField) {
 
     function handleDeleteTask(id: string) {
         return actions.deleteFieldValue(id);
+    }
+
+    function handleCheckTask(id: string, checked: boolean) {
+        if (users.includes(aid)) {
+            return handleUpdateTask(id, { done: checked });
+        }
     }
 
     function handleUpdateTask(id: string, params: Partial<ITaskParams>) {
@@ -216,43 +233,47 @@ export default function ChecklistField({ field, handle, ...props }: IField) {
 
     return (
         <Field
-            dragging={props.dragging}
             handle={handle}
-            icon={Icons.Field.Checklist}
+            onClick={handleTogglePopper}
+            dragging={props.dragging}
+            icon={Icons.Field.Users}
+            buttonRef={fieldRef}
             field={field}>
-            <div className="flex-1 flex flex-col">
-                <div className="relative flex flex-row">
-                    <button
-                        ref={fieldRef}
-                        onClick={handleTogglePopper}
-                        className="-left-0.5 relative p-1 rounded-md hover:bg-gray-200 bg-gray-100">
-                        <Icons.Field.Users className="text-gray-500 hover:text-primary-500" />
-                    </button>
-                    <div className="flex mx-1 flex-row pb-1">
-                        {users.map((id) => (
-                            <User key={id} id={id} />
-                        ))}
-                    </div>
+            <div className="flex-1 flex flex-col px-1">
+                <div className="flex flex-row pb-1">
+                    {users.map((id) => (
+                        <User key={id} id={id} />
+                    ))}
                 </div>
                 {tasks.map((task) => (
                     <Task
                         key={task.id}
                         task={task}
-                        onUpdate={handleUpdateTask}
-                        onDelete={handleDeleteTask}
+                        onCheck={handleCheckTask}
+                        {...can("card.manage", {
+                            onUpdate: handleUpdateTask,
+                            onDelete: handleDeleteTask,
+                        })}
                     />
                 ))}
-                <div className="py-1 flex flex-col">
-                    <AddTask field={field} onSubmit={handleCreateTask} />
-                </div>
+                {can(
+                    "card.manage",
+                    <div className="py-1 flex flex-col">
+                        <AddTask field={field} onSubmit={handleCreateTask} />
+                    </div>
+                )}
             </div>
-            <MembersPopper
-                selected={users}
-                onSelect={handleUserInput}
-                anchorEl={fieldRef.current}
-                onClickAway={handleTogglePopper}
-                open={popper}
-            />
+            {can(
+                "card.manage",
+                <MembersPopper
+                    placement="right-start"
+                    selected={users}
+                    onSelect={handleUserInput}
+                    anchorEl={fieldRef.current}
+                    onClickAway={handleTogglePopper}
+                    open={popper}
+                />
+            )}
         </Field>
     );
 }

@@ -8,6 +8,7 @@ import {
 import Field, { IField } from "./Field";
 import * as Icons from "@octal/icons";
 import Label from "@workspace/Board/Label";
+import { useCardCapability } from "../hooks";
 import { useLabels } from "@workspace/Board";
 import LabelsPopper from "@workspace/Board/LabelsPopper";
 
@@ -31,6 +32,8 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
     const boardlabels = useLabels();
 
     const [editing, setEditing] = useState<boolean>(false);
+
+    const can = useCardCapability(field.card_id);
 
     const fieldRef = useRef<HTMLButtonElement>(null);
 
@@ -56,7 +59,7 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
                     <Label
                         name={label.name}
                         color={label.color}
-                        onClose={onClose}
+                        onClose={can("card.manage") ? onClose : undefined}
                     />
                 </div>
             );
@@ -88,13 +91,16 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
             <div className="flex flex-row flex-wrap items-center">
                 {selected.map(renderLabel)}
             </div>
-            <LabelsPopper
-                open={editing}
-                selected={selected}
-                onSelect={handleLabelInput}
-                anchorEl={fieldRef.current}
-                onClickAway={handleToggleEditMode}
-            />
+            {can(
+                "card.manage",
+                <LabelsPopper
+                    open={editing}
+                    selected={selected}
+                    onSelect={handleLabelInput}
+                    anchorEl={fieldRef.current}
+                    onClickAway={handleToggleEditMode}
+                />
+            )}
         </Field>
     );
 }

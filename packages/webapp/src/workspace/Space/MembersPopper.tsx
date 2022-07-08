@@ -6,6 +6,8 @@ import { Popper } from "@octal/ui";
 
 interface IMenu {
     selected?: string[];
+    placement?: string;
+    portal?: boolean;
     onSelect?: (member: MemberRecord) => void;
 }
 
@@ -63,7 +65,7 @@ export default Popper.create<HTMLUListElement, IMenu>(
                 tabIndex={-1}
                 style={labelStyle}
                 anchorEl={props.anchorEl}
-                placement="bottom-start"
+                placement={(props.placement as any) ?? "bottom-start"}
                 onClickAway={props.onClickAway}
                 className="z-10 focus:outline-none flex w-64 flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-64 bg-white shadow-md overflow-y-auto overflow-x-hidden">
                 <div className="flex flex-col divide-y dark:divide-slate-200/5">

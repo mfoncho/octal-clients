@@ -5,9 +5,8 @@ import { MdOutlineTrackChanges as TrackerIcon } from "react-icons/md";
 import { BsChatSquareTextFill as ThreadIcon } from "react-icons/bs";
 import { BsCheckCircleFill as DoneIcon } from "react-icons/bs";
 import { Dialog, Button } from "@octal/ui";
-import { CardRecord, useTrackers, useAuthId } from "@octal/store";
-import { useActions } from "./hooks";
-import { usePermissions } from "@workspace/Space";
+import { CardRecord, useTrackers } from "@octal/store";
+import { useActions, useCardCapability } from "./hooks";
 import { useDrawer } from "./hooks";
 import Warning from "./DeleteWarning";
 
@@ -17,14 +16,11 @@ interface IActions {
 }
 
 export default function Actions({ card, ...props }: IActions) {
-    const aid = useAuthId();
+    const can = useCardCapability(card.id);
     const events = useTrackers(card.id);
     const dialog = Dialog.useDialog("");
     const rootRef = useRef<HTMLDivElement>(null);
-    const permissions = usePermissions();
-    const [drawer, drawerActions] = useDrawer(card.id);
-    const owner = card.user_id == aid;
-    const canManageBoard = permissions.get("board.manage");
+    const [_drawer, drawerActions] = useDrawer(card.id);
 
     const actions = useActions(card);
 
@@ -44,7 +40,9 @@ export default function Actions({ card, ...props }: IActions) {
     }
 
     return (
-        <div className="flex flex-row items-center" ref={rootRef}>
+        <div
+            className="flex flex-row items-center space-x-2 px-2"
+            ref={rootRef}>
             <Button
                 variant="icon"
                 className="sm:hidden ml-2"
@@ -57,11 +55,8 @@ export default function Actions({ card, ...props }: IActions) {
                 }>
                 <ThreadIcon className="text-gray-500" />
             </Button>
-            {!card.archived && (
-                <Button
-                    variant="icon"
-                    className="ml-2"
-                    onClick={dialog.opener("trackers")}>
+            {can("card.track") && (
+                <Button variant="icon" onClick={dialog.opener("trackers")}>
                     <TrackerIcon
                         className={
                             events.isEmpty()
@@ -71,12 +66,8 @@ export default function Actions({ card, ...props }: IActions) {
                     />
                 </Button>
             )}
-            {!card.archived && (
-                <Button
-                    variant="icon"
-                    className="mx-2"
-                    disabled={!owner && !canManageBoard}
-                    onClick={handleToggleComplete}>
+            {can("card.manage") && (
+                <Button variant="icon" onClick={handleToggleComplete}>
                     <DoneIcon
                         className={
                             card.complete ? "text-green-500" : "text-gray-500"
@@ -84,11 +75,8 @@ export default function Actions({ card, ...props }: IActions) {
                     />
                 </Button>
             )}
-            {card.archived && canManageBoard && (
-                <Button
-                    variant="icon"
-                    className="mx-2"
-                    onClick={dialog.opener("warning")}>
+            {can("card.delete") && (
+                <Button variant="icon" onClick={dialog.opener("warning")}>
                     <Icons.Delete className="text-gray-500" />
                 </Button>
             )}

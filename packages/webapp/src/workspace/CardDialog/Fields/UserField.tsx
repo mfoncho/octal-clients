@@ -8,6 +8,7 @@ import {
     useUser,
     MemberRecord,
 } from "@octal/store";
+import { useCardCapability } from "../hooks";
 import Field, { IField } from "./Field";
 
 export interface IEdit {
@@ -70,6 +71,8 @@ export default function UserField({ field, handle, ...props }: IUserField) {
 
     const actions = useFieldAction(field);
 
+    const can = useCardCapability(field.card_id);
+
     const selected = field.values
         .map((value: any) => value.user_id)
         .toList()
@@ -96,7 +99,10 @@ export default function UserField({ field, handle, ...props }: IUserField) {
         const onClose = () => actions.deleteFieldValue(value.id);
         return (
             <div key={value.id} className="mr-1.5 mb-1">
-                <UserValue onClose={onClose} value={value} />
+                <UserValue
+                    onClose={can("card.manage") ? onClose : undefined}
+                    value={value}
+                />
             </div>
         );
     }
@@ -112,13 +118,16 @@ export default function UserField({ field, handle, ...props }: IUserField) {
             <div className="flex flex-row flex-wrap items-center">
                 {field.values.map(renderUser as any)}
             </div>
-            <MembersPopper
-                selected={selected as any}
-                onSelect={handleUserInput}
-                anchorEl={fieldRef.current}
-                onClickAway={handleToggleEditMode}
-                open={editing}
-            />
+            {can(
+                "card.manage",
+                <MembersPopper
+                    selected={selected as any}
+                    onSelect={handleUserInput}
+                    anchorEl={fieldRef.current}
+                    onClickAway={handleToggleEditMode}
+                    open={editing}
+                />
+            )}
         </Field>
     );
 }

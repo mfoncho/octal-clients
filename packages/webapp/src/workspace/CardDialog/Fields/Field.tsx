@@ -4,6 +4,7 @@ import { Text, Textarea } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import { CardFieldRecord } from "@octal/store";
 import { useInput } from "src/utils";
+import { useCardCapability } from "../hooks";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { IoMdTrash as DeleteIcon } from "react-icons/io";
 
@@ -55,7 +56,7 @@ function Rename({ field, onClose }: IRname) {
         <Textarea.Input
             autoFocus={true}
             onBlur={handleOnBlur}
-            className="rounded px-2 py-0 min-w-[128px] focus:outline-none font-semibold text-gray-700 text-base"
+            className="rounded px-2 py-0.5 min-w-[128px] focus:outline-none font-semibold text-gray-700 text-base w-full bg-slate-100"
             onSubmit={handleSubmit}
             {...name.props}
         />
@@ -68,6 +69,8 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
 
         const actions = useFieldAction(field);
 
+        const can = useCardCapability(field.card_id);
+
         const [rename, setRename] = useState(false);
 
         return (
@@ -78,17 +81,9 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                     props.dragging && "bg-primary-50"
                 )}>
                 <div
-                    {...props.handle}
+                    {...can("card.manage", props.handle)}
                     className="group flex flex-row justify-between items-center">
-                    <div className="flex flex-row items-center">
-                        {Boolean(icon) && (
-                            <button
-                                onClick={props.onClick}
-                                className="p-2 rounded-md hover:bg-gray-100"
-                                ref={props.buttonRef}>
-                                <Icon className="text-gray-500" />
-                            </button>
-                        )}
+                    <div className="flex-1 flex flex-col">
                         {rename ? (
                             <Rename
                                 field={field}
@@ -100,24 +95,35 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                             </span>
                         )}
                     </div>
-                    <div
-                        className={clx(
-                            "flex flex-row items-center group-hover:visible invisible",
-                            { hidden: rename }
-                        )}>
-                        <button
-                            onClick={() => setRename(true)}
-                            className="group-hover:visible invisible mr-2">
-                            <Icons.Edit className="h-5 w-5 text-gray-500" />
-                        </button>
-                        <button
-                            onClick={() => actions.deleteField()}
-                            className="flex flex-row ">
-                            <DeleteIcon className="text-gray-500 h-5 w-5" />
-                        </button>
-                    </div>
+                    {can(
+                        "card.manage",
+                        <div
+                            className={clx(
+                                "flex flex-row items-center space-x-2 group-hover:visible invisible",
+                                { hidden: rename }
+                            )}>
+                            {Boolean(icon) && (
+                                <button
+                                    onClick={props.onClick}
+                                    className="p-1.5 rounded-md hover:bg-gray-100"
+                                    ref={props.buttonRef}>
+                                    <Icon className="text-gray-500" />
+                                </button>
+                            )}
+                            <button
+                                onClick={() => setRename(true)}
+                                className="p-1 rounded-md  hover:bg-gray-100">
+                                <Icons.Edit className="h-5 w-5 text-gray-500" />
+                            </button>
+                            <button
+                                onClick={() => actions.deleteField()}
+                                className="p-1 rounded-md  hover:bg-gray-100">
+                                <DeleteIcon className="text-gray-500 h-5 w-5" />
+                            </button>
+                        </div>
+                    )}
                 </div>
-                <div className="flex flex-row py-1 pl-10">{props.children}</div>
+                <div className="flex flex-row py-1 px-1">{props.children}</div>
             </div>
         );
     }

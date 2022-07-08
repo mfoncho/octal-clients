@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import * as Icons from "@octal/icons";
 import { useFieldAction } from "@workspace/Board/hooks";
+import { useCardCapability } from "../hooks";
 import { CardDatetimeValueRecord } from "@octal/store";
 import Field, { IField } from "./Field";
 import Popover from "@material-ui/core/Popover";
@@ -8,6 +9,7 @@ import { Datepicker, UIEvent } from "@octal/ui";
 import moment from "moment";
 
 export default function DateTimeField({ field, handle, ...props }: IField) {
+    const can = useCardCapability(field.card_id);
     const [popper, setPopper] = useState<boolean>(false);
 
     const fieldRef = useRef<HTMLButtonElement>(null);
@@ -59,6 +61,11 @@ export default function DateTimeField({ field, handle, ...props }: IField) {
         );
     }
 
+    const btnProps = can("card.manage", {
+        role: "button",
+        onClick: can("card.manage", handleOpenDatePicker),
+    });
+
     return (
         <Field
             icon={Icons.Field.DateTime}
@@ -69,18 +76,17 @@ export default function DateTimeField({ field, handle, ...props }: IField) {
             buttonRef={fieldRef}>
             {value ? (
                 <span
-                    role="button"
-                    className="cursor-pointer font-bold text-gray-700 py-1 px-2 bg-gray-50 rounded-md hover:bg-gray-100 text-sm"
-                    onClick={handleOpenDatePicker}>
+                    {...btnProps}
+                    className="font-bold text-gray-700 py-1 px-2 bg-gray-50 rounded-md hover:bg-gray-100 text-sm">
                     {moment(value.value).format("MMMM Do YYYY, h:mm")}
                 </span>
             ) : (
                 <div
-                    role="button"
-                    className="cursor-pointer font-semibold h-6 w-36 text-gray-700 p-1 rounded-md bg-gray-50 hover:bg-gray-100"
-                    onClick={handleOpenDatePicker}></div>
+                    {...btnProps}
+                    className="font-semibold h-6 w-36 text-gray-700 p-1 rounded-md bg-gray-50 hover:bg-gray-100"
+                />
             )}
-            {popper ? renderPopover() : null}
+            {popper && can("card.manage") ? renderPopover() : null}
         </Field>
     );
 }

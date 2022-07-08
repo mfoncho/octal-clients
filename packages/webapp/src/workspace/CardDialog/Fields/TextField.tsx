@@ -4,6 +4,7 @@ import * as Icons from "@octal/icons";
 import { Textarea, Markdown } from "@octal/ui";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { CardTextValueRecord } from "@octal/store";
+import { useCardCapability } from "../hooks";
 import Field, { IField } from "./Field";
 
 interface IEdit {
@@ -54,6 +55,8 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
 export default function TextField({ field, handle, ...props }: IField) {
     const [editing, setEditing] = useState<boolean>(false);
 
+    const can = useCardCapability(field.card_id);
+
     const actions = useFieldAction(field);
 
     const value = field.values.first()! as CardTextValueRecord;
@@ -103,11 +106,14 @@ export default function TextField({ field, handle, ...props }: IField) {
                         </Markdown>
                     </div>
                     <div className="flex flex-row justify-end pt-2 px-3">
-                        <button
-                            onClick={handleToggleEditMode}
-                            className="text-primary-500 font-bold text-xs">
-                            edit
-                        </button>
+                        {can(
+                            "card.manage",
+                            <button
+                                onClick={handleToggleEditMode}
+                                className="text-primary-500 font-bold text-xs">
+                                edit
+                            </button>
+                        )}
                     </div>
                 </div>
             )}

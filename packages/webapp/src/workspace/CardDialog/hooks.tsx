@@ -1,7 +1,14 @@
+import { Record } from "immutable";
 import { useCallback, useMemo } from "react";
 import { useDrawer as useWorkspaceDrawer } from "src/hooks";
 import { CardRecord } from "@octal/store";
 import { useDispatch } from "react-redux";
+import {
+    useCard as useBoardCard,
+    useAuthId,
+    useBoard,
+    useSpacePermissions,
+} from "@octal/store";
 import * as BoardAction from "@octal/store/lib/actions/board";
 
 export interface IDrawer {
@@ -9,6 +16,20 @@ export interface IDrawer {
     type: string;
     thread_id?: string;
 }
+
+let CardCap = {
+    ["board.manage"]: false,
+    ["card.manage"]: false,
+    ["card.delete"]: false,
+    ["card.track"]: false,
+};
+
+export type Can = <T = boolean>(
+    permission: keyof typeof CardCap,
+    value?: T
+) => T;
+
+export class Capability extends Record(CardCap) {}
 
 const defaultDrawerProps: IDrawer = {
     id: "",
@@ -152,4 +173,34 @@ export function useActions(card: CardRecord) {
     return useMemo(() => {
         return actions;
     }, Object.values(actions));
+}
+
+export function useCardCapability(id: string) {
+    const aid = useAuthId();
+    const card = useBoardCard(id)!;
+    const board = useBoard(card.board_id);
+    const permissions = useSpacePermissions(board?.space_id);
+    return useMemo<Can>(() => {
+        const canManageBoard = permissions.get(
+            "board.manage",
+            false
+        ) as boolean;
+        let cap = new Capability({
+            ["card.track"]: !card.archived,
+            ["board.manage"]: canManageBoard && !card.archived,
+            ["card.manage"]:
+                (card.user_id === aid || canManageBoard) && !card.archived,
+            ["card.delete"]: canManageBoard && card.archived,
+        });
+        return ((permission: keyof typeof CardCap, val?: any) => {
+            let perm = cap.get(permission, false);
+            if (val === undefined) {
+                return perm;
+            }
+            if (perm) {
+                return val;
+            }
+            return perm;
+        }) as Can;
+    }, [permissions, card.id, card.archived]);
 }
