@@ -233,12 +233,12 @@ export default function ChecklistField({ field, handle, ...props }: IField) {
 
     return (
         <Field
+            icon={Icons.Field.Users}
             handle={handle}
+            field={field}
             onClick={handleTogglePopper}
             dragging={props.dragging}
-            icon={Icons.Field.Users}
-            buttonRef={fieldRef}
-            field={field}>
+            buttonRef={fieldRef}>
             <div className="flex-1 flex flex-col px-1">
                 <div className="flex flex-row pb-1">
                     {users.map((id) => (

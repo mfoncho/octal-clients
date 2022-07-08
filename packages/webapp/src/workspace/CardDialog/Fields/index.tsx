@@ -19,6 +19,7 @@ import LabelField from "./LabelField";
 import NumberField from "./NumberField";
 import DateTimeField from "./DateTimeField";
 import ChecklistField from "./ChecklistField";
+import { useCardCapability } from "../hooks";
 import { Dragged as FieldDragged } from "./Context";
 
 interface IFields {
@@ -34,6 +35,8 @@ export default React.memo<IFields>((props) => {
     const { card } = props;
 
     const actions = useActions(card);
+
+    const can = useCardCapability(card.id);
 
     const [dragged, setDragged] = useState<DragStart | null>(null);
 
@@ -147,9 +150,7 @@ export default React.memo<IFields>((props) => {
                     </DragDropContext>
                 </FieldDragged.Provider>
             </Elements.Provider>
-            {Boolean(card.id) && !Boolean(card.archived) && (
-                <FieldCreator card={card} />
-            )}
+            {can("card.manage", <FieldCreator card={card} />)}
         </React.Fragment>
     );
 });
