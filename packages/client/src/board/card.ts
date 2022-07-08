@@ -22,18 +22,6 @@ export interface MoveCardRequest {
     board_id: string;
 }
 
-export interface LabelCardRequest {
-    label_id: string;
-    card_id: string;
-    board_id: string;
-}
-
-export interface UnlabelCardRequest {
-    label_id: string;
-    card_id: string;
-    board_id: string;
-}
-
 export interface DeleteCardRequest {
     card_id: string;
     board_id: string;
@@ -172,29 +160,11 @@ export default class CardClient extends BaseClient {
         request: UpdateCardRequest,
         params?: Params
     ): Promise<io.Card> {
-        const path = `/boards/${request.board_id}/cards/${request.card_id}`;
+        const path = `/cards/${request.card_id}`;
         const payload = {
             name: request.name,
         };
         const { data } = await this.endpoint.patch(path, payload, params);
-        return data;
-    }
-
-    async labelCard(
-        request: LabelCardRequest,
-        params?: Params
-    ): Promise<io.CardLabel> {
-        const path = `/boards/${request.board_id}/cards/${request.card_id}/labels/${request.label_id}`;
-        const { data } = await this.endpoint.put(path, {}, params);
-        return data;
-    }
-
-    async unlabelCard(
-        request: UnlabelCardRequest,
-        params?: Params
-    ): Promise<string> {
-        const path = `/boards/${request.board_id}/cards/${request.card_id}/labels/${request.label_id}`;
-        const { data } = await this.endpoint.delete(path, params);
         return data;
     }
 
