@@ -2,6 +2,7 @@ import { put, takeEvery, select } from "redux-saga/effects";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as UserActions from "../actions/user";
+import * as AppActions from "../actions/app";
 import client, { io, Presence } from "@octal/client";
 import { UserSchema } from "../schemas";
 import { State } from "..";
@@ -149,11 +150,10 @@ function* connected({
     });
 }
 
-function* syncPresence(): Iterable<any> {
-    const topic = "workspace";
-
-    if (client.topic(topic)) return;
-    let channel = client.channel(topic);
+function* syncPresence({
+    payload,
+}: AppActions.WorkspaceConnectedAction): Iterable<any> {
+    let channel = payload.channel;
 
     channel.on("user.updated", (payload: io.User) => {
         dispatch(UserActions.userUpdated(payload));
@@ -183,11 +183,6 @@ function* syncPresence(): Iterable<any> {
             dispatch(UserActions.removePresence({ user_id: id }));
         }
     });
-
-    channel
-        .subscribe()
-        .receive("ok", () => {})
-        .receive("error", () => {});
 }
 
 export const tasks = [
@@ -209,7 +204,11 @@ export const tasks = [
     { effect: takeEvery, type: Actions.USER_CONNECTED, handler: connected },
     { effect: takeEvery, type: Actions.USER_BROADCAST, handler: broadcast },
     { effect: takeEvery, type: Actions.AUTH_LOADED, handler: subscribe },
-    { effect: takeEvery, type: Actions.AUTH_LOADED, handler: syncPresence },
+    {
+        effect: takeEvery,
+        type: Actions.WORKSPACE_CONNECTED,
+        handler: syncPresence,
+    },
     { effect: takeEvery, type: Actions.SET_USER_STATUS, handler: setStatus },
     //{ effect: takeEvery, type: "STORE_USERS", handler: store },
 ];
