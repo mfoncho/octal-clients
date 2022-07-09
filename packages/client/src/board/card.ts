@@ -103,15 +103,6 @@ export default class CardClient extends BaseClient {
         return data;
     }
 
-    async deleteCard(
-        request: DeleteCardRequest,
-        params?: Params
-    ): Promise<Partial<io.Card>> {
-        const url = `/boards/${request.board_id}/cards/${request.card_id}`;
-        const { data } = await this.endpoint.delete(url, params);
-        return data;
-    }
-
     async archiveCard(
         request: ArchiveCardRequest,
         params?: Params
@@ -146,7 +137,15 @@ export default class CardClient extends BaseClient {
         return data;
     }
 
-    // Route not activated
+    async deleteCard(
+        request: DeleteCardRequest,
+        params?: Params
+    ): Promise<Partial<io.Card>> {
+        const url = `/cards/${request.card_id}`;
+        const { data } = await this.endpoint.delete(url, params);
+        return data;
+    }
+
     async uncompleteCard(
         request: UncompleteCardRequest,
         params?: Params
