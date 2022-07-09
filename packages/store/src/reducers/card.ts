@@ -8,6 +8,7 @@ const positionSort = sort("position", "asc");
 type Index = "users" | "boards" | "columns" | "dates";
 
 export class CardsStore extends Record({
+    fields: Map<string, string>(),
     loaded: Map<string, List<string>>(),
     dates: Map<string, List<string>>(),
     users: Map<string, List<string>>(),
@@ -91,6 +92,11 @@ export class CardsStore extends Record({
         return store;
     }
 
+    getFieldCard(id: string) {
+        let card_id = this.fields.get(id, "xxxx");
+        return this.getCard(card_id);
+    }
+
     putCard(payload: any) {
         if (this.contains(payload.id)) {
             return this.patchCard(payload);
@@ -101,6 +107,11 @@ export class CardsStore extends Record({
                 CardsStore.indexCardUsers(store, card);
                 CardsStore.indexCardDates(store, card);
                 CardsStore.indexCardBoard(store, card);
+
+                // index fields
+                card.fields.forEach((field) => {
+                    store.setIn(["fields", field.id], field.card_id);
+                });
 
                 // index column_id
                 let columns = store.columns.get(card.column_id, List<string>());
@@ -200,7 +211,7 @@ export class CardsStore extends Record({
             return this.withMutations((store) => {
                 const filter = (id: string) => id !== card.id;
 
-                // index user_id
+                // indexed user_id
                 card.users.forEach((id) => {
                     let cids = store.users.get(id);
                     if (cids && cids.includes(card.id)) {
@@ -209,7 +220,12 @@ export class CardsStore extends Record({
                     }
                 });
 
-                // index board_id
+                // indexed fields
+                card.fields.forEach((field) => {
+                    store.deleteIn(["fields", field.id]);
+                });
+
+                // indexed board_id
                 let boards = store.boards.get(card.board_id, List<string>());
                 if (boards.includes(card.id))
                     store.setIn(
@@ -217,7 +233,7 @@ export class CardsStore extends Record({
                         boards.filter(filter)
                     );
 
-                // index column_id
+                // indexed column_id
                 let columns = store.users
                     .get(card.column_id, List<string>())
                     .filter(filter)
@@ -314,7 +330,9 @@ export const reducers = {
         let card = store.getCard(payload.card_id);
         if (card) {
             card = card.addField(payload);
-            return store.putCard(card);
+            return store
+                .putCard(card)
+                .setIn(["fields", payload.id], payload.card_id);
         }
         return store;
     },
@@ -338,7 +356,7 @@ export const reducers = {
         let card = store.getCard(payload.card_id);
         if (card) {
             card = card.removeField(payload.id);
-            return store.putCard(card);
+            return store.putCard(card).deleteIn(["fields", payload.id]);
         }
         return store;
     },
@@ -346,7 +364,7 @@ export const reducers = {
         store: CardsStore,
         { payload }: any
     ) => {
-        let card = store.getCard(payload.card_id);
+        let card = store.getFieldCard(payload.field_id);
         if (card) {
             card = card.addFieldValue(payload);
             return store.putCard(card);
@@ -357,7 +375,7 @@ export const reducers = {
         store: CardsStore,
         { payload }: any
     ) => {
-        let card = store.getCard(payload.card_id);
+        let card = store.getFieldCard(payload.field_id);
         if (card) {
             card = card.updateFieldValue(payload);
             return store.putCard(card);
@@ -368,7 +386,7 @@ export const reducers = {
         store: CardsStore,
         { payload }: any
     ) => {
-        let card = store.getCard(payload.card_id);
+        let card = store.getFieldCard(payload.field_id);
         if (card) {
             card = card.removeFieldValue(payload.field_id, payload.id);
             return store.putCard(card);

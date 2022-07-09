@@ -31,7 +31,7 @@ function* broadcast(action: UserActions.UserBroadcastAction): Iterable<any> {
 function* getPreferences(): Iterable<any> {
     try {
         const data = (yield client.getPreferences()) as any;
-        yield put(UserActions.preferenceSet(data));
+        yield put(UserActions.preferencesLoaded(data));
     } catch (e) {}
 }
 

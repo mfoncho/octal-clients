@@ -20,6 +20,7 @@ import {
     PRESENCE_UPDATED,
     UPDATE_USER_PROFILE,
     PREFERENCE_SET,
+    PREFERENCES_LOADED,
     UPDATE_USER_PASSWORD,
     SET_PREFERENCE,
 } from "./types";
@@ -153,6 +154,11 @@ export type UserUnassignedAction = Action<USER_UNASSIGNED, AssignedPayload>;
 
 export type UserBroadcastAction = Action<USER_BROADCAST, UserBoardcastPayload>;
 
+export type PreferencesLoadedAction = Action<
+    PREFERENCES_LOADED,
+    io.Preference[]
+>;
+
 export type PresenceLoadedAction = Action<
     PRESENCE_LOADED,
     PresenceLoadedPayload
@@ -211,6 +217,12 @@ export function presenceUpdated(
     payload: PresenceUpdatedPayload
 ): PresenceUpdatedAction {
     return createAction(PRESENCE_UPDATED, payload);
+}
+
+export function preferencesLoaded(
+    payload: io.Preference[]
+): PreferencesLoadedAction {
+    return createAction(PREFERENCES_LOADED, payload);
 }
 
 export function preferenceSet(payload: io.Preference): PreferenceSetAction {

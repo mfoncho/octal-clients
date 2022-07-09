@@ -6,6 +6,14 @@ import * as AppActions from "../actions/app";
 export const state = new PreferencesRecord();
 
 export const reducers = {
+    [Actions.PREFERENCES_LOADED]: (
+        state: PreferencesRecord,
+        { payload }: UserActions.PreferencesLoadedAction
+    ) => {
+        return payload.reduce((store, pref) => {
+            return store.set(pref.preference as any, pref.value);
+        }, state);
+    },
     [Actions.SET_AUTH]: (
         state: PreferencesRecord,
         { payload }: AppActions.AuthAction

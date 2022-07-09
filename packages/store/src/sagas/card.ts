@@ -205,6 +205,14 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
         dispatch(BoardActions.cardUpdated(card as any));
     });
 
+    channel.on("card.completed", (payload: io.Card) => {
+        dispatch(BoardActions.cardUpdated(payload as any));
+    });
+
+    channel.on("card.uncompleted", (payload: io.Card) => {
+        dispatch(BoardActions.cardUpdated(payload as any));
+    });
+
     channel.on("card.done", (payload: io.Card) => {
         let [card, related] = CardSchema.normalizeOne(payload);
         dispatch(AppActions.relatedLoaded(related));
