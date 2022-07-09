@@ -141,7 +141,7 @@ export default class Socket {
     }
 
     replaceTransport(newTransport: any) {
-        this.disconnect(() => {}, "rt", "replacing connection");
+        this.disconnect(() => {}, "replacing connection");
         this.transport = newTransport;
     }
 
@@ -167,13 +167,13 @@ export default class Socket {
 
     disconnect(
         callback: Callback = () => {},
-        code: string | number = "disconnect",
-        reason: string = "disconnect"
+        reason: string = "disconnect",
+        code: number = 1000
     ) {
         this.connectClock++;
         this.closeWasClean = true;
         this.reconnectTimer.reset();
-        this.teardown(callback, code, reason);
+        this.teardown(callback, reason, code);
     }
 
     setParams(params: Params | (() => Params)) {
@@ -246,8 +246,8 @@ export default class Socket {
 
     teardown(
         callback: Callback = () => {},
-        code: string | number = "teardown",
-        reason: string = "teardown"
+        reason: string = "teardown",
+        code: number = 1000
     ) {
         if (!this.connection) {
             return callback && callback();
@@ -497,11 +497,11 @@ export default class Socket {
         this.channels = this.channels.filter((ch) => ch !== channel);
     }
 
-    shutdown(callback?: () => void, _code?: number, _reason?: string) {
+    shutdown(callback?: () => void, reason?: string, code?: number) {
         for (const channel of this.channels) {
             channel.unsubscribe();
         }
-        this.disconnect(callback);
+        this.disconnect(callback, reason ?? "shutdown", code ?? 1000);
         return this;
     }
 
