@@ -154,15 +154,14 @@ export default class Socket {
             ...this.params(),
             vsn: this.vsn,
         });
-        if (uri.charAt(0) !== "/") {
+        if (uri.startsWith("wss:") || uri.startsWith("ws:")) {
             return uri;
         }
-        if (uri.charAt(1) === "/") {
-            return `${this.protocol()}:${uri}`;
+        if (uri.charAt(0) !== "/") {
+            return `${this.protocol()}://${uri}`;
         }
 
-        //return `${this.protocol()}://${location.host}${uri}`;
-        return `${this.protocol()}://192.168.1.2:4000${uri}`;
+        return `${this.protocol()}://${location.host}${uri}`;
     }
 
     disconnect(
