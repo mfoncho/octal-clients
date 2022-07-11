@@ -30,16 +30,16 @@ export default class SocketClient extends BaseClient {
         return this;
     }
 
-    disconnect(callback?: () => void, _code?: number, _reason?: string) {
-        this.socket.disconnect(callback);
+    disconnect(callback?: () => void, reason = "disconnect", code = 1000) {
+        this.socket.disconnect(callback, reason, code);
         return this;
     }
 
-    shutdown(callback?: () => void, _code?: number, _reason?: string) {
+    shutdown(callback?: () => void, reason = "shutdown", code = 1000) {
         for (const channel of this.channels) {
             channel.unsubscribe();
         }
-        this.socket.disconnect(callback);
+        this.socket.disconnect(callback, reason, code);
         return this;
     }
 

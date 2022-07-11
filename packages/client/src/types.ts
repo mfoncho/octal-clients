@@ -87,36 +87,20 @@ export namespace io {
         created_at: string;
     }
 
-    export interface BoardTemplate {
+    export interface CardFieldTemplate {
+        name: string;
+        type: string;
+    }
+
+    export interface CardTemplate {
         id: string;
         name: string;
-        type: "board";
-        author: {
-            name: string;
-            email: string;
-        };
-        board: {
-            name: string;
-            columns: any[];
-        };
-        topics: any[];
-        description: string;
+        board_id: string;
+        fields: CardFieldTemplate[];
     }
 
     export interface Calendar {
         cards: Card[];
-    }
-
-    export interface DiscussTemplate {
-        id: string;
-        name: string;
-        type: "board";
-        author: {
-            name: string;
-            email: string;
-        };
-        topics: any[];
-        description: string;
     }
 
     export interface Site {

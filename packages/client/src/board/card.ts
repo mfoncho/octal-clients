@@ -1,6 +1,19 @@
 import { io } from "../types";
 import BaseClient, { Params } from "../base";
 
+export interface CreateCardTemplateRequest {
+    board_id: string;
+    params: {
+        name: string;
+        fields: { name: string; type: string }[];
+    };
+}
+
+export interface DeleteCardTemplateRequest {
+    board_id: string;
+    template_id: string;
+}
+
 export interface CreateTrackerRequest {
     entity_id: string;
     params: { event: string };
@@ -181,6 +194,24 @@ export default class CardClient extends BaseClient {
         params?: Params
     ): Promise<any> {
         const path = `/cards/${request.entity_id}/trackers/${request.params.event}`;
+        const { data } = await this.endpoint.delete(path, params);
+        return data;
+    }
+
+    async createCardTemplate(
+        request: CreateCardTemplateRequest,
+        params?: Params
+    ): Promise<io.CardTemplate> {
+        const path = `/boards/${request.board_id}/templates`;
+        const { data } = await this.endpoint.post(path, request.params, params);
+        return data;
+    }
+
+    async deleteCardTemplate(
+        request: DeleteCardTemplateRequest,
+        params?: Params
+    ): Promise<any> {
+        const path = `/boards/${request.board_id}/templates/${request.template_id}`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }
