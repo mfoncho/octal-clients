@@ -2,6 +2,49 @@ import { Record, List } from "immutable";
 import { Unique, Id } from "@octal/client";
 import { CardRecord } from "./card";
 
+export class CardFieldTemplateRecord extends Record({
+    name: "",
+    type: "",
+}) {
+    static make(payload: any) {
+        if (Record.isRecord(payload)) {
+            return payload as any as CardFieldTemplateRecord;
+        }
+        return new CardFieldTemplateRecord(payload);
+    }
+}
+
+export class CardTemplateRecord
+    extends Record({
+        id: "" as Id,
+        name: "",
+        fields: List<CardFieldTemplateRecord>(),
+        board_id: "" as Id,
+    })
+    implements Unique
+{
+    constructor(data: any) {
+        super(CardTemplateRecord.objectFromJS(data));
+    }
+    static make(payload: any) {
+        if (Record.isRecord(payload)) {
+            return payload as any as CardTemplateRecord;
+        }
+        return new CardTemplateRecord(payload);
+    }
+    static objectFromJS(data: any) {
+        if (data.fields) {
+            let fields = List(
+                data.fields.map((field: any) =>
+                    CardFieldTemplateRecord.make(field)
+                )
+            );
+            data = { ...data, fields };
+        }
+        return data;
+    }
+}
+
 export class LabelRecord
     extends Record({
         id: "" as Id,
@@ -48,6 +91,7 @@ export class BoardRecord
         name: "",
         space_id: "",
         loaded: List<string>([]),
+        templates: List<CardTemplateRecord>(),
         labels: List<LabelRecord>(),
         filter: new BoardFilter(),
         is_archived: false,
@@ -110,11 +154,19 @@ export class BoardRecord
     }
 
     static objectFromJS(data: any) {
-        if (data.labels) {
+        if (Array.isArray(data.labels)) {
             let labels = List(
                 data.labels.map((label: any) => new LabelRecord(label))
             );
             data = { ...data, labels };
+        }
+        if (Array.isArray(data.templates)) {
+            let templates = List(
+                data.templates.map((template: any) =>
+                    CardTemplateRecord.make(template)
+                )
+            );
+            data = { ...data, templates };
         }
         return data;
     }
