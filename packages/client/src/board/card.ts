@@ -41,7 +41,9 @@ export interface DeleteCardRequest {
 }
 
 export interface CreateCardRequest {
-    name: string;
+    params: {
+        name: string;
+    };
     board_id: string;
     column_id: string;
     template_id?: string;
@@ -64,13 +66,9 @@ export interface UnarchiveCardRequest {
 }
 
 export interface UpdateCardRequest {
-    name?: string;
-    card_id: string;
-    board_id: string;
-}
-
-export interface UpdateCardStatusRequest {
-    done: boolean;
+    params: {
+        name?: string;
+    };
     card_id: string;
     board_id: string;
 }
@@ -108,8 +106,8 @@ export default class CardClient extends BaseClient {
         params?: Params
     ): Promise<io.Card> {
         const payload = {
-            name: request.name,
-            template_id: request.template_id,
+            ...request.params,
+            apply: request.template_id,
         };
         const url = `/boards/${request.board_id}/columns/${request.column_id}/cards`;
         const { data } = await this.endpoint.post(url, payload, params);
@@ -173,10 +171,11 @@ export default class CardClient extends BaseClient {
         params?: Params
     ): Promise<io.Card> {
         const path = `/cards/${request.card_id}`;
-        const payload = {
-            name: request.name,
-        };
-        const { data } = await this.endpoint.patch(path, payload, params);
+        const { data } = await this.endpoint.patch(
+            path,
+            request.params,
+            params
+        );
         return data;
     }
 
