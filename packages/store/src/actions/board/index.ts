@@ -67,8 +67,6 @@ import {
     CARD_MOVED,
     COMPLETE_CARD,
     UNCOMPLETE_CARD,
-    LABEL_CARD,
-    UNLABEL_CARD,
     LOAD_CARDS,
     LOAD_COLUMNS,
     FETCH_COLUMNS,
@@ -96,12 +94,34 @@ import {
     UNASSIGN_CHECKLIST,
     CHECKLIST_UNASSIGNED,
     BOARD_UPDATED,
+    CREATE_CARD_TEMPLATE,
+    DELETE_CARD_TEMPLATE,
+    CARD_TEMPLATE_CREATED,
+    CARD_TEMPLATE_DELETED,
 } from "./types";
 
 export * from "./types";
 
 export interface BoardPurgedPayload {
     id: string;
+}
+
+export interface CreateCardTemplatePayload {
+    board_id: string;
+    params: {
+        name: string;
+        fields: { name: string; type: string }[];
+    };
+}
+
+export interface CardTemplateDeletedPayload {
+    id: string;
+    board_id: string;
+}
+
+export interface DeleteCardTemplatePayload {
+    board_id: string;
+    template_id: string;
 }
 
 export interface ArchiveBoardPayload {
@@ -415,18 +435,6 @@ export interface UncompleteCardPayload {
     board_id: string;
 }
 
-export interface LabelCardPayload {
-    label_id: string;
-    card_id: string;
-    board_id: string;
-}
-
-export interface UnlabelCardPayload {
-    label_id: string;
-    card_id: string;
-    board_id: string;
-}
-
 export interface CreateChecklistPayload {
     name: string;
     card_id: string;
@@ -513,6 +521,28 @@ export type BoardPurgedAction = Action<BOARD_PURGED, BoardPurgedPayload>;
 export type BoardFilterUpdatedAction = Action<
     BOARD_FILTER_UPDATED,
     BoardFilterPayload
+>;
+
+export type CreateCardTemplateAction = IOAction<
+    CREATE_CARD_TEMPLATE,
+    CreateCardTemplatePayload,
+    io.CardTemplate
+>;
+
+export type DeleteCardTemplateAction = IOAction<
+    DELETE_CARD_TEMPLATE,
+    DeleteCardTemplatePayload,
+    any
+>;
+
+export type CardTemplateCreatedAction = Action<
+    CARD_TEMPLATE_CREATED,
+    io.CardTemplate
+>;
+
+export type CardTemplateDeletedAction = Action<
+    CARD_TEMPLATE_DELETED,
+    CardTemplateDeletedPayload
 >;
 
 export type BoardConnectedAction = Action<
@@ -744,18 +774,6 @@ export type FetchColumnsAction = IOAction<
     FETCH_COLUMNS,
     FetchColumnsPayload,
     io.Column[]
->;
-
-export type LabelCardAction = IOAction<
-    LABEL_CARD,
-    LabelCardPayload,
-    io.CardLabel
->;
-
-export type UnlabelCardAction = IOAction<
-    UNLABEL_CARD,
-    UnlabelCardPayload,
-    string
 >;
 
 export type GetCardAction = IOAction<GET_CARD, GetCardPayload, io.Card>;
@@ -1332,4 +1350,27 @@ export function boardUnarchived(payload: BoardPartial): BoardUnarchivedAction {
 
 export function purgeBoard(payload: BoardPurgedPayload): BoardPurgedAction {
     return createAction(BOARD_PURGED, payload);
+}
+
+export function cardTemplateCreated(
+    payload: io.CardTemplate
+): CardTemplateCreatedAction {
+    return createAction(CARD_TEMPLATE_CREATED, payload);
+}
+export function cardTemplateDeleted(
+    payload: CardTemplateDeletedPayload
+): CardTemplateDeletedAction {
+    return createAction(CARD_TEMPLATE_DELETED, payload);
+}
+
+export function createCardTemplate(
+    payload: CreateCardTemplatePayload
+): CreateCardTemplateAction {
+    return createIOAction<CREATE_CARD_TEMPLATE>(CREATE_CARD_TEMPLATE, payload);
+}
+
+export function deleteCardTemplate(
+    payload: DeleteCardTemplatePayload
+): DeleteCardTemplateAction {
+    return createIOAction<DELETE_CARD_TEMPLATE>(DELETE_CARD_TEMPLATE, payload);
 }

@@ -150,12 +150,6 @@ export type CARD_MOVED = typeof CARD_MOVED;
 export const UPDATE_CARD = "UPDATE_CARD";
 export type UPDATE_CARD = typeof UPDATE_CARD;
 
-export const LABEL_CARD = "LABEL_CARD";
-export type LABEL_CARD = typeof LABEL_CARD;
-
-export const UNLABEL_CARD = "UNLABEL_CARD";
-export type UNLABEL_CARD = typeof UNLABEL_CARD;
-
 export const FETCH_CARDS = "FETCH_CARDS";
 export type FETCH_CARDS = typeof FETCH_CARDS;
 
@@ -180,9 +174,6 @@ export type CARD_UNLABELED = typeof CARD_UNLABELED;
 export const CARD_ARCHIVED = "CARD_ARCHIVED";
 export type CARD_ARCHIVED = typeof CARD_ARCHIVED;
 
-export const CARD_DONE = "CARD_DONE";
-export type CARD_DONE = typeof CARD_DONE;
-
 export const COMPLETE_CARD = "COMPLETE_CARD";
 export type COMPLETE_CARD = typeof COMPLETE_CARD;
 
@@ -203,6 +194,18 @@ export type CARD_DELETED = typeof CARD_DELETED;
 
 export const CARDS_REORDERED = "CARDS_REORDERED";
 export type CARDS_REORDERED = typeof CARDS_REORDERED;
+
+export const CREATE_CARD_TEMPLATE = "CREATE_CARD_TEMPLATE";
+export type CREATE_CARD_TEMPLATE = typeof CREATE_CARD_TEMPLATE;
+
+export const DELETE_CARD_TEMPLATE = "DELETE_CARD_TEMPLATE";
+export type DELETE_CARD_TEMPLATE = typeof DELETE_CARD_TEMPLATE;
+
+export const CARD_TEMPLATE_CREATED = "CARD_TEMPLATE_CREATED";
+export type CARD_TEMPLATE_CREATED = typeof CARD_TEMPLATE_CREATED;
+
+export const CARD_TEMPLATE_DELETED = "CARD_TEMPLATE_DELETED";
+export type CARD_TEMPLATE_DELETED = typeof CARD_TEMPLATE_DELETED;
 
 // Checklist actions
 export const ASSIGN_CHECKLIST = "ASSIGN_CHECKLIST";

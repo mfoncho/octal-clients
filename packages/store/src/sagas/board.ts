@@ -20,6 +20,37 @@ function* create({
     }
 }
 
+function* createCardTemplate({
+    payload,
+    resolve,
+}: BoardActions.CreateCardTemplateAction): Iterable<any> {
+    try {
+        const data = (yield client.createCardTemplate(payload)) as any;
+        yield put(BoardActions.cardTemplateCreated(data));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
+function* deleteCardTemplate({
+    payload,
+    resolve,
+}: BoardActions.DeleteCardTemplateAction): Iterable<any> {
+    try {
+        const data = (yield client.deleteCardTemplate(payload)) as any;
+        yield put(
+            BoardActions.cardTemplateDeleted({
+                id: payload.template_id,
+                ...payload,
+            })
+        );
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
 function* archive({
     payload,
     resolve,
@@ -176,6 +207,16 @@ export const tasks = [
         effect: takeEvery,
         type: Actions.SPACES_LOADED,
         handler: spaceLoaded,
+    },
+    {
+        effect: takeEvery,
+        type: Actions.CREATE_CARD_TEMPLATE,
+        handler: createCardTemplate,
+    },
+    {
+        effect: takeEvery,
+        type: Actions.DELETE_CARD_TEMPLATE,
+        handler: deleteCardTemplate,
     },
     { effect: takeEvery, type: Actions.BOARD_PURGED, handler: unsubscribe },
     { effect: takeEvery, type: Actions.ARCHIVE_BOARD, handler: archive },
