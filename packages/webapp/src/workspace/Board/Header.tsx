@@ -7,7 +7,6 @@ import { usePermissions } from "../Space";
 import Templates from "./Templates";
 import RenameBoardDialog from "./RenameBoardDialog";
 import { useNavigatorDrawer } from "src/hooks";
-import { useSpacePermissions } from "@octal/store";
 
 export default React.memo(() => {
     const board = useBoard();

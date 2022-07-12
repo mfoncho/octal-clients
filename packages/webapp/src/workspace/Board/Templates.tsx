@@ -3,6 +3,7 @@ import * as Icons from "@octal/icons";
 import { Button, Dialog, Text } from "@octal/ui";
 import { BoardRecord } from "@octal/store";
 import { useBoardActions } from "./hooks";
+import { usePermissions } from "../Space";
 
 interface IDialog {
     board: BoardRecord;
@@ -12,6 +13,8 @@ export default Dialog.create<IDialog>((props) => {
     const [loading, setLoading] = React.useState<string[]>([]);
 
     const actions = useBoardActions();
+
+    const permissions = usePermissions();
 
     function handleDeleteTemplate(id: string) {
         actions.deleteCardTemplate(id).finally(() => {
@@ -47,15 +50,17 @@ export default Dialog.create<IDialog>((props) => {
                                 </div>
                             </div>
                             <div>
-                                <Button
-                                    onClick={() =>
-                                        handleDeleteTemplate(template.id)
-                                    }
-                                    variant="icon"
-                                    disabled={loading.includes(template.id)}
-                                    color="clear">
-                                    <Icons.Delete className="group-hover:text-white" />
-                                </Button>
+                                {permissions.get("board.manage") && (
+                                    <Button
+                                        onClick={() =>
+                                            handleDeleteTemplate(template.id)
+                                        }
+                                        variant="icon"
+                                        disabled={loading.includes(template.id)}
+                                        color="clear">
+                                        <Icons.Delete className="group-hover:text-white" />
+                                    </Button>
+                                )}
                             </div>
                         </div>
                         <div className="text-sm text-gray-500 group-hover:text-gray-200 font-semibold">
