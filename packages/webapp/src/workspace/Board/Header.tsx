@@ -54,17 +54,19 @@ export default React.memo(() => {
                 </div>
             </div>
             <div className="flex flex-row items-center justify-end px-4">
-                <Button
-                    variant="icon"
-                    className="mx-2"
-                    onClick={dialog.opener("templates")}>
-                    <Icons.Template />
-                    <Templates
-                        onClose={dialog.close}
-                        open={dialog.templates}
-                        board={board}
-                    />
-                </Button>
+                {permissions.get("board.manage") && (
+                    <Button
+                        variant="icon"
+                        className="mx-2"
+                        onClick={dialog.opener("templates")}>
+                        <Icons.Template />
+                        <Templates
+                            onClose={dialog.close}
+                            open={dialog.templates}
+                            board={board}
+                        />
+                    </Button>
+                )}
                 <Button
                     variant="icon"
                     className="mx-2"
