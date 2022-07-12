@@ -1,24 +1,12 @@
 import React from "react";
 import { Button, Dialog, Text } from "@octal/ui";
+import * as Icons from "@octal/icons";
 import { useBoard, useDrawer } from "./hooks";
 import StashDialog from "./StashDialog";
 import Templates from "./Templates";
 import RenameBoardDialog from "./RenameBoardDialog";
-import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
-import { RiArchiveDrawerFill as DrawerIcon } from "react-icons/ri";
 import { useNavigatorDrawer } from "src/hooks";
 import { useSpacePermissions } from "@octal/store";
-
-const ArchiveIcon = React.memo(() => (
-    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-        <path
-            fillRule="evenodd"
-            d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-            clipRule="evenodd"
-        />
-    </svg>
-));
 
 export default React.memo(() => {
     const board = useBoard();
@@ -51,7 +39,7 @@ export default React.memo(() => {
                     color="clear"
                     onClick={handleToggleDrawer}
                     className="visible sm:hidden">
-                    <MenuIcon />
+                    <Icons.Menu />
                 </Button>
                 <div className="flex flex-col justify-center px-2 overflow-hidden">
                     <button
@@ -70,7 +58,7 @@ export default React.memo(() => {
                     variant="icon"
                     className="mx-2"
                     onClick={dialog.opener("templates")}>
-                    <DrawerIcon />
+                    <Icons.Template />
                     <Templates
                         onClose={dialog.close}
                         open={dialog.templates}
@@ -81,7 +69,7 @@ export default React.memo(() => {
                     variant="icon"
                     className="mx-2"
                     onClick={dialog.opener("stash")}>
-                    <DrawerIcon />
+                    <Icons.Drawer />
                     <StashDialog
                         onClose={dialog.close}
                         open={dialog.stash}
@@ -95,7 +83,7 @@ export default React.memo(() => {
                     }
                     className="mx-2"
                     onClick={handleToggleArchive}>
-                    <ArchiveIcon />
+                    <Icons.Archives className="w-5 h-5" />
                 </Button>
             </div>
             <RenameBoardDialog

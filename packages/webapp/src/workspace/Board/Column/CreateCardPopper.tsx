@@ -165,7 +165,7 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
                 anchorEl={props.anchorEl}
                 placement="bottom-end"
                 onClickAway={loading ? undefined : handleClickAway}
-                className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 py-2 w-[294px] bg-white shadow-md overflow-x-hidden">
+                className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 py-2 w-[294px] bg-white shadow-md overflow-x-hidden">
                 <div className="flex flex-col py-2 px-4 items-center">
                     <Textarea.Input
                         autoFocus={true}
@@ -212,6 +212,7 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
                 </div>
                 <div className="flex flex-col py-2 px-4 items-center">
                     <button
+                        disabled={loading}
                         onClick={handleSubmit}
                         className={`${
                             name.valid ? "bg-primary-500" : "bg-primary-200"

@@ -1,9 +1,8 @@
 import React from "react";
 import * as Icons from "@octal/icons";
-import { Switch, Button, Dialog, Text } from "@octal/ui";
+import { Button, Dialog, Text } from "@octal/ui";
 import { BoardRecord } from "@octal/store";
 import { useBoardActions } from "./hooks";
-import { useInput } from "src/utils";
 
 interface IDialog {
     board: BoardRecord;
@@ -23,7 +22,7 @@ export default Dialog.create<IDialog>((props) => {
 
     return (
         <Dialog
-            title="Create Template"
+            title="Templates"
             maxWidth="xs"
             open={props.open}
             fullWidth={true}
