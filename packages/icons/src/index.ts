@@ -47,6 +47,7 @@ export { default as Copy } from "./Copy";
 export { default as Link } from "./Link";
 export { default as Mail } from "./Mail";
 export { default as Download } from "./Download";
+export { default as Template } from "./Template";
 
 export { default as Forum } from "./Forum";
 export { default as MoveCard } from "./LeftRight";
