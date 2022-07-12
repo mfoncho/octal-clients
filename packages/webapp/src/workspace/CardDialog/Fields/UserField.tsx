@@ -67,6 +67,8 @@ function UserValue({ value, onClose }: IUserValue) {
 export default function UserField({ field, handle, ...props }: IUserField) {
     const [editing, setEditing] = useState<boolean>(false);
 
+    const [loading, setLoading] = useState<string[]>([]);
+
     const fieldRef = useRef<HTMLButtonElement>(null);
 
     const actions = useFieldAction(field);
@@ -83,15 +85,25 @@ export default function UserField({ field, handle, ...props }: IUserField) {
     }
 
     function handleUserInput(member: MemberRecord) {
+        if (loading.includes(member.user_id)) return;
+        let cleanUpLoading = () =>
+            setLoading((loading) =>
+                loading.filter((lid) => lid !== member.user_id)
+            );
+        setLoading((loading) => loading.concat([member.user_id]));
         if (selected.includes(member.user_id)) {
             const value = field.values.find(
                 (value: any) => value.user_id == member.user_id
             );
             if (value) {
-                return actions.deleteFieldValue(value.id);
+                return actions
+                    .deleteFieldValue(value.id)
+                    .finally(cleanUpLoading);
             }
         } else {
-            return actions.createFieldValue({ value: member.user_id });
+            return actions
+                .createFieldValue({ value: member.user_id })
+                .finally(cleanUpLoading);
         }
     }
 
