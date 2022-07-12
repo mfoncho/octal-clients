@@ -3,6 +3,7 @@ import { Button, Dialog, Text } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import { useBoard, useDrawer } from "./hooks";
 import StashDialog from "./StashDialog";
+import { usePermissions } from "../Space";
 import Templates from "./Templates";
 import RenameBoardDialog from "./RenameBoardDialog";
 import { useNavigatorDrawer } from "src/hooks";
@@ -14,7 +15,7 @@ export default React.memo(() => {
     const [drawer, drawerActions] = useDrawer(board.id);
     const dialog = Dialog.useDialog();
 
-    const permissions = useSpacePermissions(board.space_id);
+    const permissions = usePermissions();
 
     function handleToggleArchive() {
         if (drawer.props.type != "archive" || !drawer.open) {
