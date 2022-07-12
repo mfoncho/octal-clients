@@ -46,6 +46,7 @@ export { default as Settings } from "./Settings";
 export { default as Copy } from "./Copy";
 export { default as Link } from "./Link";
 export { default as Mail } from "./Mail";
+export { default as Drawer } from "./Drawer";
 export { default as Download } from "./Download";
 export { default as Template } from "./Template";
 export { default as Archives } from "./Archives";
