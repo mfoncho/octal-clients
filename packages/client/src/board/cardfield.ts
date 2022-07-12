@@ -125,8 +125,25 @@ export default class CardFieldClient extends BaseClient {
         params?: Params
     ): Promise<any> {
         const path = `/fields/${request.field_id}/values`;
-        const { data } = await this.endpoint.post(path, request.params, params);
-        return data;
+        let findex = Object.values(request.params).findIndex((value) => {
+            return value instanceof File;
+        });
+        if (findex < 0) {
+            const { data } = await this.endpoint.post(
+                path,
+                request.params,
+                params
+            );
+            return data;
+        } else {
+            let form = Object.keys(request.params).reduce((form, key) => {
+                form.append(key, request.params[key]);
+                return form;
+            }, new FormData());
+
+            const { data } = await this.endpoint.post(path, form, params);
+            return data;
+        }
     }
 
     async updateCardFieldValue(
