@@ -2,7 +2,9 @@ import Endpoint from "@octal/endpoint";
 import { Page } from "src/types";
 import { io } from "./types";
 
-const endpoint = Endpoint.create({ baseURL: "http://192.168.1.2:8080/api" });
+const endpoint = Endpoint.create({
+    baseURL: `${window.location.origin}/api/console`,
+});
 
 export interface FetchUsersRequest {
     page?: number | string;
