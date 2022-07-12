@@ -1,2 +1,1 @@
-import { RiArchiveDrawerFill as default } from "react-icons/ri";
-
+export { RiArchiveDrawerFill as default } from "react-icons/ri";
