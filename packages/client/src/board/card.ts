@@ -5,6 +5,7 @@ export interface CreateCardTemplateRequest {
     board_id: string;
     params: {
         name: string;
+        description: string;
         fields: { name: string; type: string }[];
     };
 }
