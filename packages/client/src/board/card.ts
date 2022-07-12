@@ -107,7 +107,7 @@ export default class CardClient extends BaseClient {
     ): Promise<io.Card> {
         const payload = {
             ...request.params,
-            apply: request.template_id,
+            template_id: request.template_id,
         };
         const url = `/boards/${request.board_id}/columns/${request.column_id}/cards`;
         const { data } = await this.endpoint.post(url, payload, params);
