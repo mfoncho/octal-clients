@@ -2,10 +2,32 @@ import { Record, List, fromJS, Map } from "immutable";
 import { Unique, Positioned, BelongsToBoard } from "@octal/client";
 import { sort, keyStingFromDate } from "@octal/common";
 import calendar from "@octal/calendar";
+import { FileRecord } from "./workspace";
 
 const createAtAsc = sort("created_at", "asc");
 
 const positionAsc = sort("position", "asc");
+
+export class CardFileValueRecord extends Record({
+    id: "",
+    file: FileRecord,
+    card_id: "",
+    field_id: "",
+    created_at: "",
+}) {
+    constructor(params: any) {
+        super(CardFileValueRecord.objectFromJS(params));
+    }
+
+    static objectFromJS(data: any) {
+        if (data.file) {
+            let file = new FileRecord(data.file);
+            data = { ...data, file };
+        }
+
+        return data;
+    }
+}
 
 export class CardTaskValueRecord extends Record({
     id: "",
@@ -58,6 +80,7 @@ export class CardDatetimeValueRecord extends Record({
 export interface ICardField<
     T =
         | CardTextValueRecord
+        | CardFileValueRecord
         | CardLabelValueRecord
         | CardDatetimeValueRecord
         | CardUserValueRecord
@@ -152,7 +175,6 @@ export class CardFieldRecord extends Record<ICardField>({
             case "user":
                 return new CardUserValueRecord(value);
 
-            case "date":
             case "datetime":
                 return new CardDatetimeValueRecord(value);
 
@@ -161,6 +183,9 @@ export class CardFieldRecord extends Record<ICardField>({
 
             case "text":
                 return new CardTextValueRecord(value);
+
+            case "file":
+                return new CardFileValueRecord(value);
 
             case "checklist":
                 return new CardTaskValueRecord(value);
