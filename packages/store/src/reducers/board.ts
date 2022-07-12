@@ -116,6 +116,28 @@ export class BoardsStore extends Record({
 export const state = new BoardsStore();
 
 export const reducers = {
+    [Actions.CARD_TEMPLATE_CREATED](
+        store: BoardsStore,
+        { payload }: BoardActions.CardTemplateCreatedAction
+    ) {
+        let board = store.getBoard(payload.board_id);
+        if (board) {
+            board = board.putTemplate(payload);
+            return store.setIn(["entities", board.id], board);
+        }
+        return store;
+    },
+    [Actions.CARD_TEMPLATE_DELETED](
+        store: BoardsStore,
+        { payload }: BoardActions.CardTemplateDeletedAction
+    ) {
+        let board = store.getBoard(payload.board_id);
+        if (board) {
+            board = board.removeTemplate(payload);
+            return store.setIn(["entities", board.id], board);
+        }
+        return store;
+    },
     [Actions.BOARD_FILTER_UPDATED]: (
         store: BoardsStore,
         { payload }: BoardActions.BoardFilterUpdatedAction

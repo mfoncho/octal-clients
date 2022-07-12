@@ -18,6 +18,7 @@ export class CardTemplateRecord
     extends Record({
         id: "" as Id,
         name: "",
+        description: "",
         fields: List<CardFieldTemplateRecord>(),
         board_id: "" as Id,
     })
@@ -120,12 +121,35 @@ export class BoardRecord
         return this.updateIn(["filter", filter], (_old) => value);
     }
 
+    putTemplate(payload: any) {
+        const index = this.templates.findIndex(
+            (template) => payload.id === template.id
+        );
+        if (index === -1) {
+            return this.update("templates", (templates) =>
+                templates.push(CardTemplateRecord.make(payload))
+            );
+        }
+        return this;
+    }
+
+    removeTemplate(payload: any) {
+        const index = this.templates.findIndex(
+            (template) => payload.id === template.id
+        );
+        if (index >= 0) {
+            return this.deleteIn(["templates", index]);
+        }
+        return this;
+    }
+
     putLabel(payload: any) {
         const index = this.labels.findIndex((label) => payload.id === label.id);
-        if (index === -1)
+        if (index === -1) {
             return this.update("labels", (labels) =>
                 labels.push(LabelRecord.make(payload))
             );
+        }
         return this.updateIn(["labels", index], (label: any) =>
             label.merge(payload)
         );

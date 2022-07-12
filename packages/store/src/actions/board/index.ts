@@ -110,6 +110,7 @@ export interface CreateCardTemplatePayload {
     board_id: string;
     params: {
         name: string;
+        description: string;
         fields: { name: string; type: string }[];
     };
 }
@@ -408,13 +409,17 @@ export interface ColumnPosition {
 }
 
 export interface UpdateCardPayload {
-    name?: string;
+    params: {
+        name: string;
+    };
     card_id: string;
     board_id: string;
 }
 
 export interface CreateCardPayload {
-    name: string;
+    params: {
+        name: string;
+    };
     board_id: string;
     column_id: string;
     template_id?: string;
