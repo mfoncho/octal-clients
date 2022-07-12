@@ -127,11 +127,9 @@ export function useActions(card: CardRecord) {
     );
 
     const updateCard = useCallback(
-        (
-            params: Omit<BoardAction.UpdateCardPayload, "card_id" | "board_id">
-        ) => {
+        (params: { name: string }) => {
             const payload = {
-                ...params,
+                params,
                 board_id: card.board_id,
                 card_id: card.id,
             };

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Dialog, Text } from "@octal/ui";
 import { useBoard, useDrawer } from "./hooks";
 import StashDialog from "./StashDialog";
+import Templates from "./Templates";
 import RenameBoardDialog from "./RenameBoardDialog";
 import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
 import { RiArchiveDrawerFill as DrawerIcon } from "react-icons/ri";
@@ -65,6 +66,17 @@ export default React.memo(() => {
                 </div>
             </div>
             <div className="flex flex-row items-center justify-end px-4">
+                <Button
+                    variant="icon"
+                    className="mx-2"
+                    onClick={dialog.opener("templates")}>
+                    <DrawerIcon />
+                    <Templates
+                        onClose={dialog.close}
+                        open={dialog.templates}
+                        board={board}
+                    />
+                </Button>
                 <Button
                     variant="icon"
                     className="mx-2"

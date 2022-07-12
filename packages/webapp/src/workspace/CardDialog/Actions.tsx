@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import * as Icons from "@octal/icons";
 import TrackersDialog from "./TrackersDialog";
+import TemplateDialog from "./TemplateDialog";
 import { MdOutlineTrackChanges as TrackerIcon } from "react-icons/md";
 import { BsChatSquareTextFill as ThreadIcon } from "react-icons/bs";
 import { BsCheckCircleFill as DoneIcon } from "react-icons/bs";
@@ -66,6 +67,11 @@ export default function Actions({ card, ...props }: IActions) {
                     />
                 </Button>
             )}
+            {can("board.manage") && (
+                <Button variant="icon" onClick={dialog.opener("template")}>
+                    <Icons.Template className="text-gray-500" />
+                </Button>
+            )}
             {can("card.manage") && (
                 <Button variant="icon" onClick={handleToggleComplete}>
                     <DoneIcon
@@ -89,6 +95,11 @@ export default function Actions({ card, ...props }: IActions) {
             <TrackersDialog
                 card={card}
                 open={dialog.trackers}
+                onClose={dialog.close}
+            />
+            <TemplateDialog
+                card={card}
+                open={dialog.template}
                 onClose={dialog.close}
             />
         </div>

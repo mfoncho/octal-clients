@@ -2,11 +2,10 @@ import { CardRecord, ColumnRecord, CardFieldRecord } from "@octal/store";
 import { OrderedMap } from "immutable";
 import { useContext, useCallback, useMemo } from "react";
 import * as BoardAction from "@octal/store/lib/actions/board";
-import * as AppAction from "@octal/store/lib/actions/app";
 import Context, { Cards, Dragged } from "./Context";
 import { useDispatch } from "react-redux";
 import { useDrawer as useWorkspaceDrawer } from "src/hooks";
-import { useBoardColumns } from "@octal/store";
+import { useBoardColumns, Actions } from "@octal/store";
 export { useMembers, useMember } from "../Space/hooks";
 
 const defaultCards = OrderedMap<string, CardRecord>();
@@ -82,6 +81,37 @@ export function useBoardActions() {
         },
         [board.id]
     );
+
+    const createCardTemplate = useCallback(
+        (
+            name: string,
+            desc: string,
+            fields: { name: string; type: string }[]
+        ) => {
+            const action = BoardAction.createCardTemplate({
+                board_id: board.id,
+                params: {
+                    name,
+                    fields,
+                    description: desc,
+                },
+            });
+            return dispatch(action);
+        },
+        [board.id]
+    );
+
+    const deleteCardTemplate = useCallback(
+        (id: string) => {
+            const action = BoardAction.deleteCardTemplate({
+                board_id: board.id,
+                template_id: id,
+            });
+            return dispatch(action);
+        },
+        [board.id]
+    );
+
     const createLabel = useCallback(
         (params: BoardAction.CreateLabelParams) => {
             const action = BoardAction.createLabel(board.id, params);
@@ -111,7 +141,15 @@ export function useBoardActions() {
         },
         [board.id]
     );
-    return { updateBoard, filter, createLabel, updateLabel, deleteLabel };
+    return {
+        updateBoard,
+        filter,
+        createLabel,
+        updateLabel,
+        deleteLabel,
+        createCardTemplate,
+        deleteCardTemplate,
+    };
 }
 
 export function useColumnActions(column: ColumnRecord) {
@@ -160,7 +198,9 @@ export function useColumnActions(column: ColumnRecord) {
 
     const createCard = useCallback((name: string, template?: string) => {
         const action = BoardAction.createCard({
-            name: name,
+            params: {
+                name: name,
+            },
             template_id: template,
             board_id: column.board_id,
             column_id: column.id,
@@ -371,11 +411,9 @@ export function useCardActions(card: CardRecord) {
     );
 
     const updateCard = useCallback(
-        (
-            params: Omit<BoardAction.UpdateCardPayload, "card_id" | "board_id">
-        ) => {
+        (params: { name: string }) => {
             const payload = {
-                ...params,
+                params,
                 board_id: card.board_id,
                 card_id: card.id,
             };
@@ -394,7 +432,11 @@ export function useCardActions(card: CardRecord) {
     }, [card.id]);
 
     const uncompleteCard = useCallback(() => {
-        return Promise.reject("@TODO");
+        const action = Actions.Board.uncompleteCard({
+            board_id: card.board_id,
+            card_id: card.id,
+        });
+        return dispatch(action);
     }, [card.id]);
 
     const actions = {

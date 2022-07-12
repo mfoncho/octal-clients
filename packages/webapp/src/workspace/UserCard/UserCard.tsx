@@ -3,7 +3,7 @@ import { Popper, Textarea } from "@octal/ui";
 import { Text } from "@octal/ui";
 import PresenceAvatar from "../PresenceAvatar";
 import { useInput } from "src/utils";
-import { useUser, useViewer } from "@octal/store";
+import { useUser, useViewer, UserRecord } from "@octal/store";
 import * as ThreadAction from "@octal/store/lib/actions/thread";
 import { useDispatch } from "react-redux";
 
@@ -11,17 +11,13 @@ interface IUserCard {
     id: string;
 }
 
-const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
-    const viewer = useViewer();
-
-    const [loading, setLoading] = React.useState<boolean>(false);
-
-    const user = useUser(props.id)!;
-
+const DirectMessageForm = React.memo<{
+    user: UserRecord;
+    onSubmit?: () => void;
+}>(({ user, ...props }) => {
     const dispatch = useDispatch();
-
+    const [loading, setLoading] = React.useState<boolean>(false);
     const input = useInput("");
-
     function handleSubmit() {
         if (input.valid && !loading) {
             const action = ThreadAction.postDirectMessage({
@@ -31,14 +27,36 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
                 },
             });
             setLoading(true);
-            return dispatch(action).finally(props.onClickAway as any);
+            return dispatch(action).finally(props.onSubmit as any);
         }
     }
 
     return (
+        <>
+            <Textarea
+                value={input.value}
+                disabled={loading}
+                onSubmit={handleSubmit}
+                onChange={input.props.onChange}
+                className="text-msg p-3 min-h-[100px]"
+                placeholder={`@${user.username || ""} quick message`}
+            />
+            <button
+                className="bg-primary-500 rounded-b w-full text-white font-bold py-2"
+                onClick={handleSubmit}>
+                Send
+            </button>
+        </>
+    );
+});
+
+const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
+    const viewer = useViewer();
+
+    const user = useUser(props.id)!;
+    return (
         <Popper
             open={true}
-            portal={true}
             anchorEl={props.anchorEl}
             onClickAway={props.onClickAway}
             className="rounded-md flex flex-col w-[250px] z-[1500] bg-white shadow-lg">
@@ -64,23 +82,10 @@ const Card = Popper.create<HTMLDivElement, IUserCard>((props) => {
                     </span>
                 </div>
                 {viewer.id !== user.id && (
-                    <>
-                        <Textarea
-                            value={input.value}
-                            disabled={loading}
-                            onSubmit={handleSubmit}
-                            onChange={input.props.onChange}
-                            className="text-msg p-3 min-h-[100px]"
-                            placeholder={`@${
-                                user.username || ""
-                            } quick message`}
-                        />
-                        <button
-                            className="bg-primary-500 rounded-b w-full text-white font-bold py-2"
-                            onClick={handleSubmit}>
-                            Send
-                        </button>
-                    </>
+                    <DirectMessageForm
+                        user={user}
+                        onSubmit={props.onClickAway as any}
+                    />
                 )}
             </div>
         </Popper>

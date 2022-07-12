@@ -1,8 +1,9 @@
 import React, { useState, useRef } from "react";
-import { Popper, Textarea } from "@octal/ui";
+import { Popper, Text, Textarea } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import { useNavigator } from "src/hooks";
-import { ColumnRecord } from "@octal/store/lib/records";
+import { useBoard } from "../hooks";
+import { ColumnRecord, BoardRecord } from "@octal/store/lib/records";
 import { useInput } from "src/utils";
 import { useColumnActions } from "@workspace/Board/hooks";
 
@@ -11,7 +12,10 @@ interface ICreateCardPopper {
     onClose: (event: any, reason: string) => void;
 }
 
-interface IDropdownPopper {}
+interface IDropdownPopper {
+    templates: BoardRecord["templates"];
+    onSelect: (id: string) => void;
+}
 
 const flip = { flipVariations: false };
 
@@ -26,7 +30,7 @@ const TemplateDropdown = Popper.create<HTMLDivElement, IDropdownPopper>(
             <Popper
                 as="div"
                 flip={flip}
-                open={props.open}
+                open={props.open && !props.templates.isEmpty()}
                 tabIndex={-1}
                 portal={true}
                 anchorEl={props.anchorEl}
@@ -34,10 +38,30 @@ const TemplateDropdown = Popper.create<HTMLDivElement, IDropdownPopper>(
                 data-popper="template-dropdown"
                 style={{ width: props.anchorEl?.offsetWidth }}
                 onClickAway={props.onClickAway}
-                className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 py-2 bg-white shadow-md overflow-x-hidden">
+                className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 bg-white shadow-md overflow-x-hidden">
                 <div
                     onClick={handleTemplateClick}
-                    className="flex flex-col py-2 px-4 items-center h-[256px]"></div>
+                    className="flex flex-col bg-slate-50">
+                    {props.templates.map((template) => (
+                        <div
+                            key={template.id}
+                            role="button"
+                            onClick={() => props.onSelect(template.id)}
+                            className="group flex flex-col hover:bg-primary-500 pl-3 pr-2 py-2">
+                            <div className="flex flex-row items-center justify-between">
+                                <div className="group-hover:text-white font-bold text-gray-800">
+                                    <Text>{template.name}</Text>
+                                </div>
+                                <div className="font-bold text-gray-700 rounded-md bg-slate-200 w-6 h-4 text-center text-xs">
+                                    {template.fields.size}
+                                </div>
+                            </div>
+                            <div className="text-sm text-gray-500 group-hover:text-gray-200 font-semibold">
+                                <Text>{template.description}</Text>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </Popper>
         );
     }
@@ -49,11 +73,17 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
 
         const navigator = useNavigator();
 
+        const board = useBoard();
+
         const dropdownRef = useRef<HTMLDivElement | null>(null);
 
         const [loading, setLoading] = useState<boolean>(false);
 
         const [dropdown, setDropdown] = useState<boolean>(false);
+
+        const [templateid, setTemplateId] = useState("");
+
+        const template = board.templates.find((temp) => temp.id === templateid);
 
         const name = useInput("", (val) => val.length >= 2);
 
@@ -100,10 +130,21 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
                 props.onClickAway(e);
         }
 
+        function handleSelectTemplate(id: string) {
+            setDropdown(false);
+            setTemplateId(id);
+        }
+
+        function handleClearTemplate(e: React.MouseEvent) {
+            e.preventDefault();
+            e.stopPropagation();
+            setTemplateId("");
+        }
+
         function handleSubmit() {
             if (loading == false && name.valid) {
                 actions
-                    .createCard(name.value)
+                    .createCard(name.value, template?.id)
                     .then((data) => {
                         props.onClose(data, "created");
                         navigator.openCard(data);
@@ -140,9 +181,33 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
                         ref={dropdownRef}
                         role="button"
                         onClick={handleToggleDropdown}
-                        className="bg-slate-200 py-2 px-2.5 cursor-pointer border-slate-200 w-full rounded-md mx-2 font-semibold text-sm text-gray-900 shadow-sm hover:shadow flex flex-row justify-between">
-                        <span className="text-gray-600">Template</span>
-                        <Icons.DropdownArrows className="h-5 w-5 text-gray-500" />
+                        className="bg-slate-200 py-2 px-2.5 cursor-pointer border-slate-200 w-full rounded-md mx-2 font-semibold text-sm text-gray-900 shadow-sm hover:shadow flex flex-col justify-between">
+                        {template ? (
+                            <div className="flex flex-col">
+                                <div className="flex flex-row justify-between">
+                                    <div>
+                                        <span className="text-gray-600">
+                                            <Text>{template.name}</Text>
+                                        </span>
+                                    </div>
+                                    <button onClick={handleClearTemplate}>
+                                        <Icons.CloseCircleSolid className="h-5 w-5 text-gray-500" />
+                                    </button>
+                                </div>
+                                <div>
+                                    <Text>{template.description}</Text>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-row justify-between">
+                                <div>
+                                    <span className="text-gray-600">
+                                        Template
+                                    </span>
+                                </div>
+                                <Icons.DropdownArrows className="h-5 w-5 text-gray-500" />
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col py-2 px-4 items-center">
@@ -156,6 +221,8 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
                 </div>
                 <TemplateDropdown
                     open={dropdown}
+                    onSelect={handleSelectTemplate}
+                    templates={board.templates}
                     anchorEl={dropdownRef.current}
                     onClickAway={handleTemplateDropdownClickAway}
                 />
