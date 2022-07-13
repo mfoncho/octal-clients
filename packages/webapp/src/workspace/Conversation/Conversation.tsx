@@ -257,7 +257,7 @@ export default React.memo<IThread>(function ({ thread }) {
     // mentain scroll position
     // or scroll to new thread message
     useEffect(() => {
-        if (container && init && thread.history.size > 0) {
+        if (container && init && !thread.history.isEmpty()) {
             // Scroll to bottom on
             // new message and autoScroll
             if (page.autoScroll) {
@@ -276,7 +276,6 @@ export default React.memo<IThread>(function ({ thread }) {
                 }
                 return;
             }
-            //console.log(page.autoScroll);
 
             // Mentiain scroll position
             let message = thread.getMessageByTimestamp(page.pivot);
@@ -297,39 +296,33 @@ export default React.memo<IThread>(function ({ thread }) {
      */
     useEffect(() => {
         if (container && !pageHistory.isEmpty() && !init) {
-            if (isScrollable()) {
-                if (Boolean(page.pivot)) {
-                    // Restore user page scroll location
-                    // when autoScroll disabled
-                    let msg = thread.getMessageByTimestamp(page.pivot);
-                    if (msg) {
-                        let element = document.getElementById(
-                            `message:${msg.id}`
-                        )!;
+            if (Boolean(page.pivot)) {
+                // Restore user page scroll location
+                // when autoScroll disabled
+                let msg = thread.getMessageByTimestamp(page.pivot);
 
-                        container.scrollTop =
-                            element.offsetTop -
-                            (page.pivotTop -
-                                container.getBoundingClientRect().top);
-                    } else {
-                        container.scrollTop =
-                            container.getBoundingClientRect().top;
-                    }
+                if (msg && page.pivotTop >= 0) {
+                    let element = document.getElementById(`message:${msg.id}`)!;
+
+                    container.scrollTop =
+                        element.offsetTop -
+                        (page.pivotTop - container.getBoundingClientRect().top);
                 } else {
-                    // Page init for scrollable page
-                    // Try to retore position around last read
-                    let message = thread.getMessageByTimestamp(
-                        thread.last_read ?? thread.history.last()!.timestamp
-                    )!;
-                    let element = document.getElementById(
-                        `message:${message.id}`
-                    );
-                    if (element) {
-                        element.scrollIntoView();
-                    }
+                    container.scrollTop = container.getBoundingClientRect().top;
                 }
             } else {
-                setPage((page) => page.set("autoScroll", true));
+                // Page init for scrollable page
+                // Try to retore position around last read
+                let message = thread.getMessageByTimestamp(
+                    thread.last_read ?? thread.history.last()!.timestamp
+                )!;
+                let element = document.getElementById(`message:${message.id}`);
+                if (message) {
+                    setPage((page) => page.set("pivot", message.timestamp));
+                }
+                if (element) {
+                    element.scrollIntoView();
+                }
             }
 
             setInit(true);
@@ -419,6 +412,7 @@ export default React.memo<IThread>(function ({ thread }) {
                 });
             }
         }
+
         setPage((page) => page.merge(updatedPage));
     }
 
