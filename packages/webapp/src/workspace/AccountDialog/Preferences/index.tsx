@@ -16,7 +16,7 @@ export default React.memo<IPreferences>((props) => {
     const [preferences, setPreference, loading] = useActions();
 
     return (
-        <Dialog.Content className="overflow-y-auto">
+        <Dialog.Content className="overflow-y-auto space-y-4">
             {/**
             <MessagePreference
                 user={props.user}

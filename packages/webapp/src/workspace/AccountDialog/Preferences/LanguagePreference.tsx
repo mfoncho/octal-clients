@@ -8,12 +8,15 @@ export default React.memo<IPreference>((props) => {
         props.setPreference("language", event.target.value as string);
     }
     return (
-        <div className="flex flex-col py-6">
+        <div className="flex flex-col py-2">
+            <span className="text-gray-600 font-black uppercase py-1 text-xs">
+                Language
+            </span>
             <div className="mt-1 relative flex flex-col">
                 <select
                     value={props.preferences.get("language")}
                     onChange={handleSetLocale}
-                    className="block appearance-none border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                    className="block appearance-none border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 font-bold text-sm">
                     <option value="en">English</option>
                     <option value="fr">French</option>
                 </select>

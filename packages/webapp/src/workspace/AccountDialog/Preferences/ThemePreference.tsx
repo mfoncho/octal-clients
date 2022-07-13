@@ -41,8 +41,13 @@ export default React.memo<IPreference>((props) => {
         }
     }
     return (
-        <div className="flex flex-row py-8 space-x-4 overflow-y-auto">
-            {Object.keys(colors).map(renderColor)}
+        <div className="flex flex-col py-2">
+            <span className="text-gray-600 font-black uppercase py-1 text-xs">
+                Theme color
+            </span>
+            <div className="flex flex-row space-x-4 py-1 overflow-y-auto">
+                {Object.keys(colors).map(renderColor)}
+            </div>
         </div>
     );
 });
