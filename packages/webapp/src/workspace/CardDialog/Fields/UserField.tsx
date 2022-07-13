@@ -121,12 +121,12 @@ export default function UserField({ field, handle, ...props }: IUserField) {
 
     return (
         <Field dragging={props.dragging} handle={handle} field={field}>
-            <div className="flex flex-row flex-wrap items-center space-x-1 space-y-1 first-child:mt-1">
+            <div className="flex flex-row flex-wrap items-center space-x-1 space-y-1 first-child:mt-1 first-child:ml-1">
                 {can(
                     "card.manage",
                     <button
                         ref={fieldRef}
-                        className="group p-1 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed"
+                        className="group p-1 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed bg-primary-50"
                         onClick={handleToggleEditMode}>
                         <Icons.AddUser className="w-6 h-6 text-gray-600" />
                     </button>

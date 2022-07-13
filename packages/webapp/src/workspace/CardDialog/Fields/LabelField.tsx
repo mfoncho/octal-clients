@@ -95,12 +95,12 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
 
     return (
         <Field handle={handle} dragging={props.dragging} field={field}>
-            <div className="flex flex-row flex-wrap items-center space-x-1 space-y-1 first-child:mt-1">
+            <div className="flex flex-row flex-wrap items-center space-x-1 space-y-1 first-child:mt-1 first-child:ml-1">
                 {can(
                     "card.manage",
                     <button
                         ref={fieldRef}
-                        className="group py-1 px-2 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed"
+                        className="group py-1 px-2 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed bg-primary-50"
                         onClick={handleToggleEditMode}>
                         <Icons.Field.Label className="text-gray-600" />
                     </button>
