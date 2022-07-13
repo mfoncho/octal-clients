@@ -3,9 +3,9 @@ import { Dialog } from "@octal/ui";
 import { useActions } from "./hooks";
 import { UserRecord } from "@octal/store";
 import ThemePreference from "./ThemePreference";
-import MessagePreference from "./MessagePreference";
 import LanguagePreference from "./LanguagePreference";
-import ThemeModePreference from "./ThemeModePreference";
+//import MessagePreference from "./MessagePreference";
+//import ThemeModePreference from "./ThemeModePreference";
 
 export interface IPreferences {
     user: UserRecord;
@@ -17,6 +17,7 @@ export default React.memo<IPreferences>((props) => {
 
     return (
         <Dialog.Content className="overflow-y-auto">
+            {/**
             <MessagePreference
                 user={props.user}
                 loading={loading}
@@ -29,6 +30,7 @@ export default React.memo<IPreferences>((props) => {
                 preferences={preferences}
                 setPreference={setPreference}
             />
+            **/}
             <ThemePreference
                 user={props.user}
                 loading={loading}
