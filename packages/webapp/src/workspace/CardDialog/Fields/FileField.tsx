@@ -1,6 +1,7 @@
 import React, { useState, useId } from "react";
 import * as Icons from "@octal/icons";
 import { Button } from "@octal/ui";
+import { usePermissions } from "../../Space";
 import { FileRecord, CardFileValueRecord } from "@octal/store";
 import { useCardCapability } from "../hooks";
 import { useFieldAction } from "@workspace/Board/hooks";
@@ -90,6 +91,8 @@ export default function FileField({ field, handle, ...props }: IField) {
 
     const actions = useFieldAction(field);
 
+    const permissions = usePermissions();
+
     function handleUploadValue(e: React.ChangeEvent<HTMLInputElement>) {
         setUploading(true);
         return actions
@@ -127,22 +130,28 @@ export default function FileField({ field, handle, ...props }: IField) {
                     field.values.isEmpty() ? "" : "first-child:ml-2"
                 }`}>
                 {field.values.map(renderFile as any)}
-                {can(
-                    "card.manage",
+                {can("card.manage") && (
                     <div className="flex flex-col p-1 w-20">
-                        {!uploading && (
-                            <input
-                                id={id}
-                                type="file"
-                                key={field.values.size.toString()}
-                                className="hidden"
-                                onChange={handleUploadValue}
-                            />
-                        )}
+                        {!uploading &&
+                            permissions.get("upload.size", 0) > 0 && (
+                                <input
+                                    id={id}
+                                    type="file"
+                                    accept={
+                                        permissions.get(
+                                            "upload.types",
+                                            ""
+                                        ) as string
+                                    }
+                                    key={field.values.size.toString()}
+                                    className="hidden"
+                                    onChange={handleUploadValue}
+                                />
+                            )}
                         <label
                             role="button"
                             htmlFor={id}
-                            className="group px-3 py-4 hover:bg-slate-200 rounded-xl border-2 border-slate-300 border-dashed justify-center items-center flex flex-1 bg-primary-50">
+                            className="group px-2 py-4 hover:bg-slate-200 rounded-xl border-2 border-slate-300 border-dashed justify-center items-center flex flex-1 bg-primary-50">
                             {uploading ? (
                                 <Spiner className="animate-spin text-primary-700 w-6 h-6" />
                             ) : (
