@@ -37,8 +37,8 @@ const options: IOption[] = [
         type: "checklist",
     },
     {
-        name: "Number",
-        type: "number",
+        name: "Files",
+        type: "file",
     },
 ];
 

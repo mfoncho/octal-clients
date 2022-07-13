@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import clx from "classnames";
-import * as Icons from "@octal/icons";
 import { Textarea, Markdown } from "@octal/ui";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { CardTextValueRecord } from "@octal/store";
@@ -39,13 +38,13 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
                 onBlur={handleBlur}
                 onChange={(e: any) => setDesc(e.target.value)}
                 onSubmit={(e: any) => handleChange(e.target.value)}
-                className="bg-primary-50 p-2 rounded-md break-word w-full text-gray-800 text-base"
+                className="bg-slate-200 p-2 rounded-md break-word w-full text-gray-800 text-base"
             />
             <div className="flex flex-row justify-end pt-2 px-3">
                 <button
                     onClick={onClose}
-                    className="text-primary-500 font-bold text-xs">
-                    cancel
+                    className="text-primary-500 font-black text-xs">
+                    Cancel
                 </button>
             </div>
         </div>
@@ -80,12 +79,7 @@ export default function TextField({ field, handle, ...props }: IField) {
     const text = value ? value.value : "";
 
     return (
-        <Field
-            handle={handle}
-            icon={Icons.Field.Text}
-            dragging={props.dragging}
-            onClick={handleToggleEditMode}
-            field={field}>
+        <Field handle={handle} dragging={props.dragging} field={field}>
             {editing ? (
                 <Edit
                     value={text}
@@ -97,24 +91,27 @@ export default function TextField({ field, handle, ...props }: IField) {
                     className={clx(
                         "flex flex-col break-word w-full text-gray-800 rounded-lg text-base mb-4",
                         {
-                            ["h-8 bg-gray-100"]: !Boolean(text),
+                            ["h-10 bg-slate-100"]: !Boolean(text.trim()),
                         }
                     )}>
-                    <div className="p-2 bg-gray-50 rounded-md">
-                        <Markdown image={false} table={true}>
-                            {text}
-                        </Markdown>
+                    <div
+                        className={clx({
+                            ["bg-slate-100 p-2 rounded-md"]: Boolean(
+                                text.trim()
+                            ),
+                        })}>
+                        <Markdown>{text}</Markdown>
                     </div>
-                    <div className="flex flex-row justify-end pt-2 px-3">
-                        {can(
-                            "card.manage",
+                    {can(
+                        "card.manage",
+                        <div className="flex flex-row justify-end pt-6 px-3">
                             <button
                                 onClick={handleToggleEditMode}
-                                className="text-primary-500 font-bold text-xs">
-                                edit
+                                className="text-primary-500 font-black text-xs">
+                                Edit
                             </button>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             )}
         </Field>

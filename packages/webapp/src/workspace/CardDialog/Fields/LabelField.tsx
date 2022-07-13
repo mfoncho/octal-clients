@@ -33,6 +33,8 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
 
     const [editing, setEditing] = useState<boolean>(false);
 
+    const [loading, setLoading] = useState<string[]>([]);
+
     const can = useCardCapability(field.card_id);
 
     const fieldRef = useRef<HTMLButtonElement>(null);
@@ -68,27 +70,41 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
     }
 
     function handleLabelInput(label: LabelRecord) {
+        if (loading.includes(label.id)) return;
+
+        let cleanUpLoading = () =>
+            setLoading((loading) => loading.filter((lid) => lid !== label.id));
+
+        setLoading((loading) => loading.concat([label.id]));
+
         if (selected.includes(label.id)) {
             const value = field.values.find(
                 (value: any) => value.label_id == label.id
             );
             if (value) {
-                return actions.deleteFieldValue(value.id);
+                return actions
+                    .deleteFieldValue(value.id)
+                    .finally(cleanUpLoading);
             }
         } else {
-            return actions.createFieldValue({ value: label.id });
+            return actions
+                .createFieldValue({ value: label.id })
+                .finally(cleanUpLoading);
         }
     }
 
     return (
-        <Field
-            icon={Icons.Field.Label}
-            handle={handle}
-            dragging={props.dragging}
-            field={field}
-            buttonRef={fieldRef}
-            onClick={handleToggleEditMode}>
-            <div className="flex flex-row flex-wrap items-center">
+        <Field handle={handle} dragging={props.dragging} field={field}>
+            <div className="flex flex-row flex-wrap items-center space-x-1 space-y-1 first-child:mt-1">
+                {can(
+                    "card.manage",
+                    <button
+                        ref={fieldRef}
+                        className="group py-1 px-2 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed"
+                        onClick={handleToggleEditMode}>
+                        <Icons.Field.Label className="text-gray-600" />
+                    </button>
+                )}
                 {selected.map(renderLabel)}
             </div>
             {can(

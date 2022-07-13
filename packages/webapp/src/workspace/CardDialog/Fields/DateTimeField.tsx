@@ -12,7 +12,7 @@ export default function DateTimeField({ field, handle, ...props }: IField) {
     const can = useCardCapability(field.card_id);
     const [popper, setPopper] = useState<boolean>(false);
 
-    const fieldRef = useRef<HTMLButtonElement>(null);
+    const fieldRef = useRef<HTMLDivElement>(null);
 
     const actions = useFieldAction(field);
 
@@ -55,7 +55,8 @@ export default function DateTimeField({ field, handle, ...props }: IField) {
                 <Datepicker
                     onClear={onClear}
                     onChange={onChange}
-                    value={value ? value.value : ""}
+                    time={true}
+                    value={value ? value.value : new Date().toISOString()}
                 />
             </Popover>
         );
@@ -67,23 +68,21 @@ export default function DateTimeField({ field, handle, ...props }: IField) {
     });
 
     return (
-        <Field
-            icon={Icons.Field.DateTime}
-            field={field}
-            handle={handle}
-            onClick={handleOpenDatePicker}
-            dragging={props.dragging}
-            buttonRef={fieldRef}>
+        <Field field={field} handle={handle} dragging={props.dragging}>
             {value ? (
-                <span
+                <div
                     {...btnProps}
-                    className="font-bold text-gray-700 py-1 px-2 bg-gray-50 rounded-md hover:bg-gray-100 text-sm">
+                    ref={fieldRef}
+                    role="button"
+                    className="font-bold text-gray-700 py-1 px-2 bg-slate-100 rounded-md hover:bg-slate-200 text-sm">
                     {moment(value.value).format("MMMM Do YYYY, h:mm")}
-                </span>
+                </div>
             ) : (
                 <div
                     {...btnProps}
-                    className="font-semibold h-6 w-36 text-gray-700 p-1 rounded-md bg-gray-50 hover:bg-gray-100"
+                    ref={fieldRef}
+                    role="button"
+                    className="font-semibold h-6 w-36 text-gray-700 p-1 rounded-md bg-slate-200 hover:bg-slate-400"
                 />
             )}
             {popper && can("card.manage") ? renderPopover() : null}

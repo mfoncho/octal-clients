@@ -41,7 +41,7 @@ function UserValue({ value, onClose }: IUserValue) {
         setDisabled(true);
     }
     return (
-        <div className="group hover:relative flex flex-row p-2 rounded-lg bg-gray-100 items-center">
+        <div className="group hover:relative flex flex-row p-2 rounded-lg bg-slate-100 items-center">
             <img
                 alt={user.username}
                 className="h-6 w-6 rounded-full"
@@ -110,7 +110,7 @@ export default function UserField({ field, handle, ...props }: IUserField) {
     function renderUser(value: CardUserValueRecord) {
         const onClose = () => actions.deleteFieldValue(value.id);
         return (
-            <div key={value.id} className="mr-1.5 mb-1">
+            <div key={value.id}>
                 <UserValue
                     onClose={can("card.manage") ? onClose : undefined}
                     value={value}
@@ -120,14 +120,17 @@ export default function UserField({ field, handle, ...props }: IUserField) {
     }
 
     return (
-        <Field
-            dragging={props.dragging}
-            icon={Icons.Field.Users}
-            handle={handle}
-            field={field}
-            buttonRef={fieldRef}
-            onClick={handleToggleEditMode}>
-            <div className="flex flex-row flex-wrap items-center">
+        <Field dragging={props.dragging} handle={handle} field={field}>
+            <div className="flex flex-row flex-wrap items-center space-x-1 space-y-1 first-child:mt-1">
+                {can(
+                    "card.manage",
+                    <button
+                        ref={fieldRef}
+                        className="group p-1 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed"
+                        onClick={handleToggleEditMode}>
+                        <Icons.AddUser className="w-6 h-6 text-gray-600" />
+                    </button>
+                )}
                 {field.values.map(renderUser as any)}
             </div>
             {can(

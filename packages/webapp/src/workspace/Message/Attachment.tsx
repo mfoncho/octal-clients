@@ -11,6 +11,7 @@ export default function Attachment(props: IAttachment) {
     function download() {
         window.open(props.file.download_url, "_blank");
     }
+
     return (
         <div className="flex flex-row py-1">
             <div className="flex flex-row border-2 rounded-md border-slate-200 items-center py-1 bg-slate-100 space-x-4">
@@ -29,7 +30,9 @@ export default function Attachment(props: IAttachment) {
                     )}
                     <div className="flex flex-col">
                         <div className="text-sm text-gray-600 font-semibold">
-                            {props.file.name}.{props.file.ext}
+                            <p className="text-ellipsis overflow-hidden">
+                                {props.file.name}.{props.file.ext}
+                            </p>
                         </div>
                         <div className="font-light text-sm text-gray-500">
                             {props.file.ext.toUpperCase()}{" "}

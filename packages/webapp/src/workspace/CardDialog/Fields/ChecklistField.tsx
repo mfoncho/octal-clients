@@ -180,7 +180,7 @@ function AddTask({ onSubmit }: ITaskCreator) {
 const User = React.memo<{ id: string }>((props) => {
     const user = useUser(props.id);
     return (
-        <span className="text-primary-700 pr-4 text-sm font-semibold cursor-pointer">
+        <span className="text-white text-sm font-semibold cursor-pointer rounded-lg bg-primary-700 px-1">
             @{user.username}
         </span>
     );
@@ -192,6 +192,8 @@ export default function ChecklistField({ field, handle, ...props }: IField) {
     const aid = useAuthId();
 
     const [popper, setPopper] = useState<boolean>(false);
+
+    const [loading, setLoading] = useState<string[]>([]);
 
     const can = useCardCapability(field.card_id);
 
@@ -224,23 +226,35 @@ export default function ChecklistField({ field, handle, ...props }: IField) {
     }
 
     function handleUserInput(member: MemberRecord) {
+        if (loading.includes(member.user_id)) return;
+
+        let cleanUpLoading = () =>
+            setLoading((loading) =>
+                loading.filter((lid) => lid !== member.user_id)
+            );
+
+        setLoading((loading) => loading.concat([member.user_id]));
+
         if (users.includes(member.user_id)) {
-            return actions.unassignUser(member.user_id);
+            return actions.unassignUser(member.user_id).finally(cleanUpLoading);
         } else {
-            return actions.assignUser(member.user_id);
+            return actions.assignUser(member.user_id).finally(cleanUpLoading);
         }
     }
 
     return (
-        <Field
-            icon={Icons.Field.Users}
-            handle={handle}
-            field={field}
-            onClick={handleTogglePopper}
-            dragging={props.dragging}
-            buttonRef={fieldRef}>
+        <Field handle={handle} field={field} dragging={props.dragging}>
             <div className="flex-1 flex flex-col px-1">
-                <div className="flex flex-row pb-1">
+                <div className="flex flex-row flex-wrap pb-1 space-x-2 space-y-1">
+                    {can(
+                        "card.manage",
+                        <button
+                            ref={fieldRef}
+                            onClick={handleTogglePopper}
+                            className="px-0.5">
+                            <Icons.AddUser className="w-5 h-5 text-gray-600" />
+                        </button>
+                    )}
                     {users.map((id) => (
                         <User key={id} id={id} />
                     ))}

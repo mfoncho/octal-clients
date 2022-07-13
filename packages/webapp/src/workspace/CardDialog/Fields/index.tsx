@@ -13,10 +13,10 @@ import { Elements } from "@octal/ui";
 import { useActions } from "../hooks";
 import Suggestion from "./Suggestion";
 import { Mention } from "@workspace/Mention";
+import FileField from "./FileField";
 import TextField from "./TextField";
 import UserField from "./UserField";
 import LabelField from "./LabelField";
-import NumberField from "./NumberField";
 import DateTimeField from "./DateTimeField";
 import ChecklistField from "./ChecklistField";
 import { useCardCapability } from "../hooks";
@@ -80,24 +80,27 @@ export default React.memo<IFields>((props) => {
                 case "text":
                     el = <TextField {...fieldProps} />;
                     break;
+
                 case "user":
                     el = <UserField {...fieldProps} />;
                     break;
+
                 case "label":
                     el = <LabelField {...fieldProps} />;
                     break;
 
-                case "number":
-                    el = <NumberField {...fieldProps} />;
+                case "file":
+                    el = <FileField {...fieldProps} />;
                     break;
 
                 case "checklist":
                     el = <ChecklistField {...fieldProps} />;
                     break;
-                case "date":
+
                 case "datetime":
                     el = <DateTimeField {...fieldProps} />;
                     break;
+
                 default:
                     break;
             }
