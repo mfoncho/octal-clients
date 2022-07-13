@@ -10,7 +10,7 @@ const positionAsc = sort("position", "asc");
 
 export class CardFileValueRecord extends Record({
     id: "",
-    file: FileRecord,
+    file: new FileRecord(),
     card_id: "",
     field_id: "",
     created_at: "",
