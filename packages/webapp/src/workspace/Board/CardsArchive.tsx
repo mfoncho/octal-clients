@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import * as Icons from "@octal/icons";
-import * as BoardAction from "@octal/store/lib/actions/board";
+import { Actions } from "@octal/store";
 import { useDispatch } from "react-redux";
 import Client from "@octal/client";
 import { io } from "@octal/client";
@@ -19,24 +18,16 @@ const Card = React.memo<{ card: CardRecord }>(({ card }) => {
 export default function CardsArchive({ board }: ICardsArchive) {
     const dispatch = useDispatch();
 
-    const [source, setSource] = useState<io.Card[]>([]);
-
     let cards = useColumnCards(board.id);
 
     useEffect(() => {
-        Client.fetchArchivedCards({ board_id: board.id })
-            .then((data) => {
-                setSource(data);
-            })
-            .catch((e) => e);
-    }, []);
-
-    useEffect(() => {
-        if (source.length > 0) {
-            const action = BoardAction.storeCards(source);
+        if (cards.isEmpty()) {
+            let action = Actions.Board.loadArchivedCards({
+                board_id: board.id,
+            });
             dispatch(action);
         }
-    }, [source]);
+    }, [cards.isEmpty()]);
 
     return (
         <div className="flex-1 flex flex-col overflow-hidden">
