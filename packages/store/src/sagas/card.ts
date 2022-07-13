@@ -67,6 +67,25 @@ function* loadBoardCards({
     }
 }
 
+function* loadArchivedCards({
+    payload,
+    resolve,
+}: BoardActions.LoadArchivedCardsAction): Iterable<any> {
+    try {
+        const data = (yield Client.fetchArchivedCards(payload)) as any;
+        yield* normalizeLoad(data);
+        yield put(
+            AppActions.collectionLoaded(
+                payload.board_id,
+                "cards.archived",
+                data
+            )
+        );
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
 function* boardLoadedLoadBoardCards({
     payload,
 }: BoardActions.BoardLoadedAction): Iterable<any> {
@@ -263,6 +282,11 @@ export const tasks = [
         handler: boardLoadedLoadBoardCards,
     },
 
+    {
+        effect: takeEvery,
+        type: Actions.LOAD_ARCHIVED_CARDS,
+        handler: loadArchivedCards,
+    },
     { effect: takeEvery, type: Actions.STORE_CARDS, handler: store },
 
     { effect: takeEvery, type: Actions.STORE_CARD, handler: store },

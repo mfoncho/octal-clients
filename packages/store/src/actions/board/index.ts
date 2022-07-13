@@ -6,6 +6,7 @@ import { createAction, createIOAction } from "../../action";
 import { NormalizedCard, NormalizedColumn } from "../../schemas";
 import {
     BOARD_PURGED,
+    LOAD_ARCHIVED_CARDS,
     BOARD_ARCHIVED,
     BOARD_UNARCHIVED,
     ARCHIVE_BOARD,
@@ -104,6 +105,10 @@ export * from "./types";
 
 export interface BoardPurgedPayload {
     id: string;
+}
+
+export interface LoadArchivedCardsPayload {
+    board_id: string;
 }
 
 export interface CreateCardTemplatePayload {
@@ -532,6 +537,12 @@ export type CreateCardTemplateAction = IOAction<
     CREATE_CARD_TEMPLATE,
     CreateCardTemplatePayload,
     io.CardTemplate
+>;
+
+export type LoadArchivedCardsAction = IOAction<
+    LOAD_ARCHIVED_CARDS,
+    LoadArchivedCardsPayload,
+    io.Card[]
 >;
 
 export type DeleteCardTemplateAction = IOAction<
@@ -1378,4 +1389,10 @@ export function deleteCardTemplate(
     payload: DeleteCardTemplatePayload
 ): DeleteCardTemplateAction {
     return createIOAction<DELETE_CARD_TEMPLATE>(DELETE_CARD_TEMPLATE, payload);
+}
+
+export function loadArchivedCards(
+    payload: LoadArchivedCardsPayload
+): LoadArchivedCardsAction {
+    return createIOAction<LOAD_ARCHIVED_CARDS>(LOAD_ARCHIVED_CARDS, payload);
 }
