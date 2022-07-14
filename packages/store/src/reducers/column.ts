@@ -97,6 +97,9 @@ export class ColumnsStore extends Record({
 export const state = new ColumnsStore();
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.COLUMN_CREATED]: (
         store: ColumnsStore,
         { payload }: BoardActions.ColumnCreatedAction

@@ -35,6 +35,9 @@ function clear(
 }
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.MEMBER_LOADED]: put,
 
     [Actions.MEMBERS_LOADED]: puts,

@@ -39,6 +39,9 @@ export class TrackersStore extends Record({
 export const state = new TrackersStore();
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.TRACKERS_LOADED]: (
         store: TrackersStore,
         { payload }: AppActions.TrackersLoadedAction

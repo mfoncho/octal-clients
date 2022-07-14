@@ -89,6 +89,9 @@ export class TopicsStore extends Record({
 export const state = new TopicsStore();
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.TOPIC_FILTER_UPDATED]: (
         store: TopicsStore,
         { payload }: TopicActions.TopicFilterUpdatedAction

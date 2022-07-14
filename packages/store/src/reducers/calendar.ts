@@ -36,6 +36,9 @@ export class CalendarStore extends Record({
 export const state = new CalendarStore({});
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.CALENDAR_LOADED]: (
         store: CalendarStore,
         { payload }: CalendarActions.CalendarLoadedAction

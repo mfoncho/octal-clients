@@ -104,6 +104,9 @@ export class Conversations extends Record(
 export const state = new Conversations();
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.THREAD_LOADED]: (
         state: Conversations,
         { payload }: ThreadActions.ThreadLoadedAction

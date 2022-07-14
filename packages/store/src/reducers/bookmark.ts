@@ -52,6 +52,9 @@ const state = new BookmarksStore();
 export type State = typeof state;
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.BOOKMARK_LOADED](
         store: BookmarksStore,
         { payload }: BookmarkActions.BookmarkLoadedAction

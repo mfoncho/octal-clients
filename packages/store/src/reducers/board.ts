@@ -116,6 +116,9 @@ export class BoardsStore extends Record({
 export const state = new BoardsStore();
 
 export const reducers = {
+    [Actions.LOGOUT](_store: any, _action: any) {
+        return state;
+    },
     [Actions.CARD_TEMPLATE_CREATED](
         store: BoardsStore,
         { payload }: BoardActions.CardTemplateCreatedAction
