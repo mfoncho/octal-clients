@@ -12,6 +12,10 @@ export interface LoginRequest {
     remember_me?: boolean;
 }
 
+export interface ResetPasswordRequest {
+    email: string;
+}
+
 export default class AuthClient extends BaseClient {
     async getAuth(params?: Params): Promise<io.Auth> {
         const { data } = await this.endpoint.get("/auth", params);
@@ -33,6 +37,18 @@ export default class AuthClient extends BaseClient {
     async login(request: LoginRequest, params?: Params): Promise<io.Auth> {
         const { data } = await this.endpoint.post(
             "/auth/login",
+            request,
+            params
+        );
+        return data;
+    }
+
+    async resetPassword(
+        request: ResetPasswordRequest,
+        params?: Params
+    ): Promise<any> {
+        const { data } = await this.endpoint.post(
+            "/auth/login/reset",
             request,
             params
         );
