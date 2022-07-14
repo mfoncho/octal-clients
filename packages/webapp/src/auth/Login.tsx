@@ -1,10 +1,15 @@
 import React from "react";
+import { useConfig } from "@octal/store";
 import Welcome from "./components/Welcome";
 import LoginForm from "./components/LoginForm";
 import OAuthProviders from "./components/OAuthProviders";
 import Header from "./Header";
 
 export default React.memo(() => {
+    const config = useConfig();
+    const oauth = config.auth_providers.filter(
+        ([, method]: any) => method == "oauth"
+    );
     return (
         <div className="flex-1 flex flex-row overflow-hidden bg-white">
             <div className="flex-1 hidden sm:flex flex-col ">
@@ -19,14 +24,18 @@ export default React.memo(() => {
                                     Hi, Welcome Back
                                 </span>
                             </div>
-                            <OAuthProviders />
-                            <div className="pb-4 pt-5 flex flex-row items-center justify-between">
-                                <div className="w-full h-px rounded bg-gray-300" />
-                                <span className="text-xs text-gray-400 font-bold px-4">
-                                    OR
-                                </span>
-                                <div className="w-full h-px rounded bg-gray-300" />
-                            </div>
+                            {oauth.length > 0 && (
+                                <React.Fragment>
+                                    <OAuthProviders providers={oauth as any} />
+                                    <div className="pb-4 pt-5 flex flex-row items-center justify-between">
+                                        <div className="w-full h-px rounded bg-gray-300" />
+                                        <span className="text-xs text-gray-400 font-bold px-4">
+                                            OR
+                                        </span>
+                                        <div className="w-full h-px rounded bg-gray-300" />
+                                    </div>
+                                </React.Fragment>
+                            )}
                             <LoginForm />
                             <div className="flex flex-row justify-center py-4">
                                 <span className="text-xs text-gray-400 font-light">

@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import { Button, Input } from "@octal/ui";
 import { useInput } from "src/utils";
 import path from "../paths";
+import * as patterns from "@octal/patterns";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "@octal/store/lib/actions/app";
+
+function validateEmail(email: string) {
+    return new RegExp(patterns.email).test(email);
+}
 
 export default React.memo(() => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [remember, setRemember] = useState(true);
 
-    const email = useInput("");
+    const email = useInput("", validateEmail);
     const password = useInput("");
 
     function handleLogin() {
@@ -31,7 +36,7 @@ export default React.memo(() => {
     }
 
     return (
-        <div className="flex flex-col">
+        <form className="flex flex-col">
             <div className="pb-3">
                 <Input.Labeled
                     {...email.props}
@@ -71,11 +76,11 @@ export default React.memo(() => {
             <div className="flex flex-col py-4">
                 <Button
                     color="primary"
-                    disabled={loading}
+                    disabled={loading || !email.valid || !password.valid}
                     onClick={handleLogin}>
                     login
                 </Button>
             </div>
-        </div>
+        </form>
     );
 });

@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuthId } from "@octal/store";
 import { useDispatch } from "react-redux";
-import {
-    loadConfig,
-    loadAuth,
-    loadWorkspace,
-} from "@octal/store/lib/actions/app";
+import { Actions } from "@octal/store"
 import client from "@octal/client";
 import Auth from "../auth";
 import App from "../workspace";
@@ -16,13 +12,13 @@ export default React.memo(() => {
     const [authenticated, setAuthenticated] = useState<boolean | null>(null);
 
     useEffect(() => {
-        dispatch(loadConfig());
-        dispatch(loadWorkspace());
+        dispatch(Actions.App.loadConfig());
+        dispatch(Actions.App.loadWorkspace());
     }, []);
 
     useEffect(() => {
         if (authenticated === null && !Boolean(id)) {
-            dispatch(loadAuth()).then((auth) => {
+            dispatch(Actions.App.loadAuth()).then((auth) => {
                 if (auth.token && auth.user) {
                     setAuthenticated(true);
                 } else {

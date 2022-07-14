@@ -1,14 +1,8 @@
 import React from "react";
 import icons from "../logos";
-import { useConfig } from "@octal/store";
-
 type IProvider = keyof typeof icons;
 
-export default React.memo(() => {
-    const providers = useConfig().auth_providers.filter(
-        ([, method]: any) => method == "oauth"
-    );
-
+export default React.memo<{ providers: [[string, string]] }>((props) => {
     function renderProvider([type]: [string, string]) {
         const Icon = icons[type as IProvider];
         return (
@@ -23,7 +17,7 @@ export default React.memo(() => {
 
     return (
         <div className="flex flex-row justify-center space-x-4">
-            {providers.map(renderProvider)}
+            {props.providers.map(renderProvider)}
         </div>
     );
 });
