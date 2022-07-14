@@ -5,7 +5,7 @@ import { ConfigRecord } from "../records";
 export const state = new ConfigRecord({});
 
 export const reducers = {
-    [SET_CONFIG]:( config: ConfigRecord, action: SetConfigAction)=>{
+    [SET_CONFIG]: (config: ConfigRecord, action: SetConfigAction) => {
         return config.merge(action.payload);
     },
 };
