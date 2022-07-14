@@ -32,12 +32,16 @@ function* claim({
     }
 }
 
+function* authStore(data: io.Auth): Iterable<any> {
+    if (data.user) {
+        yield put(authLoaded(data));
+    }
+}
+
 function* loadAuth({ resolve }: LoadAuthAction): Iterable<any> {
     try {
         const data = (yield client.getAuth()) as any;
-        if (data.id && data.user) {
-            yield put(authLoaded(data));
-        }
+        yield* authStore(data);
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -47,7 +51,7 @@ function* loadAuth({ resolve }: LoadAuthAction): Iterable<any> {
 function* doLogin({ payload, resolve }: LoginAction): Iterable<any> {
     try {
         const data = (yield client.login(payload)) as any;
-        yield put(authLoaded(data));
+        yield* authStore(data);
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
