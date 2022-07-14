@@ -29,8 +29,8 @@ export default React.memo(() => {
                     </span>
                     <span className="text-base font-medium">
                         Please enter the email address associated with your
-                        account and We will email you a link to reset your
-                        password
+                        account and an email with a reset link will be sent to
+                        you
                     </span>
                 </div>
                 <div className="py-4">
