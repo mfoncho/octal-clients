@@ -35,7 +35,9 @@ function* claim({
 function* loadAuth({ resolve }: LoadAuthAction): Iterable<any> {
     try {
         const data = (yield client.getAuth()) as any;
-        yield put(authLoaded(data));
+        if (data.id && data.user) {
+            yield put(authLoaded(data));
+        }
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
