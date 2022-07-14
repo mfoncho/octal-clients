@@ -80,7 +80,7 @@ export default class ColumnClient extends BaseClient {
         request: ArchiveColumnRequest,
         params?: Params
     ): Promise<io.Column> {
-        const path = `/boards/${request.board_id}/columns/${request.column_id}/archive`;
+        const path = `/columns/${request.column_id}/archive`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }
@@ -89,7 +89,7 @@ export default class ColumnClient extends BaseClient {
         request: ArchiveColumnRequest,
         params?: Params
     ): Promise<io.Column> {
-        const path = `/boards/${request.board_id}/columns/${request.column_id}/unarchive`;
+        const path = `/columns/${request.column_id}/unarchive`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }
@@ -98,7 +98,7 @@ export default class ColumnClient extends BaseClient {
         request: UpdateColumnRequest,
         params?: Params
     ): Promise<io.Column> {
-        const path = `/boards/${request.board_id}/columns/${request.column_id}`;
+        const path = `/columns/${request.column_id}`;
         const payload = {
             name: request.name,
             type: request.type,
@@ -113,7 +113,7 @@ export default class ColumnClient extends BaseClient {
         request: MoveColumnRequest,
         params?: Params
     ): Promise<io.Column> {
-        const path = `/boards/${request.board_id}/columns/${request.column_id}/move`;
+        const path = `/columns/${request.column_id}/move`;
         const payload = {
             position: request.position,
         };
@@ -125,7 +125,7 @@ export default class ColumnClient extends BaseClient {
         request: DeleteColumnRequest,
         params?: Params
     ): Promise<any> {
-        const path = `/boards/${request.board_id}/columns/${request.column_id}`;
+        const path = `/columns/${request.column_id}`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }
