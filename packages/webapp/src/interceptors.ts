@@ -4,28 +4,28 @@ import store from "@octal/store";
 let id = 0;
 
 export function auth(config: any) {
-	const { auth } = store.getState();
+    const { auth } = store.getState();
 
-	switch (auth.token) {
-		case "Bearer":
-			config.headers["Authorization"] = `Bearer ${auth.token}`;
-			break;
+    switch (auth.token) {
+        case "Bearer":
+            config.headers["Authorization"] = `Bearer ${auth.token}`;
+            break;
 
-		case "csrf-token":
-			config.headers["X-CSRF-TOKEN"] = auth.token;
-			break;
+        case "csrf-token":
+            config.headers["X-CSRF-TOKEN"] = auth.token;
+            break;
 
-		default:
-			break;
-	}
+        default:
+            break;
+    }
 
-	const source = axios.CancelToken.source();
+    const source = axios.CancelToken.source();
 
-	config.cancelToken = source.token;
+    config.cancelToken = source.token;
 
-	config.id = id++;
+    config.id = id++;
 
-	/*
+    /*
 		store.dispatch({
 			type:'HTTP_START',
 			payload:{ 
@@ -66,37 +66,40 @@ export function auth(config: any) {
 		}
 		*/
 
-	return config;
+    return config;
 }
 
 export function error(error: any) {
-	if (error.response) {
-		if (error.response.status === 401) {
-			window.location.reload();
-		}
+    if (error.response) {
+        if (
+            error.response.status === 401 &&
+            !error.responseURL.endsWith("/auth/login")
+        ) {
+            window.location.reload();
+        }
 
-		const data = error.toJSON();
+        //const data = error.toJSON();
 
-		/*
+        /*
 			store.dispatch({
 				type:'HTTP_ERROR', 
 				payload:{ 
 					code: data.code,
 					id: data.config.id, 
 					reason: data.message,
+					data: error.response.data,
 					status: error.response.status,
-					message: error.response.data.message,
 					statusText: error.response.statusText,
 				} 
 			})
 			*/
 
-		return Promise.reject(error.response);
-	} else {
-		if (error.request) {
-			const { config, ...data } = error.toJSON();
+        return Promise.reject(error.response);
+    } else {
+        if (error.request) {
+            const { config, ...data } = error.toJSON();
 
-			/*
+            /*
 				store.dispatch({
 					type:'HTTP_ERROR', 
 					payload:{ 
@@ -108,15 +111,15 @@ export function error(error: any) {
 				})
 				*/
 
-			return Promise.reject(data);
-		} else {
-			return Promise.reject(error.message.reason as string);
-		}
-	}
+            return Promise.reject(data);
+        } else {
+            return Promise.reject(error.message.reason as string);
+        }
+    }
 }
 
 export function success(res: any) {
-	/*
+    /*
 	store.dispatch({
 		type:'HTTP_COMPLETE', 
 		payload:{ 
@@ -125,5 +128,5 @@ export function success(res: any) {
 		} 
 	});
 	*/
-	return res;
+    return res;
 }

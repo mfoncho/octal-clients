@@ -13,13 +13,16 @@ function validateEmail(email: string) {
 
 export default React.memo(() => {
     const dispatch = useDispatch();
+    const [failed, setFailed] = useState(false);
     const [loading, setLoading] = useState(false);
     const [remember, setRemember] = useState(true);
 
     const email = useInput("", validateEmail);
     const password = useInput("");
 
-    function handleLogin() {
+    function handleLogin(e: any) {
+        e.preventDefault();
+        e.stopPropagation();
         let remember_me = remember ? remember : undefined;
         dispatch(
             login({
@@ -27,7 +30,10 @@ export default React.memo(() => {
                 password: password.value,
                 remember_me,
             })
-        ).catch(() => setLoading(false));
+        ).catch(() => {
+            setFailed(true);
+            setLoading(false);
+        });
         setLoading(true);
     }
 
@@ -36,7 +42,7 @@ export default React.memo(() => {
     }
 
     return (
-        <form className="flex flex-col">
+        <form className="flex flex-col" onSubmit={handleLogin}>
             <div className="pb-3">
                 <Input.Labeled
                     {...email.props}
@@ -81,6 +87,14 @@ export default React.memo(() => {
                     login
                 </Button>
             </div>
+            {failed && (
+                <div className="flex flex-col text-red-500 rounded-md p-4 bg-red-100">
+                    <span>
+                        Please ensure email and password are correct and try
+                        again
+                    </span>
+                </div>
+            )}
         </form>
     );
 });
