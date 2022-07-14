@@ -2,15 +2,9 @@ import { put, takeEvery } from "redux-saga/effects";
 import client, { io } from "@octal/client";
 import * as Actions from "../actions/types";
 import * as UserActions from "../actions/user";
-import {
-    authLoaded,
-    LoginAction,
-    LogoutAction,
-    AuthAction,
-    LoadAuthAction,
-} from "../actions/app";
+import * as AppActions from "../actions/app";
 
-function* auth({ payload }: AuthAction): Iterable<any> {
+function* auth({ payload }: AppActions.AuthAction): Iterable<any> {
     if ("user" in payload && "token" in payload && "roles" in payload) {
         let data = payload as any as io.Auth;
         yield put(UserActions.userLoaded(data.user));
@@ -34,11 +28,11 @@ function* claim({
 
 function* authStore(data: io.Auth): Iterable<any> {
     if (data.user) {
-        yield put(authLoaded(data));
+        yield put(AppActions.authLoaded(data));
     }
 }
 
-function* loadAuth({ resolve }: LoadAuthAction): Iterable<any> {
+function* loadAuth({ resolve }: AppActions.LoadAuthAction): Iterable<any> {
     try {
         const data = (yield client.getAuth()) as any;
         yield* authStore(data);
@@ -48,7 +42,7 @@ function* loadAuth({ resolve }: LoadAuthAction): Iterable<any> {
     }
 }
 
-function* doLogin({ payload, resolve }: LoginAction): Iterable<any> {
+function* doLogin({ payload, resolve }: AppActions.LoginAction): Iterable<any> {
     try {
         const data = (yield client.login(payload)) as any;
         yield* authStore(data);
@@ -58,10 +52,11 @@ function* doLogin({ payload, resolve }: LoginAction): Iterable<any> {
     }
 }
 
-function* doLogout({ resolve }: LogoutAction): Iterable<any> {
+function* doLogout({ resolve }: AppActions.LogoutAction): Iterable<any> {
     try {
         const data = (yield client.logout()) as any;
         client.shutdown();
+        yield put(AppActions.loggedOut());
         resolve.success(data);
     } catch (e) {
         resolve.error(e);

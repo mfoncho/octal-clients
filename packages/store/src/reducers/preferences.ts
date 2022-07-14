@@ -6,7 +6,7 @@ import * as AppActions from "../actions/app";
 export const state = new PreferencesRecord();
 
 export const reducers = {
-    [Actions.LOGOUT](_store: any, _action: any) {
+    [Actions.LOGGED_OUT](_store: any, _action: any) {
         return state;
     },
     [Actions.PREFERENCES_LOADED]: (

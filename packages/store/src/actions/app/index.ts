@@ -15,6 +15,7 @@ import {
     SET_CONFIG,
     STORE_INIT,
     LOAD_CONFIG,
+    LOGGED_OUT,
     RELATED_LOADED,
     LOAD_WORKSPACE,
     CREATE_TRACKER,
@@ -34,6 +35,8 @@ export * from "./types";
 export interface DeleteTrackerPayload {
     id: string;
 }
+
+export interface LoggedOutPyaload {}
 
 export interface CreateTrackerPayload {
     event: string;
@@ -63,6 +66,8 @@ export interface CollectionLoadedPayload {
     data?: any;
     collection: string;
 }
+
+export type LoggedOutAction = Action<LOGGED_OUT, LoggedOutPyaload>;
 
 export type TrackerCreatedAction = Action<TRACKER_CREATED, io.Tracker>;
 
@@ -223,4 +228,8 @@ export function trackerLoaded(payload: io.Tracker): TrackerLoadedAction {
 
 export function trackersLoaded(payload: io.Tracker[]): TrackersLoadedAction {
     return createAction(TRACKERS_LOADED, payload);
+}
+
+export function loggedOut(): LoggedOutAction {
+    return createAction(LOGGED_OUT, {});
 }

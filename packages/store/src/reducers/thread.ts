@@ -104,7 +104,7 @@ export class Conversations extends Record(
 export const state = new Conversations();
 
 export const reducers = {
-    [Actions.LOGOUT](_store: any, _action: any) {
+    [Actions.LOGGED_OUT](_store: any, _action: any) {
         return state;
     },
     [Actions.THREAD_LOADED]: (

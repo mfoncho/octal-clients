@@ -37,7 +37,7 @@ export class DrawerStore extends Record({
 export const state = new DrawerStore();
 
 export const reducers = {
-    [Actions.LOGOUT](_store: any, _action: any) {
+    [Actions.LOGGED_OUT](_store: any, _action: any) {
         return state;
     },
     [Actions.DRAWER_OPENED](

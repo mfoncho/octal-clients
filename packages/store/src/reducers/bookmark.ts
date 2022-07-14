@@ -52,7 +52,7 @@ const state = new BookmarksStore();
 export type State = typeof state;
 
 export const reducers = {
-    [Actions.LOGOUT](_store: any, _action: any) {
+    [Actions.LOGGED_OUT](_store: any, _action: any) {
         return state;
     },
     [Actions.BOOKMARK_LOADED](

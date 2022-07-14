@@ -76,7 +76,7 @@ export class SpacesStore extends Record({
 export const state = new SpacesStore({});
 
 export const reducers = {
-    [Actions.LOGOUT](_store: any, _action: any) {
+    [Actions.LOGGED_OUT](_store: any, _action: any) {
         return state;
     },
     [Actions.SPACE_CREATED]: (store: SpacesStore, { payload }: any) => {

@@ -54,6 +54,9 @@ export type RELATED_LOADED = typeof RELATED_LOADED;
 export const LOGOUT = "LOGOUT";
 export type LOGOUT = typeof LOGOUT;
 
+export const LOGGED_OUT = "LOGGED_OUT";
+export type LOGGED_OUT = typeof LOGGED_OUT;
+
 export const LOGIN = "LOGIN";
 export type LOGIN = typeof LOGIN;
 

@@ -256,7 +256,7 @@ export class CardsStore extends Record({
 export const state = new CardsStore();
 
 export const reducers = {
-    [Actions.LOGOUT](_store: any, _action: any) {
+    [Actions.LOGGED_OUT](_store: any, _action: any) {
         return state;
     },
     [Actions.CARD_CREATED]: (store: CardsStore, { payload }: any) => {

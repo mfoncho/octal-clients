@@ -12,7 +12,7 @@ export const reducers = {
         return AuthRecord.make(payload);
     },
 
-    [Actions.LOGOUT]() {
+    [Actions.LOGGED_OUT]() {
         return AuthRecord.make({});
     },
     [Actions.USER_ASSIGNED](
