@@ -48,7 +48,7 @@ export default class AuthClient extends BaseClient {
         params?: Params
     ): Promise<any> {
         const { data } = await this.endpoint.post(
-            "/auth/login/reset",
+            "/auth/reset",
             request,
             params
         );
