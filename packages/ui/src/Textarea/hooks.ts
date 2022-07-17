@@ -158,6 +158,11 @@ export function useKeyDownHandler(
     props: InputProps
 ) {
     return function handleKeyDown(event: React.KeyboardEvent) {
+        if (props.disabled) {
+            event.stopPropagation();
+            event.preventDefault();
+            return;
+        }
         for (const hotkey in HOTKEYS) {
             if (isHotkey(hotkey, event as any)) {
                 event.preventDefault();

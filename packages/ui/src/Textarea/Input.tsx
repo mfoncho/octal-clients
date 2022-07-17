@@ -75,6 +75,12 @@ export default function Input(props: InputProps) {
     const handleChange = useChangeHandler(editor, input, props, slater);
 
     function handleKeyDown(event: React.KeyboardEvent) {
+        if (props.disabled) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
         if (event.key == "Enter") {
             event.preventDefault();
             if (suggesting[0] == false) {
@@ -126,6 +132,9 @@ export default function Input(props: InputProps) {
     }
 
     function handleFocused(event: React.FocusEvent<HTMLDivElement>) {
+        if (props.disabled) {
+            return Transforms.deselect(editor);
+        }
         if (props.onFocus) {
             props.onFocus(event);
         }
