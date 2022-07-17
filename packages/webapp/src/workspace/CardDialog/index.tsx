@@ -76,7 +76,7 @@ export const CardDialog = React.memo<ICardDialog>(({ card, onClose, open }) => {
         <Dialog.Base
             open={open}
             onClose={onClose}
-            maxWidth="lg"
+            maxWidth="md"
             fullWidth={true}
             className="h-5/6"
             fullScreen={screen.mobile}>

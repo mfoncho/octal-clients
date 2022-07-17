@@ -94,7 +94,7 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
 
         function handleToggleDropdown(e: React.MouseEvent) {
             if (isDropdownBtn(e.nativeEvent) && e.type === "click") {
-                setDropdown((value) => !value);
+                setDropdown((value) => !value && !loading);
             }
         }
 
