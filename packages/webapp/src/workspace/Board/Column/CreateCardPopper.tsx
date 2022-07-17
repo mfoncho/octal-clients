@@ -215,8 +215,10 @@ export default Popper.create<HTMLDivElement, ICreateCardPopper>(
                         disabled={loading}
                         onClick={handleSubmit}
                         className={`${
-                            name.valid ? "bg-primary-500" : "bg-primary-200"
-                        } cursor-pointer py-2 px-2.5 border-slate-200 w-full rounded-md mx-2 font-semibold text-sm text-white shadow hover:shadow-md`}>
+                            name.valid && !loading
+                                ? "bg-primary-500 shadow hover:shadow-md"
+                                : "bg-primary-200"
+                        } cursor-pointer py-2 px-2.5 border-slate-200 w-full rounded-md mx-2 font-semibold text-sm text-white`}>
                         <span>Create</span>
                     </button>
                 </div>
