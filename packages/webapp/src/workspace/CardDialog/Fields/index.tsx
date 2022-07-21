@@ -28,7 +28,6 @@ interface IFields {
 
 const components = {
     Suggestion,
-    Mention,
 };
 
 export default React.memo<IFields>((props) => {

@@ -29,7 +29,7 @@ export default function Suggestion({
             return (
                 <div
                     className={clx(
-                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white px-2 py-1",
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white px-2 py-1 min-w-[250px]",
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <div className="font-bold flex flex-row items-center">
@@ -53,7 +53,7 @@ export default function Suggestion({
             return (
                 <div
                     className={clx(
-                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white px-2 py-1",
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-500 hover:text-white px-2 py-1 min-w-[250px]",
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <span className="font-bold flex flex-row items-center">
@@ -69,11 +69,14 @@ export default function Suggestion({
             return (
                 <div
                     className={clx(
-                        "flex flex-row justify-between rounded w-full hover:bg-primary-100 hover:text-white p-2",
+                        "flex flex-row justify-between rounded w-full hover:bg-primary-100 hover:text-white p-2 min-w-[250px]",
                         { ["bg-primary-500 text-white"]: selected }
                     )}>
                     <span className="font-bold flex flex-row items-center">
                         <Text>{value.native}</Text>
+                    </span>
+                    <span className="text-gray-600 text-sm">
+                        {(value as any).colons}
                     </span>
                 </div>
             );
