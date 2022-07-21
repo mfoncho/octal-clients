@@ -96,6 +96,7 @@ export class BoardRecord
         labels: List<LabelRecord>(),
         filter: new BoardFilter(),
         is_archived: false,
+        created_at: "",
         archived_at: null as string | null,
     })
     implements Unique
