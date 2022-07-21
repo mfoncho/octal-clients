@@ -16,11 +16,16 @@ export interface PasswordResetRequest {
     email: string;
 }
 
-export interface ResetPasswordRequest {
+export interface ConfirmResetCodeRequest {
     request_id: string;
-    params: {
+    params:{
         code: string;
-    };
+    }
+}
+
+export interface ResetPasswordRequest {
+    token: string;
+    password: string;
 }
 
 export default class AuthClient extends BaseClient {
@@ -62,13 +67,25 @@ export default class AuthClient extends BaseClient {
         return data;
     }
 
+    async confirmResetCode(
+        request: ConfirmResetCodeRequest,
+        params?: Params
+    ): Promise<{ token: string }> {
+        const { data } = await this.endpoint.post(
+            `/auth/reset/code/${request.request_id}`,
+            request.params,
+            params
+        );
+        return data;
+    }
+
     async resetPassword(
         request: ResetPasswordRequest,
         params?: Params
     ): Promise<any> {
         const { data } = await this.endpoint.post(
-            `/auth/reset/${request.request_id}`,
-            request.params,
+            `/auth/reset/password`,
+            request,
             params
         );
         return data;
