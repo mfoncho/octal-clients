@@ -427,7 +427,10 @@ export default React.memo<IThread>(function ({ thread }) {
                 onScrollY={handleScrollY}
                 containerRef={setContainer}
                 className="h-full w-full">
-                <div className="flex flex-col min-h-full justify-end">
+                <div
+                    className={`flex flex-col min-h-full justify-end ${
+                        init ? "" : "invisible"
+                    }`}>
                     <div className="header h-6" ref={header} />
                     {renderConversation()}
                     <div className="footer h-12" ref={footer} />
