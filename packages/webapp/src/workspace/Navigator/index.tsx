@@ -10,6 +10,12 @@ type SpacesType = ReturnType<typeof useSpaces>;
 
 const defaultSpaces: SpacesType = Map();
 
+const sortSpaces = (a: SpaceRecord, b: SpaceRecord) => {
+    if (a.created_at === b.created_at) return -1;
+    if (a.created_at > b.created_at) return 0;
+    else return 1;
+};
+
 export default React.memo(() => {
     let spaces = useSpaces();
 
@@ -36,12 +42,14 @@ export default React.memo(() => {
                     {grouped
                         .get("direct", defaultSpaces)
                         .toList()
+                        .sort(sortSpaces)
                         .map(renderSpaces)}
                 </div>
                 <div className="flex flex-col pb-14 overflow-hidden">
                     {grouped
                         .get("general", defaultSpaces)
                         .toList()
+                        .sort(sortSpaces)
                         .map(renderSpaces)}
                 </div>
             </Scrollbars>
