@@ -9,6 +9,10 @@ function* init(): Iterable<any> {
     client.connect({ token: auth.token });
 }
 
+function* shutdownConnection(): Iterable<any> {
+    client.shutdown();
+}
+
 function* loadConfig(payload: AppActions.LoadConfigAction): Iterable<any> {
     try {
         const data = (yield client.getConfig()) as any;
@@ -42,6 +46,11 @@ function* loadSite(payload: AppActions.LoadSiteAction): Iterable<any> {
 export const tasks = [
     { effect: takeEvery, type: Actions.INIT, handler: init },
     { effect: takeEvery, type: Actions.STORE_INIT, handler: loadSite },
+    {
+        effect: takeEvery,
+        type: Actions.LOGGED_OUT,
+        handler: shutdownConnection,
+    },
     { effect: takeEvery, type: Actions.STORE_INIT, handler: loadConfig },
     { effect: takeEvery, type: Actions.LOAD_SITE, handler: loadSite },
     { effect: takeEvery, type: Actions.LOAD_CONFIG, handler: loadConfig },
