@@ -11,9 +11,9 @@ type SpacesType = ReturnType<typeof useSpaces>;
 const defaultSpaces: SpacesType = Map();
 
 const sortSpaces = (a: SpaceRecord, b: SpaceRecord) => {
-    if (a.created_at === b.created_at) return -1;
-    if (a.created_at > b.created_at) return 0;
-    else return 1;
+    if (a.created_at > b.created_at) return 1;
+    if (a.created_at < b.created_at) return -1;
+    return 0;
 };
 
 export default React.memo(() => {

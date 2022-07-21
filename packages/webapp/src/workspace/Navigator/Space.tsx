@@ -12,7 +12,7 @@ import Board from "./Board";
 import { BsThreeDots as MenuIcon } from "react-icons/bs";
 import SpaceSettingsDialog from "../SpaceSettingsDialog";
 import InviteDialog from "../InviteDialog";
-import {
+import store, {
     SpaceRecord,
     useUser,
     useAuthId,
@@ -36,6 +36,22 @@ export interface IMenu {
     onSelect: (e: React.MouseEvent) => void;
     options: IMenuItem[];
 }
+
+const sortTopics = (aid: string, bid: string) => {
+    let a = store.getState().topics.getTopic(aid)!;
+    let b = store.getState().topics.getTopic(bid)!;
+    if (a.created_at > b.created_at) return 1;
+    if (a.created_at < b.created_at) return -1;
+    return 0;
+};
+
+const sortBoards = (aid: string, bid: string) => {
+    let a = store.getState().boards.getBoard(aid)!;
+    let b = store.getState().boards.getBoard(bid)!;
+    if (a.created_at > b.created_at) return 1;
+    if (a.created_at < b.created_at) return -1;
+    return 0;
+};
 
 const Menu = Popper.create<HTMLUListElement, IMenu>((props) => {
     return (
@@ -193,6 +209,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
     function renderBoards() {
         return boards
+            .sort(sortBoards)
             .map((id) => {
                 return <Board key={id} id={id} />;
             })
@@ -200,7 +217,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     }
 
     function renderTopics() {
-        return topics.map((id) => {
+        return topics.sort(sortTopics).map((id) => {
             return <Topic key={id} id={id} />;
         });
     }
