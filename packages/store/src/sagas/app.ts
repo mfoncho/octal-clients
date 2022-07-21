@@ -5,7 +5,7 @@ import * as AppActions from "../actions/app";
 import { State } from "..";
 
 function* init(): Iterable<any> {
-    let { auth } = ((yield select()) as any) as State;
+    let { auth } = (yield select()) as any as State;
     client.connect({ token: auth.token });
 }
 

@@ -1,4 +1,4 @@
-import { put, takeEvery } from "redux-saga/effects";
+import { put, delay, takeEvery } from "redux-saga/effects";
 import client from "@octal/client";
 import * as Actions from "../actions/types";
 import * as AppActions from "../actions/app";
@@ -19,6 +19,7 @@ function* connect({ payload }: AppActions.AuthAction): Iterable<any> {
 
         if (client.topic(topic)) return;
 
+        yield delay(1000);
         let channel = client.channel(topic);
 
         channel

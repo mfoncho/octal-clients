@@ -6,13 +6,13 @@ const watch = ({ effect, type, handler }: any) =>
     };
 
 const watchers = [
+    ...require("./auth").tasks,
     ...require("./init").tasks,
     ...require("./app").tasks,
     ...require("./label").tasks,
     ...require("./role").tasks,
     ...require("./ping").tasks,
     ...require("./tool").tasks,
-    ...require("./auth").tasks,
     ...require("./user").tasks,
     ...require("./card").tasks,
     ...require("./board").tasks,

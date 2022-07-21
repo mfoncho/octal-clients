@@ -1,4 +1,4 @@
-import { put, takeEvery, select } from "redux-saga/effects";
+import { put, delay, takeEvery, select } from "redux-saga/effects";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as UserActions from "../actions/user";
@@ -121,6 +121,7 @@ function* related({ payload }: any): Iterable<any> {
 function* subscribe({ payload }: any): Iterable<any> {
     const topic = `user:${payload.id}`;
     if (client.topic(topic)) return;
+    yield delay(1000);
     let channel = client.channel(topic);
     yield put(
         UserActions.userConnected({ user_id: payload.id, topic, channel })
