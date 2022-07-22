@@ -320,15 +320,16 @@ export function BasePortal({ subject, ...props }: IBasePortal) {
                 rect.top + el.getBoundingClientRect().height + 24 >
                 window.innerHeight
             ) {
-                el.style.top = `${
-                    rect.top + window.pageYOffset - el.offsetHeight - 8
-                }px`;
-                el.style.left = `${
+                let left =
                     rect.left +
                     window.pageXOffset -
                     el.offsetWidth / 2 +
-                    rect.width / 2
+                    rect.width / 2;
+
+                el.style.top = `${
+                    rect.top + window.pageYOffset - el.offsetHeight - 8
                 }px`;
+                el.style.left = `${left < 0 ? 20 : left}px`;
             } else {
                 el.style.top = `${rect.top + window.pageYOffset + 24}px`;
                 el.style.left = `${rect.left + window.pageXOffset}px`;
