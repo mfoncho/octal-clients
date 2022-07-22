@@ -13,11 +13,15 @@ function* create({
 }: BoardActions.CreateBoardAction): Iterable<any> {
     try {
         const data = (yield client.createBoard(payload)) as any;
-        yield put(BoardActions.boardLoaded(data));
+        yield put(BoardActions.boardCreated(data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
     }
+}
+
+function* loadBoard({ payload }: any): Iterable<any> {
+    yield put(BoardActions.boardLoaded(payload));
 }
 
 function* createCardTemplate({
@@ -161,15 +165,29 @@ function* spaceLoaded({
     yield put(BoardActions.loadSpaceBoards(payload.id!));
 }
 
-function* subscribe({
+function* subscribeSpace({
     payload: { channel },
 }: SpaceActions.SpaceConnectedAction): Iterable<any> {
+    channel.on("board.created", (payload: io.Board) => {
+        dispatch(BoardActions.boardCreated(payload));
+    });
     channel.on("board.updated", (payload: io.Board) => {
         dispatch(BoardActions.boardUpdated(payload));
     });
 
     channel.on("board.deleted", (payload: io.Board) => {
         dispatch(BoardActions.boardDeleted(payload));
+    });
+}
+
+function* subscribe({
+    payload: { channel },
+}: BoardActions.BoardConnectedAction): Iterable<any> {
+    channel.on("card_template.created", (payload: io.CardTemplate) => {
+        dispatch(BoardActions.cardTemplateCreated(payload));
+    });
+    channel.on("card_template.deleted", (payload: io.CardTemplate) => {
+        dispatch(BoardActions.cardTemplateDeleted(payload));
     });
 }
 
@@ -196,7 +214,13 @@ function* spacePurged({
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
+    {
+        effect: takeEvery,
+        type: Actions.SPACE_CONNECTED,
+        handler: subscribeSpace,
+    },
+    { effect: takeEvery, type: Actions.BOARD_CREATED, handler: loadBoard },
+    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
     {
         effect: takeEvery,
         type: Actions.LOAD_BOARDS,
