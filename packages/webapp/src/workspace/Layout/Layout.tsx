@@ -7,7 +7,8 @@ import {
     Routes,
     Navigate,
 } from "react-router-dom";
-import Suggestion, { Mention } from "../Mention";
+import Mention from "../Mention";
+import Suggestion from "../Suggestion";
 import Home from "../Home";
 import Claim from "../ClaimDialog";
 import Calendar from "../Calendar";

@@ -271,6 +271,10 @@ export default React.memo<IThread>(function ({ thread }) {
                     dispatch(action);
                 }
 
+                if (!page.autoScroll) {
+                    setPage((page) => page.set("autoScroll", true));
+                }
+
                 if (lastMessage.timestamp > prevLastMessage?.timestamp) {
                     return footer.current?.scrollIntoView();
                 }
