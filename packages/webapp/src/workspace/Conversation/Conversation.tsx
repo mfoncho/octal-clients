@@ -178,10 +178,11 @@ export default React.memo<IThread>(function ({ thread }) {
         const footerTop =
             footer.current?.getBoundingClientRect().top ?? viewHeight;
 
-        const topInView = headerTop > 0 && headerTop < viewHeight;
-        const bottomInView = footerTop > 0 && footerTop - 80.6 < viewHeight;
+        const headerInView = headerTop > 0 && headerTop < viewHeight;
+        const footerInView = footerTop > 0 && footerTop - 80.6 < viewHeight;
 
-        return !topInView || !bottomInView;
+        const scrollable = !headerInView || !footerInView;
+        return scrollable;
     }
 
     function messageRect(id: string) {
@@ -275,7 +276,10 @@ export default React.memo<IThread>(function ({ thread }) {
                     setPage((page) => page.set("autoScroll", true));
                 }
 
-                if (lastMessage.timestamp > prevLastMessage?.timestamp) {
+                if (
+                    thread.hasMoreBottom == false &&
+                    lastMessage.timestamp > prevLastMessage?.timestamp
+                ) {
                     return footer.current?.scrollIntoView();
                 }
                 return;
@@ -292,7 +296,7 @@ export default React.memo<IThread>(function ({ thread }) {
                 }
             }
         }
-    }, [pageHistory, page.autoScroll]);
+    }, [pageHistory, page.autoScroll, init]);
 
     /**
      * Component init conversation
