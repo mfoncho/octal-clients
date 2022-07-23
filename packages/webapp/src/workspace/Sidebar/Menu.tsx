@@ -7,7 +7,7 @@ import AccountDialog from "../AccountDialog";
 import PresenceDialog from "../PresenceDialog";
 import { presence as colors } from "src/colors";
 import { Popper, Button, Text, Dialog, Tooltip } from "@octal/ui";
-import { usePresence, useStatus } from "@octal/store";
+import { usePresence, useStatus, useWorkspace, useAuth } from "@octal/store";
 import { GoPrimitiveDot as PresenceDotIcon } from "react-icons/go";
 
 interface IOption {
@@ -79,6 +79,8 @@ const items: IMenuItem[] = [
 ];
 
 export const Menu = Popper.create<HTMLDivElement, IMenu>((props) => {
+    const auth = useAuth();
+    const workspace = useWorkspace();
     function hanleSelect(dialog: string) {
         return (event: React.MouseEvent): void => {
             event.stopPropagation();
@@ -107,11 +109,13 @@ export const Menu = Popper.create<HTMLDivElement, IMenu>((props) => {
                 </div>
             ))}
 
-            <Link
-                to="/console"
-                className="rounded-md px-4 py-2 text-base text-gray-700 hover:bg-gray-100 flex flex-row items-center justify-between">
-                <span className="font-semibold text-sm">Console</span>
-            </Link>
+            {auth.get("id") === workspace.get("admin_id") && (
+                <Link
+                    to="/console"
+                    className="rounded-md px-4 py-2 text-base text-gray-700 hover:bg-gray-100 flex flex-row items-center justify-between">
+                    <span className="font-semibold text-sm">Console</span>
+                </Link>
+            )}
         </Popper>
     );
 });
