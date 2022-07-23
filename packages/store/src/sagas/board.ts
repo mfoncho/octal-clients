@@ -175,6 +175,14 @@ function* subscribeSpace({
         dispatch(BoardActions.boardUpdated(payload));
     });
 
+    channel.on("board.archived", (payload: io.Board) => {
+        dispatch(BoardActions.boardArchived(payload));
+    });
+
+    channel.on("board.unarchived", (payload: io.Board) => {
+        dispatch(BoardActions.boardUnarchived(payload));
+    });
+
     channel.on("board.deleted", (payload: io.Board) => {
         dispatch(BoardActions.boardDeleted(payload));
     });

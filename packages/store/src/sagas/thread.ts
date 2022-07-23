@@ -10,14 +10,17 @@ import * as Actions from "../actions/types";
 
 function* load({
     payload,
-    resolve: meta,
+    resolve
 }: ThreadActions.LoadThreadAction): Iterable<any> {
+    const { threads } = (yield select()) as any as State;
+    if(threads.getThread(payload.thread_id))
+        return
     try {
         const data = (yield client.loadThread(payload)) as any;
         yield put(ThreadActions.threadLoaded(data));
-        meta.success(data);
+        resolve.success(data);
     } catch (e) {
-        meta.error(e);
+        resolve.error(e);
     }
 }
 

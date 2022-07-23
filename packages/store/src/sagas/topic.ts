@@ -4,6 +4,7 @@ import { dispatch, State } from "..";
 import { RelatedLoadedAction } from "../actions/app";
 import * as TopicActions from "../actions/topic";
 import * as SpaceActions from "../actions/space";
+import * as ThreadActions from "../actions/thread";
 import * as Actions from "../actions/types";
 import { TopicSchema } from "../schemas";
 import * as AppActions from "../actions/app";
@@ -132,6 +133,12 @@ function* spacePurged({
     }
 }
 
+function* loadTopicThread({ payload }: TopicActions.TopicLoadedAction) {
+    if (!payload.is_archived) {
+        yield put(ThreadActions.loadThread(payload));
+    }
+}
+
 function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
     const { channel } = payload;
     channel.on("topic.created", (payload: io.Topic) => {
@@ -142,6 +149,14 @@ function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
         dispatch(TopicActions.topicUpdated(payload));
     });
 
+    channel.on("topic.archived", (payload: io.Topic) => {
+        dispatch(TopicActions.topicArchived(payload));
+    });
+
+    channel.on("topic.unarchived", (payload: io.Topic) => {
+        dispatch(TopicActions.topicUnarchived(payload));
+    });
+
     channel.on("topic.deleted", (payload: io.Topic) => {
         dispatch(TopicActions.topicDeleted(payload));
     });
@@ -150,6 +165,8 @@ function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
 export const tasks = [
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.SPACE_LOADED, handler: spaceLoaded },
+    { effect: takeEvery, type: Actions.TOPIC_LOADED, handler: loadTopicThread },
+    { effect: takeEvery, type: Actions.TOPIC_UNARCHIVED, handler: loadTopicThread },
     { effect: takeEvery, type: Actions.LOAD_TOPICS, handler: loadSpaceTopics },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.ARCHIVE_TOPIC, handler: archive },
