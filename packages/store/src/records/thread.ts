@@ -102,18 +102,6 @@ export class ThreadDraft extends Record({
     files: [] as File[],
 }) {}
 
-function getValueByIndex<T>(
-    map: OrderedMap<string, T>,
-    index: number
-): T | undefined {
-    if (map.size > 0) {
-        const msg = (map as any)._list.get(index);
-        if (msg) {
-            return msg[1];
-        }
-    }
-}
-
 function getIndexByKey<T>(
     map: OrderedMap<string, T>,
     index: string
@@ -254,7 +242,7 @@ export class ThreadRecord
     }
 
     getMessageByIndex(index: number): ChatMessage | undefined {
-        return getValueByIndex(this.history, index);
+        return this.history.toList().get(index);
     }
 
     getMessageIndexById(id: string): number | undefined {
