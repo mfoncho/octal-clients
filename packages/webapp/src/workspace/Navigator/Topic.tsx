@@ -23,6 +23,10 @@ export default React.memo<ITopic>(({ id }) => {
 
     const selected = params.topic_id == id;
 
+    if (topic.is_archived && !selected) {
+        return <React.Fragment />;
+    }
+
     return (
         <Link
             to={path}

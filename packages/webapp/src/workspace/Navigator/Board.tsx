@@ -22,6 +22,9 @@ export default React.memo<IBoard>(({ id }) => {
 
     const selected = params.board_id == id;
 
+    if (board.is_archived && !selected) {
+        return <React.Fragment />;
+    }
     return (
         <Link
             to={path}
