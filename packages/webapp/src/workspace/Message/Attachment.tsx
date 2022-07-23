@@ -28,15 +28,15 @@ export default function Attachment(props: IAttachment) {
                             className="text-primary-600 w-12 h-14"
                         />
                     )}
-                    <div className="flex flex-col">
+                    <div className="flex flex-col max-w-[200px]">
                         <div className="text-sm text-gray-600 font-semibold">
                             <p className="text-ellipsis overflow-hidden">
                                 {props.file.name}.{props.file.ext}
                             </p>
                         </div>
-                        <div className="font-light text-sm text-gray-500">
-                            {props.file.ext.toUpperCase()}{" "}
-                            {props.file.humanSize}
+                        <div className="flex flex-row font-light text-sm text-gray-500 space-x-2">
+                            <div>{(props.file.ext || "").toUpperCase()}</div>
+                            <div>{props.file.humanSize}</div>
                         </div>
                     </div>
                 </div>
