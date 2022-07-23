@@ -175,7 +175,7 @@ export class ThreadRecord
         let history = source;
         while (history.size > 1) {
             let mid = Math.floor(history.size / 2);
-            let middle = getValueByIndex(history, mid)!;
+            let middle = history.toList().get(mid)!;
 
             if (middle.timestamp === timestamp) {
                 history = OrderedMap({ [middle.id]: middle });
