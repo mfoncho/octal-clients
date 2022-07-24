@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { List } from "immutable";
 import * as Icons from "@octal/icons";
 import { sort } from "@octal/common";
@@ -54,32 +54,14 @@ export const UserAvatar = React.memo<IUserAvatar>(({ users }) => {
 });
 
 function Checklist(props: ICard) {
-    const cardPath = generatePath(paths.workspace.card, {
-        board_id: props.board.id,
-        space_id: props.board.space_id,
-        card_id: props.card.id,
-    });
-
-    const subheader = (
-        <Link to={cardPath} className="inline-flex flex-row">
-            <span className="text-sm font-semibold text-gray-500">
-                <Text>{props.card.name}</Text>
-            </span>
-            <span className="text-xs px-2 text-gray-500">
-                (<Text>{props.board.name}</Text>)
-            </span>
-        </Link>
-    );
-
     return (
-        <div className="flex flex-col rounded-lg bg-white p-4">
+        <div className="flex flex-col px-4 py-2">
             <div className="flex flex-row justify-between">
-                <span className="cursor-pointer font-bold">
+                <span className="text-sm cursor-pointer font-semibold text-gray-700">
                     <Text>{props.name}</Text>
                 </span>
                 <UserAvatar users={props.users} />
             </div>
-            {subheader}
             <div className="flex flex-col py-1">
                 {props.tasks.map((task) => (
                     <div key={task.id} className="flex flex-row items-center">
@@ -101,21 +83,53 @@ function Checklist(props: ICard) {
 
 export default React.memo(function Assigned() {
     const id = useAuthId();
-    const checklists = useUserChecklists(id);
+    const checklists = useUserChecklists(id).sort(createdAtSort);
+    const grouped = checklists
+        .groupBy((checklist) => checklist.card.id)
+        .toList();
     if (checklists.isEmpty()) return <div />;
     return (
-        <div className="flex flex-col bg-gray-100 p-4 border-2 border-gray-300 rounded-lg space-y-4">
-            {checklists.sort(createdAtSort).map((checklist) => {
+        <div className="flex flex-col space-y-8">
+            {grouped.map((checklists) => {
+                let items = checklists.toList();
+                let sample = items.first()!;
+                const cardPath = generatePath(paths.workspace.card, {
+                    board_id: sample.board.id,
+                    space_id: sample.board.space_id,
+                    card_id: sample.card.id,
+                });
                 return (
-                    <Checklist
-                        users={checklist.users}
-                        tasks={checklist.tasks}
-                        board={checklist.board}
-                        id={checklist.id}
-                        card={checklist.card}
-                        name={checklist.name}
-                        key={checklist.id}
-                    />
+                    <div
+                        key={items.first()?.card.id}
+                        className="flex flex-col divide-y-2 divide-gray-200 border-2 border-gray-200 rounded-lg overflow-hidden">
+                        <Link
+                            to={cardPath}
+                            className="flex flex-row px-4 py-2 justify-between bg-slate-100 hover:bg-slate-200">
+                            <div>
+                                <span className="font-bold text-gray-800">
+                                    <Text>{sample.card.name}</Text>
+                                </span>
+                            </div>
+                            <div>
+                                <span className="text-xs text-gray-500 font-semibold">
+                                    <Text>{sample.board.name}</Text>
+                                </span>
+                            </div>
+                        </Link>
+                        {items.toList().map((checklist) => {
+                            return (
+                                <Checklist
+                                    users={checklist.users}
+                                    tasks={checklist.tasks}
+                                    board={checklist.board}
+                                    id={checklist.id}
+                                    card={checklist.card}
+                                    name={checklist.name}
+                                    key={checklist.id}
+                                />
+                            );
+                        })}
+                    </div>
                 );
             })}
         </div>
