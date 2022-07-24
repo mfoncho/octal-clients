@@ -10,7 +10,7 @@ export type ThreadType =
     | "comment"
     | "email";
 
-export type AccessType = "public" | "private" | "direct";
+export type SpaceType = "public" | "private" | "direct" | "common";
 
 export type Id = string;
 
@@ -36,7 +36,7 @@ export interface BelongsToCard {
     card_id: Id;
 }
 
-export interface BelongsToThread {
+export interface HasThread {
     thread_id: Id;
 }
 
@@ -46,10 +46,6 @@ export interface BelongsToBoard {
 
 export interface BelongsToSpace {
     space_id: Id;
-}
-
-export interface BelongsToWorkspace {
-    workspace_id: Id;
 }
 
 export interface Page<Entry = any> {
@@ -324,11 +320,9 @@ export namespace io {
 
     export interface TopicSearchResult extends Page<Message> {}
 
-    export interface Space extends Unique, BelongsToWorkspace {
-        icon: string;
+    export interface Space extends Unique {
         name: string;
-        access: AccessType;
-        topics: Topic[];
+        type: SpaceType;
         created_at: Timestamp;
     }
 
@@ -348,7 +342,7 @@ export namespace io {
         created_at: Timestamp;
     }
 
-    export interface Message extends Unique, BelongsToThread, Timestamped {
+    export interface Message extends Unique, HasThread, Timestamped {
         author: Author;
         pinned: boolean;
         content: string;
