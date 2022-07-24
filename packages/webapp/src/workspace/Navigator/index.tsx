@@ -26,7 +26,7 @@ export default React.memo(() => {
     }
 
     const grouped = spaces.groupBy((space) =>
-        space.access == "direct" ? space.access : "general"
+        space.is_direct ? space.type : "general"
     );
 
     return (

@@ -8,7 +8,7 @@ import { useInput } from "src/utils";
 import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
 import client, { io } from "@octal/client";
-import * as BoardActions from "@octal/store/lib/actions/board";
+import { Actions } from "@octal/store";
 
 interface ITopic {
     board: io.Board;
@@ -128,7 +128,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }, []);
 
     function handleDeleteBoard(id: string) {
-        const action = BoardActions.deleteBoard({
+        const action = Actions.Board.deleteBoard({
             board_id: id,
             space_id: space.id,
         });
@@ -138,7 +138,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }
 
     function handleArchiveBoard(id: string) {
-        const action = BoardActions.archiveBoard({
+        const action = Actions.Board.archiveBoard({
             board_id: id,
             space_id: space.id,
         });
@@ -150,7 +150,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }
 
     function handleUnarchiveBoard(id: string) {
-        const action = BoardActions.unarchiveBoard({
+        const action = Actions.Board.unarchiveBoard({
             board_id: id,
             space_id: space.id,
         });

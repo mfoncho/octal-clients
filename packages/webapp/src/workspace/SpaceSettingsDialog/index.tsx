@@ -72,7 +72,7 @@ export default Dialog.create<IDialog>((props) => {
 
         const critical = menu.name.toLowerCase() == "shutdown";
 
-        if (space.admin_id !== authid && critical) {
+        if ((space.admin_id !== authid || space.is_common) && critical) {
             return null;
         }
         return (

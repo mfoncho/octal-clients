@@ -1,24 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import clx from "classnames";
 import { useInput } from "src/utils";
-import GeneralIcon from "@material-ui/icons/AccountTreeRounded";
 import { SpaceManagerProps } from "./index";
-import * as SpaceActions from "@octal/store/lib/actions/space";
+import { Actions } from "@octal/store";
 import { useDispatch } from "react-redux";
 import * as Icons from "@octal/icons";
 import { Switch, Button } from "@octal/ui";
 import Layout from "./Layout";
 
-type SpaceAccess = "public" | "private" | "direct";
-
 type ChangesType = {
     name?: string;
-    purpose?: string;
-    access?: SpaceAccess;
-    icon?: File;
+    type?: string;
 };
 
-const accessDescription = {
+const TypeDescription = {
     public: "Everyone in the space workspace can join and leave the space as they please. Other must be invited to join the space",
     private:
         "Space will be visible only to space members. Others can join the space by invition or adding them from the space workspace",
@@ -29,7 +24,7 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
     const dispatch = useDispatch();
     const name = useInput(space.name);
 
-    const access = useInput<SpaceAccess>(space.access);
+    const access = useInput(space.type);
 
     const rootRef = useRef<HTMLDivElement>(null);
 
@@ -47,11 +42,11 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
 
     useEffect(() => {
         if (access.value == (space.is_private ? "private" : "public")) {
-            if ("access" in changes) {
-                setChanges(({ access, ...vals }) => vals);
+            if ("type" in changes) {
+                setChanges(({ type, ...vals }) => vals);
             }
         } else if (access.valid) {
-            setChanges((vals) => ({ ...vals, access: access.value }));
+            setChanges((vals) => ({ ...vals, type: access.value }));
         }
     }, [access.value, access.valid]);
 
@@ -75,10 +70,10 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
 
     function handleSave() {
         const patches: any = { ...changes };
-        if (changes.access) {
-            patches.access = changes.access;
+        if (changes.type) {
+            patches.access = changes.type;
         }
-        const actions = SpaceActions.updateSpace(space.id, patches);
+        const actions = Actions.Space.updateSpace(space.id, patches);
         dispatch(actions)
             .then(() => setChanges({} as any))
             .finally(() => setLoading(false));
@@ -101,21 +96,23 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
                     />
                 </div>
 
-                <div className="flex flex-col py-8">
-                    <div className="flex flex-row items-center py-4">
-                        <Icons.Private className="text-gray-500" />
-                        <span className="font-semibold px-2 flex-grow">
-                            Private
+                {!space.is_common && (
+                    <div className="flex flex-col py-8">
+                        <div className="flex flex-row items-center py-4">
+                            <Icons.Private className="text-gray-500" />
+                            <span className="font-semibold px-2 flex-grow">
+                                Private
+                            </span>
+                            <Switch
+                                checked={access.value == "private"}
+                                onChange={toggleAccess}
+                            />
+                        </div>
+                        <span className="font-semibold text-xs pr-8 text-gray-700">
+                            {(TypeDescription as any)[access.value]}
                         </span>
-                        <Switch
-                            checked={access.value == "private"}
-                            onChange={toggleAccess}
-                        />
                     </div>
-                    <span className="font-semibold text-xs pr-8 text-gray-700">
-                        {accessDescription[access.value]}
-                    </span>
-                </div>
+                )}
             </div>
             <div
                 className={clx(
@@ -141,7 +138,6 @@ const name = "General";
 
 export default {
     name: name,
-    icon: GeneralIcon,
     filter: filter,
     manager: Manager,
 };

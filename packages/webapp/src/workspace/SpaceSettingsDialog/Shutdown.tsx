@@ -4,7 +4,7 @@ import { SpaceManagerProps } from "./index";
 import { useDispatch } from "react-redux";
 import Layout from "./Layout";
 import { SpaceRecord } from "@octal/store";
-import { shutdownSpace } from "@octal/store/lib/actions/space";
+import { Actions } from "@octal/store";
 
 interface IWarning {
     onConfirm: (e: React.MouseEvent) => void;
@@ -40,7 +40,7 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
     const [loading, setLoading] = useState(false);
 
     function handleShutdownSpace() {
-        const action = shutdownSpace({
+        const action = Actions.Space.shutdownSpace({
             space_id: space.id,
         });
         dispatch(action).finally(() => setLoading(false));

@@ -9,7 +9,7 @@ import { Promiseable } from "@octal/common";
 import { useInput } from "src/utils";
 import { Text } from "@octal/ui";
 import { SpaceManagerFilterParams } from ".";
-import * as TopicActions from "@octal/store/lib/actions/topic";
+import { Actions } from "@octal/store";
 
 interface ITopic {
     topic: io.Topic;
@@ -143,7 +143,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }, []);
 
     function handleDeleteTopic(id: string) {
-        const action = TopicActions.deleteTopic({
+        const action = Actions.Topic.deleteTopic({
             topic_id: id,
             space_id: space.id,
         });
@@ -153,7 +153,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }
 
     function handleArchiveTopic(id: string) {
-        const action = TopicActions.archiveTopic({
+        const action = Actions.Topic.archiveTopic({
             topic_id: id,
             space_id: space.id,
         });
@@ -165,7 +165,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }
 
     function handleUnarchiveTopic(id: string) {
-        const action = TopicActions.unarchiveTopic({
+        const action = Actions.Topic.unarchiveTopic({
             topic_id: id,
             space_id: space.id,
         });
@@ -220,7 +220,6 @@ const name = "Topics";
 
 export default {
     name: name,
-    icon: Icons.Topic,
     filter: filter,
     manager: Manager,
 };

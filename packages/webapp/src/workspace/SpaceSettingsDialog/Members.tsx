@@ -3,19 +3,17 @@ import * as Icons from "@octal/icons";
 import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
 import UsersDialog from "../UsersDialog";
-import MembersIcon from "@material-ui/icons/PeopleRounded";
 import client, { io } from "@octal/client";
 import { Markdown, Avatar, Dialog, Button } from "@octal/ui";
-import { deleteMember, createMember } from "@octal/store/lib/actions/member";
 import { useDispatch } from "react-redux";
 import { useInput } from "src/utils";
-import { SpaceRecord } from "@octal/store/lib/records";
+import { SpaceRecord, Actions } from "@octal/store";
 
 interface IMember {
     space: SpaceRecord;
     filter: string;
     member: io.Member;
-    onDelete: (member: io.Member) => void;
+    onDelete?: (member: io.Member) => void;
 }
 
 interface IWarning {
@@ -59,7 +57,9 @@ function Row({ member, space, filter, onDelete }: IMember) {
     }
 
     function handleDelete() {
-        onDelete(member);
+        if (onDelete) {
+            onDelete(member);
+        }
     }
 
     function handleOpenWarning(e: React.MouseEvent<HTMLElement>) {
@@ -85,7 +85,7 @@ function Row({ member, space, filter, onDelete }: IMember) {
     return (
         <div className="group flex px-4 py-2 flex-row items-center justify-between hover:bg-slate-100">
             {userNode}
-            {space.admin_id !== member.user.id && (
+            {space.admin_id !== member.user.id && onDelete && (
                 <button
                     onClick={handleOpenWarning}
                     className="invisible group-hover:visible text-gray-500 rounded-md border border-gray-500 p-1 hover:bg-gray-200">
@@ -133,7 +133,7 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
     }, [space.id]);
 
     function handleDeleteMember(member: io.Member) {
-        const action = deleteMember({
+        const action = Actions.Member.deleteMember({
             member_id: member.id,
             space_id: space.id,
         });
@@ -143,7 +143,10 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
 
     function handleAddUser(id: string) {
         if (!selected.includes(id)) {
-            const action = createMember({ space_id: space.id, user_id: id });
+            const action = Actions.Member.createMember({
+                space_id: space.id,
+                user_id: id,
+            });
             dispatch(action).then((data) =>
                 setMembers((members) => [data].concat(members))
             );
@@ -161,20 +164,22 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
                     <div className="absolute px-2 h-full flex flex-col justify-center">
                         <Icons.Filter className="text-gray-500 w-5 h-5" />
                     </div>
-                    <div className="absolute px-1 right-0 h-full flex flex-col justify-center">
-                        <Button
-                            onClick={dialog.opener("users")}
-                            color="primary"
-                            variant="icon">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                            </svg>
-                        </Button>
-                    </div>
+                    {!space.is_common && (
+                        <div className="absolute px-1 right-0 h-full flex flex-col justify-center">
+                            <Button
+                                onClick={dialog.opener("users")}
+                                color="primary"
+                                variant="icon">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                                </svg>
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="flex flex-col rounded-md border-gray-200 border divide-y divide-solid">
@@ -184,16 +189,20 @@ const Manager = React.memo(({ space }: SpaceManagerFilterParams) => {
                         key={member.id}
                         member={member}
                         filter={filter.value}
-                        onDelete={handleDeleteMember}
+                        onDelete={
+                            space.is_common ? undefined : handleDeleteMember
+                        }
                     />
                 ))}
             </div>
-            <UsersDialog
-                open={dialog.users}
-                onClose={dialog.close}
-                selected={selected}
-                onSelect={handleAddUser}
-            />
+            {!space.is_common && (
+                <UsersDialog
+                    open={dialog.users}
+                    onClose={dialog.close}
+                    selected={selected}
+                    onSelect={handleAddUser}
+                />
+            )}
         </Layout>
     );
 });
@@ -206,7 +215,6 @@ const name = "Members";
 
 export default {
     name: name,
-    icon: MembersIcon,
     filter: filter,
     manager: Manager,
 };
