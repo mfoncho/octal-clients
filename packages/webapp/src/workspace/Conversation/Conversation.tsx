@@ -263,7 +263,10 @@ export default React.memo<IThread>(function ({ thread }) {
             // new message and autoScroll
             if (page.autoScroll || !isScrollable()) {
                 let lastMessage = thread.history.last()!;
-                if (lastMessage.timestamp > thread.last_read) {
+                if (
+                    lastMessage.timestamp > thread.last_read ||
+                    !Boolean(thread.last_read)
+                ) {
                     let action = ThreadActionFactory.threadActivity({
                         type: "read",
                         thread_id: thread.id,
