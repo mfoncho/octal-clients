@@ -1,6 +1,6 @@
 import { Record, List, fromJS } from "immutable";
 import { FileRecord } from "./workspace";
-import { Unique, Id, Timestamped, BelongsToThread } from "@octal/client";
+import { Unique, Id, Timestamped, HasThread } from "@octal/client";
 import { Slater } from "@octal/markdown";
 
 const slater = Slater.create();
@@ -38,7 +38,7 @@ export class MessageRecord
         reactions: List<UsersReactionRecord>(),
         last_reply: null as MessageRecord | null,
     })
-    implements Unique, Timestamped, BelongsToThread
+    implements Unique, Timestamped, HasThread
 {
     __parsed__: any;
 

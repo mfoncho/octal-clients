@@ -1,6 +1,6 @@
 import { Record, List, Map } from "immutable";
 import { Permission } from "./permissions";
-import { Unique, Id, AccessType } from "@octal/client";
+import { Unique, Id, SpaceType } from "@octal/client";
 
 export const SpacePermissions = Map<Permission, string | number | boolean>();
 
@@ -48,11 +48,10 @@ export class SpaceRoleRecord
 export class SpaceRecord
     extends Record({
         id: "" as Id,
-        icon: "",
         name: "",
         admin_id: "",
         users: List<Id>(),
-        access: "" as AccessType,
+        type: "" as SpaceType,
         topic_id: "",
         thread_id: "",
         member_id: "" as Id,
@@ -73,16 +72,20 @@ export class SpaceRecord
             : this.update("loaded", (loaded) => loaded.push(collection));
     }
 
+    get is_common() {
+        return this.type === "common";
+    }
+
     get is_private() {
-        return this.access == "private";
+        return this.type === "private";
     }
 
     get is_public() {
-        return this.access == "public";
+        return this.type === "public";
     }
 
     get is_direct() {
-        return this.access === "direct";
+        return this.type === "direct";
     }
 
     toServer() {
