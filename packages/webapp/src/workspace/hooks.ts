@@ -3,16 +3,16 @@ import { useDispatch } from "react-redux";
 import * as AppAction from "@octal/store/lib/actions/app";
 import { useActionTrackers } from "@octal/store";
 
-export function useTrackerActions(entity: string) {
+export function useTrackerActions(entity_id: string) {
     const dispatch = useDispatch();
-    const trackers = useActionTrackers(entity);
+    const trackers = useActionTrackers(entity_id);
 
     const track = React.useCallback(
         (target: string, event: string) => {
             const action = AppAction.createTracker({
                 event,
                 target,
-                entity,
+                entity_id,
             });
             return dispatch(action);
         },
