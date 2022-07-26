@@ -2,18 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { usePermissions } from "../Space";
 import { ActionT } from "./Menu";
-import { MessageRecord, useEntityBookmark } from "@octal/store";
-import * as BookmarkActions from "@octal/store/lib/actions/bookmark";
-import {
-    pinMesssag,
-    updateMessage,
-    unpinMesssag,
-    reactMessage,
-    deleteMessage,
-    unreactMessage,
-} from "@octal/store/lib/actions/thread";
-
+import { MessageRecord, useEntityBookmark, Actions } from "@octal/store";
 export function useActions(message: MessageRecord, authid: string = "") {
+    const [loading, setLoading] = useState<string[]>([]);
+
     const dispatch = useDispatch();
 
     let authored = message.user_id === authid;
@@ -23,6 +15,18 @@ export function useActions(message: MessageRecord, authid: string = "") {
     const permissions = usePermissions();
 
     const [buttons, setButtons] = useState<ActionT[]>([]);
+
+    function addLoading(type: string) {
+        setLoading((loading) => loading.concat([type]));
+    }
+
+    function removeLoading(type: string) {
+        setLoading((loading) => loading.filter((load) => load !== type));
+    }
+
+    function removeLoadingCb(type: string) {
+        return () => removeLoading(type);
+    }
 
     useEffect(() => {
         let buttons: ActionT[] = ["react"];
@@ -50,38 +54,44 @@ export function useActions(message: MessageRecord, authid: string = "") {
 
     const onBookmark = useCallback(
         (notes: string = "") => {
+            if (loading.includes("bookmark")) return;
+            addLoading("bookmark");
             if (bookmark) {
-                const action = BookmarkActions.deleteBookmark({
+                const action = Actions.Bookmark.deleteBookmark({
                     id: bookmark!.id,
-                    entity: message.id,
+                    entity_id: message.id,
                 });
-                return dispatch(action);
+                return dispatch(action).finally(removeLoadingCb("bookmark"));
             } else {
-                const action = BookmarkActions.createBookmark({
+                const action = Actions.Bookmark.createBookmark({
                     type: "message",
                     notes: notes,
-                    entity: message.id,
+                    entity_id: message.id,
                 });
-                return dispatch(action);
+                return dispatch(action).finally(removeLoadingCb("bookmark"));
             }
         },
-        [message.id, Boolean(bookmark)]
+        [message.id, Boolean(bookmark), loading]
     );
 
     const onPin = useCallback(() => {
+        if (loading.includes("pin")) return;
+        addLoading("pin");
         const params = {
             message_id: message.id,
             thread_id: message.thread_id,
             space_id: message.space_id,
         };
         const action = message.pinned
-            ? unpinMesssag(params)
-            : pinMesssag(params);
-        return dispatch(action);
-    }, [message.id, message.pinned]);
+            ? Actions.Thread.unpinMesssag(params)
+            : Actions.Thread.pinMesssag(params);
+        return dispatch(action).finally(removeLoadingCb("pin"));
+    }, [message.id, message.pinned, loading]);
 
     const onReact = useCallback(
         (reaction: string) => {
+            if (loading.includes("react")) return;
+            addLoading("react");
             const params = {
                 message_id: message.id,
                 thread_id: message.thread_id,
@@ -92,25 +102,35 @@ export function useActions(message: MessageRecord, authid: string = "") {
                 (rtx) => rtx.reaction == reaction
             );
             if (rtx && rtx.users.includes(authid)) {
-                return dispatch(unreactMessage(params));
+                return dispatch(Actions.Thread.unreactMessage(params)).finally(
+                    removeLoadingCb("react")
+                );
             } else {
-                return dispatch(reactMessage(params));
+                return dispatch(Actions.Thread.reactMessage(params)).finally(
+                    removeLoadingCb("react")
+                );
             }
         },
-        [message.id, message.reactions]
+        [message.id, message.reactions, loading]
     );
 
     const onDelete = useCallback(() => {
+        if (loading.includes("delete")) return;
+        addLoading("delete");
         const params = {
             space_id: message.space_id,
             message_id: message.id,
             thread_id: message.thread_id,
         };
-        return dispatch(deleteMessage(params));
-    }, [message.id]);
+        return dispatch(Actions.Thread.deleteMessage(params)).finally(
+            removeLoadingCb("delete")
+        );
+    }, [message.id, loading]);
 
     const onUpdate = useCallback(
         (text: string) => {
+            if (loading.includes("update")) return;
+            addLoading("update");
             const params = {
                 params: {
                     content: text.trim(),
@@ -120,9 +140,11 @@ export function useActions(message: MessageRecord, authid: string = "") {
                 space_id: message!.space_id,
             };
 
-            return dispatch(updateMessage(params));
+            return dispatch(Actions.Thread.updateMessage(params)).finally(
+                removeLoadingCb("update")
+            );
         },
-        [message.id]
+        [message.id, loading]
     );
 
     return {
