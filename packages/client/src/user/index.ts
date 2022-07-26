@@ -33,9 +33,9 @@ export interface FetchBookmarksRequest {
 }
 
 export interface CreateBookmarkRequest {
-    entity: string;
     type: string;
     notes?: string;
+    entity_id: string;
 }
 
 export interface UpdateBookmarkRequest {

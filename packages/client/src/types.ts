@@ -69,8 +69,8 @@ export namespace io {
         id: string;
         type: string;
         notes: string;
-        entity: string;
         user_id: string;
+        entity_id: string;
         created_at: string;
         updated_at: string;
     }
@@ -78,9 +78,16 @@ export namespace io {
     export interface Tracker {
         id: string;
         event: string;
-        entity: string;
         target: string;
+        entity_id: string;
         created_at: string;
+    }
+
+    export interface Name {
+        name: string;
+        type: string;
+        metadata: string;
+        entity_id: string;
     }
 
     export interface CardFieldTemplate {

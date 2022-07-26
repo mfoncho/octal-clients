@@ -3,8 +3,8 @@ import BaseClient, { Params } from "../base";
 
 export interface CreateTrackerReqeust {
     event: string;
-    entity: string;
     target: string;
+    entity_id: string;
 }
 
 export default class WorkspaceClient extends BaseClient {
@@ -33,6 +33,11 @@ export default class WorkspaceClient extends BaseClient {
 
     async deleteTracker(id: string, params?: Params): Promise<io.Tracker> {
         const { data } = await this.endpoint.delete(`/trackers/${id}`, params);
+        return data;
+    }
+
+    async fetchNames(): Promise<io.Name> {
+        const { data } = await this.endpoint.get("/names");
         return data;
     }
 
