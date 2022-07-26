@@ -5,7 +5,7 @@ export class BookmarkRecord extends Record({
     type: "",
     notes: "",
     user_id: "",
-    entity: "",
+    entity_id: "",
     created_at: "",
     updated_at: "",
 }) {}

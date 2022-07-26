@@ -12,23 +12,23 @@ export class TrackersStore extends Record({
         if (record) {
             return this;
         }
-        let entities = this.entities.get(tracker.entity, List<string>());
+        let entities = this.entities.get(tracker.entity_id, List<string>());
         if (!entities.includes(tracker.id))
             entities = entities.push(tracker.id);
         return this.setIn(
             ["trackers", tracker.id],
             new TrackerRecord(tracker)
-        ).setIn(["entities", tracker.entity], entities);
+        ).setIn(["entities", tracker.entity_id], entities);
     }
 
     removeTracker(id: string) {
         let record = this.trackers.get(id);
         if (record) {
             let trackers = this.entities
-                .get(record.entity, List<string>())
+                .get(record.entity_id, List<string>())
                 .filter((id) => id !== record?.id);
             return this.deleteIn(["trackers", id]).setIn(
-                ["entities", record.entity],
+                ["entities", record.entity_id],
                 trackers
             );
         }

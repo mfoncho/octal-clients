@@ -9,9 +9,9 @@ export class BookmarksStore extends Record({
     entities: Map<string, BookmarkRecord>(),
 }) {
     putBookmark(payload: io.Bookmark) {
-        let bookmarked = this.bookmarked.has(payload.entity)
+        let bookmarked = this.bookmarked.has(payload.entity_id)
             ? this.bookmarked
-            : this.bookmarked.set(payload.entity, payload.id);
+            : this.bookmarked.set(payload.entity_id, payload.id);
         let entities = this.entities.set(
             payload.id,
             new BookmarkRecord(payload)
@@ -40,7 +40,7 @@ export class BookmarksStore extends Record({
         let bookmark = this.entities.get(id)!;
         if (bookmark) {
             let entities = this.entities.delete(bookmark.id);
-            let bookmarked = this.bookmarked.delete(bookmark.entity);
+            let bookmarked = this.bookmarked.delete(bookmark.entity_id);
             return this.set("entities", entities).set("bookmarked", bookmarked);
         }
         return this;

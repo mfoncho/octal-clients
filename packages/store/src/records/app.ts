@@ -5,7 +5,7 @@ export class TrackerRecord extends Record({
     id: "",
     event: "",
     target: "",
-    entity: "",
+    entity_id: "",
 }) {}
 
 export class ConfigRecord extends Record<io.Config>({

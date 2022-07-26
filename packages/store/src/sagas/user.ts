@@ -165,7 +165,7 @@ function* syncPresence({
 
     const presence = new Presence(channel as any);
     presence.onSync(() => {
-        //console.log("online", presence.list());
+        // console.log("online", presence.list());
     });
 
     presence.onJoin((id, current: io.PresenceSync, pres: io.PresenceSync) => {

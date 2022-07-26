@@ -41,7 +41,7 @@ export interface LoggedOutPyaload {}
 export interface CreateTrackerPayload {
     event: string;
     target: string;
-    entity: string;
+    entity_id: string;
 }
 
 export interface IAuth {

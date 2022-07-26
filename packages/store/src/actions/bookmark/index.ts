@@ -14,7 +14,7 @@ import {
 export interface CreateBookmarkPayload {
     type: string;
     notes: string;
-    entity: string;
+    entity_id: string;
 }
 
 export interface UpdateBookmarkPayload {
@@ -26,7 +26,7 @@ export interface UpdateBookmarkPayload {
 
 export interface DeleteBookmarkPayload {
     id: string;
-    entity?: string;
+    entity_id?: string;
 }
 
 export type CreateBookmarkAction = IOAction<
