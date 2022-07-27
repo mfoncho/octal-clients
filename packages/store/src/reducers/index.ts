@@ -9,6 +9,7 @@ import topics from "./topics";
 import auth from "./auth";
 import trackers from "./trackers";
 import calendar from "./calendar";
+import names from "./names";
 import snack from "./snack";
 import route from "./route";
 import member from "./member";
@@ -43,6 +44,7 @@ const RootStates = {
     bookmarks: bookmark.state,
     users: user.state,
     cards: card.state,
+    names: names.state,
     boards: board.state,
     members: member.state,
     preferences: preferences.state,
@@ -96,6 +98,7 @@ const reducers = {
     bookmarks: createReducer(bookmark.reducers, bookmark.state),
     config: createReducer(config.reducers, config.state),
     calendars: createReducer(calendar.reducers, calendar.state),
+    names: createReducer(names.reducers, names.state),
     roles: createReducer(role.reducers, role.state),
     auth: createReducer(auth.reducers, auth.state),
     preferences: createReducer(preferences.reducers, preferences.state),

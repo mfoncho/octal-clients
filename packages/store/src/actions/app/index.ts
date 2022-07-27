@@ -28,6 +28,10 @@ import {
     WORKSPACE_UPDATED,
     WORKSPACE_LOADED,
     WORKSPACE_CONNECTED,
+    NAME_LOADED,
+    NAMES_LOADED,
+    NAME_UPDATED,
+    NAME_DELETED,
 } from "./types";
 
 export * from "./types";
@@ -86,6 +90,14 @@ export type CollectionLoadedAction = Action<
     COLLECTION_LOADED,
     CollectionLoadedPayload
 >;
+
+export type NameLoadedAction = Action<NAME_LOADED, io.Name>;
+
+export type NamesLoadedAction = Action<NAMES_LOADED, io.Name[]>;
+
+export type NameUpdatedAction = Action<NAME_UPDATED, Partial<io.Name>>;
+
+export type NameDeletedAction = Action<NAME_DELETED, Partial<io.Name>>;
 
 export type AuthAction = Action<AUTH_LOADED, io.Auth>;
 
@@ -232,4 +244,20 @@ export function trackersLoaded(payload: io.Tracker[]): TrackersLoadedAction {
 
 export function loggedOut(): LoggedOutAction {
     return createAction(LOGGED_OUT, {});
+}
+
+export function nameLoaded(payload: io.Name): NameLoadedAction {
+    return createAction(NAME_LOADED, payload);
+}
+
+export function namesLoaded(payload: io.Name[]): NamesLoadedAction {
+    return createAction(NAMES_LOADED, payload);
+}
+
+export function nameUpdated(payload: Partial<io.Name>): NameUpdatedAction {
+    return createAction(NAME_UPDATED, payload);
+}
+
+export function nameDeleted(payload: Partial<io.Name>): NameDeletedAction {
+    return createAction(NAME_DELETED, payload);
 }

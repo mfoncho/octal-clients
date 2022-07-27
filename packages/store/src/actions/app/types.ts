@@ -6,6 +6,18 @@ export type STORE_INIT = typeof STORE_INIT;
 export const INIT = "COLAB_INIT";
 export type INIT = typeof INIT;
 
+export const NAMES_LOADED = "NAMES_LOADED";
+export type NAMES_LOADED = typeof NAMES_LOADED;
+
+export const NAME_LOADED = "NAME_LOADED";
+export type NAME_LOADED = typeof NAME_LOADED;
+
+export const NAME_DELETED = "NAME_DELETED";
+export type NAME_DELETED = typeof NAME_DELETED;
+
+export const NAME_UPDATED = "NAME_UPDATED";
+export type NAME_UPDATED = typeof NAME_UPDATED;
+
 export const COLLECTION_LOADED = "COLLECTION_LOADED";
 export type COLLECTION_LOADED = typeof COLLECTION_LOADED;
 

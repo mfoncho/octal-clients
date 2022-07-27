@@ -8,6 +8,13 @@ export class TrackerRecord extends Record({
     entity_id: "",
 }) {}
 
+export class NameRecord extends Record({
+    type: "",
+    name: "",
+    metadata: {} as object,
+    entity_id: "",
+}) {}
+
 export class ConfigRecord extends Record<io.Config>({
     locale: "en_US",
     lpack: {},

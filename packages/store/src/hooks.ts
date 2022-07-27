@@ -423,6 +423,16 @@ export function useSpaceMembers() {
     return emptyarr;
 }
 
+export function useName(id: string) {
+    const selector = useCallback(
+        ({ names }: State) => {
+            return names.entities.get(id);
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
+
 export function useMessage(id: string) {
     const selector = useCallback(
         ({ threads }: State) => {
