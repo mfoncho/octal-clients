@@ -54,7 +54,7 @@ export default React.memo<ILayout>((props) => {
                     {props.actions}
                 </div>
             </div>
-            <div className={cls("flex-grow", props.className)}>
+            <div className={cls("flex-grow overflow-y-auto", props.className)}>
                 {props.children}
             </div>
         </div>

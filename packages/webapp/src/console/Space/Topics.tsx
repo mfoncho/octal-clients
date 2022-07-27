@@ -45,7 +45,7 @@ export default function Topics({ space }: ITopics) {
     }
 
     return (
-        <div className="flex flex-col shadow rounded-md bg-white overflow-hidden">
+        <div className="flex flex-col shadow rounded-md bg-white">
             <div className="py-4 bg-gray-100 flex flex-row justify-between">
                 <span className="font-bold px-4 text-gray-800">Topics</span>
             </div>

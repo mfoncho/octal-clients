@@ -107,7 +107,7 @@ export default React.memo(() => {
                             </td>
                             <td className="text-center px-6 py-2">
                                 <span>
-                                    <Label color="green">{space.access}</Label>
+                                    <Label color="green">{space.type}</Label>
                                 </span>
                             </td>
                             <td className="text-right px-6 py-3">

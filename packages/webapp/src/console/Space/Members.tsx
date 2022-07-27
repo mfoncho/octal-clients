@@ -164,7 +164,7 @@ export default function Members({ space, updateSpace }: IMembers) {
     }
 
     return (
-        <div className="flex flex-col rounded-md overflow-hidden bg-white shadow">
+        <div className="flex flex-col rounded-md bg-white shadow">
             <UsersDialog
                 loading={loading}
                 onSelect={handleAddUser}
