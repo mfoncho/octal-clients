@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "@octal/ui";
-import { useUser } from "@octal/store";
+import { useName } from "@octal/store";
 import UserCard from "@workspace/UserCard";
 
 export interface IUsername {
@@ -8,9 +8,9 @@ export interface IUsername {
 }
 
 export default function Username({ id }: IUsername) {
-    const user = useUser(id);
+    const name = useName(id);
     const ref = React.useRef<HTMLSpanElement | null>(null);
-    const [card, clickHander] = UserCard.useCard(user.id);
+    const [card, clickHander] = UserCard.useCard(id);
 
     function handleClick(e: any) {
         if (ref.current == e.target) {
@@ -23,7 +23,7 @@ export default function Username({ id }: IUsername) {
             ref={ref}
             onClick={handleClick}
             className="px-1 pb-0.5 my-0.5 bg-primary-500 text-white rounded-full font-semibold text-sm">
-            @<Text>{user.username}</Text>
+            @<Text>{name ? name.name : "none"}</Text>
             {card}
         </span>
     );

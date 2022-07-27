@@ -1,17 +1,26 @@
 import React from "react";
 import { Text } from "@octal/ui";
 import Username from "@workspace/Username";
-import { useTopic } from "@octal/store";
+import { useName } from "@octal/store";
 
 interface IMentioned {
     id: string;
 }
 
 export function TopicMentioned({ id }: IMentioned) {
-    const topic = useTopic(id);
+    const name = useName(id);
+
+    if (name) {
+        return (
+            <span className="px-1 pb-0.5 my-0.5 bg-primary-100 rounded text-primary-800 font-semibold text-sm">
+                #<Text>{name.name}</Text>
+            </span>
+        );
+    }
+
     return (
         <span className="px-1 pb-0.5 my-0.5 bg-primary-100 rounded text-primary-800 font-semibold text-sm">
-            #<Text>{topic.name}</Text>
+            #<Text>(lost)</Text>
         </span>
     );
 }
