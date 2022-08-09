@@ -38,7 +38,7 @@ function File(props: IFile) {
     }
 
     return (
-        <div className="group hover:relative flex flex-row py-1">
+        <div className="group hover:relative flex flex-row py-1 w-fit">
             <div className="flex flex-row border-2 rounded-lg border-slate-200 items-center py-1 bg-slate-100 space-x-4">
                 <div className="flex flex-row items-center space-x-1">
                     {props.file.preview_url ? (
@@ -125,10 +125,7 @@ export default function FileField({ field, handle, ...props }: IField) {
 
     return (
         <Field handle={handle} dragging={props.dragging} field={field}>
-            <div
-                className={`w-full flex flex-row flex-wrap space-x-2 space-y-2 first-child:mt-2 ${
-                    field.values.isEmpty() ? "" : "first-child:ml-2"
-                }`}>
+            <div className="flex flex-col">
                 {field.values.map(renderFile as any)}
                 {can("card.manage") && (
                     <div className="flex flex-col p-1 w-20">

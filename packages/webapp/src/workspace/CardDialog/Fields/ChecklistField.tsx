@@ -245,13 +245,13 @@ export default function ChecklistField({ field, handle, ...props }: IField) {
     return (
         <Field handle={handle} field={field} dragging={props.dragging}>
             <div className="flex-1 flex flex-col px-1">
-                <div className="flex flex-row flex-wrap pb-1 space-x-2 space-y-1">
+                <div className="flex flex-row flex-wrap pb-1 space-x-2 space-y-1 first-child:mt-1 first-child:ml-0">
                     {can(
                         "card.manage",
                         <button
                             ref={fieldRef}
                             onClick={handleTogglePopper}
-                            className="px-0.5">
+                            className="pr-0.5">
                             <Icons.AddUser className="w-5 h-5 text-gray-600" />
                         </button>
                     )}

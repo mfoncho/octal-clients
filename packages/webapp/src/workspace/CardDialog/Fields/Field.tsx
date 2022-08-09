@@ -56,7 +56,7 @@ function Rename({ field, onClose }: IRname) {
         <Textarea.Input
             autoFocus={true}
             onBlur={handleOnBlur}
-            className="rounded px-2 py-0.5 min-w-[128px] focus:outline-none font-semibold text-gray-700 text-base w-full bg-slate-100"
+            className="rounded px-1 py-0.5 min-w-[128px] focus:outline-none font-bold text-gray-700 text-sm w-full bg-slate-100"
             onSubmit={handleSubmit}
             {...name.props}
         />
@@ -77,7 +77,7 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
             <div
                 ref={rootRef}
                 className={clx(
-                    "flex flex-col py-2 mb-2 rounded-md",
+                    "flex flex-col rounded-md px-1 py-2",
                     props.dragging && "bg-primary-50"
                 )}>
                 <div
@@ -90,7 +90,7 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                                 onClose={() => setRename(false)}
                             />
                         ) : (
-                            <span className="text-gray-700 px-2 font-semibold">
+                            <span className="text-gray-700 px-1 font-bold text-sm">
                                 <Text>{field.name}</Text>
                             </span>
                         )}
@@ -113,17 +113,17 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                             <button
                                 onClick={() => setRename(true)}
                                 className="p-1 rounded-md  hover:bg-gray-100">
-                                <Icons.Edit className="h-5 w-5 text-gray-500" />
+                                <Icons.Edit className="h-4 w-4 text-gray-500" />
                             </button>
                             <button
                                 onClick={() => actions.deleteField()}
                                 className="p-1 rounded-md  hover:bg-gray-100">
-                                <DeleteIcon className="text-gray-500 h-5 w-5" />
+                                <DeleteIcon className="text-gray-500 h-4 w-4" />
                             </button>
                         </div>
                     )}
                 </div>
-                <div className="flex flex-row py-1 px-1">{props.children}</div>
+                <div className="flex flex-row">{props.children}</div>
             </div>
         );
     }
