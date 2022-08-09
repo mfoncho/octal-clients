@@ -24,7 +24,7 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
     const dispatch = useDispatch();
     const name = useInput(space.name);
 
-    const access = useInput(space.type);
+    const type = useInput(space.type);
 
     const rootRef = useRef<HTMLDivElement>(null);
 
@@ -37,18 +37,18 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
     }, [space.name]);
 
     useEffect(() => {
-        access.setValue(space.is_private ? "private" : "public");
+        type.setValue(space.is_private ? "private" : "public");
     }, [space.is_private]);
 
     useEffect(() => {
-        if (access.value == (space.is_private ? "private" : "public")) {
+        if (type.value == (space.is_private ? "private" : "public")) {
             if ("type" in changes) {
                 setChanges(({ type, ...vals }) => vals);
             }
-        } else if (access.valid) {
-            setChanges((vals) => ({ ...vals, type: access.value }));
+        } else if (type.valid) {
+            setChanges((vals) => ({ ...vals, type: type.value }));
         }
-    }, [access.value, access.valid]);
+    }, [type.value, type.valid]);
 
     useEffect(() => {
         if (name.value == space.name || !name.valid) {
@@ -61,17 +61,17 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
     }, [name.value, name.valid]);
 
     function toggleAccess() {
-        if (access.value == "public") {
-            access.setValue("private");
-        } else if (access.value == "private") {
-            access.setValue("public");
+        if (type.value == "public") {
+            type.setValue("private");
+        } else if (type.value == "private") {
+            type.setValue("public");
         }
     }
 
     function handleSave() {
         const patches: any = { ...changes };
         if (changes.type) {
-            patches.access = changes.type;
+            patches.type = changes.type;
         }
         const actions = Actions.Space.updateSpace(space.id, patches);
         dispatch(actions)
@@ -104,12 +104,12 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
                                 Private
                             </span>
                             <Switch
-                                checked={access.value == "private"}
+                                checked={type.value == "private"}
                                 onChange={toggleAccess}
                             />
                         </div>
                         <span className="font-semibold text-xs pr-8 text-gray-700">
-                            {(TypeDescription as any)[access.value]}
+                            {(TypeDescription as any)[type.value]}
                         </span>
                     </div>
                 )}
