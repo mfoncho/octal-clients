@@ -148,13 +148,15 @@ export default function Members({ space, updateSpace }: IMembers) {
                                     className="px-2">
                                     <Icons.Crown />
                                 </Button>
-                                <Button
-                                    variant="icon"
-                                    color="clear"
-                                    onClick={handleRemoveMember(member)}
-                                    className="px-2">
-                                    <Icons.Delete />
-                                </Button>
+                                {space.type !== "common" && (
+                                    <Button
+                                        variant="icon"
+                                        color="clear"
+                                        onClick={handleRemoveMember(member)}
+                                        className="px-2">
+                                        <Icons.Delete />
+                                    </Button>
+                                )}
                             </>
                         )
                     )}
@@ -180,9 +182,13 @@ export default function Members({ space, updateSpace }: IMembers) {
                     </span>
                 </div>
                 <div className="flex flex-row w-40 justify-end px-4">
-                    <Button color="primary" onClick={dialog.opener("users")}>
-                        Add User
-                    </Button>
+                    {space.type !== "common" && (
+                        <Button
+                            color="primary"
+                            onClick={dialog.opener("users")}>
+                            Add User
+                        </Button>
+                    )}
                 </div>
             </div>
             <div className="flex flex-col divide-y divide-slate-200">
