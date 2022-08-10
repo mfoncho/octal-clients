@@ -30,8 +30,7 @@ function Column({ column, ...props }: IColumn) {
         return (
             <li
                 key={column.id}
-                role="button"
-                className="flex rounded-md group flex-row py-1 items-center px-2 justify-between">
+                className="flex group flex-row items-center p-2 bg-gray-100 justify-between">
                 <span className="text-gray-600 font-semibold">
                     <Text>{column.name}</Text>
                 </span>
@@ -45,7 +44,7 @@ function Column({ column, ...props }: IColumn) {
             <li
                 key={column.id}
                 role="button"
-                className="flex group cursor-pointer rounded-md flex-row py-1 items-center px-2 hover:bg-primary-500 justify-between"
+                className="flex group cursor-pointer flex-row  items-center p-2 hover:bg-primary-500 justify-between"
                 onClick={(e) => props.onSelect(e, column.id)}>
                 <span className="group-hover:text-white text-gray-800 font-semibold">
                     <Text>{column.name}</Text>
@@ -71,9 +70,12 @@ export default Popper.create<HTMLUListElement, IMenu>((props) => {
                 return (
                     <li
                         role="button"
-                        className="flex flex-row mt-1 font-semibold bg-gray-100 rounded-md justify-center text-gray-600 py-2"
+                        className="flex group cursor-pointer flex-row  items-center p-2 hover:bg-primary-500 justify-between bg-orange-50"
                         onClick={(e) => props.onSelect(e, action)}>
-                        {action}
+                        <span className="group-hover:text-white text-gray-800 font-semibold">
+                            <Text>{action}</Text>
+                        </span>
+                        <Icons.Archive className="group-hover:text-white text-gray-500" />
                     </li>
                 );
 
@@ -81,9 +83,12 @@ export default Popper.create<HTMLUListElement, IMenu>((props) => {
                 return (
                     <li
                         role="button"
-                        className="flex flex-row mt-1 font-semibold bg-red-50 rounded-md justify-center text-red-700 py-2"
+                        className="flex group cursor-pointer flex-row  items-center p-2 hover:bg-primary-500 justify-between bg-red-50"
                         onClick={(e) => props.onSelect(e, action)}>
-                        {action}
+                        <span className="group-hover:text-white text-gray-800 font-semibold">
+                            <Text>{action}</Text>
+                        </span>
+                        <Icons.Archive className="group-hover:text-white text-gray-500" />
                     </li>
                 );
         }
@@ -98,7 +103,7 @@ export default Popper.create<HTMLUListElement, IMenu>((props) => {
             tabIndex={-1}
             anchorEl={props.anchorEl}
             onClickAway={props.onClickAway}
-            className="z-10 flex w-48 flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 p-2 bg-white shadow-lg overflow-x-hidden overflow-y-auto">
+            className="z-10 flex w-60 flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-64 bg-white shadow-lg overflow-x-hidden overflow-y-auto divide-y">
             {columns
                 .filter(unarchived)
                 .sort(positionSort)
