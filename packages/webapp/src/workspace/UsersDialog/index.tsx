@@ -25,7 +25,7 @@ export default Dialog.create<IUsersDialog>(({ selected = [], ...props }) => {
             maxWidth="xs"
             fullHeight={true}
             onClose={props.onClose}>
-            <Dialog.Content className="flex flex-col overflow-hiddden">
+            <Dialog.Content className="flex flex-col overflow-hidden">
                 <div className="relative flex flex-col item-center">
                     <input
                         {...search.props}
@@ -35,7 +35,7 @@ export default Dialog.create<IUsersDialog>(({ selected = [], ...props }) => {
                         <Icons.Filter className="text-gray-500 w-5 h-5" />
                     </div>
                 </div>
-                <div className="users flex flex-col py-4 overflow-x-hiddden overflow-y-auto">
+                <div className="users flex flex-col py-4 overflow-x-hidden overflow-y-auto">
                     {(search.valid
                         ? users.filter(
                               (user) =>
