@@ -38,7 +38,7 @@ const TemplateDropdown = Popper.create<HTMLDivElement, IDropdownPopper>(
                 data-popper="template-dropdown"
                 style={{ width: props.anchorEl?.offsetWidth }}
                 onClickAway={props.onClickAway}
-                className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 bg-white shadow-md overflow-x-hidden">
+                className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 bg-white shadow-md overflow-x-hidden z-20">
                 <div
                     onClick={handleTemplateClick}
                     className="flex flex-col bg-slate-50">
