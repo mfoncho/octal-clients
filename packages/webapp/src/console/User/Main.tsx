@@ -25,9 +25,7 @@ export default React.memo(() => {
 
     if (!user) return <></>;
     return (
-        <Layout
-            title={user.name}
-            className="flex flex-col p-4 bg-slate-200 space-y-4">
+        <Layout title={user.name} className="block p-4 bg-slate-200 space-y-4">
             <Profile user={user} />
             <Roles roles={user.roles} />
             <UserSpaces id={params.user_id!} />

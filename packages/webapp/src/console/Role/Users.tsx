@@ -108,11 +108,11 @@ export default function Members({ role }: IMembers) {
                             className="inline-block h-8 w-8 rounded-full"
                         />
                         <span className="px-4 text-gray-800 font-semibold text-base">
-                            @{user.username}
+                            {user.username}
                         </span>
                     </div>
                     <div className="px-4">
-                        <span className="font-semibold text-sm">
+                        <span className="font-semibold text-xs uppercase">
                             {moment(ruser.created_at).format("ll")}
                         </span>
                     </div>

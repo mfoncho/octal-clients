@@ -86,8 +86,8 @@ export default React.memo(() => {
                     <Text>{role.name}</Text>
                 </span>
             }
-            className="bg-slate-200 flex flex-col flex-grow px-4 pb-20 overflow-y-auto">
-            <div className="flex flex-row items-center py-2">
+            className="bg-slate-200 flex flex-col flex-grow pb-20">
+            <div className="flex flex-row items-center py-2 px-4">
                 {tabs.map((t) => (
                     <div key={t.value} className="flex flex-col">
                         <Button color="clear" onClick={() => setTab(t.value)}>
@@ -102,16 +102,18 @@ export default React.memo(() => {
                     </div>
                 ))}
             </div>
-            <Flow.Switch value={tab}>
-                {tabs.map((tab) => (
-                    <Flow.Case key={tab.value} value={tab.value}>
-                        {React.createElement(tab.comp, {
-                            role: role,
-                            updateRole: setRole,
-                        })}
-                    </Flow.Case>
-                ))}
-            </Flow.Switch>
+            <div className="flex-1 overflow-y-auto block px-4">
+                <Flow.Switch value={tab}>
+                    {tabs.map((tab) => (
+                        <Flow.Case key={tab.value} value={tab.value}>
+                            {React.createElement(tab.comp, {
+                                role: role,
+                                updateRole: setRole,
+                            })}
+                        </Flow.Case>
+                    ))}
+                </Flow.Switch>
+            </div>
         </Layout>
     );
 });

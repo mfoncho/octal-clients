@@ -109,11 +109,11 @@ export default React.memo(() => {
                                         className="inline-block h-8 w-8 rounded-full"
                                     />
                                     <div className="flex flex-col">
-                                        <span className="px-4 font-semibold">
-                                            {user.name}
+                                        <span className="px-4 font-bold">
+                                            {user.username}
                                         </span>
-                                        <span className="px-4 font-semibold text-primary-500">
-                                            @{user.username}
+                                        <span className="px-4 font-semibold text-gray-600">
+                                            {user.name}
                                         </span>
                                     </div>
                                 </div>
