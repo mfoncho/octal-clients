@@ -6,7 +6,7 @@ import { Dialog, Button } from "@octal/ui";
 import { useNavigator } from "@console/hooks";
 import moment from "moment";
 import client from "@console/client";
-import UsersDialog from "./UsersDialog";
+import UsersDialog from "src/workspace/UsersDialog";
 
 export interface IMembers {
     space: io.Space;
@@ -58,6 +58,11 @@ export default function Members({ space, updateSpace }: IMembers) {
 
     function handleRemoveMember(member: io.Member) {
         return () => {
+            if (
+                loading.includes(member.user.id) ||
+                !excludes.includes(member.user.id)
+            )
+                return;
             client
                 .removeSpaceMember({
                     space_id: member.space_id,
@@ -77,6 +82,7 @@ export default function Members({ space, updateSpace }: IMembers) {
 
     function handleCrownMember(member: io.Member) {
         return () => {
+            if (loading.includes(member.user.id)) return;
             client
                 .electSpaceUser({
                     space_id: member.space_id,
@@ -94,6 +100,7 @@ export default function Members({ space, updateSpace }: IMembers) {
     }
 
     function handleAddUser(uid: string) {
+        if (loading.includes(uid) || excludes.includes(uid)) return;
         client
             .addSpaceUser({
                 space_id: space.id,
@@ -166,11 +173,10 @@ export default function Members({ space, updateSpace }: IMembers) {
     }
 
     return (
-        <div className="flex flex-col rounded-md bg-white shadow">
+        <div className="flex flex-col shadow rounded-md bg-white overflow-hidden">
             <UsersDialog
-                loading={loading}
                 onSelect={handleAddUser}
-                excludes={excludes}
+                selected={excludes}
                 open={dialog.users}
                 onClose={dialog.close}
             />
