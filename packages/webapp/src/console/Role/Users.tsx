@@ -5,7 +5,7 @@ import { Dialog, Button } from "@octal/ui";
 import { useNavigator } from "@console/hooks";
 import moment from "moment";
 import client from "@console/client";
-import UsersDialog from "@console/components/UsersDialog";
+import UsersDialog from "src/workspace/UsersDialog";
 
 export interface IMembers {
     role: io.Role;
@@ -56,6 +56,8 @@ export default function Members({ role }: IMembers) {
 
     function handleRemoveUser(user: io.User) {
         return () => {
+            if (loading.includes(user.id) || !excludes.includes(user.id))
+                return;
             client
                 .removeRoleUser({
                     role_id: role.id,
@@ -74,6 +76,7 @@ export default function Members({ role }: IMembers) {
     }
 
     function handleAddUser(uid: string) {
+        if (loading.includes(uid) || excludes.includes(uid)) return;
         client
             .addRoleUser({
                 role_id: role.id,
@@ -135,9 +138,8 @@ export default function Members({ role }: IMembers) {
     return (
         <div className="flex flex-col shadow rounded-md bg-white overflow-hidden">
             <UsersDialog
-                loading={loading}
                 onSelect={handleAddUser}
-                excludes={excludes}
+                selected={excludes}
                 open={dialog.users}
                 onClose={dialog.close}
             />
