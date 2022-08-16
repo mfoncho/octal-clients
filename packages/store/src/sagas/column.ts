@@ -178,8 +178,8 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
         dispatch(BoardActions.columnDeleted(payload));
     });
 
-    channel.on("columns.reordered", ({ columns }: { columns: io.Column[] }) => {
-        dispatch(BoardActions.columnsReordered(columns));
+    channel.on("column.moved", (payload: io.Column) => {
+        dispatch(BoardActions.columnMoved(payload));
     });
 }
 
