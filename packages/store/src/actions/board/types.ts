@@ -144,7 +144,7 @@ export type DELETE_CARD = typeof DELETE_CARD;
 export const MOVE_CARD = "MOVE_CARD";
 export type MOVE_CARD = typeof MOVE_CARD;
 
-export const CARD_MOVED = "MOVED_CARD";
+export const CARD_MOVED = "CARD_MOVED";
 export type CARD_MOVED = typeof CARD_MOVED;
 
 export const UPDATE_CARD = "UPDATE_CARD";

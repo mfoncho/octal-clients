@@ -263,6 +263,10 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
     channel.on("cards.reordered", ({ cards }: { cards: io.Card[] }) => {
         dispatch(BoardActions.cardsReordered(cards));
     });
+
+    channel.on("card.moved", (payload: io.Card) => {
+        dispatch(BoardActions.cardMoved(payload));
+    });
 }
 
 export const tasks = [
