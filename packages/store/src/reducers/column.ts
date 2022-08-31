@@ -34,16 +34,16 @@ export class ColumnsStore extends Record({
         if (this.contains(payload.id)) {
             return this.patchColumn(payload);
         } else {
-            const board = ColumnRecord.make(payload);
+            const column = ColumnRecord.make(payload);
             return this.withMutations((store) => {
-                store.setIn(["entities", payload.id], board);
+                store.setIn(["entities", column.id], column);
 
                 // index board_id
-                let boards = store.boards.get(board.board_id, List<string>());
-                if (!boards.includes(board.board_id))
+                let boards = store.boards.get(column.board_id, List<string>());
+                if (!boards.includes(column.board_id))
                     store.setIn(
-                        ["boards", board.board_id],
-                        boards.push(board.id)
+                        ["boards", column.board_id],
+                        boards.push(column.id)
                     );
             });
         }
