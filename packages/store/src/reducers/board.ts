@@ -66,6 +66,9 @@ export class BoardsStore extends Record({
 
     putBoard(payload: any): BoardsStore {
         if (this.contains(payload.id)) {
+            if (payload instanceof BoardRecord) {
+                return this.setIn(["entities", payload.id], payload);
+            }
             return this;
         } else {
             const board = BoardRecord.make(payload);
