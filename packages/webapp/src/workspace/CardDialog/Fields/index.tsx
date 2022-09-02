@@ -129,7 +129,7 @@ export default React.memo<IFields>((props) => {
             <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="flex flex-col">
+                className="flex flex-col space-y-4">
                 {card.fields.map(renderField)}
                 {provided.placeholder}
             </div>
@@ -137,7 +137,7 @@ export default React.memo<IFields>((props) => {
     }
 
     return (
-        <React.Fragment>
+        <div className="flex flex-col space-y-4">
             <Elements.Provider value={components}>
                 <FieldDragged.Provider value={dragged}>
                     <DragDropContext
@@ -154,6 +154,6 @@ export default React.memo<IFields>((props) => {
                 </FieldDragged.Provider>
             </Elements.Provider>
             {can("card.manage", <FieldCreator card={card} />)}
-        </React.Fragment>
+        </div>
     );
 });
