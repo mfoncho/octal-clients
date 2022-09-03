@@ -30,7 +30,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
     }
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full p-1">
             <Textarea
                 value={desc}
                 disabled={disabled}
@@ -38,7 +38,7 @@ function Edit({ disabled, value, onSubmit, onClose }: IEdit) {
                 onBlur={handleBlur}
                 onChange={(e: any) => setDesc(e.target.value)}
                 onSubmit={(e: any) => handleChange(e.target.value)}
-                className="bg-slate-100 p-1 rounded-md break-word w-full text-gray-800 text-base"
+                className="bg-slate-100 p-2 rounded-md break-word w-full text-gray-800 text-base"
             />
             <div className="flex flex-row justify-end pt-2 px-3">
                 <button
@@ -89,18 +89,17 @@ export default function TextField({ field, handle, ...props }: IField) {
             ) : (
                 <div
                     className={clx(
-                        "flex flex-col break-word w-full text-gray-800 rounded-lg text-base p-1",
-                        {
-                            ["h-10 bg-slate-100"]: !Boolean(text.trim()),
-                        }
+                        "flex flex-col break-word w-full text-gray-800 rounded-lg text-base p-1"
                     )}>
                     <div
                         className={clx({
-                            ["bg-slate-100 p-2 rounded-md"]: !Boolean(
+                            ["bg-slate-100 py-2 px-3 rounded-md"]: !Boolean(
                                 text.trim()
                             ),
                         })}>
-                        <Markdown>{text}</Markdown>
+                        <Markdown>
+                            {text.trim().length > 0 ? text : "﻿"}
+                        </Markdown>
                     </div>
                     {can(
                         "card.manage",
