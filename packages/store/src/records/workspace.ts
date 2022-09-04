@@ -1,12 +1,20 @@
 import { Record } from "immutable";
 export type WorkspaceRecord = Map<string, any>;
 
+export type FileMetadata = {
+    PreviewImageWidth?: number;
+    PreviewImageHeight?: number;
+    MIMEType?: string;
+    [key: string]: any;
+};
+
 export class FileRecord extends Record({
     id: "",
     ext: "",
     name: "",
     size: 0,
     filename: "",
+    metadata: {} as FileMetadata,
     bucket_id: "",
     preview_url: "",
     download_url: "",
