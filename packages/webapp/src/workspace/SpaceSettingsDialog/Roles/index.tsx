@@ -132,7 +132,9 @@ const Manager = React.memo(({ space }: IManager) => {
 
     const actions = useActions(space);
 
-    const customRoles = roles.filter((role) => space.roles.has(role.id));
+    const customRoles = roles.filter((role) =>
+        space.roles.find((srole) => srole.role_id === role.id)
+    );
 
     const role = roles.get(selected ?? "");
 
@@ -155,8 +157,9 @@ const Manager = React.memo(({ space }: IManager) => {
     }
 
     function handleDeleteRole() {
-        if (warning && roles.has(warning)) {
-            actions.deleteRole(warning).then(() => setWarning(null));
+        let role = space.roles.find((role) => role.role_id == warning);
+        if (role) {
+            actions.deleteRole(role.id).then(() => setWarning(null));
         }
     }
 

@@ -188,8 +188,8 @@ export function useActions(space: SpaceRecord) {
 
     return {
         createRole,
-        createBoard,
         deleteRole,
+        createBoard,
         createTopic,
     };
 }
