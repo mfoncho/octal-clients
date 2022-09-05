@@ -98,7 +98,7 @@ export class SpaceRecord
 
     putRole(payload: any) {
         return this.update("roles", (roles) => {
-            return roles.set(payload.role_id, SpaceRoleRecord.make(payload));
+            return roles.set(payload.id, SpaceRoleRecord.make(payload));
         });
     }
 
@@ -106,7 +106,7 @@ export class SpaceRecord
         const role = this.roles.get(role_id);
         if (role) {
             return this.setIn(
-                ["roles", role.role_id],
+                ["roles", role.id],
                 role.setPermission(permission, value)
             );
         }
@@ -117,7 +117,7 @@ export class SpaceRecord
         const role = this.roles.get(role_id);
         if (role) {
             return this.setIn(
-                ["roles", role.role_id],
+                ["roles", role.id],
                 role.unsetPermission(permission)
             );
         }
@@ -135,7 +135,7 @@ export class SpaceRecord
     static objectFromJS(data: any) {
         if (data.roles) {
             const roles = data.roles.reduce((roles: any, role: any) => {
-                return roles.set(role.role_id, SpaceRoleRecord.make(role));
+                return roles.set(role.id, SpaceRoleRecord.make(role));
             }, Map());
             data = { ...data, roles };
         }

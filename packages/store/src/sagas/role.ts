@@ -76,7 +76,12 @@ function* deleteSpaceRole({
 }: RoleActions.DeleteSpaceRoleAction): Iterable<any> {
     try {
         const data = (yield client.deleteSpaceRole(payload)) as any;
-        yield put(RoleActions.spaceRoleDeleted(data));
+        yield put(
+            RoleActions.spaceRoleDeleted({
+                id: payload.role_id,
+                space_id: payload.space_id,
+            } as any)
+        );
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
