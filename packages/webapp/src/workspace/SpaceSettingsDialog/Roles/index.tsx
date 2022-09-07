@@ -132,9 +132,18 @@ const Manager = React.memo(({ space }: IManager) => {
 
     const actions = useActions(space);
 
-    const customRoles = roles.filter((role) =>
-        space.roles.find((srole) => srole.role_id === role.id)
-    );
+    const customRoles = space.roles
+        .sort((a, b) => {
+            if (a.created_at > b.created_at) {
+                return -1;
+            } else if (a.created_at < b.created_at) {
+                return 1;
+            } else {
+                return 0;
+            }
+        })
+        .map((srole) => roles.get(srole.role_id)!)
+        .filter(Boolean);
 
     const role = roles.get(selected ?? "");
 
