@@ -1,4 +1,4 @@
-import { Record, List } from "immutable";
+import { Record } from "immutable";
 import { Unique } from "@octal/client";
 import { Permissions } from "./permissions";
 
@@ -82,7 +82,6 @@ export class AuthRecord
             email: "",
             claimed: false,
             timestamp: "",
-            roles: List<string>(),
         },
         "auth"
     )
@@ -97,15 +96,6 @@ export class AuthRecord
     }
 
     static fromJS(payload: any) {
-        if (Array.isArray(payload.roles)) {
-            const roles = payload.roles.map((role: any) => {
-                if (typeof role === "string") {
-                    return role;
-                }
-                return role.id;
-            });
-            payload = { ...payload, roles: List(roles) };
-        }
         return payload;
     }
 }

@@ -35,6 +35,27 @@ export class UserStore extends Record({
     removeUser(id: string) {
         return this.deleteIn(["entities", id]);
     }
+
+    assignRole(payload: any) {
+        let user = this.entities.get(payload.user_id);
+        if (user) {
+            return this.setIn(
+                ["entities", user.id],
+                user.addRole(payload.role_id)
+            );
+        }
+        return this;
+    }
+    unassignRole(payload: any) {
+        let user = this.entities.get(payload.user_id);
+        if (user) {
+            return this.setIn(
+                ["entities", user.id],
+                user.removeRole(payload.role_id)
+            );
+        }
+        return this;
+    }
 }
 
 export const state = new UserStore({});
@@ -45,6 +66,12 @@ export const reducers = {
     },
     [Actions.USER_LOADED]: (store: UserStore, { payload }: any) => {
         return store.putUser(payload);
+    },
+    [Actions.ROLE_ASSIGNED]: (store: UserStore, { payload }: any) => {
+        return store.assignRole(payload);
+    },
+    [Actions.ROLE_UNASSIGNED]: (store: UserStore, { payload }: any) => {
+        return store.unassignRole(payload);
     },
     [Actions.USERS_LOADED]: (store: UserStore, { payload }: any) => {
         return payload.reduce((store: UserStore, user: any) => {

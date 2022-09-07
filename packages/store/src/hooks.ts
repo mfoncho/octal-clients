@@ -702,10 +702,10 @@ export function useActionTrackers(id: string) {
 }
 
 export function usePermissions() {
-    const auth = useAuth();
+    const user = useUser();
     const roles = useRoles();
     return useMemo(() => {
-        return auth.roles
+        return user.roles
             .map((id) => roles.get(id)!)
             .filter(Boolean)
             .reduce((permissions, role) => {
@@ -739,17 +739,18 @@ export function usePermissions() {
                         }
                     }, permissions);
             }, SpacePermissions);
-    }, [auth, roles]);
+    }, [roles]);
 }
 
 export function useSpacePermissions(id: string) {
+    const user = useUser();
     const auth = useAuth();
     const roles = useRoles();
     const space = useSpace(id);
     return useMemo(() => {
         if (!auth.claimed) return SpacePermissions;
 
-        return auth.roles
+        return user.roles
             .map((id) => roles.get(id)!)
             .filter(Boolean)
             .filter((role) => {
@@ -809,5 +810,5 @@ export function useSpacePermissions(id: string) {
                         }
                     }, permissions);
             }, SpacePermissions);
-    }, [auth, roles, space.roles]);
+    }, [auth, user.roles, space.roles]);
 }

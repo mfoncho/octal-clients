@@ -117,6 +117,14 @@ function* workspaceConnected({
         dispatch(RoleActions.roleDeleted(payload));
     });
 
+    channel.on("role.assigned", (payload: any) => {
+        dispatch(RoleActions.roleAssigned(payload));
+    });
+
+    channel.on("role.unassigned", (payload: any) => {
+        dispatch(RoleActions.roleUnassigned(payload));
+    });
+
     channel.on(
         "role.permission.set",
         (payload: RoleActions.RolePermissionSetPayload) => {

@@ -3,6 +3,8 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
     ROLE_LOADED,
+    ROLE_ASSIGNED,
+    ROLE_UNASSIGNED,
     ROLES_LOADED,
     ROLE_UPDATED,
     ROLE_DELETED,
@@ -23,6 +25,13 @@ import {
 } from "./types";
 
 export * from "./types";
+
+export interface RoleMemberPayload {
+    user_id: string;
+    role_id: string;
+    left_at?: string;
+    joined_at?: string;
+}
 
 export interface CreateSpaceRolePayload {
     space_id: string;
@@ -110,6 +119,10 @@ export type RolePermissionSetAction = Action<
     ROLE_PERMISSION_SET,
     RolePermissionSetPayload
 >;
+
+export type RoleAssignedAction = Action<ROLE_ASSIGNED, RoleMemberPayload>;
+
+export type RoleUnassignedAction = Action<ROLE_UNASSIGNED, RoleMemberPayload>;
 
 export type RoleUpdatedAction = Action<ROLE_UPDATED, io.Role>;
 export type RoleDeletedAction = Action<ROLE_DELETED, { id: string }>;
@@ -211,6 +224,16 @@ export function unsetSpacePermission(
         UNSET_SPACE_PERMISSION,
         payload
     );
+}
+
+export function roleUnassigned(
+    payload: RoleMemberPayload
+): RoleUnassignedAction {
+    return createAction(ROLE_UNASSIGNED, payload);
+}
+
+export function roleAssigned(payload: RoleMemberPayload): RoleAssignedAction {
+    return createAction(ROLE_ASSIGNED, payload);
 }
 
 export function spacePermissionUnset(

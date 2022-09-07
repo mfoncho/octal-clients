@@ -12,6 +12,12 @@ export type ROLE_LOADED = typeof ROLE_LOADED;
 export const ROLES_LOADED = "ROLES_LOADED";
 export type ROLES_LOADED = typeof ROLES_LOADED;
 
+export const ROLE_ASSIGNED = "ROLE_ASSIGNED";
+export type ROLE_ASSIGNED = typeof ROLE_ASSIGNED;
+
+export const ROLE_UNASSIGNED = "ROLE_UNASSIGNED";
+export type ROLE_UNASSIGNED = typeof ROLE_UNASSIGNED;
+
 export const ROLE_PERMISSION_SET = "ROLE_PERISSION_SET";
 export type ROLE_PERMISSION_SET = typeof ROLE_PERMISSION_SET;
 
@@ -59,4 +65,3 @@ export type SPACE_ROLE_UPDATED = typeof SPACE_ROLE_UPDATED;
 
 export const SPACE_ROLE_DELETED = "SPACE_ROLE_DELETED";
 export type SPACE_ROLE_DELETED = typeof SPACE_ROLE_DELETED;
-

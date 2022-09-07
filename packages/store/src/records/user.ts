@@ -1,4 +1,4 @@
-import { Record, fromJS } from "immutable";
+import { Record, fromJS, List } from "immutable";
 import { Unique, Id } from "@octal/client";
 import { io } from "@octal/client";
 
@@ -16,8 +16,8 @@ export class UserRecord
         {
             id: "0" as Id,
             name: "",
+            roles: List<string>([]),
             username: "",
-            email: "",
             verified: false,
             avatar: null as any as string,
             bio: "",
@@ -32,6 +32,19 @@ export class UserRecord
         return this.merge(UserRecord.objectFromJS(payload));
     }
 
+    addRole(role_id: string) {
+        if (this.roles.includes(role_id)) return this;
+        return this.set("roles", this.roles.push(role_id));
+    }
+
+    removeRole(role_id: string) {
+        if (this.roles.includes(role_id))
+            return this.set(
+                "roles",
+                this.roles.filter((rid) => rid !== role_id)
+            );
+        return this;
+    }
     static mapFromJS(data: any) {
         return fromJS(UserRecord.objectFromJS(data));
     }
@@ -40,6 +53,9 @@ export class UserRecord
         let data = { ...payload };
         if (data && data.state) {
             data.state = new UserStatusRecord(data.state);
+        }
+        if (Array.isArray(data.roles)) {
+            data.roles = List(data.roles);
         }
         return data;
     }
