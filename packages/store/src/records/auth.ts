@@ -9,6 +9,7 @@ export class RoleRecord
         name: "",
         is_default: false,
         permissions: new Permissions(),
+        created_at: "",
     })
     implements Unique
 {

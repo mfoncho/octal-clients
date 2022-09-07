@@ -11,6 +11,7 @@ export class SpaceRoleRecord
         id: "" as Id,
         role_id: "" as Id,
         space_id: "" as Id,
+        created_at: "",
         permissions: SpacePermissions,
     })
     implements Unique
