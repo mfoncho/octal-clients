@@ -85,6 +85,19 @@ function* presence({
     }
 }
 
+function* loadUser({
+    payload,
+    resolve,
+}: UserActions.LoadUserAction): Iterable<any> {
+    try {
+        const data = (yield client.getUser(payload.user_id)) as any;
+        yield put(UserActions.userLoaded(data));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
 function* update({
     payload,
     resolve,
@@ -208,6 +221,11 @@ export const tasks = [
         effect: takeEvery,
         type: Actions.WORKSPACE_CONNECTED,
         handler: syncPresence,
+    },
+    {
+        effect: takeEvery,
+        type: Actions.LOAD_USER,
+        handler: loadUser,
     },
     { effect: takeEvery, type: Actions.SET_USER_STATUS, handler: setStatus },
     //{ effect: takeEvery, type: "STORE_USERS", handler: store },

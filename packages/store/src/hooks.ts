@@ -4,6 +4,7 @@ import { useCallback, useMemo } from "react";
 
 import { State } from "./index";
 import { Store } from "./reducers";
+import { Actions } from "./actions";
 
 import selectors from "./selectors";
 import {
@@ -341,6 +342,15 @@ export function useUser(id?: string) {
     );
 
     return useSelector(selector) ?? defaultUser;
+}
+
+export function useProfile(id: string) {
+    const user = useUser(id);
+    const dispatch = useDispatch();
+    if (user.roles.isEmpty()) {
+        dispatch(Actions.User.loadUser(id));
+    }
+    return user;
 }
 
 export function useUsers(ids?: Array<string> | List<string>) {

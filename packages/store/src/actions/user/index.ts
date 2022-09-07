@@ -3,6 +3,7 @@ import type { Channel } from "@octal/endpoint";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {
+    LOAD_USER,
     USER_ASSIGNED,
     CLAIM_ACCOUNT,
     ACCOUNT_CLAIMED,
@@ -110,6 +111,7 @@ export type ClaimAccountAction = IOAction<
     ClaimAccountPayload
 >;
 
+export type LoadUserAction = IOAction<LOAD_USER, { user_id: string }, io.User>;
 export type UserStatusUpdatedAction = IOAction<
     USER_STATUS_UPDATED,
     StatusUpdatedPayload,
@@ -197,6 +199,10 @@ export function updateProfile(
     payload: UpdateUserProfilePayload
 ): UpdateUserProfileAction {
     return createIOAction<UPDATE_USER_PROFILE>(UPDATE_USER_PROFILE, payload);
+}
+
+export function loadUser(id: string): LoadUserAction {
+    return createIOAction<LOAD_USER>(LOAD_USER, { user_id: id });
 }
 
 export function userLoaded(user: io.User): UserLoadedAction {

@@ -3,6 +3,9 @@
 export const GET_USER = "GET_USER";
 export type GET_USER = typeof GET_USER;
 
+export const LOAD_USER = "LOAD_USER";
+export type LOAD_USER = typeof LOAD_USER;
+
 export const USER_LOADED = "USER_LOADED";
 export type USER_LOADED = typeof USER_LOADED;
 
