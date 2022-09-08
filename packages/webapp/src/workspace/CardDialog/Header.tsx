@@ -87,7 +87,7 @@ export default function Header({ card, ...props }: IHeader) {
                             className="overflow-wrap-anywhere text-left text-2xl text-gray-800 font-black">
                             <Text>{card.name}</Text>
                         </span>
-                        <div className="absolute -top-1 -right-1.5 group-hover:visible invisible">
+                        <div className="absolute -top-1.5 -left-1.5 group-hover:visible invisible">
                             <button
                                 onClick={
                                     owner && !board.is_archived
