@@ -3,7 +3,7 @@ import { Button, Dialog, Textarea } from "@octal/ui";
 import { Text } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import { useInput } from "src/utils";
-import { useUser, useViewer, UserRecord } from "@octal/store";
+import { useProfile, useViewer, UserRecord } from "@octal/store";
 import * as ThreadAction from "@octal/store/lib/actions/thread";
 import { useDispatch } from "react-redux";
 
@@ -53,7 +53,7 @@ const DirectMessageForm = React.memo<{
 const Card = Dialog.create<IUserCard>((props) => {
     const viewer = useViewer();
 
-    const user = useUser(props.id)!;
+    const user = useProfile(props.id)!;
     return (
         <Dialog.Base
             open={props.open}
