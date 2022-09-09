@@ -4,7 +4,7 @@ import { useCallback, useMemo } from "react";
 
 import { State } from "./index";
 import { Store } from "./reducers";
-import { Actions } from "./actions";
+import Actions from "./actions";
 
 import selectors from "./selectors";
 import {
@@ -820,5 +820,5 @@ export function useSpacePermissions(id: string) {
                         }
                     }, permissions);
             }, SpacePermissions);
-    }, [auth, user.roles, space.roles]);
+    }, [auth, roles, user.roles, space.roles]);
 }
