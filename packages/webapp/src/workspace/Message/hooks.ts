@@ -52,6 +52,14 @@ export function useActions(message: MessageRecord, authid: string = "") {
         setButtons(buttons);
     }, [permissions]);
 
+    const onReply = useCallback(() => {
+        const action = Actions.Thread.setDraftReply({
+            thread_id: message.thread_id,
+            reply_id: message.id,
+        });
+        return dispatch(action);
+    }, [message.id]);
+
     const onBookmark = useCallback(
         (notes: string = "") => {
             if (loading.includes("bookmark")) return;
@@ -149,6 +157,7 @@ export function useActions(message: MessageRecord, authid: string = "") {
 
     return {
         onPin,
+        onReply,
         onBookmark,
         buttons,
         onDelete,

@@ -5,7 +5,14 @@ import { Text } from "@octal/ui";
 import * as Icons from "@octal/icons";
 import { useInput } from "src/utils";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { useProfile, useRoles, useViewer, UserRecord } from "@octal/store";
+import { presence as colors } from "src/utils";
+import {
+    useProfile,
+    useRoles,
+    useViewer,
+    usePresence,
+    UserRecord,
+} from "@octal/store";
 import * as ThreadAction from "@octal/store/lib/actions/thread";
 import { useDispatch } from "react-redux";
 
@@ -58,6 +65,7 @@ const Card = Dialog.create<IUserCard>((props) => {
     const viewer = useViewer();
     const roles = useRoles();
     const user = useProfile(props.id)!;
+    const presence = usePresence(props.id);
     const [tab, setTab] = React.useState<string>("bio");
     const userRoles = roles.filter((role) => user.roles.includes(role.id));
     return (
@@ -83,9 +91,15 @@ const Card = Dialog.create<IUserCard>((props) => {
                     </Button>
                 </div>
                 <div className="flex flex-row justify-between items-center bg-gray-800/50 w-full z-[1] py-2 backdrop-blur-sm  overflow-hidden text-white px-4">
-                    <span className="text-sm font-semibold py-px">
-                        <Text>{user.status}</Text>
-                    </span>
+                    <div>
+                        <span className="text-sm font-semibold py-px">
+                            <Text>{user.status}</Text>
+                        </span>
+                    </div>
+                    <div
+                        className="w-3 h-3 rounded-full shadow"
+                        style={{ backgroundColor: colors.get(presence.state) }}
+                    />
                 </div>
             </div>
             <div
@@ -141,7 +155,7 @@ const Card = Dialog.create<IUserCard>((props) => {
                     </button>
                 )}
             </div>
-            <div className="flex flex-col md:rounded-b-lg w-full overflow-hidden overflow-hidden md:h-[150px] flex-1 md:flex-none">
+            <div className="flex flex-col md:rounded-b-lg w-full overflow-hidden overflow-hidden md:h-[100px] flex-1 md:flex-none">
                 <Flow.Switch value={tab}>
                     <Flow.Case value="chat">
                         {viewer.id !== user.id && (

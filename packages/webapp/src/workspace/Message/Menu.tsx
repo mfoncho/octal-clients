@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Popover from "@material-ui/core/Popover";
 import { BookmarkRecord } from "@octal/store";
 import { Picker as EmojiPicker, EmojiData } from "emoji-mart";
@@ -43,11 +43,11 @@ export interface IMenu {
     buttons: ActionT[];
     bookmark?: BookmarkRecord;
     anchor: HTMLElement;
+    onReply?: (e: React.MouseEvent) => void;
     onPin?: (e: React.MouseEvent) => void;
     onEdit?: (e: React.MouseEvent) => void;
     onBookmark?: (e?: string) => void;
     onJump?: (e: React.MouseEvent) => void;
-    onReply?: () => void;
     onReact?: (reaction: string) => void;
     onDelete?: (e: React.MouseEvent) => void;
 }
@@ -57,10 +57,6 @@ enum PopupType {
     EMOJI,
     EDITOR,
 }
-
-export const Reply = React.createContext<
-    (id: string, e: React.MouseEvent) => void
->(() => {});
 
 function EmojiPopover(props: IEmojiPopover) {
     return (
@@ -87,9 +83,7 @@ function EmojiPopover(props: IEmojiPopover) {
 
 const present = 2;
 
-const Menu = React.memo<IMenu>(({ open, ...props }) => {
-    const onReply = useContext(Reply);
-
+export default React.memo<IMenu>(({ open, ...props }) => {
     const [popup, setPopup] = useState<PopupType>(PopupType.CLOSE);
 
     const [expanded, setExpanded] = useState<boolean>(false);
@@ -161,7 +155,7 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
                     return {
                         name: "Reply",
                         icon: Icons.Reply,
-                        onClick: (e: any) => onReply(props.id, e),
+                        onClick: props.onReply,
                     };
 
                 case "edit":
@@ -229,9 +223,3 @@ const Menu = React.memo<IMenu>(({ open, ...props }) => {
         </div>
     );
 });
-
-type FCMenu = typeof Menu & { Reply: typeof Reply };
-
-(Menu as FCMenu).Reply = Reply;
-
-export default Menu as FCMenu;

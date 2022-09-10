@@ -19,11 +19,15 @@ export function usePostInput(thread: ThreadRecord) {
     const [accept, setAccept] =
         useState<{ max: number; types: string } | undefined>();
 
-    function setDraft(value: string, files: File[] = []) {
+    function setDraft(
+        value: string,
+        files: File[] = [],
+        reply?: string | null
+    ) {
         const action = ThreadActions.updateDaft({
             thread_id: thread.id,
             space_id: thread.space_id,
-            params: { value, files },
+            params: { value, files, reply },
         });
         dispatch(action);
     }
@@ -44,9 +48,20 @@ export function usePostInput(thread: ThreadRecord) {
 
     const onChange = useCallback(
         (event: UIEvent<FileInput>) => {
-            setDraft(event.target.value, event.target.files);
+            setDraft(
+                event.target.value,
+                event.target.files,
+                thread.draft.reply
+            );
         },
         [thread.id, thread.draft]
+    );
+
+    const onReply = useCallback(
+        (reply: string | null) => {
+            setDraft(thread.draft.value, thread.draft.files, reply);
+        },
+        [thread.draft]
     );
 
     useThrottledEffect(
@@ -63,12 +78,12 @@ export function usePostInput(thread: ThreadRecord) {
     );
 
     const onSubmit = useCallback(
-        (payload: UIEvent<FileInput>, reply_id?: string) => {
+        (payload: UIEvent<FileInput>) => {
             const { target } = payload;
             if (target.value.length > 0 || target.files.length > 0) {
                 const [file, ...files] = target.files;
                 const postAction = ThreadActions.postMessage({
-                    reply_id: reply_id!,
+                    reply_id: thread.draft.reply as any,
                     space_id: thread.space_id,
                     thread_id: thread.id,
                     params: {
@@ -76,11 +91,11 @@ export function usePostInput(thread: ThreadRecord) {
                         content: target.value.trim(),
                     },
                 });
-                setDraft("", files);
+                setDraft("", files, null);
                 return dispatch(postAction);
             }
         },
-        [thread.id]
+        [thread.id, thread.draft.reply]
     );
 
     return {
@@ -88,6 +103,7 @@ export function usePostInput(thread: ThreadRecord) {
         files: thread.draft.files,
         onChange,
         onSubmit,
+        onReply,
         accept,
         disabled: !permissions.get("message.post"),
     };
