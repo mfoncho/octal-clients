@@ -4,6 +4,7 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedMessage } from "../../schemas";
 import {
+    THREAD_DRAFT_REPLY_SET,
     THREAD_PAGE_UPDATED,
     CONVERSATION_LOADED,
     THREAD_DRAFT_UPDATED,
@@ -45,6 +46,11 @@ import {
 
 export * from "./types";
 
+export interface ThreadDraftReplySetPayload {
+    thread_id: string;
+    reply_id: string;
+}
+
 export interface ThreadPageUpdatedPayload {
     thread_id: string;
     params: {
@@ -69,6 +75,7 @@ export interface ThreadDraftUpdatedPayload {
     space_id: string;
     thread_id: string;
     params: {
+        reply?: string | null;
         value?: string;
         files?: File[];
     };
@@ -243,6 +250,11 @@ export interface GetThreadPayload {
     thread_id: string;
     space_id: string;
 }
+
+export type ThreadDraftReplySetAction = Action<
+    THREAD_DRAFT_REPLY_SET,
+    ThreadDraftReplySetPayload
+>;
 
 export type MessageReactionAction = Action<
     REACTION_LOADED,
@@ -590,6 +602,12 @@ export function conversationLoaded(
     payload: ConversationLoadedPayload
 ): ConversationLoadedAction {
     return createAction(CONVERSATION_LOADED, payload);
+}
+
+export function setDraftReply(
+    payload: ThreadDraftReplySetPayload
+): ThreadDraftReplySetAction {
+    return createAction(THREAD_DRAFT_REPLY_SET, payload);
 }
 
 export function updateThreadPage(

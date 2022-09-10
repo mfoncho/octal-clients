@@ -100,6 +100,7 @@ export class ThreadPageView extends Record({
 export class ThreadDraft extends Record({
     value: "",
     files: [] as File[],
+    reply: null as string | null,
 }) {}
 
 function getIndexByKey<T>(

@@ -115,6 +115,17 @@ export const reducers = {
         return state.storeThread(thread);
     },
 
+    [Actions.THREAD_DRAFT_REPLY_SET]: (
+        state: Conversations,
+        { payload }: ThreadActions.ThreadDraftReplySetAction
+    ) => {
+        return state.updateDraft({
+            thread_id: payload.thread_id,
+            space_id: "",
+            params: { reply: payload.reply_id },
+        });
+    },
+
     [Actions.THREAD_DRAFT_UPDATED]: (
         state: Conversations,
         { payload }: ThreadActions.ThreadDraftUpdatedAction
