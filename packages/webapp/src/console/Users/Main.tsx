@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Label } from "@octal/ui";
-import * as Icons from "@octal/icons";
 import Pagination from "@material-ui/lab/Pagination";
 import { Page } from "src/types";
 import Layout from "@console/Layout";
@@ -85,13 +84,6 @@ export default React.memo(() => {
                                 STATUS
                             </div>
                         </th>
-                        <th
-                            scope="col"
-                            className="flex flex-row justify-end px-6 py-3">
-                            <span className="text-xs font-medium text-gray-500 uppercase">
-                                VERIFIED
-                            </span>
-                        </th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -132,11 +124,6 @@ export default React.memo(() => {
                                             : "Active"}
                                     </Label>
                                 </span>
-                            </td>
-                            <td className="text-center px-6 py-3">
-                                {user.verified && (
-                                    <Icons.VerifiedBadge className="text-green-800" />
-                                )}
                             </td>
                         </tr>
                     ))}
