@@ -50,6 +50,7 @@ export { default as Drawer } from "./Drawer";
 export { default as Download } from "./Download";
 export { default as Template } from "./Template";
 export { default as Archives } from "./Archives";
+export { default as Info } from "./Info";
 
 export { default as Forum } from "./Forum";
 export { default as MoveCard } from "./LeftRight";
