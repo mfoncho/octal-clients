@@ -13,7 +13,9 @@ export interface IThread {
     menu?: string[];
 }
 
-const defaultThread = new ThreadRecord({ id: "" });
+const NONE = "NONE";
+
+const defaultThread = new ThreadRecord({ id: NONE });
 
 export default React.memo<IThread>((props) => {
     const dispatch = useDispatch();
@@ -27,7 +29,7 @@ export default React.memo<IThread>((props) => {
      * not in store
      */
     useEffect(() => {
-        if (thread.id.length > 0) {
+        if (thread.id === NONE) {
             const action = ThreadActionFactory.loadThread({
                 space_id: params.space_id!,
                 thread_id: props.id,
@@ -36,7 +38,7 @@ export default React.memo<IThread>((props) => {
         }
     }, [thread.id]);
 
-    if (thread.id.length === 0)
+    if (thread.id === NONE)
         return <div className="flex flex-col flex-grow"></div>;
 
     return (
