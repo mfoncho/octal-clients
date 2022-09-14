@@ -31,8 +31,8 @@ export function Input({ label, as = "input", description, ...props }: IInput) {
     const AsComponent: any = as;
     return (
         <div className="flex flex-col pb-8">
-            <span className="font-semibold text-base text-gray-800 py-1.5">
-                {label}
+            <span className="font-bold text-xs text-gray-700 px-1">
+                {label.toUpperCase()}
             </span>
             <AsComponent
                 {...props}
@@ -41,7 +41,7 @@ export function Input({ label, as = "input", description, ...props }: IInput) {
                 }`}
             />
             {description && (
-                <span className="text-gray-500 py-1 text-xs font-semibold">
+                <span className="text-gray-500 px-1 text-xs font-semibold">
                     {description}
                 </span>
             )}
@@ -99,7 +99,7 @@ export default React.memo<IProfile>(({ user, ...props }) => {
             <Dialog.Content className="overflow-y-auto overflow-x-hidden">
                 <div className="flex flex-row">
                     <div className="flex flex-col flex-1 pr-8">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col py-4">
                             <Input
                                 label="Name"
                                 disabled={loading}
