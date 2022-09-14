@@ -1,6 +1,6 @@
 import React from "react";
 import { List } from "immutable";
-import DoneIcon from "@material-ui/icons/CheckCircle";
+import * as Icons from "@octal/icons";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import { Tooltip, Text } from "@octal/ui";
 import Label from "@workspace/Board/Label";
@@ -28,7 +28,9 @@ export const Complete = React.memo<IComplete>(({ complete }) => {
 
         return (
             <Tooltip placement="top" title={title}>
-                <DoneIcon className="mt-1 mr-2.5 text-green-500" />
+                <div className="flex justify-center items-center">
+                    <Icons.Complete className="text-green-500 w-5 h-5" />
+                </div>
             </Tooltip>
         );
     } else {
@@ -123,7 +125,7 @@ export default React.memo<ICard>(({ card, ...props }) => {
                 </div>
             )}
             {(!checklists.isEmpty() || !card.users.isEmpty()) && (
-                <div className="flex flex-row px-4 py-1 rounded-b-lg bg-gray-100 items-center justify-between">
+                <div className="flex flex-row px-2 py-1 rounded-b-lg bg-gray-100 items-center justify-between">
                     <div className="flex flex-row items-center">
                         {!checklists.isEmpty() && (
                             <Checklists checklists={checklists} />
