@@ -25,7 +25,8 @@ export default React.memo<IDialog>(
         return (
             <Dialog
                 title={title}
-                fullWidth={false}
+                maxWidth="xs"
+                fullWidth={true}
                 open={props.open}
                 onClose={loading ? undefined : props.onClose}>
                 <Dialog.Content>
