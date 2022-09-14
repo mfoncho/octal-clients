@@ -29,14 +29,18 @@ const typeDescription = {
 function Input(props: IInput) {
     return (
         <div className="flex flex-col py-2">
-            <span className="font-semibold text-xs">{props.label}</span>
+            <span className="font-bold text-xs px-1">
+                {props.label.toUpperCase()}
+            </span>
             <Textarea.Input
                 value={props.value}
                 onChange={props.onChange}
                 placeholder={props.placeholder}
                 className="form-input rounded-md text-base"
             />
-            <span className="text-xs text-gray-500">{props.subheader}</span>
+            <span className="font-semibold text-xs text-gray-500 px-1">
+                {props.subheader}
+            </span>
         </div>
     );
 }
