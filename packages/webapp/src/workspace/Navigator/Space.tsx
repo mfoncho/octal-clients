@@ -9,7 +9,6 @@ import Counter from "./Counter";
 import * as Icons from "@octal/icons";
 import Topic from "./Topic";
 import Board from "./Board";
-import { BsThreeDots as MenuIcon } from "react-icons/bs";
 import SpaceSettingsDialog from "../SpaceSettingsDialog";
 import InviteDialog from "../InviteDialog";
 import store, {
@@ -141,6 +140,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     const permissions = useSpacePermissions(space.id);
 
     const [menu, setMenu] = useState<IMenuItem[]>([]);
+    const [creators, setCreators] = useState<IMenuItem[]>([]);
 
     const boards = useSpaceBoardsIndex(space.id);
 
@@ -154,42 +154,46 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
     useEffect(() => {
         let menu: IMenuItem[] = [];
+        let creators: IMenuItem[] = [];
         if (permissions.get("space.manage")) {
             menu.push({
-                icon: <Icons.Board />,
+                menu: "menu",
+                name: "create",
+                icon: <Icons.Plus />,
+            });
+            creators.push({
                 menu: "board",
                 name: "Board",
+                icon: <Icons.Board />,
                 action: <Icons.Plus />,
             });
-        }
-        if (permissions.get("space.manage")) {
-            menu.push({
+            creators.push({
                 menu: "topic",
-                icon: <Icons.Topic />,
                 name: "Topic",
+                icon: <Icons.Topic />,
                 action: <Icons.Plus />,
             });
         }
-
         if (
             permissions.get("invite.link.create") ||
             permissions.get("invite.mail.send")
         ) {
             menu.push({
-                icon: <Icons.AddUser />,
                 menu: "invite",
                 name: "Invite",
+                icon: <Icons.AddUser />,
             });
         }
 
         if (permissions.get("space.manage") || authid === space.admin_id) {
             menu.push({
-                icon: <Icons.Settings />,
                 menu: "settings",
                 name: "Settings",
+                icon: <Icons.Settings />,
             });
         }
         setMenu(menu);
+        setCreators(creators);
     }, [permissions]);
 
     function handleToggleExpanded(e: React.MouseEvent) {
@@ -226,34 +230,36 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         <React.Fragment>
             <div
                 className={clx(
-                    "flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded cursor-pointer",
+                    "group flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded cursor-pointer overflow-hidden h-8",
                     highlight && " bg-primary-500"
                 )}
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
-                <span
+                <p
                     onClick={handleToggleExpanded}
                     className={clx(
-                        "flex-grow text-xs font-semibold",
+                        "flex-grow text-xs font-semibold truncate",
                         highlight ? "text-white" : "text-primary-200"
                     )}>
                     <Text>{space.name.toUpperCase()}</Text>
-                </span>
-                {menu.length > 0 && (
-                    <button
-                        ref={menuRef}
-                        className={clx(
-                            "flex justify-center items-center p-1 bg-gray-200 text-gray-500 rounded-md w-6 h-6",
-                            !hovering && "invisible"
-                        )}
-                        onClick={dialog.opener("menu")}>
-                        <MenuIcon />
-                    </button>
-                )}
+                </p>
+                <div className="flex flex-row items-center hidden group-hover:flex">
+                    {menu.map((item) => (
+                        <button
+                            key={item.name}
+                            ref={menuRef}
+                            className={clx(
+                                "flex justify-center items-center p-1 text-white w-6 h-6"
+                            )}
+                            onClick={dialog.opener(item.menu)}>
+                            {item.icon}
+                        </button>
+                    ))}
+                </div>
             </div>
-            {menu.length > 0 && (
+            {creators.length > 0 && (
                 <Menu
-                    options={menu}
+                    options={creators}
                     open={dialog.menu}
                     onSelect={handleOpenMenu}
                     anchorEl={menuRef.current}
