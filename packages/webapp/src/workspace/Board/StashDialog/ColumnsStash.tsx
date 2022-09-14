@@ -41,7 +41,7 @@ function Column({ column }: IColumn) {
                         <Text>{column.name}</Text>
                     </span>
                 </div>
-                <div className="flex flex-row items-center justify-end space-x-2">
+                <div className="flex flex-row items-center justify-end space-x-1">
                     {isFull && (
                         <Tooltip
                             placement="top"
@@ -59,7 +59,7 @@ function Column({ column }: IColumn) {
                         onClick={dialog.opener("destroy")}
                         color="clear"
                         variant="icon">
-                        <Icons.Delete className="w-6 h-6" />
+                        <Icons.Delete className="w-4 h-4" />
                     </Button>
                 </div>
             </div>

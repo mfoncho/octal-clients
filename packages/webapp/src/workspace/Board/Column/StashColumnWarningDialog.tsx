@@ -7,9 +7,8 @@ interface IDialog {
     column: ColumnRecord;
 }
 
-const warning = `
-Stashed columns have call their cards
-hidden untill the column is unstashed
+const warning = (column: ColumnRecord) => `
+All cards in __${column.name}__ will be hidden untill the column is unstashed
 `;
 
 export default Dialog.create<IDialog>(({ column, ...props }) => {
@@ -27,12 +26,11 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
     return (
         <Dialog.Warning
             open={props.open}
-            title={`Stach (${column.name})`}
-            confirm="Confirm"
+            title="Stach Column"
             onClose={loading ? undefined : props.onClose}
             disabled={loading}
             onConfirm={handleConfirm}>
-            {warning}
+            {warning(column)}
         </Dialog.Warning>
     );
 });

@@ -21,15 +21,14 @@ interface ITopic {
 interface IWarning {
     onConfirm: (e: React.MouseEvent) => void;
     title: string;
-    confirm: string;
     loading: boolean;
     children: React.ReactNode;
 }
 
 function deleteWarningText(topic: any) {
-    return `If you delete __${topic.name}__, all mesages, and related data in the topic will be lost permantly. 
+    return `All topic data will be lost permanently. 
 
-###### Are you sure you wish to do this?`;
+###### Delete #${topic.name}`;
 }
 
 const WarningDialog = Dialog.create<IWarning>((props) => {
@@ -37,7 +36,6 @@ const WarningDialog = Dialog.create<IWarning>((props) => {
         <Dialog.Warning
             open={props.open}
             title={props.title}
-            confirm={props.confirm}
             onClose={props.onClose}
             disabled={props.loading}
             onConfirm={props.onConfirm}>
@@ -121,7 +119,6 @@ function Topic({ topic, onArchive, onUnarchive, onDelete }: ITopic) {
             <WarningDialog
                 loading={loading}
                 title="Delete Topic"
-                confirm="Delete"
                 onConfirm={handleDelete}
                 open={dialog.destroy}
                 onClose={dialog.close}>

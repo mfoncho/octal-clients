@@ -1,17 +1,11 @@
 import React, { useState } from "react";
-import { Dialog } from "@octal/ui";
+import { Dialog, Markdown } from "@octal/ui";
 import { useColumnActions } from "@workspace/Board/hooks";
 import { ColumnRecord } from "@octal/store";
 
 interface IDialog {
     column: ColumnRecord;
 }
-
-const warning = `
-All date related to this column and cards in this 
-column will be lost permently. This action cannot 
-be undone!.
-`;
 
 export default Dialog.create<IDialog>(({ column, ...props }) => {
     const [loading, setLoading] = useState(false);
@@ -28,12 +22,13 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
     return (
         <Dialog.Warning
             open={props.open}
-            title={`Delete Column (${column.name})`}
-            confirm="Delete"
+            title="Delete Column"
             onClose={loading ? undefined : props.onClose}
             disabled={loading}
             onConfirm={handleConfirm}>
-            {warning}
+            <Markdown>
+                {`All data related to __${column.name}__ will be lost permently.`}
+            </Markdown>
         </Dialog.Warning>
     );
 });

@@ -13,17 +13,16 @@ interface IWarning {
 }
 
 function warningText(space: SpaceRecord) {
-    return `If you shutdown __${space.name}__, This space will be inaccessible to all members.
+    return `This space will be inaccessible to all members.
 
-Continue shuting down __${space.name}__?`;
+Shuting down __${space.name}__?`;
 }
 
 const WarningDialog = Dialog.create<IWarning>((props) => {
     return (
         <Dialog.Warning
             open={props.open}
-            title="Shutdown space"
-            confirm="Remove"
+            title="Shutdown"
             onClose={props.onClose}
             disabled={props.loading}
             onConfirm={props.onConfirm}>

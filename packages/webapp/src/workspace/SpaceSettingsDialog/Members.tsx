@@ -4,7 +4,7 @@ import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
 import UsersDialog from "../UsersDialog";
 import client, { io } from "@octal/client";
-import { Markdown, Avatar, Dialog, Button } from "@octal/ui";
+import { Avatar, Dialog, Button } from "@octal/ui";
 import { useDispatch } from "react-redux";
 import { useInput } from "src/utils";
 import { SpaceRecord, Actions } from "@octal/store";
@@ -20,25 +20,6 @@ interface IWarning {
     onConfirm: (e: React.MouseEvent) => void;
     children: React.ReactNode;
 }
-
-function warningText(space: SpaceRecord, user: { name: string }) {
-    return `If you remove __${user.name}__ from __${space.name}__, they will no longer be able to see any of its messages. To rejoin the space, they will have to be re-invited.
-
-Are you sure you wish to do this?`;
-}
-
-const WarningDialog = Dialog.create<IWarning>((props) => {
-    return (
-        <Dialog.Warning
-            open={props.open}
-            title="Remove Member"
-            confirm="Remove"
-            onClose={props.onClose}
-            onConfirm={props.onConfirm}>
-            {props.children}
-        </Dialog.Warning>
-    );
-});
 
 function Row({ member, space, filter, onDelete }: IMember) {
     const [warning, setWarning] = useState<boolean>(false);
@@ -98,17 +79,14 @@ function Row({ member, space, filter, onDelete }: IMember) {
                     </svg>
                 </button>
             )}
-            <WarningDialog
+
+            <Dialog.Warning
                 open={Boolean(warning)}
-                onConfirm={handleDelete}
-                onClose={handleCloseWarning}>
-                <div className="flex flex-col">
-                    {userNode}
-                    <div className="py-4 text-base text-gray-800">
-                        <Markdown>{warningText(space, member.user)}</Markdown>
-                    </div>
-                </div>
-            </WarningDialog>
+                title="Remove User"
+                onClose={handleCloseWarning}
+                onConfirm={handleDelete}>
+                <div className="flex flex-col">{userNode}</div>
+            </Dialog.Warning>
         </div>
     );
 }

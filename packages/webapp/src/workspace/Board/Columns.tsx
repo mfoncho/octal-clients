@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { createColumn } from "@octal/store/lib/actions/board";
 import Column from "./Column";
 import { useColumns, useBoard } from "./hooks";
-import { useSpace, usePermissions } from "../Space/hooks";
+import { usePermissions } from "../Space/hooks";
 import ColumnNameInput, { IColumnNameInputRef } from "./Column/NameInput";
 
 const positionSort = sort("position", "asc");
