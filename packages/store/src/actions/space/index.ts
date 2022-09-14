@@ -45,7 +45,7 @@ export interface SendInvitationsPayload {
 export interface CreateSpacePayload {
     name: string;
     topic: string;
-    access: "public" | "private";
+    type: "public" | "private";
 }
 
 export interface LoadSpacePayload {
@@ -64,7 +64,7 @@ export interface LoadSpacesPayload {}
 
 export interface UpdateSpaceParams {
     name?: string;
-    access?: string;
+    type?: string;
 }
 
 export interface UpdateSpacePayload extends Unique {

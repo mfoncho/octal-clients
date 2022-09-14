@@ -10,11 +10,10 @@ import * as Actions from "../actions/types";
 
 function* load({
     payload,
-    resolve
+    resolve,
 }: ThreadActions.LoadThreadAction): Iterable<any> {
     const { threads } = (yield select()) as any as State;
-    if(threads.getThread(payload.thread_id))
-        return
+    if (threads.getThread(payload.thread_id)) return;
     try {
         const data = (yield client.loadThread(payload)) as any;
         yield put(ThreadActions.threadLoaded(data));
@@ -101,6 +100,10 @@ function* subscribe({
         if (client.topic(topic)) continue;
 
         let ch = client.channel(topic);
+
+        ch.on("thread.updated", (payload: io.Thread) => {
+            dispatch(ThreadActions.threadUpdated(payload as any));
+        });
 
         ch.on("new.message", (payload: io.UserMessage) => {
             const [normalized, related] = MessageSchema.normalize(payload);
