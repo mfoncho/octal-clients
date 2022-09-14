@@ -156,7 +156,9 @@ export const Dialog = React.forwardRef<HTMLDivElement, IDialog>(
                         </button>
                     )}
                 </div>
-                {props.children}
+                <div className="flex flex-col flex-1 justify-between">
+                    {props.children}
+                </div>
             </Base>
         );
     }
