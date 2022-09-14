@@ -1,7 +1,6 @@
 import React from "react";
 import { List } from "immutable";
 import * as Icons from "@octal/icons";
-import AssignmentIcon from "@material-ui/icons/Assignment";
 import { Tooltip, Text } from "@octal/ui";
 import Label from "@workspace/Board/Label";
 import { CardRecord, useUser, useBoard } from "@octal/store";
@@ -80,7 +79,7 @@ const Checklists = React.memo<IChecklists>(({ checklists }) => {
     return (
         <Tooltip placement="top" title={title}>
             <div className="flex flex-row items-center">
-                <AssignmentIcon fontSize="small" className="text-gray-500" />
+                <Icons.Clipboard className="text-gray-500 w-4 h-4" />
                 <span className="text-sm px font-semibold">
                     {checklists.size}
                 </span>

@@ -230,7 +230,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         <React.Fragment>
             <div
                 className={clx(
-                    "group flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded cursor-pointer overflow-hidden h-8",
+                    "group flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded cursor-pointer overflow-hidden h-8 justify-between",
                     highlight && " bg-primary-500"
                 )}
                 onMouseOver={() => setHovering(true)}
@@ -238,7 +238,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                 <p
                     onClick={handleToggleExpanded}
                     className={clx(
-                        "flex-grow text-xs font-semibold truncate",
+                        "text-xs font-semibold truncate",
                         highlight ? "text-white" : "text-primary-200"
                     )}>
                     <Text>{space.name.toUpperCase()}</Text>
