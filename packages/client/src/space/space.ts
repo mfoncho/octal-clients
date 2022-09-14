@@ -8,14 +8,14 @@ export interface JoinSpaceRequest {
 export interface CreateSpaceRequest {
     name: string;
     topic: string;
-    access: "private" | "public";
+    type: "private" | "public";
 }
 
 export interface UpdateSpaceRequest {
     space_id: string;
     params: {
         name?: string;
-        access?: "private" | "public";
+        type?: "private" | "public";
     };
 }
 
