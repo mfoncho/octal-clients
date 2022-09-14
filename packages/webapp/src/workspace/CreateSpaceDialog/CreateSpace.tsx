@@ -20,7 +20,7 @@ interface IInput {
     placeholder?: string;
 }
 
-const accessDescription = {
+const typeDescription = {
     public: "Everyone in the space workspace can join and leave the space as they please. Other must be invited to join the space",
     private:
         "Space will be visible only to space members. Others can join the space by invition or adding them from the space workspace",
@@ -45,7 +45,7 @@ export default React.memo<ISpaceCreator>((props) => {
     const nav = useNavigator();
     const dispatch = useDispatch();
 
-    const [access, setAccess] = useState<"public" | "private">("public");
+    const [type, setType] = useState<"public" | "private">("public");
 
     const name = useInput("");
 
@@ -58,7 +58,7 @@ export default React.memo<ISpaceCreator>((props) => {
         event.stopPropagation();
         let payload: any = {
             name: name.value,
-            access: access,
+            type: type,
             topic: topic.value,
         };
         const action = createSpace(payload);
@@ -74,10 +74,10 @@ export default React.memo<ISpaceCreator>((props) => {
     }
 
     function toggleAccess() {
-        if (access == "public") {
-            setAccess("private");
-        } else if (access == "private") {
-            setAccess("public");
+        if (type == "public") {
+            setType("private");
+        } else if (type == "private") {
+            setType("public");
         }
     }
 
@@ -106,12 +106,12 @@ export default React.memo<ISpaceCreator>((props) => {
                             Private
                         </span>
                         <Switch
-                            checked={access == "private"}
+                            checked={type == "private"}
                             onChange={toggleAccess}
                         />
                     </div>
                     <span className="font-semibold text-xs text-gray-500 py-2">
-                        {accessDescription[access]}
+                        {typeDescription[type]}
                     </span>
                 </div>
             </Dialog.Content>

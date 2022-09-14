@@ -105,6 +105,6 @@ export function usePostInput(thread: ThreadRecord) {
         onSubmit,
         onReply,
         accept,
-        disabled: !permissions.get("message.post"),
+        disabled: !permissions.get("message.post") || !thread.is_active,
     };
 }
