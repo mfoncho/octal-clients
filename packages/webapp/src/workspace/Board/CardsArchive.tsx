@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Actions } from "@octal/store";
 import { useDispatch } from "react-redux";
-import Client from "@octal/client";
-import { io } from "@octal/client";
 import BoardCard from "./Card";
 import { useColumnCards } from "@octal/store";
 import { CardRecord } from "@octal/store/lib/records";
@@ -21,13 +19,11 @@ export default function CardsArchive({ board }: ICardsArchive) {
     let cards = useColumnCards(board.id);
 
     useEffect(() => {
-        if (cards.isEmpty()) {
-            let action = Actions.Board.loadArchivedCards({
-                board_id: board.id,
-            });
-            dispatch(action);
-        }
-    }, [cards.isEmpty()]);
+        let action = Actions.Board.loadArchivedCards({
+            board_id: board.id,
+        });
+        dispatch(action);
+    }, []);
 
     return (
         <div className="flex-1 flex flex-col overflow-hidden">
