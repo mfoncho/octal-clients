@@ -51,6 +51,7 @@ export { default as Download } from "./Download";
 export { default as Template } from "./Template";
 export { default as Archives } from "./Archives";
 export { default as Info } from "./Info";
+export { default as Clipboard } from "./Clipboard";
 export { default as Invited } from "./CheckedSolid";
 export { default as Complete } from "./CheckedSolid";
 export { default as CheckedDot } from "./CheckedSolid";
