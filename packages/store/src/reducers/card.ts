@@ -234,7 +234,7 @@ export class CardsStore extends Record({
                     );
 
                 // indexed column_id
-                let columns = store.users
+                let columns = store.columns
                     .get(card.column_id, List<string>())
                     .filter(filter)
                     .map((id) => store.getCard(id)!)
