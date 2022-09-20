@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from "react";
 import { Button } from "@octal/ui";
 import { Droppable } from "react-beautiful-dnd";
 import { sort } from "@octal/common";
+import * as Icons from "@octal/icons";
 import { ColumnRecord } from "@octal/store/lib/records";
 import { useDispatch } from "react-redux";
 import { createColumn } from "@octal/store/lib/actions/board";
@@ -66,7 +67,11 @@ function CreateColumn() {
                     onClose={handleClose}
                 />
             ) : (
-                <Button onClick={toggleOpen}>Add Column</Button>
+                <Button
+                    onClick={toggleOpen}
+                    className="flex flex-row justify-center h-10 items-center">
+                    <Icons.Plus />
+                </Button>
             )}
         </div>
     );
