@@ -4,7 +4,7 @@ import { MemberRecord } from "./records";
 
 const defaultMembers = OrderedMap<string, MemberRecord>();
 
-export function config({ config }: State) {
+export function config({ app: config }: State) {
     return config;
 }
 

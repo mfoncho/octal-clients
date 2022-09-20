@@ -15,7 +15,7 @@ export class NameRecord extends Record({
     entity_id: "",
 }) {}
 
-export class ConfigRecord extends Record<io.Config>({
+export class AppRecord extends Record<io.Config>({
     locale: "en_US",
     lpack: {},
     user_invitation: false,

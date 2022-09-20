@@ -1,6 +1,6 @@
 import { Record } from "immutable";
 import { Action } from "redux";
-import config from "./config";
+import app from "./app";
 import role from "./role";
 import user from "./user";
 import bookmark from "./bookmark";
@@ -34,7 +34,7 @@ interface IHandlers<T> {
 const INIT = "@@INIT";
 
 const RootStates = {
-    config: config.state,
+    app: app.state,
     trackers: trackers.state,
     calendars: calendar.state,
     topics: topics.state,
@@ -96,7 +96,7 @@ function createReducer<T>(
 
 const reducers = {
     bookmarks: createReducer(bookmark.reducers, bookmark.state),
-    config: createReducer(config.reducers, config.state),
+    app: createReducer(app.reducers, app.state),
     calendars: createReducer(calendar.reducers, calendar.state),
     names: createReducer(names.reducers, names.state),
     roles: createReducer(role.reducers, role.state),
