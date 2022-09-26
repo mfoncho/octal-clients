@@ -4,6 +4,7 @@ import * as Actions from "../actions/types";
 import * as AppActions from "../actions/app";
 import { CardSchema } from "../schemas";
 import * as BoardActions from "../actions/board";
+import * as ThreadActions from "../actions/thread";
 import Client, { io } from "@octal/client";
 
 function* normalize(payload: io.Card | io.Card[]): Iterable<any> {
@@ -256,8 +257,14 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
         dispatch(BoardActions.cardUnarchived(card as any));
     });
 
-    channel.on("card.deleted", (payload: io.Card) => {
+    channel.on("card.deleted", (payload: any) => {
         dispatch(BoardActions.cardDeleted(payload.id));
+        dispatch(
+            ThreadActions.threadDeleted({
+                id: payload.thread_id,
+                space_id: payload.space_id,
+            })
+        );
     });
 
     channel.on("cards.reordered", ({ cards }: { cards: io.Card[] }) => {

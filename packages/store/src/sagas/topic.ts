@@ -159,6 +159,12 @@ function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
 
     channel.on("topic.deleted", (payload: io.Topic) => {
         dispatch(TopicActions.topicDeleted(payload));
+        dispatch(
+            ThreadActions.threadDeleted({
+                id: payload.thread_id,
+                space_id: payload.space_id,
+            })
+        );
     });
 }
 
@@ -166,7 +172,11 @@ export const tasks = [
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.SPACE_LOADED, handler: spaceLoaded },
     { effect: takeEvery, type: Actions.TOPIC_LOADED, handler: loadTopicThread },
-    { effect: takeEvery, type: Actions.TOPIC_UNARCHIVED, handler: loadTopicThread },
+    {
+        effect: takeEvery,
+        type: Actions.TOPIC_UNARCHIVED,
+        handler: loadTopicThread,
+    },
     { effect: takeEvery, type: Actions.LOAD_TOPICS, handler: loadSpaceTopics },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.ARCHIVE_TOPIC, handler: archive },
