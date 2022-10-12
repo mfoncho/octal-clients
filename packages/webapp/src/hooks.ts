@@ -1,4 +1,4 @@
-import { Screen } from "@octal/ui";
+import { Screen } from "@colab/ui";
 import moment from "moment";
 import {
     useEffect,
@@ -16,13 +16,13 @@ import {
     Calendar,
     useDrawer as useStoreDrawer,
     useCalendar as useStoreCalendar,
-} from "@octal/store";
-import calutils from "@octal/calendar";
-import { openDrawer, closeDrawer } from "@octal/store/lib/actions/drawer";
+} from "@colab/store";
+import calutils from "@colab/calendar";
+import { openDrawer, closeDrawer } from "@colab/store/lib/actions/drawer";
 import {
     updateCalendar,
     ICalendarParams,
-} from "@octal/store/lib/actions/calendar";
+} from "@colab/store/lib/actions/calendar";
 
 export function useScreen() {
     return useContext(Screen.Context);

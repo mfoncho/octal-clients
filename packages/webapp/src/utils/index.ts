@@ -1,4 +1,4 @@
-import emoji from "@octal/emoji";
+import emoji from "@colab/emoji";
 import transform from "lodash/transform";
 import isObject from "lodash/isObject";
 import isEqual from "lodash/isEqual";

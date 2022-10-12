@@ -1,7 +1,7 @@
 import React from "react";
-import { Dialog } from "@octal/ui";
+import { Dialog } from "@colab/ui";
 import { useActions } from "./hooks";
-import { UserRecord } from "@octal/store";
+import { UserRecord } from "@colab/store";
 import ThemePreference from "./ThemePreference";
 import LanguagePreference from "./LanguagePreference";
 //import MessagePreference from "./MessagePreference";

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Map, Record } from "immutable";
-import client, { LiveState } from "@octal/client";
+import client, { LiveState } from "@colab/client";
 
 interface IHandle<T> {
     version: number;

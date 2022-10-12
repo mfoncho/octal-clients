@@ -1,6 +1,6 @@
 import { Map, Record } from "immutable";
 import { BookmarkRecord } from "../records";
-import { io } from "@octal/client";
+import { io } from "@colab/client";
 import * as Actions from "../actions/types";
 import * as BookmarkActions from "../actions/bookmark";
 

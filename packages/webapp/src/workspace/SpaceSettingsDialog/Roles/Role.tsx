@@ -1,10 +1,10 @@
 import React from "react";
-import * as Icons from "@octal/icons";
-import { Text } from "@octal/ui";
-import { RoleRecord, SpaceRoleRecord } from "@octal/store";
+import * as Icons from "@colab/icons";
+import { Text } from "@colab/ui";
+import { RoleRecord, SpaceRoleRecord } from "@colab/store";
 import { useRoleActions } from "@workspace/Space";
 import BooleanPermission from "./BooleanPermission";
-import { PermissionGroups, IPermissionsGroup, IPermission } from "@octal/store";
+import { PermissionGroups, IPermissionsGroup, IPermission } from "@colab/store";
 import NumberPermission from "./NumberPermission";
 import StringPermission from "./StringPermission";
 

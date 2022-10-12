@@ -3,7 +3,7 @@ import clx from "classnames";
 import BaseDialog from "./Base";
 import Warning from "./Warning";
 import { useDialog } from "./hooks";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import Effect from "@material-ui/core/Zoom";
 import Flow from "../Flow";
 import { TransitionProps } from "@material-ui/core/transitions/transition";

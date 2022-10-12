@@ -1,10 +1,10 @@
 import { useCallback } from "react";
-import * as TopicActions from "@octal/store/lib/actions/topic";
+import * as TopicActions from "@colab/store/lib/actions/topic";
 import { useDispatch } from "react-redux";
 import {
     UpdateTopicPayload,
     SearchTopicPayload,
-} from "@octal/store/lib/actions/topic";
+} from "@colab/store/lib/actions/topic";
 
 interface ITopic {
     id: string;

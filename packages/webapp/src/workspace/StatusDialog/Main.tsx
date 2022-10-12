@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Dialog, Text, Emoji, Button } from "@octal/ui";
-import * as Icons from "@octal/icons";
-import emoji from "@octal/emoji";
-import { setUserStatus } from "@octal/store/lib/actions/user";
-import { useStatus, useAuthId } from "@octal/store";
+import { Dialog, Text, Emoji, Button } from "@colab/ui";
+import * as Icons from "@colab/icons";
+import emoji from "@colab/emoji";
+import { setUserStatus } from "@colab/store/lib/actions/user";
+import { useStatus, useAuthId } from "@colab/store";
 import { useDispatch } from "react-redux";
 import { useInput } from "src/utils";
 

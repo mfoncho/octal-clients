@@ -1,7 +1,7 @@
 import React from "react";
 import clx from "classnames";
-import { Text } from "@octal/ui";
-import { UserRecord, TopicRecord } from "@octal/store";
+import { Text } from "@colab/ui";
+import { UserRecord, TopicRecord } from "@colab/store";
 
 interface ISuggestion<T = TopicRecord | UserRecord> {
     type: string;

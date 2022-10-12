@@ -1,5 +1,5 @@
 import merge from "lodash/merge";
-import { Unique } from "@octal/client";
+import { Unique } from "@colab/client";
 import { NormalizedRelated } from "./schemas";
 
 interface Data {

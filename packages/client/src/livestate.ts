@@ -1,4 +1,4 @@
-import { Channel } from "@octal/endpoint";
+import { Channel } from "@colab/endpoint";
 
 export interface Object {
     [key: string]:

@@ -1,11 +1,11 @@
 import React from "react";
-import * as Icons from "@octal/icons";
-import { Dialog } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Dialog } from "@colab/ui";
 import { useDispatch } from "react-redux";
-import { setPresence } from "@octal/store/lib/actions/user";
-import { usePresence } from "@octal/store";
+import { setPresence } from "@colab/store/lib/actions/user";
+import { usePresence } from "@colab/store";
 import { presence as colors } from "src/utils";
-import { io } from "@octal/client";
+import { io } from "@colab/client";
 
 interface IPresenceType {
     name: string;

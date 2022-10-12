@@ -1,6 +1,6 @@
 import React from "react";
 import clx from "classnames";
-import { useUser, usePresence } from "@octal/store";
+import { useUser, usePresence } from "@colab/store";
 
 export default React.memo<React.ImgHTMLAttributes<HTMLImageElement>>(
     ({ className, id, ...props }) => {

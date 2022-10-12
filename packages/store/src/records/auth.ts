@@ -1,5 +1,5 @@
 import { Record } from "immutable";
-import { Unique } from "@octal/client";
+import { Unique } from "@colab/client";
 import { Permissions } from "./permissions";
 
 export class RoleRecord

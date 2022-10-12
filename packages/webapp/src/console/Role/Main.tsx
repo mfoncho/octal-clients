@@ -6,7 +6,7 @@ import Users from "./Users";
 import { io } from "@console/types";
 import client from "@console/client";
 import { useParams } from "react-router-dom";
-import { Dialog, Button, Flow, Text } from "@octal/ui";
+import { Dialog, Button, Flow, Text } from "@colab/ui";
 import Layout from "@console/Layout";
 
 interface ICustomize {

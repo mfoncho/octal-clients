@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
-import { Text, Collapse, Dialog, Popper } from "@octal/ui";
+import { Text, Collapse, Dialog, Popper } from "@colab/ui";
 import TopicCreatorDialog from "../Space/CreateTopic";
 import CreateBoardDialog from "../Space/CreateBoardDialog";
 import paths from "src/paths/workspace";
 import Counter from "./Counter";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import Topic from "./Topic";
 import Board from "./Board";
 import SpaceSettingsDialog from "../SpaceSettingsDialog";
@@ -18,7 +18,7 @@ import store, {
     useSpacePermissions,
     useSpaceBoardsIndex,
     useSpaceTopicsIndex,
-} from "@octal/store";
+} from "@colab/store";
 
 export interface ISpace {
     space: SpaceRecord;

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button, Popper, Switch } from "@octal/ui";
+import { Button, Popper, Switch } from "@colab/ui";
 import { useCalendar } from "src/hooks";
 import moment from "moment";
 import {

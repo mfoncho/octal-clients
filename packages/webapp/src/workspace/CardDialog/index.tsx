@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Dialog } from "@octal/ui";
+import { Dialog } from "@colab/ui";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Drawer from "./Drawer";
 import Header from "./Header";
@@ -7,9 +7,9 @@ import Fields from "./Fields";
 import { useDrawer } from "./hooks";
 import ActionsField from "./ActionsField";
 import { Context } from "@workspace/Board/Card";
-import { useAuthId, useCard } from "@octal/store";
+import { useAuthId, useCard } from "@colab/store";
 import { useScreen } from "src/hooks";
-import { CardRecord } from "@octal/store";
+import { CardRecord } from "@colab/store";
 
 export * from "./hooks";
 

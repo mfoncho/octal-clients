@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Actions } from "@octal/store";
+import { Actions } from "@colab/store";
 import { useDispatch } from "react-redux";
 import BoardCard from "./Card";
-import { useColumnCards } from "@octal/store";
-import { CardRecord } from "@octal/store/lib/records";
+import { useColumnCards } from "@colab/store";
+import { CardRecord } from "@colab/store/lib/records";
 
 interface ICardsArchive {
     board: { id: string };

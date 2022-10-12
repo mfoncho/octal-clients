@@ -1,9 +1,9 @@
 import React from "react";
 import { List } from "immutable";
-import * as Icons from "@octal/icons";
-import { Tooltip, Text } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Tooltip, Text } from "@colab/ui";
 import Label from "@workspace/Board/Label";
-import { CardRecord, useUser, useBoard } from "@octal/store";
+import { CardRecord, useUser, useBoard } from "@colab/store";
 
 interface IUserAvatar {
     id: string;

@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, Dialog, Tooltip } from "@octal/ui";
-import emoji from "@octal/emoji";
-import { useUser } from "@octal/store";
+import { Text, Dialog, Tooltip } from "@colab/ui";
+import emoji from "@colab/emoji";
+import { useUser } from "@colab/store";
 import StatusDialog from "../StatusDialog";
 
 const Status = React.memo<{ status: string }>((props) => {

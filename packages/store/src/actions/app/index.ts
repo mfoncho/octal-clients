@@ -1,5 +1,5 @@
-import type { io } from "@octal/client";
-import type { Channel } from "@octal/endpoint";
+import type { io } from "@colab/client";
+import type { Channel } from "@colab/endpoint";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedRelated } from "../../schemas";

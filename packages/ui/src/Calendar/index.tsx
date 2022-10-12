@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import calendar from "@octal/calendar";
+import calendar from "@colab/calendar";
 
 export interface ICalendar {
     day?: number;

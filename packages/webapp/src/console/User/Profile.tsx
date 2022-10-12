@@ -1,6 +1,6 @@
 import React from "react";
 import { io } from "@console/types";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 
 export default React.memo<{ user: io.Account }>(({ user }) => {
     return (

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { FaTrello as BoardIcon } from "react-icons/fa";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { useDispatch } from "react-redux";
-import { Dialog, Text } from "@octal/ui";
+import { Dialog, Text } from "@colab/ui";
 import { Promiseable } from "src/types";
 import { useInput } from "src/utils";
 import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
-import client, { io } from "@octal/client";
-import { Actions } from "@octal/store";
+import client, { io } from "@colab/client";
+import { Actions } from "@colab/store";
 
 interface ITopic {
     board: io.Board;

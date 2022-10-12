@@ -1,5 +1,5 @@
 import { Record, List } from "immutable";
-import { Unique, Id } from "@octal/client";
+import { Unique, Id } from "@colab/client";
 import { CardRecord } from "./card";
 
 export class CardFieldTemplateRecord extends Record({

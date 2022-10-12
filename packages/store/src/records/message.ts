@@ -1,7 +1,7 @@
 import { Record, List, fromJS } from "immutable";
 import { FileRecord } from "./workspace";
-import { Unique, Id, Timestamped, HasThread } from "@octal/client";
-import { Slater } from "@octal/markdown";
+import { Unique, Id, Timestamped, HasThread } from "@colab/client";
+import { Slater } from "@colab/markdown";
 
 const slater = Slater.create();
 

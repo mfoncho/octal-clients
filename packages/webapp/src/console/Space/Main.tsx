@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import * as Icons from "@octal/icons";
-import { Dialog, Button } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Dialog, Button } from "@colab/ui";
 import { useParams } from "react-router-dom";
 import Layout from "@console/Layout";
 import client from "@console/client";

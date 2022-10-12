@@ -1,4 +1,4 @@
-import type { io } from "@octal/client";
+import type { io } from "@colab/client";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import {

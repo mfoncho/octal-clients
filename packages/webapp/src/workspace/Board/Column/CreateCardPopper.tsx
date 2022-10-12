@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
-import { Popper, Text, Textarea } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Popper, Text, Textarea } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import { useNavigator } from "src/hooks";
 import { useBoard } from "../hooks";
-import { ColumnRecord, BoardRecord } from "@octal/store/lib/records";
+import { ColumnRecord, BoardRecord } from "@colab/store/lib/records";
 import { useInput } from "src/utils";
 import { useColumnActions } from "@workspace/Board/hooks";
 

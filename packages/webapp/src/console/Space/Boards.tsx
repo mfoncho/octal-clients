@@ -2,7 +2,7 @@ import React from "react";
 import { io } from "@console/types";
 import moment from "moment";
 import client from "@console/client";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 
 export interface IBoards {
     space: io.Space;

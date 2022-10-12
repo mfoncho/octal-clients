@@ -5,8 +5,8 @@ import {
     PreferencesRecord,
     UserRecord,
     usePreferences,
-} from "@octal/store";
-import * as UserActions from "@octal/store/lib/actions/user";
+} from "@colab/store";
+import * as UserActions from "@colab/store/lib/actions/user";
 
 export type SetPreferenceType = (
     key: Preference,

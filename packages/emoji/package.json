@@ -1,5 +1,5 @@
 {
-    "name": "@octal/emoji",
+    "name": "@colab/emoji",
     "version": "1.0.0",
     "main": "lib/index.js",
     "typings": "lib/index.d.ts",
@@ -14,7 +14,7 @@
         "jsxBracketSameLine": true
     },
     "dependencies": {
-        "@octal/patterns": "^1.0.0",
+        "@colab/patterns": "^1.0.0",
         "emoji-mart": "^2.11.1"
     },
     "devDependencies": {

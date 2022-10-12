@@ -1,7 +1,7 @@
 import React from "react";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 import clx from "classnames";
-import { UserRecord, TopicRecord } from "@octal/store";
+import { UserRecord, TopicRecord } from "@colab/store";
 
 interface IValue {
     value: string;

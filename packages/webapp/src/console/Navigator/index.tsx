@@ -2,7 +2,7 @@ import React from "react";
 import clx from "classnames";
 import { Link, useLocation } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 import routes from "@console/routes";
 import { startsWith } from "lodash";
 

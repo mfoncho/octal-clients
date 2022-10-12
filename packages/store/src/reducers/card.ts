@@ -1,5 +1,5 @@
 import { Record, Map, List } from "immutable";
-import { sort } from "@octal/common";
+import { sort } from "@colab/common";
 import * as Actions from "../actions/types";
 import { CardRecord } from "../records";
 

@@ -1,12 +1,12 @@
 import React, { useRef, useMemo } from "react";
 import clx from "classnames";
 import moment from "moment";
-import { io } from "@octal/client";
-import * as Icons from "@octal/icons";
+import { io } from "@colab/client";
+import * as Icons from "@colab/icons";
 import Menu, { ActionT } from "./Menu";
-import emoji from "@octal/emoji";
-import { Markdown, Text } from "@octal/ui";
-import { MessageRecord } from "@octal/store/lib/records";
+import emoji from "@colab/emoji";
+import { Markdown, Text } from "@colab/ui";
+import { MessageRecord } from "@colab/store/lib/records";
 
 export interface ISearchMessage {
     message: io.Message;

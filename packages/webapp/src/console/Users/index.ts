@@ -1,4 +1,4 @@
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import paths from "@console/paths";
 import { route } from "../types";
 import main from "./Main";

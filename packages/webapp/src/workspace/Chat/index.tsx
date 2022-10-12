@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./Header";
 import Thread from "../Thread";
-import { SpaceRecord } from "@octal/store";
+import { SpaceRecord } from "@colab/store";
 
 interface IChat {
     space: SpaceRecord;

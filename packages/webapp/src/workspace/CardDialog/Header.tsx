@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Actions from "./Actions";
-import * as Icons from "@octal/icons";
-import { CardRecord } from "@octal/store/lib/records";
-import { useAuthId } from "@octal/store";
+import * as Icons from "@colab/icons";
+import { CardRecord } from "@colab/store/lib/records";
+import { useAuthId } from "@colab/store";
 import { useInput } from "src/utils";
-import { Button, Text, useScreen, Textarea } from "@octal/ui";
-import { usePermissions} from "@workspace/Space";
+import { Button, Text, useScreen, Textarea } from "@colab/ui";
+import { usePermissions } from "@workspace/Space";
 import { useActions } from "@workspace/Board/Card";
 import { useBoard } from "@workspace/Board";
 

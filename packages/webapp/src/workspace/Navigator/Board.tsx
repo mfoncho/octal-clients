@@ -1,10 +1,10 @@
 import React from "react";
 import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 import paths from "src/paths/workspace";
-import * as Icons from "@octal/icons";
-import { useBoard } from "@octal/store";
+import * as Icons from "@colab/icons";
+import { useBoard } from "@colab/store";
 
 interface IBoard {
     id: string;

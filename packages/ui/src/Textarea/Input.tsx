@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from "react";
 import { Slate, Editable, withReact } from "slate-react";
 import Elements from "../Elements";
-import emoji from "@octal/emoji";
+import emoji from "@colab/emoji";
 import cls from "classnames";
 import UIEvent from "../event";
 import { EventTarget, InputProps } from "./types";
 import Suggestions, { useSuggesting } from "./Suggestion";
-import Markdown, { Slater, nodes } from "@octal/markdown";
+import Markdown, { Slater, nodes } from "@colab/markdown";
 import { isEmojiActive, insertEmoji } from "./utils";
 import { withPaste, wrap } from "./wrappers";
 import { useReflection, useInput, useChangeHandler } from "./hooks";

@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import clx from "classnames";
 import { useInput } from "src/utils";
 import { SpaceManagerProps } from "./index";
-import { Actions } from "@octal/store";
+import { Actions } from "@colab/store";
 import { useDispatch } from "react-redux";
-import * as Icons from "@octal/icons";
-import { Switch, Button } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Switch, Button } from "@colab/ui";
 import Layout from "./Layout";
 
 type ChangesType = {

@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Dialog, Text } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Button, Dialog, Text } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import { useBoard, useDrawer } from "./hooks";
 import StashDialog from "./StashDialog";
 import { usePermissions } from "../Space";

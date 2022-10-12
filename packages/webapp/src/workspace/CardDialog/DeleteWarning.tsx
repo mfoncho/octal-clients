@@ -1,6 +1,6 @@
 import React from "react";
-import { Dialog, Text } from "@octal/ui";
-import { CardRecord } from "@octal/store";
+import { Dialog, Text } from "@colab/ui";
+import { CardRecord } from "@colab/store";
 
 interface IDialog {
     card: CardRecord;

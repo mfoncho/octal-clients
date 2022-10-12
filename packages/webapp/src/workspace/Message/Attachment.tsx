@@ -1,7 +1,7 @@
 import React from "react";
-import * as Icons from "@octal/icons";
-import { Button } from "@octal/ui";
-import { FileRecord } from "@octal/store";
+import * as Icons from "@colab/icons";
+import { Button } from "@colab/ui";
+import { FileRecord } from "@colab/store";
 
 export interface IAttachment {
     file: FileRecord;

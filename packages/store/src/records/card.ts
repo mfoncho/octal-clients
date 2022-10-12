@@ -1,7 +1,7 @@
 import { Record, List, fromJS, Map } from "immutable";
-import { Unique, Positioned, BelongsToBoard } from "@octal/client";
-import { sort, keyStingFromDate } from "@octal/common";
-import calendar from "@octal/calendar";
+import { Unique, Positioned, BelongsToBoard } from "@colab/client";
+import { sort, keyStingFromDate } from "@colab/common";
+import calendar from "@colab/calendar";
 import { FileRecord } from "./workspace";
 
 const createAtAsc = sort("created_at", "asc");

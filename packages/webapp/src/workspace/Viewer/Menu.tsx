@@ -1,6 +1,6 @@
 import React from "react";
-import { Popper } from "@octal/ui";
-import { logout } from "@octal/store/lib/actions/app";
+import { Popper } from "@colab/ui";
+import { logout } from "@colab/store/lib/actions/app";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 

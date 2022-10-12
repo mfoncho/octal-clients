@@ -1,5 +1,5 @@
 import { Record, fromJS, List, OrderedMap } from "immutable";
-import { Unique, BelongsToSpace, Id, ThreadType } from "@octal/client";
+import { Unique, BelongsToSpace, Id, ThreadType } from "@colab/client";
 
 interface ListLike {
     size: number;

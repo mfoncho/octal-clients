@@ -1,7 +1,7 @@
 {
-    "name": "octal",
+    "name": "colab",
     "version": "1.0.0",
-    "description": "octal packages",
+    "description": "colab packages",
     "author": "MC-A",
     "license": "ICS",
     "private": true,

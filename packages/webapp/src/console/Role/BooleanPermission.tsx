@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
-import { Switch } from "@octal/ui";
-import { IBooleanPermission } from "@octal/store";
+import { Switch } from "@colab/ui";
+import { IBooleanPermission } from "@colab/store";
 
 interface IPermission {
     value: boolean;

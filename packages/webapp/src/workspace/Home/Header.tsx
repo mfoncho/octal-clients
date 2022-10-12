@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../Header";
-import { useUser } from "@octal/store";
+import { useUser } from "@colab/store";
 
 export default React.memo(() => {
     const user = useUser();

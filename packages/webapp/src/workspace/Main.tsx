@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Routes from "@workspace/Routes";
-import { INIT } from "@octal/store";
-import { usePreference } from "@octal/store";
+import { INIT } from "@colab/store";
+import { usePreference } from "@colab/store";
 import * as theme from "src/theme";
 
 export default React.memo(() => {

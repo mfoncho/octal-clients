@@ -1,10 +1,10 @@
 import { put, takeEvery } from "redux-saga/effects";
 import { dispatch } from "..";
-import { io } from "@octal/client";
+import { io } from "@colab/client";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 
-import Client from "@octal/client";
+import Client from "@colab/client";
 
 function* create({
     payload,

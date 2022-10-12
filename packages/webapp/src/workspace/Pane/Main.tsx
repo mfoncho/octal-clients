@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useWorkspace } from "@octal/store";
+import { useWorkspace } from "@colab/store";
 import paths from "src/paths";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 
 const Site = React.memo(() => {
     const workspace = useWorkspace();

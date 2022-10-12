@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import * as Icons from "@octal/icons";
-import emoji from "@octal/emoji";
+import * as Icons from "@colab/icons";
+import emoji from "@colab/emoji";
 import { Link } from "react-router-dom";
 import StatusDialog from "../StatusDialog";
 import AccountDialog from "../AccountDialog";
 import PresenceDialog from "../PresenceDialog";
 import { presence as colors } from "src/colors";
-import { Popper, Button, Text, Dialog, Tooltip } from "@octal/ui";
-import { usePresence, useStatus, useWorkspace, useAuth } from "@octal/store";
+import { Popper, Button, Text, Dialog, Tooltip } from "@colab/ui";
+import { usePresence, useStatus, useWorkspace, useAuth } from "@colab/store";
 import { GoPrimitiveDot as PresenceDotIcon } from "react-icons/go";
 
 interface IOption {

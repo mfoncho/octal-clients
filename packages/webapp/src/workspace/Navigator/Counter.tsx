@@ -1,6 +1,6 @@
 import React from "react";
 import clx from "classnames";
-import { useUnreadCount } from "@octal/store";
+import { useUnreadCount } from "@colab/store";
 export default React.memo<{ id: string }>((props) => {
     let count = useUnreadCount(props.id);
     return (

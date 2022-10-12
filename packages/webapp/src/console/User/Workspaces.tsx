@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { io } from "@console/types";
 import client from "@console/client";
-import { Text } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Text } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import { useNavigator } from "@console/hooks";
 
 export default React.memo<{ id: string }>((props) => {

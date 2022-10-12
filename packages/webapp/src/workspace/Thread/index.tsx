@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useThread, useMessage, ThreadRecord } from "@octal/store";
-import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
-import { Textarea } from "@octal/ui";
+import { useThread, useMessage, ThreadRecord } from "@colab/store";
+import * as ThreadActionFactory from "@colab/store/lib/actions/thread";
+import { Textarea } from "@colab/ui";
 import ReplyPreview from "./ReplyPreview";
 import { usePostInput } from "./hooks";
 import Conversation from "../Conversation";

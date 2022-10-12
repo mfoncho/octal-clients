@@ -1,6 +1,6 @@
 import React from "react";
 import { Node } from "unist";
-import { Slater } from "@octal/markdown";
+import { Slater } from "@colab/markdown";
 import Elements from "../Elements";
 
 const slater = Slater.create();

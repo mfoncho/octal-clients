@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../Header";
 import Controls from "./Controls";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 
 const calendarEmoji = "📅";
 

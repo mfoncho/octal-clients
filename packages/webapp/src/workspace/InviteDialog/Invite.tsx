@@ -1,12 +1,12 @@
 import React from "react";
 import moment from "moment";
 import capitalize from "lodash/capitalize";
-import * as patterns from "@octal/patterns";
-import * as Icons from "@octal/icons";
-import { Dialog, Button, Flow } from "@octal/ui";
+import * as patterns from "@colab/patterns";
+import * as Icons from "@colab/icons";
+import { Dialog, Button, Flow } from "@colab/ui";
 import { useInput } from "src/utils";
-import client, { io } from "@octal/client";
-import { SpaceRecord, useSpacePermissions } from "@octal/store";
+import client, { io } from "@colab/client";
+import { SpaceRecord, useSpacePermissions } from "@colab/store";
 
 type ModeType = "email" | "link";
 

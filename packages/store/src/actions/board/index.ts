@@ -1,6 +1,6 @@
-import type { io, BelongsToBoard, Unique, BelongsToSpace } from "@octal/client";
-import type { Channel } from "@octal/endpoint";
-import type { Require } from "@octal/common";
+import type { io, BelongsToBoard, Unique, BelongsToSpace } from "@colab/client";
+import type { Channel } from "@colab/endpoint";
+import type { Require } from "@colab/common";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedCard, NormalizedColumn } from "../../schemas";

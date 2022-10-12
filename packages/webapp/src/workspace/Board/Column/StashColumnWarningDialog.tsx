@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Dialog } from "@octal/ui";
-import { ColumnRecord } from "@octal/store";
+import { Dialog } from "@colab/ui";
+import { ColumnRecord } from "@colab/store";
 import { useColumnActions } from "@workspace/Board/hooks";
 
 interface IDialog {

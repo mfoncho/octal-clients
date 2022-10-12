@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import clx from "classnames";
-import * as Icons from "@octal/icons";
-import { Dialog, Button } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Dialog, Button } from "@colab/ui";
 import {
     useAuthId,
     SpaceRecord,
     SpacePermissions,
     useSpacePermissions,
-} from "@octal/store";
+} from "@colab/store";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import GeneralManager from "./General";
 import RolesPermissionsManager from "./Roles";

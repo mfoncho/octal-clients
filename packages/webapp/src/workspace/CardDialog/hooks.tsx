@@ -1,15 +1,15 @@
 import { Record } from "immutable";
 import { useCallback, useMemo } from "react";
 import { useDrawer as useWorkspaceDrawer } from "src/hooks";
-import { CardRecord } from "@octal/store";
+import { CardRecord } from "@colab/store";
 import { useDispatch } from "react-redux";
 import {
     useCard as useBoardCard,
     useAuthId,
     useBoard,
     useSpacePermissions,
-} from "@octal/store";
-import * as BoardAction from "@octal/store/lib/actions/board";
+} from "@colab/store";
+import * as BoardAction from "@colab/store/lib/actions/board";
 
 export interface IDrawer {
     id: string;

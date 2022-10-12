@@ -1,10 +1,10 @@
 import React from "react";
-import * as Icons from "@octal/icons";
-import { Markdown } from "@octal/ui";
-import { useUser } from "@octal/store";
+import * as Icons from "@colab/icons";
+import { Markdown } from "@colab/ui";
+import { useUser } from "@colab/store";
 import ReplyIcon from "@material-ui/icons/Reply";
 import UserCard from "@workspace/UserCard";
-import { MessageRecord } from "@octal/store/lib/records";
+import { MessageRecord } from "@colab/store/lib/records";
 
 export interface IMessage {
     message: MessageRecord;

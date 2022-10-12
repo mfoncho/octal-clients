@@ -1,5 +1,5 @@
 import React from "react";
-import { useWorkspace } from "@octal/store";
+import { useWorkspace } from "@colab/store";
 
 export default React.memo(() => {
     const workspace = useWorkspace();

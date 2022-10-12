@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import clx from "classnames";
-import client, { io } from "@octal/client";
-import * as Icons from "@octal/icons";
+import client, { io } from "@colab/client";
+import * as Icons from "@colab/icons";
 import { useDispatch } from "react-redux";
-import { Dialog } from "@octal/ui";
-import { Promiseable } from "@octal/common";
+import { Dialog } from "@colab/ui";
+import { Promiseable } from "@colab/common";
 import { useInput } from "src/utils";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 import { SpaceManagerFilterParams } from ".";
-import { Actions } from "@octal/store";
+import { Actions } from "@colab/store";
 
 interface ITopic {
     topic: io.Topic;

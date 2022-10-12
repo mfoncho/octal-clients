@@ -2,13 +2,13 @@ import { useContext, useMemo, useEffect, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { List } from "immutable";
 import Space, { Permissions, Tool, Members, Member } from "./Context";
-import * as RoleActions from "@octal/store/lib/actions/role";
+import * as RoleActions from "@colab/store/lib/actions/role";
 import {
     createTopic as createSpaceTopic,
     CreateTopicPayload,
-} from "@octal/store/lib/actions/topic";
-import { createBoard as createSpaceBoard } from "@octal/store/lib/actions/board";
-import emoji from "@octal/emoji";
+} from "@colab/store/lib/actions/topic";
+import { createBoard as createSpaceBoard } from "@colab/store/lib/actions/board";
+import emoji from "@colab/emoji";
 import {
     SpaceRecord,
     SpaceRoleRecord,
@@ -17,7 +17,7 @@ import {
     useSpaceTopicsIndex,
     TopicRecord,
     useStore,
-} from "@octal/store";
+} from "@colab/store";
 import { useParams } from "react-router-dom";
 
 export interface IMentionUser {

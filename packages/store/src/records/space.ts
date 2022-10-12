@@ -1,6 +1,6 @@
 import { Record, List, Map } from "immutable";
 import { Permission } from "./permissions";
-import { Unique, Id, SpaceType } from "@octal/client";
+import { Unique, Id, SpaceType } from "@colab/client";
 
 export const SpacePermissions = Map<Permission, string | number | boolean>();
 

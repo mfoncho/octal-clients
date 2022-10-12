@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 //import Switch from "@material-ui/core/Switch";
 import { useDispatch } from "react-redux";
-import { Dialog, Button, Switch, Textarea, UIEvent } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Dialog, Button, Switch, Textarea, UIEvent } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import { useInput } from "src/utils";
 import { useNavigator } from "src/hooks";
-import { createSpace } from "@octal/store/lib/actions/space";
+import { createSpace } from "@colab/store/lib/actions/space";
 
 interface ISpaceCreator {
     open: boolean;

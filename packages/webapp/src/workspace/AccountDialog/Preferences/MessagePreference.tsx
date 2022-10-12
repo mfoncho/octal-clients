@@ -1,7 +1,7 @@
 import React from "react";
 import Message from "@workspace/Message";
 import { noop, IPreference } from "./hooks";
-import { MessageRecord, Preference } from "@octal/store";
+import { MessageRecord, Preference } from "@colab/store";
 
 const preference: Preference = "webapp.message.view";
 

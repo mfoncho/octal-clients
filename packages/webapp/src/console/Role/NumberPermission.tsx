@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Range } from "@octal/ui";
+import { Range } from "@colab/ui";
 import NumberLabel from "./NumberLabel";
-import { INumberPermission } from "@octal/store";
-import { useDebouncedEffect } from "@octal/hooks";
+import { INumberPermission } from "@colab/store";
+import { useDebouncedEffect } from "@colab/hooks";
 
 interface IPermission {
     value: number;

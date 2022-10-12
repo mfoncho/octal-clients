@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, Button } from "@octal/ui";
-import * as Icons from "@octal/icons";
-import { useUser, useAuthId, SpaceRecord } from "@octal/store";
+import { Text, Button } from "@colab/ui";
+import * as Icons from "@colab/icons";
+import { useUser, useAuthId, SpaceRecord } from "@colab/store";
 import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
 import { useNavigatorDrawer } from "src/hooks";
 

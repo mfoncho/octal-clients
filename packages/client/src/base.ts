@@ -1,4 +1,4 @@
-import { Socket } from "@octal/endpoint";
+import { Socket } from "@colab/endpoint";
 
 export interface Params {}
 

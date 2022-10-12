@@ -1,6 +1,6 @@
 import { Record, List, Map } from "immutable";
 import * as BoardActions from "../actions/board";
-import { sort } from "@octal/common";
+import { sort } from "@colab/common";
 import * as Actions from "../actions/types";
 import { ColumnRecord } from "../records";
 

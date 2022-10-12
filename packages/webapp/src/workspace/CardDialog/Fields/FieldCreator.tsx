@@ -1,8 +1,8 @@
 import React from "react";
-import * as Icons from "@octal/icons";
-import { Popper, Dialog, Button } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Popper, Dialog, Button } from "@colab/ui";
 import { useActions } from "../hooks";
-import { CardRecord } from "@octal/store";
+import { CardRecord } from "@colab/store";
 
 interface IOption {
     type: string;

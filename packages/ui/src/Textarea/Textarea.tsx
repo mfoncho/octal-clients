@@ -10,7 +10,7 @@ import {
     useReflection,
 } from "./hooks";
 import { InputProps } from "./types";
-import { Slater } from "@octal/markdown";
+import { Slater } from "@colab/markdown";
 import {
     withPaste,
     wrap,

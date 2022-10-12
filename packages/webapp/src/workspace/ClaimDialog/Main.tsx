@@ -1,11 +1,11 @@
 import React from "react";
 import clx from "classnames";
 import { useDispatch } from "react-redux";
-import * as patterns from "@octal/patterns";
-import { Dialog, Button } from "@octal/ui";
+import * as patterns from "@colab/patterns";
+import { Dialog, Button } from "@colab/ui";
 import { useInput } from "src/utils";
-import { useAuth } from "@octal/store";
-import { Actions } from "@octal/store";
+import { useAuth } from "@colab/store";
+import { Actions } from "@colab/store";
 
 interface IDialog {}
 

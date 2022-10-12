@@ -1,5 +1,5 @@
 import React from "react";
-import { useConfig } from "@octal/store";
+import { useConfig } from "@colab/store";
 import Welcome from "./components/Welcome";
 import LoginForm from "./components/LoginForm";
 import OAuthProviders from "./components/OAuthProviders";

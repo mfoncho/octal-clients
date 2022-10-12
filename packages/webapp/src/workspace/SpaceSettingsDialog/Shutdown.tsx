@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Dialog, Button } from "@octal/ui";
+import { Dialog, Button } from "@colab/ui";
 import { SpaceManagerProps } from "./index";
 import { useDispatch } from "react-redux";
 import Layout from "./Layout";
-import { SpaceRecord } from "@octal/store";
-import { Actions } from "@octal/store";
+import { SpaceRecord } from "@colab/store";
+import { Actions } from "@colab/store";
 
 interface IWarning {
     onConfirm: (e: React.MouseEvent) => void;

@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { useCardCapability } from "../hooks";
-import { CardDatetimeValueRecord } from "@octal/store";
+import { CardDatetimeValueRecord } from "@colab/store";
 import Field, { IField } from "./Field";
 import Popover from "@material-ui/core/Popover";
-import { Datepicker, UIEvent } from "@octal/ui";
+import { Datepicker, UIEvent } from "@colab/ui";
 import moment from "moment";
 
 export default function DateTimeField({ field, handle, ...props }: IField) {

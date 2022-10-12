@@ -7,7 +7,7 @@ import {
     Path,
     Transforms,
 } from "slate";
-import { Slater } from "@octal/markdown";
+import { Slater } from "@colab/markdown";
 
 import { BaseEditor } from "slate";
 import { ReactEditor } from "slate-react";

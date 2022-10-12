@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Button, Input } from "@octal/ui";
+import { Button, Input } from "@colab/ui";
 import { useInput } from "src/utils";
 import path from "../paths";
-import * as patterns from "@octal/patterns";
+import * as patterns from "@colab/patterns";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "@octal/store/lib/actions/app";
+import { login } from "@colab/store/lib/actions/app";
 
 function validateEmail(email: string) {
     return new RegExp(patterns.email).test(email);

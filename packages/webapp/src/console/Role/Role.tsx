@@ -6,7 +6,7 @@ import {
     PermissionGroups,
     IPermissionsGroup,
     IPermission,
-} from "@octal/store";
+} from "@colab/store";
 import NumberPermission from "./NumberPermission";
 import StringPermission from "./StringPermission";
 import BooleanPermission from "./BooleanPermission";

@@ -1,8 +1,8 @@
 import React from "react";
-import { Popper, Text } from "@octal/ui";
-import { sort } from "@octal/common";
-import { ColumnRecord, useColumnCardsIndex } from "@octal/store";
-import * as Icons from "@octal/icons";
+import { Popper, Text } from "@colab/ui";
+import { sort } from "@colab/common";
+import { ColumnRecord, useColumnCardsIndex } from "@colab/store";
+import * as Icons from "@colab/icons";
 import { useColumns } from "./hooks";
 
 export interface IMenu {

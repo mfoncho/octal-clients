@@ -1,5 +1,5 @@
 import { put, takeEvery } from "redux-saga/effects";
-import client from "@octal/client";
+import client from "@colab/client";
 import * as Actions from "../actions/types";
 import { CardSchema } from "../schemas";
 import * as CalendarActions from "../actions/calendar";

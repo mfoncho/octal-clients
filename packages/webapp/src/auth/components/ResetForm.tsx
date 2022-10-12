@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BiArrowBack as BackArrowIcon } from "react-icons/bi";
-import Client from "@octal/client";
-import { Input, Button, Flow, Text } from "@octal/ui";
+import Client from "@colab/client";
+import { Input, Button, Flow, Text } from "@colab/ui";
 import { useInput } from "src/utils";
-import * as patterns from "@octal/patterns";
+import * as patterns from "@colab/patterns";
 import path from "../paths";
 
 function validateEmail(email: string) {

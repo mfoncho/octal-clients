@@ -1,4 +1,4 @@
-import { mixin } from "@octal/common";
+import { mixin } from "@colab/common";
 import BaseClient from "../base";
 import BoardClient from "./board";
 import CardClient from "./card";

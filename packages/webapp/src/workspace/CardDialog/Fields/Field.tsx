@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import clx from "classnames";
-import { Text, Textarea } from "@octal/ui";
-import * as Icons from "@octal/icons";
-import { CardFieldRecord } from "@octal/store";
+import { Text, Textarea } from "@colab/ui";
+import * as Icons from "@colab/icons";
+import { CardFieldRecord } from "@colab/store";
 import { useInput } from "src/utils";
 import { useCardCapability } from "../hooks";
 import { useFieldAction } from "@workspace/Board/hooks";

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { io } from "@console/types";
-import * as Icons from "@octal/icons";
-import { Button } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Button } from "@colab/ui";
 import Pagination from "@material-ui/lab/Pagination";
 import { Page } from "src/types";
 import Layout from "@console/Layout";

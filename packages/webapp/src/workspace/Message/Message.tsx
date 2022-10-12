@@ -1,18 +1,18 @@
 import React, { useState, useRef } from "react";
 import clx from "classnames";
 import moment from "moment";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import Reply from "./Reply";
 import Menu, { ActionT } from "./Menu";
 import ReplyButton from "./ReplyButton";
 import Reaction from "./Reaction";
-import emoji from "@octal/emoji";
-import { Markdown, Text } from "@octal/ui";
+import emoji from "@colab/emoji";
+import { Markdown, Text } from "@colab/ui";
 import UserCard from "@workspace/UserCard";
-import { useUser } from "@octal/store";
+import { useUser } from "@colab/store";
 import { useActions } from "./hooks";
 import Attachment from "./Attachment";
-import { MessageRecord } from "@octal/store/lib/records";
+import { MessageRecord } from "@colab/store/lib/records";
 
 export interface IMessage {
     authid: string;

@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as AppAction from "@octal/store/lib/actions/app";
-import { useActionTrackers } from "@octal/store";
+import * as AppAction from "@colab/store/lib/actions/app";
+import { useActionTrackers } from "@colab/store";
 
 export function useTrackerActions(entity_id: string) {
     const dispatch = useDispatch();

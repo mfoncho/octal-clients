@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { UserRecord } from "@octal/store/lib/records";
+import { UserRecord } from "@colab/store/lib/records";
 import { useInput } from "src/utils";
-import * as Icons from "@octal/icons";
-import { Dialog, ImageInput, Button, Textarea } from "@octal/ui";
-import * as UserActions from "@octal/store/lib/actions/user";
+import * as Icons from "@colab/icons";
+import { Dialog, ImageInput, Button, Textarea } from "@colab/ui";
+import * as UserActions from "@colab/store/lib/actions/user";
 import { useDispatch } from "react-redux";
 
 export interface IProfile {

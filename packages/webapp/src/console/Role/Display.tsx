@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useInput } from "src/utils";
-import * as Icons from "@octal/icons";
-import { Dialog, Button, Text, Emoji } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Dialog, Button, Text, Emoji } from "@colab/ui";
 import { io } from "@console/types";
 import client from "@console/client";
 import { useNavigator } from "@console/hooks";

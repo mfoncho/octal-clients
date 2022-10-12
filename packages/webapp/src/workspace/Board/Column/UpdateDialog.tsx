@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import clx from "classnames";
-import { Textarea } from "@octal/ui";
-import { Switch, Dialog, Button, Range } from "@octal/ui";
+import { Textarea } from "@colab/ui";
+import { Switch, Dialog, Button, Range } from "@colab/ui";
 import { useInput } from "src/utils";
-import { ColumnRecord } from "@octal/store/lib/records";
+import { ColumnRecord } from "@colab/store/lib/records";
 import { useColumnActions } from "../hooks";
 
 const types: { type: "stack" | "queue"; description: string }[] = [

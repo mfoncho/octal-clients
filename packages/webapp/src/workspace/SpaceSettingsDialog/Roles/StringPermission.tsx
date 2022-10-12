@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
-import { Input } from "@octal/ui";
-import { IStringPermission } from "@octal/store";
+import { Input } from "@colab/ui";
+import { IStringPermission } from "@colab/store";
 
 interface IPermission {
     value: string;

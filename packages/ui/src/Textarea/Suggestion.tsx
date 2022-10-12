@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
 import { Range, Editor } from "slate";
-import emoji from "@octal/emoji";
+import emoji from "@colab/emoji";
 import { ReactEditor, useSlate } from "slate-react";
 import Elements from "../Elements";
 import ReactPortal from "./Portal";
 import ReactPopper from "../Popper";
-import { useDebounce } from "@octal/hooks";
+import { useDebounce } from "@colab/hooks";
 
 export interface ISuggestion {
     value: string;

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Dialog, Text, Emoji, Button } from "@octal/ui";
+import { Dialog, Text, Emoji, Button } from "@colab/ui";
 import client from "@console/client";
 import { useInput } from "src/utils";
 import { useNavigator } from "@console/hooks";

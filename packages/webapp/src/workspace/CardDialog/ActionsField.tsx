@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import ColumnsMenuPopper from "@workspace/Board/ColumnsMenuPopper";
-import { CardRecord, useColumn, useAuthId } from "@octal/store";
-import { Text, useScreen } from "@octal/ui";
+import { CardRecord, useColumn, useAuthId } from "@colab/store";
+import { Text, useScreen } from "@colab/ui";
 import Actions from "./Actions";
 import { useActions } from "./hooks";
 import { usePermissions } from "@workspace/Space";

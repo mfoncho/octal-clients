@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useAuthId } from "@octal/store";
+import { useAuthId } from "@colab/store";
 import { useDispatch } from "react-redux";
-import { Actions } from "@octal/store";
+import { Actions } from "@colab/store";
 import Auth from "../auth";
 import App from "../workspace";
 

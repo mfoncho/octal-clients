@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import * as Icons from "@octal/icons";
-import { Dialog, Text, Textarea, Button } from "@octal/ui";
-import { BoardRecord } from "@octal/store/lib/records";
+import * as Icons from "@colab/icons";
+import { Dialog, Text, Textarea, Button } from "@colab/ui";
+import { BoardRecord } from "@colab/store/lib/records";
 import { useInput } from "src/utils";
 import { useBoardActions } from "./hooks";
 

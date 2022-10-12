@@ -1,5 +1,5 @@
 import type { IComponent, IMarkdown, Match, Context } from "../../types";
-import * as patterns from "@octal/patterns";
+import * as patterns from "@colab/patterns";
 
 const name = "emoji";
 

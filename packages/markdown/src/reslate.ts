@@ -1,5 +1,5 @@
 import type { Node } from "./types";
-import emoji from "@octal/emoji";
+import emoji from "@colab/emoji";
 
 export interface IProps {
     [key: string]: any;

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import BoardCard from "./BoardCard";
 import { Draggable } from "react-beautiful-dnd";
-import { CardRecord } from "@octal/store";
+import { CardRecord } from "@colab/store";
 import { useNavigator } from "src/hooks";
 export { default as Context } from "./Context";
 export * from "./hooks";

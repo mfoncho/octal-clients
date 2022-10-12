@@ -1,5 +1,5 @@
 import { Record, Map } from "immutable";
-import { Unique, Positioned, Id, BelongsToBoard } from "@octal/client";
+import { Unique, Positioned, Id, BelongsToBoard } from "@colab/client";
 
 export class ColumnRecord
     extends Record({

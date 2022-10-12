@@ -14,11 +14,11 @@ import Claim from "../ClaimDialog";
 import Calendar from "../Calendar";
 import Workspace from "../Workspace";
 import paths from "src/paths";
-import { Elements } from "@octal/ui";
-import { route } from "@octal/store/lib/actions/app";
+import { Elements } from "@colab/ui";
+import { route } from "@colab/store/lib/actions/app";
 import Console from "src/console";
 import Sidebar from "@workspace/Sidebar";
-import { useAuth } from "@octal/store";
+import { useAuth } from "@colab/store";
 import { useNavigatorDrawer } from "src/hooks";
 
 const elements = {

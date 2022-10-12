@@ -1,4 +1,4 @@
-import Endpoint from "@octal/endpoint";
+import Endpoint from "@colab/endpoint";
 import { Page } from "src/types";
 import { io } from "./types";
 

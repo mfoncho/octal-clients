@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Textarea } from "@octal/ui";
+import { Textarea } from "@colab/ui";
 import Chat from "../Chat";
 import Board from "../Board";
 import Topic from "../Topic";

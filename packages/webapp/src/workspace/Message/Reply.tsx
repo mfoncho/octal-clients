@@ -1,7 +1,7 @@
 import React from "react";
 import UserCard from "@workspace/UserCard";
-import { Markdown } from "@octal/ui";
-import { useUser, useMessage } from "@octal/store";
+import { Markdown } from "@colab/ui";
+import { useUser, useMessage } from "@colab/store";
 
 export interface IMessage {
     id: string;

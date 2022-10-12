@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
-import { Dialog, Avatar } from "@octal/ui";
-import client, { io } from "@octal/client";
-import * as Icons from "@octal/icons";
+import { Dialog, Avatar } from "@colab/ui";
+import client, { io } from "@colab/client";
+import * as Icons from "@colab/icons";
 
 interface IUsersDialog {
     onSelect?: (id: string) => void;

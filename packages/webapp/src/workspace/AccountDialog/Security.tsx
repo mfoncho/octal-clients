@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "./Profile";
-import { Dialog, Button } from "@octal/ui";
+import { Dialog, Button } from "@colab/ui";
 import { useInput } from "src/utils";
-import { updatePassword } from "@octal/store/lib/actions/user";
+import { updatePassword } from "@colab/store/lib/actions/user";
 import { useDispatch } from "react-redux";
-import { UserRecord } from "@octal/store/lib/records";
+import { UserRecord } from "@colab/store/lib/records";
 
 interface IPassword {
     user: UserRecord;

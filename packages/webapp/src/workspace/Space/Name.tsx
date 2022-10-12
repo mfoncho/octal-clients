@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog } from "@octal/ui";
+import { Dialog } from "@colab/ui";
 import InviteDialog from "../InviteDialog";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { useSpace } from "./hooks";

@@ -2,7 +2,7 @@ import React from "react";
 import { OrderedMap } from "immutable";
 import { useColumnActions } from "../hooks";
 import { useColumnCards } from "../hooks";
-import { ColumnRecord, CardRecord } from "@octal/store";
+import { ColumnRecord, CardRecord } from "@colab/store";
 
 const actions = new Proxy(
     {},

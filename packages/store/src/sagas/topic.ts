@@ -1,5 +1,5 @@
 import { put, takeEvery, select, all } from "redux-saga/effects";
-import Client, { io } from "@octal/client";
+import Client, { io } from "@colab/client";
 import { dispatch, State } from "..";
 import { RelatedLoadedAction } from "../actions/app";
 import * as TopicActions from "../actions/topic";

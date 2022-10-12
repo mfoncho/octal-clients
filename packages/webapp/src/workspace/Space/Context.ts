@@ -6,7 +6,7 @@ import {
     MemberRecord,
     ThreadRecord,
     SpaceRoleRecord,
-} from "@octal/store";
+} from "@colab/store";
 
 const Space = React.createContext(new SpaceRecord({}));
 

@@ -1,6 +1,6 @@
 import React from "react";
 import cls from "classnames";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { isFormatActive, toggleFormat } from "./utils";
 import { useSlate } from "slate-react";
 

@@ -1,5 +1,5 @@
 import { Record } from "immutable";
-import { io } from "@octal/client";
+import { io } from "@colab/client";
 
 export class TrackerRecord extends Record({
     id: "",

@@ -1,5 +1,5 @@
 import { put, takeEvery } from "redux-saga/effects";
-import client, { io } from "@octal/client";
+import client, { io } from "@colab/client";
 import { dispatch } from "..";
 import { SpaceSchema as Schema, NormalizedSpace } from "../schemas";
 import * as SpaceActions from "../actions/space";

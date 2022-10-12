@@ -1,8 +1,8 @@
 import React from "react";
 import { List } from "immutable";
-import * as Icons from "@octal/icons";
-import { sort } from "@octal/common";
-import { Text, Tooltip } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { sort } from "@colab/common";
+import { Text, Tooltip } from "@colab/ui";
 import paths from "src/paths";
 import { Link, generatePath } from "react-router-dom";
 import {
@@ -12,7 +12,7 @@ import {
     BoardRecord,
     UserRecord,
     useAuthId,
-} from "@octal/store";
+} from "@colab/store";
 
 interface ICard {
     id: string;

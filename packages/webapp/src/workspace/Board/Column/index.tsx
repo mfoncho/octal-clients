@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import Context from "./Context";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { Text, Tooltip, Button } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Text, Tooltip, Button } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import { DraggableCard as Card } from "../Card";
 import Menu from "./Menu";
-import { sort } from "@octal/common";
+import { sort } from "@colab/common";
 import UpdateColumnDialog from "./UpdateDialog";
 import CreateCardPopper from "./CreateCardPopper";
 import StashColumnWarningDialog from "./StashColumnWarningDialog";
-import { ColumnRecord, CardRecord } from "@octal/store";
+import { ColumnRecord, CardRecord } from "@colab/store";
 import { useDragged, useBoard } from "../hooks";
 import { usePermissions } from "@workspace/Space";
-import { useColumnCards } from "@octal/store";
+import { useColumnCards } from "@colab/store";
 export { default as Context } from "./Context";
 
 interface IColumn {

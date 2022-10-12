@@ -1,11 +1,11 @@
 import React from "react";
 import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
-import * as Icons from "@octal/icons";
-import { Text } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Text } from "@colab/ui";
 import paths from "src/paths/workspace";
 import Counter from "./Counter";
-import { useTopic } from "@octal/store";
+import { useTopic } from "@colab/store";
 
 interface ITopic {
     id: string;

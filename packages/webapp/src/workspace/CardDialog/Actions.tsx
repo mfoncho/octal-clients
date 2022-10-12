@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import TrackersDialog from "./TrackersDialog";
 import TemplateDialog from "./TemplateDialog";
 import { MdOutlineTrackChanges as TrackerIcon } from "react-icons/md";
 import { BsChatSquareTextFill as ThreadIcon } from "react-icons/bs";
 import { BsCheckCircleFill as DoneIcon } from "react-icons/bs";
-import { Dialog, Button } from "@octal/ui";
-import { CardRecord, useTrackers } from "@octal/store";
+import { Dialog, Button } from "@colab/ui";
+import { CardRecord, useTrackers } from "@colab/store";
 import { useActions, useCardCapability } from "./hooks";
 import { useDrawer } from "./hooks";
 import Warning from "./DeleteWarning";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { logout } from "@octal/store/lib/actions/app";
-import { Dialog, Button } from "@octal/ui";
+import { logout } from "@colab/store/lib/actions/app";
+import { Dialog, Button } from "@colab/ui";
 
 export default React.memo(() => {
     const dispatch = useDispatch();

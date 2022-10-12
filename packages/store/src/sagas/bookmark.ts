@@ -1,5 +1,5 @@
 import { dispatch } from "..";
-import client, { io } from "@octal/client";
+import client, { io } from "@colab/client";
 import * as Actions from "../actions/types";
 import * as UserActions from "../actions/user";
 import * as BookmarkActions from "../actions/bookmark";

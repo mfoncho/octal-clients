@@ -1,5 +1,5 @@
-import emoji from "@octal/emoji";
-import * as patterns from "@octal/patterns";
+import emoji from "@colab/emoji";
+import * as patterns from "@colab/patterns";
 
 export interface ILocation {
     line: number;

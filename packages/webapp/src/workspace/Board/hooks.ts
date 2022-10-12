@@ -1,11 +1,11 @@
-import { CardRecord, ColumnRecord, CardFieldRecord } from "@octal/store";
+import { CardRecord, ColumnRecord, CardFieldRecord } from "@colab/store";
 import { OrderedMap } from "immutable";
 import { useContext, useCallback, useMemo } from "react";
-import * as BoardAction from "@octal/store/lib/actions/board";
+import * as BoardAction from "@colab/store/lib/actions/board";
 import Context, { Cards, Dragged } from "./Context";
 import { useDispatch } from "react-redux";
 import { useDrawer as useWorkspaceDrawer } from "src/hooks";
-import { useBoardColumns, Actions } from "@octal/store";
+import { useBoardColumns, Actions } from "@colab/store";
 export { useMembers, useMember } from "../Space/hooks";
 
 const defaultCards = OrderedMap<string, CardRecord>();

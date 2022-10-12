@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "@console/Layout";
 import client from "@console/client";
 import { io } from "@console/types";
-import { Text, Button, Dialog } from "@octal/ui";
+import { Text, Button, Dialog } from "@colab/ui";
 import { useNavigator } from "@console/hooks";
 import CreateRoleDialog from "./RoleDialog";
 

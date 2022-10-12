@@ -1,6 +1,6 @@
 import React from "react";
 import { useCardActions } from "../hooks";
-import { CardRecord } from "@octal/store";
+import { CardRecord } from "@colab/store";
 
 const actions = new Proxy(
     {},

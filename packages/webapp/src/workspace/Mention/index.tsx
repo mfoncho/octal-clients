@@ -1,7 +1,7 @@
 import React from "react";
-import { Text } from "@octal/ui";
+import { Text } from "@colab/ui";
 import Username from "@workspace/Username";
-import { useName } from "@octal/store";
+import { useName } from "@colab/store";
 
 interface IMentioned {
     id: string;

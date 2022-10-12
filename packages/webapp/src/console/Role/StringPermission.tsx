@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Input } from "@octal/ui";
-import { IStringPermission } from "@octal/store";
-import { useDebouncedEffect } from "@octal/hooks";
+import { Input } from "@colab/ui";
+import { IStringPermission } from "@colab/store";
+import { useDebouncedEffect } from "@colab/hooks";
 
 interface IPermission {
     value: string;

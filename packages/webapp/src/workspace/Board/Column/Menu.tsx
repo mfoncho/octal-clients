@@ -1,5 +1,5 @@
 import React from "react";
-import { Popper } from "@octal/ui";
+import { Popper } from "@colab/ui";
 
 interface IMenu {
     onSelect: (e: React.MouseEvent) => void;

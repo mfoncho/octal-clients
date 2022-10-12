@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Textarea } from "@octal/ui";
-import { Dialog } from "@octal/ui";
-import { useMessage, MessageRecord } from "@octal/store";
+import { Textarea } from "@colab/ui";
+import { Dialog } from "@colab/ui";
+import { useMessage, MessageRecord } from "@colab/store";
 import { useInput } from "src/utils";
-import { updateMessage } from "@octal/store/lib/actions/thread";
+import { updateMessage } from "@colab/store/lib/actions/thread";
 
 export interface IEditor {
     id: string;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Popover from "@material-ui/core/Popover";
-import { BookmarkRecord } from "@octal/store";
+import { BookmarkRecord } from "@colab/store";
 import { Picker as EmojiPicker, EmojiData } from "emoji-mart";
-import { Tooltip } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Tooltip } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import Editor from "./Editor";
 
 export type ActionT =

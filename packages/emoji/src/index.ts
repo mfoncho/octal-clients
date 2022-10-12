@@ -1,4 +1,4 @@
-import { emoji as pattern } from "@octal/patterns";
+import { emoji as pattern } from "@colab/patterns";
 import data from "emoji-mart/data/all.json";
 import { getEmojiDataFromNative, NimbleEmojiIndex } from "emoji-mart";
 

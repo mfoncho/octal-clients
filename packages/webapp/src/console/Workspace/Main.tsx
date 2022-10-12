@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ImageInput, Button } from "@octal/ui";
+import { ImageInput, Button } from "@colab/ui";
 import client from "@console/client";
 import { io } from "@console/types";
 import { useInput } from "src/utils";

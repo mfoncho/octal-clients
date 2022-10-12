@@ -3,13 +3,13 @@ import clx from "classnames";
 import Header from "./Header";
 import { List } from "immutable";
 import { MdOutlineArrowBackIosNew as BackIcon } from "react-icons/md";
-import { Calendar, Button, Popper, Text } from "@octal/ui";
+import { Calendar, Button, Popper, Text } from "@colab/ui";
 import { UseCards } from "@workspace/Records";
 import moment from "moment";
-import cal from "@octal/calendar";
+import cal from "@colab/calendar";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import CardDialog from "@workspace/CardDialog";
-import * as CalendarActions from "@octal/store/lib/actions/calendar";
+import * as CalendarActions from "@colab/store/lib/actions/calendar";
 import { useDispatch } from "react-redux";
 import {
     CardRecord,
@@ -17,8 +17,8 @@ import {
     useCalendarLoaded,
     useUser,
     useDateCardsIndex,
-} from "@octal/store";
-import { sort, keyStingFromDate } from "@octal/common";
+} from "@colab/store";
+import { sort, keyStingFromDate } from "@colab/common";
 import { useCalendar } from "src/hooks";
 
 const defaultList = List<any>();

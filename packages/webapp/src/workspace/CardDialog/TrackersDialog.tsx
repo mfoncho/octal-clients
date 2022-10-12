@@ -1,6 +1,6 @@
 import React from "react";
-import { Switch, Dialog } from "@octal/ui";
-import { CardRecord, useTrackers } from "@octal/store";
+import { Switch, Dialog } from "@colab/ui";
+import { CardRecord, useTrackers } from "@colab/store";
 import { useActions } from "./hooks";
 import { useTrackerActions } from "@workspace/hooks";
 

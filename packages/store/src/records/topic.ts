@@ -1,5 +1,5 @@
 import { Record, List } from "immutable";
-import { Unique, Id } from "@octal/client";
+import { Unique, Id } from "@colab/client";
 
 export class TopicSearchFilter extends Record({
     since: "",

@@ -4,7 +4,7 @@ import Columns from "./Columns";
 import { Dragged } from "./Context";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { DragDropContext, DropResult, DragStart } from "react-beautiful-dnd";
-import * as BoardAction from "@octal/store/lib/actions/board";
+import * as BoardAction from "@colab/store/lib/actions/board";
 import { useBoard } from "./hooks";
 
 const scrollbarOptions = {

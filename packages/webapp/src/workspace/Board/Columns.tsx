@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useRef } from "react";
-import { Button } from "@octal/ui";
+import { Button } from "@colab/ui";
 import { Droppable } from "react-beautiful-dnd";
-import { sort } from "@octal/common";
-import * as Icons from "@octal/icons";
-import { ColumnRecord } from "@octal/store/lib/records";
+import { sort } from "@colab/common";
+import * as Icons from "@colab/icons";
+import { ColumnRecord } from "@colab/store/lib/records";
 import { useDispatch } from "react-redux";
-import { createColumn } from "@octal/store/lib/actions/board";
+import { createColumn } from "@colab/store/lib/actions/board";
 import Column from "./Column";
 import { useColumns, useBoard } from "./hooks";
 import { usePermissions } from "../Space/hooks";

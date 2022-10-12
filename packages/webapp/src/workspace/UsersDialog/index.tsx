@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, Avatar } from "@octal/ui";
-import client from "@octal/client";
+import { Dialog, Avatar } from "@colab/ui";
+import client from "@colab/client";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useInput } from "src/utils";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 
 interface User {
     id: string;

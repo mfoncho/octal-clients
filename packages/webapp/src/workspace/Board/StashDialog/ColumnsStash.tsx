@@ -1,13 +1,13 @@
 import React from "react";
-import { Dialog, Tooltip, Button, Text } from "@octal/ui";
-import { ColumnRecord, CardRecord } from "@octal/store";
+import { Dialog, Tooltip, Button, Text } from "@colab/ui";
+import { ColumnRecord, CardRecord } from "@colab/store";
 import Card from "@workspace/Board/Card";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { useColumns } from "@workspace/Board";
 import { useColumnActions } from "@workspace/Board";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import DestroyColumnWarningDialog from "./DestroyColumnWaringDialog";
-import { useColumnCards } from "@octal/store";
+import { useColumnCards } from "@colab/store";
 
 interface IColumnsStash {
     board: { id: string };

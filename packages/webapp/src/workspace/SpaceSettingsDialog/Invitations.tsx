@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@octal/ui";
+import { Button } from "@colab/ui";
 import { BsTrash as DeleteIcon } from "react-icons/bs";
 import moment from "moment";
-import client, { io } from "@octal/client";
+import client, { io } from "@colab/client";
 import Layout from "./Layout";
 import { SpaceManagerProps } from "./index";
 

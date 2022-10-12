@@ -1,8 +1,8 @@
 import React, { useState, useId } from "react";
-import * as Icons from "@octal/icons";
-import { Button } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Button } from "@colab/ui";
 import { usePermissions } from "../../Space";
-import { FileRecord, CardFileValueRecord } from "@octal/store";
+import { FileRecord, CardFileValueRecord } from "@colab/store";
 import { useCardCapability } from "../hooks";
 import { useFieldAction } from "@workspace/Board/hooks";
 import Field, { IField } from "./Field";

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
-import { Range } from "@octal/ui";
+import { Range } from "@colab/ui";
 import NumberLabel from "./NumberLabel";
-import { INumberPermission } from "@octal/store";
+import { INumberPermission } from "@colab/store";
 
 interface IPermission {
     value: number;

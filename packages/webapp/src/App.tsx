@@ -1,10 +1,10 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { Screen } from "@octal/ui";
-import store from "@octal/store";
+import { Screen } from "@colab/ui";
+import store from "@colab/store";
 import Judge from "./judge";
-import { useScreen } from "@octal/ui";
+import { useScreen } from "@colab/ui";
 
 const Main = React.memo(() => {
     const screen = useScreen();

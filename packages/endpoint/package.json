@@ -1,5 +1,5 @@
 {
-    "name": "@octal/endpoint",
+    "name": "@colab/endpoint",
     "version": "1.0.0",
     "main": "lib/index.js",
     "typings": "lib/index.d.ts",
@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "axios": "^0.24.0",
-        "@octal/common": "^1.0.0"
+        "@colab/common": "^1.0.0"
     },
     "devDependencies": {
         "@types/axios": "^0.14.0",

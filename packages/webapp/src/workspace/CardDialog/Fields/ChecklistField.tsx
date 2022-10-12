@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { List } from "immutable";
 import Field, { IField } from "./Field";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { MdCancel as CancelIcon } from "react-icons/md";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { useInput } from "src/utils";
-import { useAuthId } from "@octal/store";
-import { Text, Textarea } from "@octal/ui";
+import { useAuthId } from "@colab/store";
+import { Text, Textarea } from "@colab/ui";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import { useCardCapability } from "../hooks";
 import {
@@ -14,7 +14,7 @@ import {
     CardFieldRecord,
     MemberRecord,
     useUser,
-} from "@octal/store";
+} from "@colab/store";
 
 export interface IEdit {
     value: string;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "@octal/store";
+import store from "@colab/store";
 
 let id = 0;
 

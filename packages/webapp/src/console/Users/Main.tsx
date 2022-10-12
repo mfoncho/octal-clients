@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Label } from "@octal/ui";
+import { Label } from "@colab/ui";
 import Pagination from "@material-ui/lab/Pagination";
 import { Page } from "src/types";
 import Layout from "@console/Layout";

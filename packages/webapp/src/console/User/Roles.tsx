@@ -1,7 +1,7 @@
 import React from "react";
 import { io } from "@console/types";
-import { Text } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Text } from "@colab/ui";
+import * as Icons from "@colab/icons";
 
 export default React.memo<{ roles: io.Role[] }>((props) => {
     function renderRole(role: io.Role) {

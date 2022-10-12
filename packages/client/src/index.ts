@@ -1,4 +1,4 @@
-import Endpoint, { Socket } from "@octal/endpoint";
+import Endpoint, { Socket } from "@colab/endpoint";
 import Client from "./client";
 export * from "./types";
 export { Presence } from "./socket";

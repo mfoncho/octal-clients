@@ -1,6 +1,6 @@
 import React from "react";
-import emoji from "@octal/emoji";
-import { emoji as pattern } from "@octal/patterns";
+import emoji from "@colab/emoji";
+import { emoji as pattern } from "@colab/patterns";
 
 interface IText {
     size?: number;

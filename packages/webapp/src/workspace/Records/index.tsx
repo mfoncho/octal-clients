@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { List, Map } from "immutable";
-import { useCard, CardRecord } from "@octal/store";
+import { useCard, CardRecord } from "@colab/store";
 
 const defaultMap = Map<string, any>();
 

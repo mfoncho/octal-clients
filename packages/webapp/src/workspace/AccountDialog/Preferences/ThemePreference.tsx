@@ -1,6 +1,6 @@
 import React from "react";
 import { colors } from "src/theme";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { IPreference } from "./hooks";
 
 const preference = "webapp.theme.color";

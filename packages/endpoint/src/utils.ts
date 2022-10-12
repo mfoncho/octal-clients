@@ -1,4 +1,4 @@
-import { invariant } from "@octal/common";
+import { invariant } from "@colab/common";
 import { IParams } from "./types";
 
 export function typematch(type: string, ctypes: string[] | string) {

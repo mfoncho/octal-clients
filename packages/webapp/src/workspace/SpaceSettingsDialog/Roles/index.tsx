@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import Role from "./Role";
 import GeneralIcon from "@material-ui/icons/AccountTreeRounded";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import Layout from "../Layout";
 import { useActions } from "@workspace/Space";
-import { Popper, Button, Dialog, Markdown, Text } from "@octal/ui";
-import { SpaceRecord, useRoles, RoleRecord } from "@octal/store";
+import { Popper, Button, Dialog, Markdown, Text } from "@colab/ui";
+import { SpaceRecord, useRoles, RoleRecord } from "@colab/store";
 
 interface IManager {
     space: SpaceRecord;

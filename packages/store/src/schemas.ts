@@ -1,4 +1,4 @@
-import { io } from "@octal/client";
+import { io } from "@colab/client";
 import { Relation, Schema } from "./normalizer";
 
 const cards: Relation<undefined> = Schema.hasMany("card", "cards");

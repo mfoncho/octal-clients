@@ -1,6 +1,6 @@
 import React from "react";
-import { Tooltip } from "@octal/ui";
-import { useUser } from "@octal/store";
+import { Tooltip } from "@colab/ui";
+import { useUser } from "@colab/store";
 
 interface IUserAvatar {
     uid: string;

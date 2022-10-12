@@ -1,8 +1,8 @@
 import React from "react";
 import clx from "classnames";
-import { Button, Dialog, Textarea, Markdown, Flow } from "@octal/ui";
-import { Text } from "@octal/ui";
-import * as Icons from "@octal/icons";
+import { Button, Dialog, Textarea, Markdown, Flow } from "@colab/ui";
+import { Text } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import { useInput } from "src/utils";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { presence as colors } from "src/utils";
@@ -12,8 +12,8 @@ import {
     useViewer,
     usePresence,
     UserRecord,
-} from "@octal/store";
-import * as ThreadAction from "@octal/store/lib/actions/thread";
+} from "@colab/store";
+import * as ThreadAction from "@colab/store/lib/actions/thread";
 import { useDispatch } from "react-redux";
 
 interface IUserCard {

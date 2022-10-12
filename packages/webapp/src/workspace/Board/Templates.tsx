@@ -1,7 +1,7 @@
 import React from "react";
-import * as Icons from "@octal/icons";
-import { Button, Dialog, Text } from "@octal/ui";
-import { BoardRecord } from "@octal/store";
+import * as Icons from "@colab/icons";
+import { Button, Dialog, Text } from "@colab/ui";
+import { BoardRecord } from "@colab/store";
 import { useBoardActions } from "./hooks";
 import { usePermissions } from "../Space";
 

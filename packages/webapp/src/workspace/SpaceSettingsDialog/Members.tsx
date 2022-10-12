@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
 import UsersDialog from "../UsersDialog";
-import client, { io } from "@octal/client";
-import { Avatar, Dialog, Button } from "@octal/ui";
+import client, { io } from "@colab/client";
+import { Avatar, Dialog, Button } from "@colab/ui";
 import { useDispatch } from "react-redux";
 import { useInput } from "src/utils";
-import { SpaceRecord, Actions } from "@octal/store";
+import { SpaceRecord, Actions } from "@colab/store";
 
 interface IMember {
     space: SpaceRecord;

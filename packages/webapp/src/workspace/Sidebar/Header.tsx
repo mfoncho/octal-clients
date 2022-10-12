@@ -2,7 +2,7 @@ import React from "react";
 import Menu from "./Menu";
 import Viewer from "@workspace/Viewer";
 import { Link } from "react-router-dom";
-import { useWorkspace } from "@octal/store";
+import { useWorkspace } from "@colab/store";
 
 interface ILogo {
     alt: string;

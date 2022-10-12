@@ -1,6 +1,6 @@
 import { Record, fromJS, List } from "immutable";
-import { Unique, Id } from "@octal/client";
-import { io } from "@octal/client";
+import { Unique, Id } from "@colab/client";
+import { io } from "@colab/client";
 
 export class Presence extends Record({
     state: "offline" as io.PresenceState,

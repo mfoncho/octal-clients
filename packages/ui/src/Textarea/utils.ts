@@ -5,8 +5,8 @@ import {
     Editor,
     Range,
 } from "slate";
-import * as patterns from "@octal/patterns";
-import emoji from "@octal/emoji";
+import * as patterns from "@colab/patterns";
+import emoji from "@colab/emoji";
 
 const LIST_TYPES = ["list"];
 

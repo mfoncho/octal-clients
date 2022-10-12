@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import clx from "classnames";
-import { Dialog, Button, Flow } from "@octal/ui";
-import { useUser } from "@octal/store/lib/hooks";
+import { Dialog, Button, Flow } from "@colab/ui";
+import { useUser } from "@colab/store/lib/hooks";
 import Preferences from "./Preferences";
 import Session from "./Session";
 import Profile from "./Profile";

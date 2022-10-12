@@ -1,6 +1,6 @@
 import { put, select, takeEvery } from "redux-saga/effects";
 import { MessageSchema, NormalizedMessage } from "../schemas";
-import client, { io } from "@octal/client";
+import client, { io } from "@colab/client";
 import { dispatch, State } from "..";
 import * as AppActions from "../actions/app";
 import * as UserActions from "../actions/user";

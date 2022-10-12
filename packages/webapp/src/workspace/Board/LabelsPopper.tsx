@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import Label from "@workspace/Board/Label";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { useInput } from "src/utils";
-import { LabelRecord } from "@octal/store/lib/records";
-import { Popper, Emoji, Text, Button, Dialog, Textarea } from "@octal/ui";
+import { LabelRecord } from "@colab/store/lib/records";
+import { Popper, Emoji, Text, Button, Dialog, Textarea } from "@colab/ui";
 import { useLabels, useBoardActions } from "@workspace/Board/hooks";
 
 interface ILabelsPopper {

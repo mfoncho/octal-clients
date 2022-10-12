@@ -1,5 +1,5 @@
 import { Record } from "immutable";
-import { Unique, BelongsToSpace } from "@octal/client";
+import { Unique, BelongsToSpace } from "@colab/client";
 export class MemberRecord
     extends Record({
         id: "",

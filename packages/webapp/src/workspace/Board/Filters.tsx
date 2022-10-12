@@ -1,9 +1,9 @@
 import React from "react";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import { useInput } from "src/hooks";
-import { Button, Dialog } from "@octal/ui";
-import { useDebouncedEffect } from "@octal/hooks";
-import { MemberRecord, LabelRecord } from "@octal/store";
+import { Button, Dialog } from "@colab/ui";
+import { useDebouncedEffect } from "@colab/hooks";
+import { MemberRecord, LabelRecord } from "@colab/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import { useBoard, useBoardActions } from "./hooks";
 import LabelsPopper from "./LabelsPopper";

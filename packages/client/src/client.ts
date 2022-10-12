@@ -1,5 +1,5 @@
-import { mixin } from "@octal/common";
-import { Socket } from "@octal/endpoint";
+import { mixin } from "@colab/common";
+import { Socket } from "@colab/endpoint";
 import AuthClient from "./auth";
 import BoardClient from "./board";
 import SpaceClient from "./space";

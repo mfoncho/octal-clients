@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import Sections from "@workspace/Sections";
 import CreateSpaceBtn from "./CreateSpaceBtn";
 import { Scrollbars } from "react-custom-scrollbars";
-import { SpaceRecord, useSpaces, usePermissions } from "@octal/store";
+import { SpaceRecord, useSpaces, usePermissions } from "@colab/store";
 import Space from "./Space";
 
 type SpacesType = ReturnType<typeof useSpaces>;

@@ -3,7 +3,7 @@ import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as UserActions from "../actions/user";
 import * as AppActions from "../actions/app";
-import client, { io, Presence } from "@octal/client";
+import client, { io, Presence } from "@colab/client";
 import { UserSchema } from "../schemas";
 import { State } from "..";
 

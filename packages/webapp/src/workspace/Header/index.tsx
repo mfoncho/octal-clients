@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@octal/ui";
+import { Button } from "@colab/ui";
 import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
 import { useNavigatorDrawer } from "src/hooks";
 

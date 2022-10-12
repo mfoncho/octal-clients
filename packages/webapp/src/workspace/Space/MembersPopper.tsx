@@ -1,8 +1,8 @@
 import React from "react";
-import { MemberRecord, useUser } from "@octal/store";
+import { MemberRecord, useUser } from "@colab/store";
 import { useMembers } from "./hooks";
-import * as Icons from "@octal/icons";
-import { Popper } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Popper } from "@colab/ui";
 
 interface IMenu {
     selected?: string[];

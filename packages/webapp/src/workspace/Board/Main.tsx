@@ -4,7 +4,7 @@ import Header from "./Header";
 import Filters from "./Filters";
 import Drawer from "./Drawer";
 import CardDialog from "@workspace/CardDialog";
-import { useCard } from "@octal/store";
+import { useCard } from "@colab/store";
 import { useParams, useNavigate } from "react-router-dom";
 
 const Dialog = React.memo<{ id: string }>((props) => {

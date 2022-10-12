@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Dialog } from "@octal/ui";
+import { Dialog } from "@colab/ui";
 import { makeStyles } from "@material-ui/core/styles";
 import DialogContent from "@material-ui/core/DialogContent";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Client from "@octal/client";
+import Client from "@colab/client";
 
 const useStyles = makeStyles((theme) => ({
     root: {

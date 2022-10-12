@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Thread from "../Thread";
 import { useNavigator } from "src/hooks";
-import { useTopic } from "@octal/store";
+import { useTopic } from "@colab/store";
 
 export default React.memo(() => {
     const nav = useNavigator();

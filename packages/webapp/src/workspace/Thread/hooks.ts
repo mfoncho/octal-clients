@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useState } from "react";
-import { useThrottledEffect } from "@octal/hooks";
+import { useThrottledEffect } from "@colab/hooks";
 import { useDispatch } from "react-redux";
-import { ThreadRecord } from "@octal/store";
-import { UIEvent } from "@octal/ui";
-import * as ThreadActions from "@octal/store/lib/actions/thread";
+import { ThreadRecord } from "@colab/store";
+import { UIEvent } from "@colab/ui";
+import * as ThreadActions from "@colab/store/lib/actions/thread";
 import { usePermissions } from "@workspace/Space";
 
 interface FileInput {

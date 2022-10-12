@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 import Space, { Permissions, Members, Member } from "./Context";
 import Main from "./Main";
 import { useParams } from "react-router-dom";
-import { MemberRecord } from "@octal/store/lib/records";
-import { useSpace, useMembers, useSpacePermissions } from "@octal/store";
-import { loadMembers } from "@octal/store/lib/actions/member";
+import { MemberRecord } from "@colab/store/lib/records";
+import { useSpace, useMembers, useSpacePermissions } from "@colab/store";
+import { loadMembers } from "@colab/store/lib/actions/member";
 export * from "./hooks";
 
 const defaultMember = new MemberRecord({});

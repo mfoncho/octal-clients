@@ -4,9 +4,9 @@ import {
     CardLabelValueRecord,
     CardFieldRecord,
     LabelRecord,
-} from "@octal/store";
+} from "@colab/store";
 import Field, { IField } from "./Field";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import Label from "@workspace/Board/Label";
 import { useCardCapability } from "../hooks";
 import { useLabels } from "@workspace/Board";

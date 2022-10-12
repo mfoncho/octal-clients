@@ -1,6 +1,6 @@
 import React, { useState, HTMLAttributes } from "react";
 import clx from "classnames";
-import { useUser } from "@octal/store";
+import { useUser } from "@colab/store";
 
 export interface IUserItem extends HTMLAttributes<HTMLDivElement> {
     id: string;

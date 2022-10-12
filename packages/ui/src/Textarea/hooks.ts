@@ -1,5 +1,5 @@
 import React from "react";
-import emoji from "@octal/emoji";
+import emoji from "@colab/emoji";
 import { ReactEditor } from "slate-react";
 import { Transforms, Descendant, Editor, Path, Text } from "slate";
 import UIEvent from "../event";
@@ -7,7 +7,7 @@ import isHotkey from "is-hotkey";
 import { clearEditor, toggleMark, isEmojiActive } from "./utils";
 import { InputProps, EditorState, State, EventTarget } from "./types";
 
-import { Slater } from "@octal/markdown";
+import { Slater } from "@colab/markdown";
 
 const initialData: Descendant[] = [
     {

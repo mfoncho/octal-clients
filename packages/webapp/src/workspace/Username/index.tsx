@@ -1,6 +1,6 @@
 import React from "react";
-import { Text } from "@octal/ui";
-import { useName } from "@octal/store";
+import { Text } from "@colab/ui";
+import { useName } from "@colab/store";
 import UserCard from "@workspace/UserCard";
 
 export interface IUsername {

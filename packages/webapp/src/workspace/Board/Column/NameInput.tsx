@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useRef } from "react";
-import { Textarea } from "@octal/ui";
+import { Textarea } from "@colab/ui";
 import { useInput } from "src/utils";
 
 export interface IColumnNameInput {

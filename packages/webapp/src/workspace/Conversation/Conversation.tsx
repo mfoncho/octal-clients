@@ -5,9 +5,9 @@ import { useDispatch } from "react-redux";
 import Message from "../Message";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { OrderedMap } from "immutable";
-import * as ThreadActionFactory from "@octal/store/lib/actions/thread";
-import { ThreadRecord, useAuthId, useMessage } from "@octal/store";
-import { useCurPrev } from "@octal/hooks";
+import * as ThreadActionFactory from "@colab/store/lib/actions/thread";
+import { ThreadRecord, useAuthId, useMessage } from "@colab/store";
+import { useCurPrev } from "@colab/hooks";
 
 window.Immutable = immutable;
 

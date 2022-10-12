@@ -1,4 +1,4 @@
-import { io } from "@octal/client";
+import { io } from "@colab/client";
 
 interface IPreference {
     key: keyof io.Preference;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog } from "@octal/ui";
+import { Dialog } from "@colab/ui";
 import ColumnsStash from "./ColumnsStash";
 
 interface IDialog {

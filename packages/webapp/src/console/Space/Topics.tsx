@@ -2,8 +2,8 @@ import React from "react";
 import { io } from "@console/types";
 import moment from "moment";
 import client from "@console/client";
-import * as Icons from "@octal/icons";
-import { Text } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Text } from "@colab/ui";
 
 export interface ITopics {
     space: io.Space;

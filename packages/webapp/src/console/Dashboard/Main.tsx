@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Layout from "@console/Layout";
 import { Link } from "react-router-dom";
 import { io } from "@console/types";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import client from "@console/client";
 import paths from "@console/paths";
-import { useWorkspace } from "@octal/store";
+import { useWorkspace } from "@colab/store";
 import {
     FaClipboard as CardsIcon,
     FaClipboardCheck as CompleteCardsIcon,

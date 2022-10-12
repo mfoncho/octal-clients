@@ -8,8 +8,8 @@ import {
     DraggableProvided,
 } from "react-beautiful-dnd";
 import FieldCreator from "./FieldCreator";
-import { CardRecord, CardFieldRecord } from "@octal/store";
-import { Elements } from "@octal/ui";
+import { CardRecord, CardFieldRecord } from "@colab/store";
+import { Elements } from "@colab/ui";
 import { useActions } from "../hooks";
 import Suggestion from "./Suggestion";
 import Mention from "src/workspace/Mention";

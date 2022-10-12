@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import * as Icons from "@octal/icons";
-import { Text } from "@octal/ui";
+import * as Icons from "@colab/icons";
+import { Text } from "@colab/ui";
 
 interface ILabel {
     name: string;

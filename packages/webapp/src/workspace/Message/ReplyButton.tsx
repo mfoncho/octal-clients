@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useUser } from "@octal/store";
-import { Text, Tooltip, Markdown } from "@octal/ui";
-import emoji from "@octal/emoji";
+import { useUser } from "@colab/store";
+import { Text, Tooltip, Markdown } from "@colab/ui";
+import emoji from "@colab/emoji";
 
 interface IReplyChip {
     message: any;

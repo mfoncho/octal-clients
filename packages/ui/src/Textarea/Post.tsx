@@ -2,8 +2,8 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 import clx from "classnames";
 import Elements from "../Elements";
 import Popover from "@material-ui/core/Popover";
-import * as Icons from "@octal/icons";
-import emoji from "@octal/emoji";
+import * as Icons from "@colab/icons";
+import emoji from "@colab/emoji";
 import UIEvent from "../event";
 import {
     useInput,
@@ -15,7 +15,7 @@ import { EventTarget, InputProps } from "./types";
 import Suggestions, { useSuggesting } from "./Suggestion";
 import Button, { Base as ButtonBase } from "../Button";
 import UploadQueue from "./UploadQueue";
-import { Slater } from "@octal/markdown";
+import { Slater } from "@colab/markdown";
 import Emoji from "../Emoji";
 import {
     wrap,

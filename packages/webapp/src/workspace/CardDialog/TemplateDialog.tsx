@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Dialog, Textarea } from "@octal/ui";
-import { CardRecord } from "@octal/store";
+import { Button, Dialog, Textarea } from "@colab/ui";
+import { CardRecord } from "@colab/store";
 import { useBoardActions } from "../Board/hooks";
 import { useInput } from "src/utils";
 

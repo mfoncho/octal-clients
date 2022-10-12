@@ -1,7 +1,7 @@
 import { Map, OrderedMap } from "immutable";
 import React from "react";
-import { BoardRecord, CardRecord } from "@octal/store";
-import { ColumnRecord } from "@octal/store";
+import { BoardRecord, CardRecord } from "@colab/store";
+import { ColumnRecord } from "@colab/store";
 import { DragStart } from "react-beautiful-dnd";
 
 export const Cards = React.createContext(

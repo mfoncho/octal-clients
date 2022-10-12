@@ -1,8 +1,8 @@
 import React from "react";
 import { io } from "@console/types";
-import { Label } from "@octal/ui";
-import * as Icons from "@octal/icons";
-import { Dialog, Button } from "@octal/ui";
+import { Label } from "@colab/ui";
+import * as Icons from "@colab/icons";
+import { Dialog, Button } from "@colab/ui";
 import { useNavigator } from "@console/hooks";
 import moment from "moment";
 import client from "@console/client";

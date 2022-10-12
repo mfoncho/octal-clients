@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { usePermissions } from "../Space";
 import { ActionT } from "./Menu";
-import { MessageRecord, useEntityBookmark, Actions } from "@octal/store";
+import { MessageRecord, useEntityBookmark, Actions } from "@colab/store";
 export function useActions(message: MessageRecord, authid: string = "") {
     const [loading, setLoading] = useState<string[]>([]);
 

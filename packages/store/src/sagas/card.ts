@@ -5,7 +5,7 @@ import * as AppActions from "../actions/app";
 import { CardSchema } from "../schemas";
 import * as BoardActions from "../actions/board";
 import * as ThreadActions from "../actions/thread";
-import Client, { io } from "@octal/client";
+import Client, { io } from "@colab/client";
 
 function* normalize(payload: io.Card | io.Card[]): Iterable<any> {
     let [card, related] = CardSchema.normalize(payload);

@@ -1,6 +1,6 @@
 import React from "react";
 import clx from "classnames";
-import emoji from "@octal/emoji";
+import emoji from "@colab/emoji";
 
 interface IReaction {
     name: string;

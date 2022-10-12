@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import * as Icons from "@octal/icons";
+import * as Icons from "@colab/icons";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import { useFieldAction } from "@workspace/Board/hooks";
 import {
@@ -7,7 +7,7 @@ import {
     CardFieldRecord,
     useUser,
     MemberRecord,
-} from "@octal/store";
+} from "@colab/store";
 import { useCardCapability } from "../hooks";
 import Field, { IField } from "./Field";
 
