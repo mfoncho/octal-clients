@@ -56,11 +56,11 @@ export default React.memo<IFields>((props) => {
 
             if (drop.source.index === drop.destination.index) return;
 
-            const position = drop.destination.index;
+            const index = drop.destination.index;
 
             const id = drop.draggableId.split(":")[1];
 
-            actions.moveField(id, position);
+            actions.moveField(id, index);
         },
         [card.id]
     );

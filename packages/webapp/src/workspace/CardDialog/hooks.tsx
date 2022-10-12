@@ -68,12 +68,12 @@ export function useActions(card: CardRecord) {
         []
     );
 
-    const moveField = useCallback((id: string, position: number) => {
+    const moveField = useCallback((id: string, index: number) => {
         const action = BoardAction.moveCardField({
             field_id: id,
             card_id: card.id,
             params: {
-                position: position,
+                index: index,
             },
         });
         return dispatch(action);

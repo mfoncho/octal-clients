@@ -11,7 +11,7 @@ export interface IMenu {
     action?: string;
 }
 
-const positionSort = sort("position", "asc");
+const positionSort = sort("index", "asc");
 
 const unarchived = (column: ColumnRecord) => !Boolean(column.archived_at);
 

@@ -58,7 +58,7 @@ export default function ColumnField({ card, ...props }: IColumnField) {
                 ) : (
                     <>
                         <span className="px-1.5 bg-primary-500 font-bold text-sm rounded text-white">
-                            {card.position + 1}
+                            {card.index + 1}
                         </span>
                         <span className="px-2 mx-1 text-base font-bold text-gray-700">
                             <Text>{column.name}</Text>

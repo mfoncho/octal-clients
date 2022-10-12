@@ -21,7 +21,7 @@ interface IColumn {
     column: ColumnRecord;
 }
 
-const positionSort = sort("position", "asc");
+const positionSort = sort("index", "asc");
 
 const Column = React.memo<IColumn>(({ column, handle }) => {
     const board = useBoard();

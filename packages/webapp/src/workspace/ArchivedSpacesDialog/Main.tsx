@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
     },
     appBar: {
-        position: "relative",
+        index: "relative",
     },
     title: {
         flex: 1,

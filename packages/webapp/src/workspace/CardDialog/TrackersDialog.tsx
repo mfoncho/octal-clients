@@ -29,7 +29,7 @@ const trackers: ITracker[] = [
     },
     {
         name: "Ranking",
-        target: "card.position",
+        target: "card.index",
         event: "change",
         description: "Track card ranking within collection",
     },

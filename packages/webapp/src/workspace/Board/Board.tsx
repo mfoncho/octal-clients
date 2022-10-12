@@ -33,7 +33,7 @@ export default function Board() {
             )
                 return;
 
-            const position = drop.destination.index;
+            const index = drop.destination.index;
 
             const id = drop.draggableId.split(":")[1];
 
@@ -43,7 +43,7 @@ export default function Board() {
                         let action = BoardAction.moveCard({
                             card_id: id,
                             board_id: board.id,
-                            position: position,
+                            index: index,
                             column_id:
                                 drop.destination.droppableId.split(":")[1],
                         });
@@ -55,7 +55,7 @@ export default function Board() {
                     {
                         let action = BoardAction.moveColumn({
                             column_id: id,
-                            position: position,
+                            index: index,
                             board_id: board.id,
                         });
                         dispatch(action);

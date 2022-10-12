@@ -11,7 +11,7 @@ import { useColumns, useBoard } from "./hooks";
 import { usePermissions } from "../Space/hooks";
 import ColumnNameInput, { IColumnNameInputRef } from "./Column/NameInput";
 
-const positionSort = sort("position", "asc");
+const positionSort = sort("index", "asc");
 
 function CreateColumn() {
     const board = useBoard();
