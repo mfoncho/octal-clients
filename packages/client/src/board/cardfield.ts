@@ -23,7 +23,7 @@ interface MoveCardFieldRequest {
     card_id: string;
     field_id: string;
     params: {
-        position: number;
+        index: number;
     };
 }
 

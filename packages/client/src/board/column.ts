@@ -24,7 +24,7 @@ export interface UpdateColumnRequest {
 }
 
 export interface MoveColumnRequest {
-    position: number;
+    index: number;
     column_id: string;
     board_id: string;
 }
@@ -115,7 +115,7 @@ export default class ColumnClient extends BaseClient {
     ): Promise<io.Column> {
         const path = `/columns/${request.column_id}/move`;
         const payload = {
-            position: request.position,
+            index: request.index,
         };
         const { data } = await this.endpoint.put(path, payload, params);
         return data;

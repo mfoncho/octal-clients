@@ -1,4 +1,4 @@
-export interface Timestamp extends String {}
+export interface Timestamp extends String { }
 
 export type ColumnType = "stack" | "queue";
 
@@ -25,7 +25,7 @@ export interface Timestamped {
 }
 
 export interface Positioned {
-    position: number;
+    index: number;
 }
 
 export interface BelongsToUser {
@@ -236,7 +236,7 @@ export namespace io {
         type: string;
         name: string;
         card_id: string;
-        position: number;
+        index: number;
         created_at: string;
         values: (CardTextValue | CardUserValue | CardLabelValue)[];
     }
@@ -251,7 +251,7 @@ export namespace io {
         name: string;
         user: Author;
         fields: CardField[];
-        position: number;
+        index: number;
         deadline: string | null;
         timestamp: string;
         column_id: string;
@@ -265,7 +265,7 @@ export namespace io {
         type: ColumnType;
         origin: boolean;
         capacity: number;
-        position: number;
+        index: number;
         archived_at: string | null;
     }
 
@@ -325,7 +325,7 @@ export namespace io {
         archived_at: Timestamp;
     }
 
-    export interface TopicSearchResult extends Page<Message> {}
+    export interface TopicSearchResult extends Page<Message> { }
 
     export interface Space extends Unique {
         name: string;

@@ -31,7 +31,7 @@ export interface UncompleteCardRequest {
 }
 export interface MoveCardRequest {
     card_id: string;
-    position?: number;
+    index?: number;
     column_id: string;
     board_id: string;
 }
@@ -133,7 +133,7 @@ export default class CardClient extends BaseClient {
         params?: Params
     ): Promise<io.Card> {
         const payload = {
-            position: request.position,
+            index: request.index,
         };
         const path = `/boards/${request.board_id}/cards/${request.card_id}/move/${request.column_id}`;
         const { data } = await this.endpoint.put(path, payload, params);
