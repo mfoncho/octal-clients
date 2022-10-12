@@ -11,7 +11,7 @@ export interface Unique {
 }
 
 export interface Positioned {
-    position: number;
+    index: number;
 }
 
 export interface IReducerMap<StoreState> {

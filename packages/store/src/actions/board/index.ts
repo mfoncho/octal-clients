@@ -189,13 +189,13 @@ export interface AssignChecklistPayload {
 
 export interface CardMovedPayload {
     id: string;
-    position: number;
+    index: number;
     column_id: string;
 }
 
 export interface ColumnMovedPayload {
     id: string;
-    position: number;
+    index: number;
 }
 
 export interface UnassignChecklistPayload {
@@ -219,7 +219,7 @@ export interface ChecklistUnassignedPayload {
 export interface CardFieldMovedPayload {
     id: string;
     card_id: string;
-    position: number;
+    index: number;
 }
 
 export interface CardFieldValueCreatedPayload extends io.CardFieldValue {
@@ -297,7 +297,7 @@ export interface MoveCardFieldPayload {
     card_id: string;
     field_id: string;
     params: {
-        position: number;
+        index: number;
     };
 }
 
@@ -361,7 +361,7 @@ export interface UpdateColumnPayload {
 }
 
 export interface MoveColumnPayload {
-    position: number;
+    index: number;
     column_id: string;
     board_id: string;
 }
@@ -392,14 +392,14 @@ export interface FetchColumnsPayload {
 
 export interface MoveCardPayload {
     card_id: string;
-    position?: number;
+    index?: number;
     column_id: string;
     board_id: string;
 }
 
 export interface CardPosition {
     id: string;
-    position: number;
+    index: number;
     column_id: string;
 }
 
@@ -410,7 +410,7 @@ export interface DeleteCardPayload {
 
 export interface ColumnPosition {
     id: string;
-    position: number;
+    index: number;
 }
 
 export interface UpdateCardPayload {

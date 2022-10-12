@@ -7,7 +7,7 @@ export class ColumnRecord
         type: "" as "stack" | "queue",
         name: "",
         origin: false,
-        position: 0,
+        index: 0,
         capacity: 0,
         board_id: "" as Id,
         archived_at: null as string | null,

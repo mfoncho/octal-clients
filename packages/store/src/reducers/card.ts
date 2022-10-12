@@ -3,7 +3,7 @@ import { sort } from "@colab/common";
 import * as Actions from "../actions/types";
 import { CardRecord } from "../records";
 
-const positionSort = sort("position", "asc");
+const positionSort = sort("index", "asc");
 
 type Index = "users" | "boards" | "columns" | "dates";
 
@@ -120,9 +120,9 @@ export class CardsStore extends Record({
                         .map((id) => store.getCard(id)!)
                         .filter(Boolean)
                         .sort(positionSort)
-                        .insert(card.position, card)
+                        .insert(card.index, card)
                         .map((card, index) => {
-                            card = card.merge({ position: index });
+                            card = card.merge({ index: index });
                             store.setIn(["entities", card.id], card);
                             return card.id;
                         });
@@ -166,7 +166,7 @@ export class CardsStore extends Record({
                             .sort(positionSort)
                             // reposition cards and collect id for new index
                             .map((card, index) => {
-                                const updates = { position: index };
+                                const updates = { index: index };
                                 card = card.merge(updates);
                                 store.setIn(["entities", card.id], card);
                                 return card.id;
@@ -176,7 +176,7 @@ export class CardsStore extends Record({
                 }
 
                 if (
-                    card.position !== updated.position ||
+                    card.index !== updated.index ||
                     card.column_id !== updated.column_id
                 ) {
                     // add new index column_id
@@ -186,9 +186,9 @@ export class CardsStore extends Record({
                         .map((id) => store.getCard(id)!)
                         .filter(Boolean)
                         .sort(positionSort)
-                        .insert(updated.position, updated)
+                        .insert(updated.index, updated)
                         .map((card, index) => {
-                            const updates = { position: index };
+                            const updates = { index: index };
                             card = card.merge(updates);
                             store.setIn(["entities", card.id], card);
                             return card.id;
@@ -240,7 +240,7 @@ export class CardsStore extends Record({
                     .map((id) => store.getCard(id)!)
                     .filter(Boolean)
                     .map((card, index) => {
-                        card = card.merge({ position: index });
+                        card = card.merge({ index: index });
                         store.setIn(["entities", card.id], card);
                         return card.id;
                     });

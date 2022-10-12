@@ -139,7 +139,7 @@ function* move({
             BoardActions.cardFieldMoved({
                 id: payload.field_id,
                 card_id: payload.card_id,
-                position: payload.params.position,
+                index: payload.params.index,
             })
         );
         yield Client.moveCardField(payload);

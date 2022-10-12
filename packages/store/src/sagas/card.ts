@@ -32,7 +32,7 @@ function* normalizeLoad(payload: io.Card | io.Card[]): Iterable<any> {
 
 function* load(cards: any): Iterable<any> {
     let actions = cards
-        .sort((a: any, b: any) => a.position - b.position)
+        .sort((a: any, b: any) => a.index - b.index)
         .map((card: any) => {
             return put(BoardActions.cardLoaded(card));
         });
@@ -128,11 +128,11 @@ function* move({
     resolve,
 }: BoardActions.MoveCardAction): Iterable<any> {
     try {
-        if (payload.position == 0 || payload.position) {
+        if (payload.index == 0 || payload.index) {
             yield put(
                 BoardActions.cardMoved({
                     id: payload.card_id,
-                    position: payload.position,
+                    index: payload.index,
                     column_id: payload.column_id,
                 })
             );

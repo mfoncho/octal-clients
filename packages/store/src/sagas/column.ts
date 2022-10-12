@@ -70,7 +70,7 @@ function* move({
         yield put(
             BoardActions.columnMoved({
                 id: payload.column_id,
-                position: payload.position,
+                index: payload.index,
             })
         );
         const data = (yield client.moveColumn(payload)) as any;

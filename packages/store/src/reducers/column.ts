@@ -4,7 +4,7 @@ import { sort } from "@colab/common";
 import * as Actions from "../actions/types";
 import { ColumnRecord } from "../records";
 
-const positionSort = sort("position", "asc");
+const positionSort = sort("index", "asc");
 
 export class ColumnsStore extends Record({
     boards: Map<string, List<string>>(),
@@ -54,7 +54,7 @@ export class ColumnsStore extends Record({
         } else {
             const column = this.entities.get(payload.id)!;
             const updated = column.patch(payload);
-            if (column.position !== updated.position) {
+            if (column.index !== updated.index) {
                 return this.withMutations((store) => {
                     store.boards
                         .get(column.board_id, List<string>())
@@ -62,11 +62,11 @@ export class ColumnsStore extends Record({
                         .filter(Boolean)
                         .sort(positionSort)
                         .filter((col) => col.id !== column.id)
-                        .insert(updated.position, updated)
+                        .insert(updated.index, updated)
                         .forEach((column, index) => {
                             store.setIn(
                                 ["entities", column.id],
-                                column.merge({ position: index })
+                                column.merge({ index: index })
                             );
                         });
                 });

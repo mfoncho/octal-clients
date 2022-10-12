@@ -6,7 +6,7 @@ import { FileRecord } from "./workspace";
 
 const createAtAsc = sort("created_at", "asc");
 
-const positionAsc = sort("position", "asc");
+const positionAsc = sort("index", "asc");
 
 export class CardFileValueRecord extends Record({
     id: "",
@@ -89,7 +89,7 @@ export interface ICardField<
     type: string;
     name: string;
     card_id: string;
-    position: number;
+    index: number;
     values: List<T>;
     metadata: Map<string, string | number>;
     users: List<string>;
@@ -102,7 +102,7 @@ export class CardFieldRecord extends Record<ICardField>({
     name: "",
     card_id: "",
     users: List(),
-    position: 0,
+    index: 0,
     metadata: Map(),
     values: List(),
     created_at: "",
@@ -224,7 +224,7 @@ export class CardRecord
         complete: false,
         fields: List<CardFieldRecord>(),
         user_id: "",
-        position: 0,
+        index: 0,
         archived: false,
         thread_id: "",
         column_id: "",
@@ -328,7 +328,7 @@ export class CardRecord
         if (field) return this;
         const fields = this.fields
             .push(CardFieldRecord.make(params))
-            .sort(sort("position", "desc"));
+            .sort(sort("index", "desc"));
         return this.setIn(["fields"], fields);
     }
 
@@ -344,13 +344,13 @@ export class CardRecord
         let [field, index] = this.locateField(value.id);
         if (field) {
             const updated = field.with(value);
-            if (field.position !== updated.position) {
+            if (field.index !== updated.index) {
                 return this.update("fields", (fields) => {
                     return fields
                         .delete(index)
-                        .insert(updated.position, updated)
+                        .insert(updated.index, updated)
                         .map((field, index) => {
-                            return field.merge({ position: index });
+                            return field.merge({ index: index });
                         });
                 });
             } else {

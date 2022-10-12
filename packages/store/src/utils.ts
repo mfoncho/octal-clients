@@ -9,9 +9,9 @@ const watch = ({ effect, type, handle }: IHandler) =>
     };
 
 export function positionSort(a: Positioned, b: Positioned) {
-    if (a.position < b.position) {
+    if (a.index < b.index) {
         return -1;
-    } else if (a.position > b.position) {
+    } else if (a.index > b.index) {
         return 1;
     }
 
