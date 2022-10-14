@@ -33,10 +33,10 @@ export class RoleRecord
         if (Array.isArray(payload.permissions)) {
             const permissions = payload.permissions.reduce(
                 (permissions: any, permission: any) => {
-                    let record = permissions.get(permission.permission);
+                    let record = permissions.get(permission.name);
                     if (record) {
                         return permissions.set(
-                            permission.permission,
+                            permission.name,
                             record.merge(permission)
                         );
                     }
@@ -57,10 +57,10 @@ export class RoleRecord
         if (Array.isArray(payload.permissions)) {
             const permissions = payload.permissions.reduce(
                 (permissions: any, permission: any) => {
-                    let record = permissions.get(permission.permission);
+                    let record = permissions.get(permission.name);
                     if (record) {
                         return permissions.set(
-                            permission.permission,
+                            permission.name,
                             record.merge(permission)
                         );
                     }
