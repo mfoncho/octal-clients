@@ -18,13 +18,10 @@ export class RoleRecord
     }
 
     setPermission(payload: any) {
-        let permission = this.permissions.get(payload.permission);
+        let permission = this.permissions.get(payload.name);
         if (permission) {
             permission = permission.merge(payload);
-            return this.setIn(
-                ["permissions", permission.permission],
-                permission
-            );
+            return this.setIn(["permissions", permission.name], permission);
         }
         return this;
     }

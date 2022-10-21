@@ -38,12 +38,12 @@ export interface IPermissionsGroup {
 export interface BasePermission<T = any> {
     readonly value: T;
     readonly overwrite: boolean;
-    readonly permission: string;
+    readonly name: string;
 }
 
 export class BooleanPermission
     extends Record({
-        permission: "",
+        name: "",
         value: false,
         overwrite: false,
     })
@@ -53,21 +53,21 @@ export class NumberPermission
     extends Record({
         value: 0,
         overwrite: false,
-        permission: "",
+        name: "",
     })
     implements BasePermission<number> {}
 
 export class ListPermission extends Record({
     value: [] as any[],
     overwrite: false,
-    permission: "",
+    name: "",
 }) {}
 
 export class StringPermission
     extends Record({
         value: "",
         overwrite: false,
-        permission: "",
+        name: "",
     })
     implements BasePermission<string> {}
 
