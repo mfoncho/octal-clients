@@ -31,10 +31,10 @@ export default function Role(props: IRole) {
         client.fetchRolePermissions({ role_id: role.id }).then((data) => {
             let loadedPermissions = data.reduce(
                 (permissions: any, permission: any) => {
-                    let record = permissions.get(permission.permission);
+                    let record = permissions.get(permission.name);
                     if (record) {
                         return permissions.set(
-                            permission.permission,
+                            permission.name,
                             record.merge(permission)
                         );
                     }
@@ -98,12 +98,12 @@ export default function Role(props: IRole) {
         }
     }
 
-    function renderPermission(permission: IPermission) {
-        const key = permission.permission;
+    function renderPermission(pinfo: IPermission) {
+        const key = pinfo.permission;
         const perm = permissions.get(key);
         const value = perm.value as any;
         const overwrite = perm.overwrite;
-        if (permission.type === "boolean") {
+        if (pinfo.type === "boolean") {
             return (
                 <BooleanPermission
                     key={key}
@@ -111,11 +111,11 @@ export default function Role(props: IRole) {
                     overwrite={overwrite}
                     onOverwrite={handleToggleOverwrite}
                     onChange={handleSetPermission}
-                    permission={permission}
+                    permission={pinfo}
                 />
             );
         }
-        if (permission.type === "number") {
+        if (pinfo.type === "number") {
             return (
                 <NumberPermission
                     min={0}
@@ -125,11 +125,11 @@ export default function Role(props: IRole) {
                     overwrite={overwrite}
                     onOverwrite={handleToggleOverwrite}
                     onChange={handleSetPermission}
-                    permission={permission}
+                    permission={pinfo}
                 />
             );
         }
-        if (permission.type == "string") {
+        if (pinfo.type == "string") {
             return (
                 <StringPermission
                     key={key}
@@ -137,7 +137,7 @@ export default function Role(props: IRole) {
                     overwrite={overwrite}
                     onOverwrite={handleToggleOverwrite}
                     onChange={handleSetPermission}
-                    permission={permission}
+                    permission={pinfo}
                 />
             );
         }
