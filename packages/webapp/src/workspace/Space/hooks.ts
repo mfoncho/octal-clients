@@ -205,13 +205,13 @@ export function useRoleActions(role: SpaceRoleRecord) {
     }, [role.id]);
 
     const setPermission = useCallback(
-        (permission: string, value: string | boolean | number) => {
+        (name: string, value: string | boolean | number) => {
             const action = RoleActions.setSpacePermission({
                 space_id: role.space_id,
                 role_id: role.id,
                 params: {
                     value: value,
-                    permission: permission,
+                    name: name,
                 },
             });
             return dispatch(action);
@@ -220,11 +220,13 @@ export function useRoleActions(role: SpaceRoleRecord) {
     );
 
     const unsetPermission = useCallback(
-        (permission: string) => {
+        (name: string) => {
             const action = RoleActions.unsetSpacePermission({
                 role_id: role.id,
                 space_id: role.space_id,
-                permission: permission,
+                params:{
+                    name
+                }
             });
             return dispatch(action);
         },

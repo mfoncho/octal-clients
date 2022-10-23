@@ -55,6 +55,7 @@ export { default as Clipboard } from "./Clipboard";
 export { default as Invited } from "./CheckedSolid";
 export { default as Complete } from "./CheckedSolid";
 export { default as CheckedDot } from "./CheckedSolid";
+export { default as Colab } from "./Colab";
 
 export { default as Forum } from "./Forum";
 export { default as MoveCard } from "./LeftRight";

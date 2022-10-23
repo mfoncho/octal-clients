@@ -58,13 +58,11 @@ function* setSpacePermission({
     resolve,
 }: RoleActions.SetSpacePermissionAction): Iterable<any> {
     try {
-        const data = (yield client.setSpaceRolePermission(payload)) as any;
-        const permission = {
-            value: payload.params.value,
-            permission: payload.params.permission,
-        };
+        const permission = (yield client.setSpaceRolePermission(
+            payload
+        )) as any;
         yield put(RoleActions.spacePermissionSet({ ...payload, permission }));
-        resolve.success(data);
+        resolve.success(permission);
     } catch (e) {
         resolve.error(e);
     }
@@ -94,7 +92,12 @@ function* unsetSpacePermission({
 }: RoleActions.UnsetSpacePermissionAction): Iterable<any> {
     try {
         const data = (yield client.deleteSpaceRolePermission(payload)) as any;
-        yield put(RoleActions.spacePermissionUnset(payload));
+        yield put(
+            RoleActions.spacePermissionUnset({
+                ...payload,
+                permission: payload.params,
+            })
+        );
         resolve.success(data);
     } catch (e) {
         resolve.error(e);

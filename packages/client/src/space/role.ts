@@ -10,9 +10,8 @@ export interface SetSpaceRolePermissionRequest {
     role_id: string;
     space_id: string;
     params: {
-        permission: string;
+        name: string;
         value: string | number | boolean;
-        overwrite?: boolean;
     };
 }
 
@@ -24,7 +23,7 @@ export interface DeleteSpaceRoleRequest {
 export interface DeleteSpaceRolePermissionRequest {
     role_id: string;
     space_id: string;
-    permission: string;
+    params: { name: string };
 }
 
 export interface FetchSpaceRolesRequest {
@@ -63,7 +62,7 @@ export default class RoleClient extends BaseClient {
         request: DeleteSpaceRolePermissionRequest,
         params?: Params
     ): Promise<any> {
-        const path = `/spaces/${request.space_id}/roles/${request.role_id}/permissions/${request.permission}`;
+        const path = `/spaces/${request.space_id}/roles/${request.role_id}/permissions/${request.params.name}`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }

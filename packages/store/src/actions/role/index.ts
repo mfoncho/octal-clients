@@ -53,7 +53,7 @@ export interface SetPermissionPayload {
     space_id: string;
     role_id: string;
     params: {
-        permission: string;
+        name: string;
         value: string | number | boolean;
     };
 }
@@ -61,7 +61,17 @@ export interface SetPermissionPayload {
 export interface UnsetSpacePermissionPayload {
     space_id: string;
     role_id: string;
-    permission: string;
+    params: {
+        name: string;
+    };
+}
+
+export interface SpacePermissionUnsetPayload {
+    space_id: string;
+    role_id: string;
+    permission: {
+        name: string;
+    };
 }
 
 export interface DeleteSpaceRolePayload {
@@ -131,7 +141,7 @@ export type RolesLoadedAction = Action<ROLES_LOADED, io.Role[]>;
 
 export type SpacePermissionUnsetAction = Action<
     SPACE_PERMISSION_UNSET,
-    UnsetSpacePermissionPayload
+    SpacePermissionUnsetPayload
 >;
 
 export type SpacePermissionSetAction = Action<
@@ -237,7 +247,7 @@ export function roleAssigned(payload: RoleMemberPayload): RoleAssignedAction {
 }
 
 export function spacePermissionUnset(
-    payload: UnsetSpacePermissionPayload
+    payload: SpacePermissionUnsetPayload
 ): SpacePermissionUnsetAction {
     return createAction(SPACE_PERMISSION_UNSET, payload);
 }

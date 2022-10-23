@@ -26,43 +26,43 @@ export default function Role(props: IRole) {
         actions.setPermission(key, value);
     }
 
-    function renderPermission(permission: IPermission) {
-        const value = role.permissions.get(permission.permission);
+    function renderPermission(pinfo: IPermission) {
+        const value = role.permissions.get(pinfo.permission);
         const enabled = value !== undefined && value !== null;
-        if (permission.type === "boolean") {
+        if (pinfo.type === "boolean") {
             return (
                 <BooleanPermission
-                    key={permission.permission}
+                    key={pinfo.permission}
                     enabled={enabled}
                     onClear={handleDeletePermission}
                     onChange={handleSetPermission}
-                    permission={permission}
+                    permission={pinfo}
                     value={value as any}
                 />
             );
         }
-        if (permission.type === "number") {
+        if (pinfo.type === "number") {
             return (
                 <NumberPermission
                     min={0}
                     max={1024}
-                    key={permission.permission}
+                    key={pinfo.permission}
                     enabled={enabled}
                     onClear={handleDeletePermission}
                     onChange={handleSetPermission}
-                    permission={permission}
+                    permission={pinfo}
                     value={value as any}
                 />
             );
         }
-        if (permission.type == "string") {
+        if (pinfo.type == "string") {
             return (
                 <StringPermission
-                    key={permission.permission}
+                    key={pinfo.permission}
                     enabled={enabled}
                     onClear={handleDeletePermission}
                     onChange={handleSetPermission}
-                    permission={permission}
+                    permission={pinfo}
                     value={value as any}
                 />
             );

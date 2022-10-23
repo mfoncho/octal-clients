@@ -86,7 +86,7 @@ export default React.memo(() => {
                     <Text>{role.name}</Text>
                 </span>
             }
-            className="bg-slate-200 flex flex-col flex-grow pb-20">
+            className="bg-slate-200 flex flex-col flex-grow pb-10">
             <div className="flex flex-row items-center py-2 px-4">
                 {tabs.map((t) => (
                     <div key={t.value} className="flex flex-col">

@@ -41,8 +41,8 @@ export class SpacesStore extends Record({
         let space = this.getSpace(payload.space_id);
         if (space) {
             space = space.setPermission(
-                payload.id,
-                payload.permission.permission,
+                payload.role_id,
+                payload.permission.name,
                 payload.permission.value
             );
             return this.setIn(["entities", space.id], space);
@@ -53,7 +53,10 @@ export class SpacesStore extends Record({
     unsetPermission(payload: any) {
         let space = this.getSpace(payload.space_id);
         if (space) {
-            space = space.unsetPermission(payload.id, payload.permission);
+            space = space.unsetPermission(
+                payload.role_id,
+                payload.permission.name
+            );
             return this.setIn(["entities", space.id], space);
         }
         return this;

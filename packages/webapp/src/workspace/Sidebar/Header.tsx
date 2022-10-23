@@ -1,5 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
+import { Colab } from "@colab/icons";
 import Viewer from "@workspace/Viewer";
 import { Link } from "react-router-dom";
 import { useWorkspace } from "@colab/store";
@@ -22,11 +23,15 @@ const Logo = React.memo<ILogo>((props) => {
 });
 export default React.memo(function Header() {
     const workspace = useWorkspace();
-    const icon = workspace.get("icon", "")!;
+    const icon = workspace.get("icon");
     const name = workspace.get("name", "")!;
     return (
         <div className="flex flex-row items-center overflow-hidden p-4">
-            <Logo src={icon} alt={name} />
+            {icon ? (
+                <Logo src={icon} alt={name} />
+            ) : (
+                <Colab className="w-10 h-10 text-white" />
+            )}
             <div className="flex-1 flex flex-col px-2">
                 <Link
                     to="/spaces"

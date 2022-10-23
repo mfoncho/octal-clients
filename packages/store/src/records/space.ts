@@ -20,12 +20,12 @@ export class SpaceRoleRecord
         super(payload ? SpaceRoleRecord.fromJS(payload) : payload);
     }
 
-    setPermission(permission: string, value: string | number | boolean) {
-        return this.setIn(["permissions", permission], value);
+    setPermission(name: string, value: string | number | boolean) {
+        return this.setIn(["permissions", name], value);
     }
 
-    unsetPermission(permission: string) {
-        return this.deleteIn(["permissions", permission]);
+    unsetPermission(name: string) {
+        return this.deleteIn(["permissions", name]);
     }
 
     static make(payload: any) {
@@ -37,7 +37,7 @@ export class SpaceRoleRecord
         if (Array.isArray(payload.permissions)) {
             let permissions = payload.permissions.reduce(
                 (acc: any, permission: any) =>
-                    acc.set(permission.permission, permission.value),
+                    acc.set(permission.name, permission.value),
                 SpacePermissions
             );
             payload = { ...payload, permissions };
@@ -103,24 +103,21 @@ export class SpaceRecord
         });
     }
 
-    setPermission(role_id: string, permission: string, value: any) {
+    setPermission(role_id: string, name: string, value: any) {
         const role = this.roles.get(role_id);
         if (role) {
             return this.setIn(
-                ["roles", role.id],
-                role.setPermission(permission, value)
+                ["roles", role_id],
+                role.setPermission(name, value)
             );
         }
         return this;
     }
 
-    unsetPermission(role_id: string, permission: string) {
+    unsetPermission(role_id: string, name: string) {
         const role = this.roles.get(role_id);
         if (role) {
-            return this.setIn(
-                ["roles", role.id],
-                role.unsetPermission(permission)
-            );
+            return this.setIn(["roles", role.id], role.unsetPermission(name));
         }
         return this;
     }
