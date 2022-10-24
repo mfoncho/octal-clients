@@ -1,4 +1,4 @@
-export interface Timestamp extends String { }
+export interface Timestamp extends String {}
 
 export type ColumnType = "stack" | "queue";
 
@@ -298,7 +298,7 @@ export namespace io {
         preferences: Preference[];
     }
 
-    export interface SpaceRole extends Unique, BelongsToSpace {
+    export interface SpaceRole extends BelongsToSpace {
         role_id: string;
         permissions: Permission[];
     }
@@ -325,7 +325,7 @@ export namespace io {
         archived_at: Timestamp;
     }
 
-    export interface TopicSearchResult extends Page<Message> { }
+    export interface TopicSearchResult extends Page<Message> {}
 
     export interface Space extends Unique {
         name: string;
