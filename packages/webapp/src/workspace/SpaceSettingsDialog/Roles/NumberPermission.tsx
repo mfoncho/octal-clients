@@ -3,6 +3,7 @@ import clx from "classnames";
 import { Range } from "@colab/ui";
 import NumberLabel from "./NumberLabel";
 import { INumberPermission } from "@colab/store";
+import { useDebouncedEffect } from "@colab/hooks";
 
 interface IPermission {
     value: number;
@@ -23,8 +24,18 @@ export default function NumberPermission(props: IPermission) {
         }
     }, [props.value]);
 
-    function handleChange(e: React.ChangeEvent<{}>, value: any) {
-        props.onChange(props.permission.permission, value);
+    useDebouncedEffect(
+        () => {
+            if (value !== props.value) {
+                props.onChange(props.permission.permission, value);
+            }
+        },
+        700,
+        [value]
+    );
+
+    function handleChange(_e: React.ChangeEvent<{}>, value: any) {
+        setValue(value);
     }
 
     function handleToggleDefault(e: React.ChangeEvent<HTMLInputElement>) {
@@ -34,6 +45,7 @@ export default function NumberPermission(props: IPermission) {
             props.onClear(props.permission.permission);
         }
     }
+
     return (
         <div className="flex flex-row p-4">
             <input
@@ -54,7 +66,7 @@ export default function NumberPermission(props: IPermission) {
                     <Range
                         min={props.min}
                         max={props.max}
-                        value={props.value ?? 0}
+                        value={value ?? 0}
                         disabled={!props.enabled}
                         onChange={handleChange}
                         valueLabelDisplay="on"

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import clx from "classnames";
 import Role from "./Role";
 import GeneralIcon from "@material-ui/icons/AccountTreeRounded";
 import * as Icons from "@colab/icons";
@@ -14,7 +15,7 @@ interface IManager {
 interface IMenu {
     roles: ReturnType<typeof useRoles>;
     selected: string[];
-    onSelect?: (e: React.MouseEvent, id: string) => void;
+    onSelect: (e: React.MouseEvent, id: string) => void;
 }
 
 interface ICustomize {
@@ -90,12 +91,17 @@ const MenuPopper = Popper.create<HTMLDivElement, IMenu>((props) => {
                         <div
                             key={role.id}
                             onClick={
-                                props.onSelect
-                                    ? (e) => props.onSelect!(e, role.id)
-                                    : undefined
+                                selected
+                                    ? undefined
+                                    : (e) => props.onSelect!(e, role.id)
                             }
-                            className="hover:bg-slate-200 flex py-2 px-4 flex-row items-center justify-between cursor-pointer">
-                            <span className="font-bold text-gray-700">
+                            className={clx(
+                                "flex py-2 px-4 flex-row items-center justify-between cursor-pointer",
+                                selected
+                                    ? "bg-slate-100 text-gray-500"
+                                    : "hover:bg-slate-200 text-gray-700"
+                            )}>
+                            <span className="font-bold">
                                 <Text>{role.name}</Text>
                             </span>
                             {selected && (
