@@ -6,16 +6,12 @@ export const SpacePermissions = Map<Permission, string | number | boolean>();
 
 export type SpacePermissions = typeof SpacePermissions;
 
-export class SpaceRoleRecord
-    extends Record({
-        id: "" as Id,
-        role_id: "" as Id,
-        space_id: "" as Id,
-        created_at: "",
-        permissions: SpacePermissions,
-    })
-    implements Unique
-{
+export class SpaceRoleRecord extends Record({
+    role_id: "" as Id,
+    space_id: "" as Id,
+    created_at: "",
+    permissions: SpacePermissions,
+}) {
     constructor(payload?: any) {
         super(payload ? SpaceRoleRecord.fromJS(payload) : payload);
     }
@@ -99,7 +95,7 @@ export class SpaceRecord
 
     putRole(payload: any) {
         return this.update("roles", (roles) => {
-            return roles.set(payload.id, SpaceRoleRecord.make(payload));
+            return roles.set(payload.role_id, SpaceRoleRecord.make(payload));
         });
     }
 
@@ -117,7 +113,10 @@ export class SpaceRecord
     unsetPermission(role_id: string, name: string) {
         const role = this.roles.get(role_id);
         if (role) {
-            return this.setIn(["roles", role.id], role.unsetPermission(name));
+            return this.setIn(
+                ["roles", role.role_id],
+                role.unsetPermission(name)
+            );
         }
         return this;
     }
@@ -133,7 +132,7 @@ export class SpaceRecord
     static objectFromJS(data: any) {
         if (data.roles) {
             const roles = data.roles.reduce((roles: any, role: any) => {
-                return roles.set(role.id, SpaceRoleRecord.make(role));
+                return roles.set(role.role_id, SpaceRoleRecord.make(role));
             }, Map());
             data = { ...data, roles };
         }

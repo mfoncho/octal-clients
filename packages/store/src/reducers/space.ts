@@ -65,7 +65,7 @@ export class SpacesStore extends Record({
     removeRole(payload: any) {
         let space = this.getSpace(payload.space_id);
         if (space) {
-            space = space.deleteRole(payload.id);
+            space = space.deleteRole(payload.role_id);
             return this.setIn(["entities", space.id], space);
         }
         return this;

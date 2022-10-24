@@ -770,9 +770,7 @@ export function useSpacePermissions(id: string) {
                 return true;
             })
             .map((role) => {
-                const permissions = space.roles.find(
-                    (srole) => srole.role_id == role.id
-                )?.permissions;
+                const permissions = space.roles.get(role.id)?.permissions;
                 if (permissions) {
                     return permissions.toSeq().reduce((role, value, key) => {
                         let permission = role.permissions.get(key);
