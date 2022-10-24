@@ -153,7 +153,7 @@ const Manager = React.memo(({ space }: IManager) => {
 
     const role = roles.get(selected ?? "");
 
-    const custom = space.roles.find((role) => role.role_id === selected);
+    const custom = space.roles.get(selected ?? "");
 
     function openRoleClickHanlder(id: string) {
         return (e: React.MouseEvent) => {
@@ -172,9 +172,9 @@ const Manager = React.memo(({ space }: IManager) => {
     }
 
     function handleDeleteRole() {
-        let role = space.roles.find((role) => role.role_id == warning);
+        let role = space.roles.get(warning ?? "");
         if (role) {
-            actions.deleteRole(role.id).then(() => setWarning(null));
+            actions.deleteRole(role.role_id).then(() => setWarning(null));
         }
     }
 
