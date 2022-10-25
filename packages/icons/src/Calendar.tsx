@@ -1,19 +1,20 @@
+import { BiCalendar as CalendarIcon } from "react-icons/bi";
 import {
     BsCalendar2 as Week,
     BsCalendar3 as Month,
     BsCalendar3Event as Day,
 } from "react-icons/bs";
 
-type Calendar = typeof Month & {
-    Day: typeof Week;
+type Calendar = typeof CalendarIcon & {
+    Day: typeof Day;
     Week: typeof Week;
     Month: typeof Month;
 };
 
-(Month as Calendar).Day = Day;
-(Month as Calendar).Week = Week;
-(Month as Calendar).Month = Month;
+(CalendarIcon as Calendar).Day = Day;
+(CalendarIcon as Calendar).Week = Week;
+(CalendarIcon as Calendar).Month = Month;
 
 export { Week, Month, Day };
 
-export default Month as Calendar;
+export default CalendarIcon as Calendar;
