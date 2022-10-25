@@ -1,19 +1,17 @@
 import React from "react";
 import Section from "./Section";
-import { FiClipboard as Assigned } from "react-icons/fi";
-import { HiOutlineFolder as FolderIcon } from "react-icons/hi";
-import { BiCalendar as CalendarIcon } from "react-icons/bi";
+import * as Icons from "@colab/icons";
 
 const sections = [
     {
         name: "Assigned",
         path: "/",
-        icon: Assigned,
+        icon: Icons.Clipboard,
     },
     {
-        name: "My Calendar",
+        name: "Calendar",
         path: "/calendar",
-        icon: CalendarIcon,
+        icon: Icons.Calendar,
     },
 ];
 
