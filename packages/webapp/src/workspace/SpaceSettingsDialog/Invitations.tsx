@@ -55,7 +55,7 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
                         <img
                             className="w-8 h-8 rounded-full"
                             alt={invite.user.username}
-                            src={invite.user.avatar}
+                            src={invite.user.avatar_url}
                         />
                         <span className="px-2 font-bold text-sm text-gray-800">
                             {invite.user.username}

@@ -57,7 +57,7 @@ export default Dialog.create<IUsersDialog>(
                             : "hover:bg-gray-200"
                     )}>
                     <div className="flex flex-row">
-                        <Avatar alt={user.name} src={user.avatar} />
+                        <Avatar alt={user.name} src={user.avatar_url} />
                         <div className="flex flex-col px-2">
                             <span className="font-bold group-hover:text-white text-gray-800 text-sm">
                                 {user.name}

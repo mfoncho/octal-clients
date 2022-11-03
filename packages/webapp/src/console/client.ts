@@ -20,7 +20,7 @@ export interface FetchSpaceBoards {
 
 export interface UpdateWorkspaceRequest {
     name?: string;
-    icon?: string;
+    logo?: string;
 }
 
 export interface DeleteSpaceRequest {

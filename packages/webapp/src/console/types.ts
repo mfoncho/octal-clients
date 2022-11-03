@@ -107,7 +107,7 @@ export namespace io {
         id: string;
         name: string;
         email: string;
-        avatar: string;
+        avatar_url: string;
         username: string;
         verified: boolean;
         suspended: boolean;
@@ -145,7 +145,7 @@ export namespace io {
     }
 
     export interface Workspace {
-        icon: string;
+        logo: string;
         name: string;
     }
 

@@ -16,9 +16,20 @@ export class FileRecord extends Record({
     filename: "",
     metadata: {} as FileMetadata,
     bucket_id: "",
-    preview_url: "",
-    download_url: "",
 }) {
+    get has_preview() {
+        const { PreviewImageWidth, PreviewImageHeight } = this.metadata;
+        return Boolean(PreviewImageWidth) && Boolean(PreviewImageHeight);
+    }
+
+    get preview_path() {
+        return `/bucket/${this.bucket_id}/${this.id}/preview.png`;
+    }
+
+    get download_path() {
+        return `/bucket/${this.bucket_id}/${this.id}/file.${this.ext}?download=true&filename=${this.filename}`;
+    }
+
     get humanSize() {
         let decimals = 2;
         if (this.size === 0) return "0 Bytes";

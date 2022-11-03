@@ -34,7 +34,7 @@ export default function Suggestion({
                     )}>
                     <div className="font-bold flex flex-row items-center">
                         <img
-                            src={user.avatar}
+                            src={user.avatar_url}
                             alt={user.username}
                             className="inline-block h-5 w-5 rounded-full mr-2"
                         />

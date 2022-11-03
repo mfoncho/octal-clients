@@ -25,7 +25,7 @@ export default function UserItem({
                 {...props}>
                 <img
                     className="inline-block mx-3 h-8 w-8 rounded-full bg-primary-500"
-                    src={user.avatar}
+                    src={user.avatar_url}
                 />
                 {selected ? (
                     <span className="text-primary-800 truncate">

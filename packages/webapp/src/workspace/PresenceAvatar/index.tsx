@@ -11,7 +11,7 @@ export default React.memo<React.ImgHTMLAttributes<HTMLImageElement>>(
         return (
             <div className="relative">
                 <img
-                    src={user.avatar}
+                    src={user.avatar_url}
                     className={clx(
                         "relative rounded-full",
                         className,

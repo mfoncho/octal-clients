@@ -113,7 +113,7 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
             )}>
             <img
                 alt={user.username}
-                src={user.avatar}
+                src={user.avatar_url}
                 className="rounded-full h-7 w-7 shadow"
             />
             <span

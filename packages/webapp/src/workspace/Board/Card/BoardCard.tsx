@@ -46,7 +46,7 @@ export const UserAvatar = React.memo<IUserAvatar>(
                     className ?? "h-8 w-8"
                 }`}
                 alt={user.username}
-                src={user.avatar}
+                src={user.avatar_url}
             />
         );
         if (tooltip) {

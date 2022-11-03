@@ -169,8 +169,8 @@ export namespace io {
 
     export interface Author extends Unique {
         name: string;
-        avatar: string;
         username: string;
+        avatar_url: string;
     }
 
     export interface SpaceInvite {
@@ -274,10 +274,10 @@ export namespace io {
         users: Author[];
     }
 
-    export interface Workspace extends Unique {
+    export interface Workspace {
         name: string;
-        icon: string;
-        owner_id: string;
+        logo: string;
+        admin_id: string;
         timestamp: string;
         description: string;
     }

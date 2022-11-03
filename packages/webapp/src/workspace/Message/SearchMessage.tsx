@@ -38,7 +38,7 @@ const Reply = React.memo<ISearchMessage>((props) => {
                     className="w-max flex flex-row items-center justify-between">
                     <img
                         alt={author.name}
-                        src={author.avatar}
+                        src={author.avatar_url}
                         className="rounded-full w-[20px] h-[20px]"
                     />
                     <button className="text-base font-bold text-primary-500 px-2">
@@ -79,7 +79,7 @@ export default React.memo<ISearchMessage>((props) => {
                     <img
                         role="button"
                         alt={author.name}
-                        src={author.avatar}
+                        src={author.avatar_url}
                         className="rounded-full w-[40px] h-[40px]"
                     />
                 </div>

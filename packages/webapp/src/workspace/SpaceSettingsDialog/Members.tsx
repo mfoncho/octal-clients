@@ -51,7 +51,7 @@ function Row({ member, space, filter, onDelete }: IMember) {
 
     const userNode = (
         <div className="flex flex-row items-center space-x-4">
-            <Avatar alt={member.user.username} src={member.user.avatar} />
+            <Avatar alt={member.user.username} src={member.user.avatar_url} />
             <div className="flex flex-col">
                 <span className="font-semibold text-base text-gray-800">
                     {member.user.username}

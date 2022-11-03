@@ -45,7 +45,7 @@ function UserValue({ value, onClose }: IUserValue) {
             <img
                 alt={user.username}
                 className="h-6 w-6 rounded-full"
-                src={user.avatar}
+                src={user.avatar_url}
             />
             <div className="px-2">
                 <span className="text-gray-800 font-semibold text-sm">

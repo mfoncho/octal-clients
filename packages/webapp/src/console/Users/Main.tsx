@@ -97,7 +97,7 @@ export default React.memo(() => {
                                 <div className="flex flex-row items-center">
                                     <img
                                         alt={user.name}
-                                        src={user.avatar}
+                                        src={user.avatar_url}
                                         className="inline-block h-8 w-8 rounded-full"
                                     />
                                     <div className="flex flex-col">

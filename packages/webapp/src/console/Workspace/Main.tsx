@@ -13,7 +13,7 @@ export default React.memo(() => {
 
     const name = useInput("");
 
-    const icon = useInput<string | null>(null);
+    const logo = useInput<string | null>(null);
 
     useEffect(() => {
         loadWorkspace();
@@ -32,11 +32,11 @@ export default React.memo(() => {
         client
             .updateWorkspace({
                 name: name.value.trim(),
-                icon: Boolean(icon.value) ? icon.value! : undefined,
+                logo: Boolean(logo.value) ? logo.value! : undefined,
             })
             .then((data) => {
                 setWorkspace(data);
-                icon.setValue(null);
+                logo.setValue(null);
             })
             .catch(noop)
             .finally(() => {
@@ -53,7 +53,7 @@ export default React.memo(() => {
 
     if (!workspace) return null;
 
-    let valid = name.value.trim() != workspace.name || icon.valid;
+    let valid = name.value.trim() != workspace.name || logo.valid;
     valid = valid && name.value.trim().length > 2;
 
     return (
@@ -63,10 +63,10 @@ export default React.memo(() => {
                     <div className="mt-1 flex flex-col justify-center items-center">
                         <ImageInput
                             id="logo-input"
-                            value={icon.value}
-                            onChange={icon.setValue}
+                            value={logo.value}
+                            onChange={logo.setValue}
                             className="w-24 h-24 rounded-lg shadow"
-                            placeholder={workspace.icon}
+                            placeholder={workspace.logo ?? null}
                         />
 
                         <label

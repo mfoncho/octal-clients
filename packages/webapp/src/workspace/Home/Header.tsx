@@ -7,7 +7,7 @@ export default React.memo(() => {
     return (
         <Header className="flex flex-row px-8 items-center">
             <img
-                src={user.avatar}
+                src={user.avatar_url}
                 alt={user.username}
                 className="h-10 w-10 rounded-full"
             />

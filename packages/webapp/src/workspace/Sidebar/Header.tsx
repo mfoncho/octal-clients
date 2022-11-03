@@ -23,12 +23,12 @@ const Logo = React.memo<ILogo>((props) => {
 });
 export default React.memo(function Header() {
     const workspace = useWorkspace();
-    const icon = workspace.get("icon");
+    const logo = workspace.get("logo");
     const name = workspace.get("name", "")!;
     return (
         <div className="flex flex-row items-center overflow-hidden p-4">
-            {icon ? (
-                <Logo src={icon} alt={name} />
+            {logo ? (
+                <Logo src={logo} alt={name} />
             ) : (
                 <Colab className="w-10 h-10 text-white" />
             )}

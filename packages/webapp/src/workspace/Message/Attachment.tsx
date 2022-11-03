@@ -7,21 +7,19 @@ export interface IAttachment {
     file: FileRecord;
 }
 
-export default function Attachment(props: IAttachment) {
+export default function Attachment({ file }: IAttachment) {
     function download() {
-        window.open(props.file.download_url, "_blank");
+        window.open(file.download_path, "_blank");
     }
 
     const info = (
         <div className="flex flex-col max-w-[200px]">
             <div className="text-sm text-gray-600 font-semibold">
-                <p className="text-ellipsis overflow-hidden">
-                    {props.file.name}.{props.file.ext}
-                </p>
+                <p className="text-ellipsis overflow-hidden">{file.filename}</p>
             </div>
             <div className="flex flex-row font-light text-sm text-gray-500 space-x-2">
-                <div>{(props.file.ext || "").toUpperCase()}</div>
-                <div>{props.file.humanSize}</div>
+                <div>{(file.ext || "").toUpperCase()}</div>
+                <div>{file.humanSize}</div>
             </div>
         </div>
     );
@@ -29,14 +27,14 @@ export default function Attachment(props: IAttachment) {
     return (
         <div className="flex flex-row py-1">
             <div className="flex flex-col border-2 rounded-md border-slate-200 items-center bg-slate-50">
-                {props.file.preview_url ? (
+                {file.has_preview ? (
                     <div className="flex flex-col space-x-1 p-1">
                         <img
-                            alt={props.file.name}
-                            src={props.file.preview_url}
+                            alt={file.name}
+                            src={file.preview_path}
                             style={{
-                                width: props.file.metadata.PreviewImageWidth,
-                                height: props.file.metadata.PreviewImageHeight,
+                                width: file.metadata.PreviewImageWidth,
+                                height: file.metadata.PreviewImageHeight,
                             }}
                             className="text-primary-600 rounded-md"
                         />
@@ -45,7 +43,7 @@ export default function Attachment(props: IAttachment) {
                 ) : (
                     <div className="flex flex-row items-center space-x-1 p-1">
                         <Icons.File
-                            ext={props.file.ext}
+                            ext={file.ext}
                             className="text-primary-600 w-12 h-14"
                         />
                         {info}

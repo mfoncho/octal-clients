@@ -96,7 +96,7 @@ const UserIcon = React.memo((props: IUserAvatar) => {
             key={user.id}
             className="inline-block h-7 w-7 rounded-xl ring-2 ring-white"
             alt={user.username}
-            src={user.avatar}
+            src={user.avatar_url}
         />
     );
 });

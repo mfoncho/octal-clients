@@ -9,7 +9,7 @@ export default React.memo<{ user: io.Account }>(({ user }) => {
                 <img
                     className="w-24 h-24 rounded-lg"
                     alt={user.name}
-                    src={user.avatar}
+                    src={user.avatar_url}
                 />
             </div>
 

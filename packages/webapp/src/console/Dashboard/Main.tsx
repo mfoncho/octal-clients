@@ -149,9 +149,21 @@ export default function Main() {
     });
 
     infoCards.push({
+        name: "Messages",
+        icon: MessagesIcon,
+        count: counters.messages,
+    });
+
+    infoCards.push({
         name: "Cards",
         icon: CardsIcon,
         count: counters.cards,
+    });
+
+    infoCards.push({
+        name: "Completed",
+        icon: CompleteCardsIcon,
+        count: counters.complete_cards,
     });
 
     infoCards.push({
@@ -161,19 +173,7 @@ export default function Main() {
     });
 
     infoCards.push({
-        name: "Messages",
-        icon: MessagesIcon,
-        count: counters.messages,
-    });
-
-    infoCards.push({
-        name: "Complete Cards",
-        icon: CompleteCardsIcon,
-        count: counters.complete_cards,
-    });
-
-    infoCards.push({
-        name: "Done Tasks",
+        name: "Done",
         icon: DoneTasksIcon,
         count: counters.done_tasks,
     });

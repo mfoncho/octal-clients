@@ -8,8 +8,8 @@ import * as Icons from "@colab/icons";
 interface User {
     id: string;
     name: string;
-    avatar: string;
     username: string;
+    avatar_url: string;
 }
 
 interface ArrayLike<T = any> {
@@ -73,7 +73,7 @@ export default Dialog.create<IUsersDialog>(({ selected = [], ...props }) => {
                                 <div className="flex flex-row">
                                     <Avatar
                                         alt={user.username}
-                                        src={user.avatar}
+                                        src={user.avatar_url}
                                     />
                                     <div className="flex flex-col px-2">
                                         <span className="font-bold group-hover:text-white text-gray-800 text-base">

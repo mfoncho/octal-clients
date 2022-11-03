@@ -79,7 +79,7 @@ const Card = Dialog.create<IUserCard>((props) => {
             <div className="w-full flex flex-col justify-between overflow-hidden md:w-[280px] md:h-[250px] h-[350px] relative">
                 <img
                     alt={user.username}
-                    src={user.avatar}
+                    src={user.avatar_url}
                     className={
                         "w-full h-full md:rounded-t-lg absolute object-fill"
                     }

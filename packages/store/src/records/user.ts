@@ -19,7 +19,7 @@ export class UserRecord
             roles: List<string>([]),
             username: "",
             verified: false,
-            avatar: null as any as string,
+            avatar_url: null as any as string,
             bio: "",
             status: "",
             timeout: 0,

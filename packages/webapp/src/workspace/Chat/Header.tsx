@@ -22,7 +22,7 @@ export default React.memo<{ space: SpaceRecord }>(({ space }) => {
                 <div className="flex flex-row items-center px-2 overflow-hidden space-x-2">
                     <img
                         alt={user.username}
-                        src={user.avatar}
+                        src={user.avatar_url}
                         className="rounded-full h-8 w-8 shadow"
                     />
                     <span className="truncate text-lg font-bold">
