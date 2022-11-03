@@ -23,8 +23,9 @@ export interface UpdatePasswordRequest {
 export interface SetUserStatusRequest {
     user_id: string;
     params: {
-        status: string;
-        timeout?: string;
+        icon?: string;
+        text: string;
+        timeout: string;
     };
 }
 
