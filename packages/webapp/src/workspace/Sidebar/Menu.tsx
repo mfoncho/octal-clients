@@ -36,14 +36,16 @@ export interface IPresence {
 }
 
 const Status = React.memo<{}>(() => {
-    const [icon, status] = emoji.prefixed(useStatus());
-    if (Boolean(icon) && Boolean(status)) {
+    const status = useStatus();
+    if (Boolean(status.icon)) {
         return (
             <Tooltip
                 placement="top"
-                title={<span className="text-xs font-bold">{status}</span>}>
+                title={
+                    <span className="text-xs font-bold">{status.text}</span>
+                }>
                 <span>
-                    <Text>{icon}</Text>
+                    <Text>{status.icon}</Text>
                 </span>
             </Tooltip>
         );

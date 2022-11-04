@@ -93,7 +93,7 @@ const Card = Dialog.create<IUserCard>((props) => {
                 <div className="flex flex-row justify-between items-center bg-gray-800/50 w-full z-[1] py-2 backdrop-blur-sm  overflow-hidden text-white px-4">
                     <div>
                         <span className="text-sm font-semibold py-px">
-                            <Text>{user.status}</Text>
+                            <Text>{user.status.text}</Text>
                         </span>
                     </div>
                     <div

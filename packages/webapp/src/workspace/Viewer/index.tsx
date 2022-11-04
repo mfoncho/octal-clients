@@ -1,18 +1,16 @@
 import React from "react";
 import { Text, Dialog, Tooltip } from "@colab/ui";
-import emoji from "@colab/emoji";
 import { useUser } from "@colab/store";
 import StatusDialog from "../StatusDialog";
 
-const Status = React.memo<{ status: string }>((props) => {
-    const [icon, status] = emoji.prefixed(props.status);
-    if (Boolean(icon) && Boolean(status)) {
+const Status = React.memo<{ icon: string; text: string }>((props) => {
+    if (Boolean(props.icon)) {
         return (
             <Tooltip
                 placement="top"
-                title={<span className="text-xs font-bold">{status}</span>}>
+                title={<span className="text-xs font-bold">{props.text}</span>}>
                 <span>
-                    <Text>{icon}</Text>
+                    <Text>{props.icon}</Text>
                 </span>
             </Tooltip>
         );
@@ -31,7 +29,7 @@ export default React.memo(() => {
             <span className="text-sm font-semibold text-primary-100 pr-2 ">
                 {user.username}
             </span>
-            <Status status={user.status} />
+            <Status icon={user.status.icon} text={user.status.text} />
             <StatusDialog open={dialog.status} onClose={dialog.close as any} />
         </button>
     );

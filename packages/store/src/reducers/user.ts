@@ -21,7 +21,7 @@ export class UserStore extends Record({
     updateStatus(payload: any) {
         let user = this.entities.get(payload.user_id);
         if (user) {
-            return this.setIn(["entities", user.id], user.patch(payload));
+            return this.setIn(["entities", user.id], user.setStatus(payload));
         }
         return this;
     }

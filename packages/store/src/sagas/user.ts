@@ -52,8 +52,8 @@ function* setPreference({
 function* setStatus({ payload, resolve }: UserActions.SetUserStatusAction) {
     try {
         const update = {
+            ...payload.params,
             user_id: payload.user_id,
-            status: payload.params.status,
         };
         //@ts-ignore
         const data = (yield client.setUserStatus(payload)) as any;

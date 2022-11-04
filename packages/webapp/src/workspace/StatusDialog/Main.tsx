@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { Dialog, Text, Emoji, Button } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import emoji from "@colab/emoji";
-import { setUserStatus } from "@colab/store/lib/actions/user";
-import { useStatus, useAuthId } from "@colab/store";
+import { Actions } from "@colab/store";
+import { useStatus, useUser } from "@colab/store";
 import { useDispatch } from "react-redux";
 import { useInput } from "src/utils";
 
@@ -13,29 +13,31 @@ interface IDialog {
 }
 
 export default React.memo<IDialog>((props) => {
-    const aid = useAuthId();
+    const user = useUser();
     const dispatch = useDispatch();
     const iconBtnRef = useRef<HTMLButtonElement>(null);
     const [picker, setPicker] = useState<boolean>(false);
-    const value = useStatus();
 
-    const icon = useInput("");
-    const text = useInput("");
-
-    let fullstatus = `${icon.value} ${text.value}`.trim();
+    const icon = useInput(user.status.icon ?? "");
+    const text = useInput(user.status.text);
 
     useEffect(() => {
-        const [valuicon, valuetext] = emoji.prefixed(value);
-        icon.setValue(valuicon ?? "");
-        text.setValue(valuetext ?? "");
-    }, [value]);
+        icon.setValue(user.status.icon ?? "");
+        text.setValue(user.status.text);
+    }, [user.status.icon, user.status.text]);
 
     function updateUserStatus(_event: React.MouseEvent) {
-        const action = setUserStatus(aid, {
-            status: fullstatus,
+        const action = Actions.User.setUserStatus(user.id, {
+            icon: icon.value,
+            text: text.value,
+            timeout: 0,
         });
         dispatch(action);
     }
+
+    const hasChanges =
+        user.status.icon !== icon.value ||
+        user.status.text !== text.value.trim();
 
     return (
         <Dialog.Base
@@ -85,7 +87,7 @@ export default React.memo<IDialog>((props) => {
             <Dialog.Actions className="rounded-b-lg">
                 <Button
                     onClick={updateUserStatus}
-                    disabled={fullstatus === value}
+                    disabled={!hasChanges}
                     color="primary">
                     Save
                 </Button>

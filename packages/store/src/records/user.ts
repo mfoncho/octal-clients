@@ -9,6 +9,8 @@ export class Presence extends Record({
 
 export class UserStatusRecord extends Record({
     icon: "",
+    text: "",
+    timeout: 0,
 }) {}
 
 export class UserRecord
@@ -21,8 +23,7 @@ export class UserRecord
             verified: false,
             avatar_url: null as any as string,
             bio: "",
-            status: "",
-            timeout: 0,
+            status: new UserStatusRecord(),
         },
         "user"
     )
@@ -30,6 +31,10 @@ export class UserRecord
 {
     patch(payload: any) {
         return this.merge(UserRecord.objectFromJS(payload));
+    }
+
+    setStatus(payload: any) {
+        return this.set("status", new UserStatusRecord(payload));
     }
 
     addRole(role_id: string) {
@@ -51,8 +56,8 @@ export class UserRecord
 
     static objectFromJS(payload: any) {
         let data = { ...payload };
-        if (data && data.state) {
-            data.state = new UserStatusRecord(data.state);
+        if (data && data.status) {
+            data.status = new UserStatusRecord(data.status);
         }
         if (Array.isArray(data.roles)) {
             data.roles = List(data.roles);

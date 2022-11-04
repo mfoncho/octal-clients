@@ -163,7 +163,8 @@ export namespace io {
     }
 
     export interface UserStatus {
-        status: string;
+        icon?: string;
+        text: string;
         timeout: string;
     }
 
@@ -171,6 +172,13 @@ export namespace io {
         name: string;
         username: string;
         avatar_url: string;
+    }
+
+    export interface User extends Author {
+        bio: string;
+        roles: string[];
+        status: UserStatus;
+        created_at: Timestamp;
     }
 
     export interface SpaceInvite {
@@ -187,11 +195,6 @@ export namespace io {
         user: Author;
         reaction: string;
         message_id: string;
-        created_at: Timestamp;
-    }
-
-    export interface User extends Author, UserStatus {
-        bio: string;
         created_at: Timestamp;
     }
 
@@ -247,17 +250,14 @@ export namespace io {
     }
 
     export interface Card extends Unique, BelongsToBoard {
-        done: boolean;
         name: string;
         user: Author;
         fields: CardField[];
+        complete: boolean;
         index: number;
-        deadline: string | null;
-        timestamp: string;
         column_id: string;
-        description: string;
-        checklists: Checklist[];
-        archived_at: string | null;
+        created_at: string;
+        archived_at?: string | null;
     }
 
     export interface Column extends Unique, BelongsToBoard {
@@ -278,7 +278,6 @@ export namespace io {
         name: string;
         logo: string;
         admin_id: string;
-        timestamp: string;
         description: string;
     }
 

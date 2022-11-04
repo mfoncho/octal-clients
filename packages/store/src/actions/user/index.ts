@@ -70,8 +70,8 @@ export interface UpdateUserProfilePayload {
 
 export interface IUserState {
     icon?: string;
-    status: string;
-    timeout?: number;
+    text: string;
+    timeout: number;
 }
 
 export interface SetUserStatusPayload {
@@ -79,10 +79,8 @@ export interface SetUserStatusPayload {
     params: IUserState;
 }
 
-export interface StatusUpdatedPayload {
+export interface StatusUpdatedPayload extends IUserState {
     user_id: string;
-    status: string;
-    timeout?: number;
 }
 
 export interface PresenceLoadedPayload {
