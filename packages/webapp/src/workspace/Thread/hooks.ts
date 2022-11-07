@@ -36,11 +36,11 @@ export function usePostInput(thread: ThreadRecord) {
         if (!permissions.get("message.post")) {
             setDraft("", []);
         }
-        if (permissions.get("upload.size", 0) < 1) {
+        if (permissions.get("upload.limit", 0) < 1) {
             setAccept(() => undefined);
         } else {
             setAccept({
-                max: permissions.get("upload.size") as number,
+                max: permissions.get("upload.limit") as number,
                 types: permissions.get("upload.types") as string,
             });
         }

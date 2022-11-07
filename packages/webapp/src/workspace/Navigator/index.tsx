@@ -31,12 +31,12 @@ export default React.memo(() => {
 
     return (
         <div className="flex flex-grow flex-col overflow-hidden">
+            <Sections />
             {permissions.get("space.create") && (
                 <div className="py-2">
                     <CreateSpaceBtn />
                 </div>
             )}
-            <Sections />
             <Scrollbars autoHide className="flex flex-col">
                 <div className="flex flex-col overflow-hidden space-y-1">
                     {grouped

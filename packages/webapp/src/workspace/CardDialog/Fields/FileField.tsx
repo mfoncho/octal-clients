@@ -130,7 +130,7 @@ export default function FileField({ field, handle, ...props }: IField) {
                 {can("card.manage") && (
                     <div className="flex flex-col p-1 w-20">
                         {!uploading &&
-                            permissions.get("upload.size", 0) > 0 && (
+                            permissions.get("upload.limit", 0) > 0 && (
                                 <input
                                     id={id}
                                     type="file"

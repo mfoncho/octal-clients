@@ -87,7 +87,7 @@ export const permissions = {
     ["card.move"]: booleanPermission,
     ["card.delete"]: booleanPermission,
     ["board.manage"]: booleanPermission,
-    ["upload.size"]: numberPermission,
+    ["upload.limit"]: numberPermission,
     ["upload.types"]: stringPermission,
     ["message.embeds"]: booleanPermission,
     ["message.edit"]: booleanPermission,
@@ -179,7 +179,7 @@ export const PermissionGroups: IPermissionsGroup[] = [
         permissions: [
             {
                 name: "Max uploadable file size",
-                permission: "upload.size",
+                permission: "upload.limit",
                 type: "number",
                 scale: "MB",
                 description: "Max uploadable file size in MB",
