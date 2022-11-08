@@ -1,10 +1,10 @@
 import React from "react";
-import * as Icons from "@colab/icons";
 import { Text } from "@colab/ui";
-import { RoleRecord, SpaceRoleRecord } from "@colab/store";
+import * as Icons from "@colab/icons";
 import { useRoleActions } from "@workspace/Space";
-import BooleanPermission from "./BooleanPermission";
+import { RoleRecord, SpaceRoleRecord } from "@colab/store";
 import { PermissionGroups, IPermissionsGroup, IPermission } from "@colab/store";
+import BooleanPermission from "./BooleanPermission";
 import NumberPermission from "./NumberPermission";
 import StringPermission from "./StringPermission";
 
@@ -92,7 +92,7 @@ export default function Role(props: IRole) {
                         <Icons.LeftArrow className="h-4 w-4" />
                     </button>
                     <span className="font-bold text-gray-700 mx-2">
-                        <Text>{props.role.name}</Text>
+                        <Text>{props.role.toString()}</Text>
                     </span>
                 </div>
             </div>

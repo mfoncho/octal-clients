@@ -102,7 +102,7 @@ const MenuPopper = Popper.create<HTMLDivElement, IMenu>((props) => {
                                     : "hover:bg-slate-200 text-gray-700"
                             )}>
                             <span className="font-bold">
-                                <Text>{role.name}</Text>
+                                <Text>{role.toString()}</Text>
                             </span>
                             {selected && (
                                 <svg
@@ -227,7 +227,7 @@ const Manager = React.memo(({ space }: IManager) => {
                 onClick={clickHandler}
                 className="group hover:bg-slate-100 flex py-2 px-4 flex-row items-center justify-between">
                 <span className="font-bold text-gray-700">
-                    <Text>{role.name}</Text>
+                    <Text>{role.toString()}</Text>
                 </span>
                 <div className="invisible group-hover:visible flex flex-row items-center justify-end space-x-2">
                     <button
