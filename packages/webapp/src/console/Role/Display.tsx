@@ -78,16 +78,14 @@ export default function Role(props: IRole) {
                     </Button>
                 </div>
             )}
-            {!role.is_default && (
-                <div className="flex flex-row justify-center items-center p-2">
-                    <button
-                        ref={iconAnchorEl}
-                        onClick={dialog.opener("emoji")}
-                        className="text-6xl p-4 hover:bg-gray-200 rounded-md">
-                        <Text>{icon.value}</Text>
-                    </button>
-                </div>
-            )}
+            <div className="flex flex-row justify-center items-center p-2">
+                <button
+                    ref={iconAnchorEl}
+                    onClick={dialog.opener("emoji")}
+                    className="inline-flex text-6xl p-4 hover:bg-gray-200 rounded-md bg-slate-100 rounded-md w-24 h-24 items-center justify-center">
+                    <Text>{icon.value}</Text>
+                </button>
+            </div>
             <div className="col-span-6 sm:col-span-3">
                 <label
                     htmlFor="role-name"
@@ -99,21 +97,19 @@ export default function Role(props: IRole) {
                     type="text"
                     name="first-name"
                     id="role-name"
-                    disabled={loading || role.is_default}
+                    disabled={loading}
                     autoComplete="given-name"
                     className="mt-1 p-2 font-bold text-gray-700 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-md border-gray-300 rounded-md"
                 />
             </div>
-            {!role.is_default && (
-                <div className="py-2 flex flex-row justify-end">
-                    <Button
-                        color="primary"
-                        disabled={!hasChanges || loading}
-                        onClick={updateRole}>
-                        Save
-                    </Button>
-                </div>
-            )}
+            <div className="py-2 flex flex-row justify-end">
+                <Button
+                    color="primary"
+                    disabled={!hasChanges || loading}
+                    onClick={updateRole}>
+                    Save
+                </Button>
+            </div>
             <DeleteRoleDialog
                 name={role.name}
                 loading={loading}

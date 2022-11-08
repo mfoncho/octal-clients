@@ -17,6 +17,13 @@ export class RoleRecord
         super(RoleRecord.fromJS(payload));
     }
 
+    toString() {
+        if (Boolean(this.icon)) {
+            return `${this.icon} ${this.name}`;
+        }
+        return this.name;
+    }
+
     setPermission(payload: any) {
         let permission = this.permissions.get(payload.name);
         if (permission) {

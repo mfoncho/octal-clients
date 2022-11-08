@@ -11,7 +11,14 @@ export class UserStatusRecord extends Record({
     icon: "",
     text: "",
     timeout: 0,
-}) {}
+}) {
+    toString() {
+        if (Boolean(this.icon)) {
+            return `${this.icon} ${this.text}`;
+        }
+        return this.text;
+    }
+}
 
 export class UserRecord
     extends Record(
