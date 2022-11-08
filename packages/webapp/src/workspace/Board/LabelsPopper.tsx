@@ -377,8 +377,11 @@ export default Popper.create<HTMLDivElement, ILabelsPopper>((props) => {
                         onSelect={props.onSelect}
                     />
                     <div className="flex rounded-b-md flex-col py-2 px-2 bg-gray-100">
-                        <Button onClick={openForm} color="primary">
-                            Create Label
+                        <Button
+                            className="flex flex-row justify-center"
+                            onClick={openForm}
+                            color="primary">
+                            <Icons.Plus className="text-white" />
                         </Button>
                     </div>
                 </>
