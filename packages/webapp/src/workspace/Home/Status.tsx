@@ -11,12 +11,12 @@ export default React.memo(function Status() {
             <button
                 onClick={() => setDialog(!dialog)}
                 className="p-2 border-2 border-gray-300 hover:bg-gray-200 bg-gray-100 rounded-md">
-                {user.status.text.length > 0 ? (
+                {user.status ? (
                     <span>
-                        <Text>{`${user.status.icon} ${user.status.text}`}</Text>
+                        <Text>{user.status.toString()}</Text>
                     </span>
                 ) : (
-                    <span className="px-2 text-base font-bold">status</span>
+                    <span className="px-2 text-base font-bold">...</span>
                 )}
             </button>
             <StatusDialog open={dialog} onClose={() => setDialog(false)} />
