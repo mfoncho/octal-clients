@@ -120,17 +120,13 @@ const Card = Dialog.create<IUserCard>((props) => {
                             <div
                                 key={role.id}
                                 className="text-sm font-semibold py-px space-x rounded-md border-slate-200 border bg-slate-100 hover:bg-slate-200">
-                                {role.icon.length > 0 && (
-                                    <span>
-                                        <Text>{role.icon}</Text>
-                                    </span>
-                                )}
                                 <span className="px-1">
-                                    <Text>{role.name}</Text>
+                                    <Text>{role.toString()}</Text>
                                 </span>
                             </div>
                         ))
-                        .toList()}
+                        .toList()
+                        .reverse()}
                 </div>
                 {/**
                  **/}
