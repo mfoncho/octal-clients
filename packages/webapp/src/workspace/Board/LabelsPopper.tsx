@@ -29,6 +29,19 @@ interface ILabelForm {
     onSubmit: (params: IFormPayload) => void;
 }
 
+interface ICustomEvent<T> {
+    target: {
+        value: T;
+    };
+}
+
+interface IColor {
+    value: string;
+    disabled?: boolean | null;
+    onSelect?: ((val: ICustomEvent<string>) => void) | null;
+    selected?: boolean | null;
+}
+
 const labelStyle = { margin: 0 };
 
 const colors: string[] = [
@@ -96,16 +109,35 @@ const Warning = Dialog.create<IDialog>((props) => {
     );
 });
 
+function Color(props: IColor) {
+    const styles = {
+        backgroundColor: props.value,
+    };
+    function handleClick(e: React.MouseEvent) {
+        if (props.onSelect) {
+            e.stopPropagation();
+            e.preventDefault();
+            props.onSelect({ target: { value: props.value } });
+        }
+    }
+    return (
+        <div
+            onClick={handleClick}
+            className="flex flex-col justify-center items-center h-7 h-7 rounded-lg"
+            style={styles}>
+            {props.selected ? <Icons.Check className="text-white" /> : null}
+        </div>
+    );
+}
+
 function LabelForm(props: ILabelForm) {
     const name = useInput(props.name ?? "");
-    const color = useInput(props.color ?? "");
+    const color = useInput(props.color ?? colors[0]);
     const iconBtnRef = useRef<HTMLButtonElement>(null);
     const [epicker, setEpicker] = useState<boolean>(false);
 
-    function handleColorChange(e: React.ChangeEvent<HTMLInputElement>) {
-        if (e.target.checked) {
-            color.setValue(e.target.value);
-        }
+    function handleColorChange(e: ICustomEvent<string>) {
+        color.setValue(e.target.value);
     }
 
     function handleSubmit(e: React.MouseEvent) {
@@ -125,21 +157,15 @@ function LabelForm(props: ILabelForm) {
                     {...name.props}
                 />
             </div>
-            <div className="grid grid-flow-row grid-cols-7 p-2">
+            <div className="grid gap-2 grid-flow-row grid-cols-7 p-2">
                 {colors.map((col) => {
                     return (
-                        <input
+                        <Color
                             key={col}
                             value={col}
                             disabled={props.disabled}
-                            checked={col == color.value}
-                            onChange={handleColorChange}
-                            className="form-checkbox focus:ring-transparent border-8 my-1 rounded-full w-8 h-8 mx-1"
-                            type="checkbox"
-                            style={{
-                                color: col,
-                                borderColor: col,
-                            }}
+                            selected={col == color.value}
+                            onSelect={handleColorChange}
                         />
                     );
                 })}
@@ -154,8 +180,10 @@ function LabelForm(props: ILabelForm) {
                 <Button
                     onClick={handleSubmit}
                     disabled={
-                        props.name === name.value.trim() &&
-                        color.value === props.color
+                        name.value.trim().length == 0 ||
+                        color.value.trim().length == 0 ||
+                        (props.name === name.value.trim() &&
+                            color.value === props.color)
                     }
                     color="primary">
                     Save
@@ -339,7 +367,7 @@ export default Popper.create<HTMLDivElement, ILabelsPopper>((props) => {
             anchorEl={props.anchorEl}
             placement="bottom-start"
             onClickAway={handlePopperClickAway}
-            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 z-[1000] ring-opacity-5 min-w-[264px] max-w-[264px] overflow-hidden bg-white shadow-md">
+            className="focus:outline-none flex flex-col rounded-md ring-1 ring-gray-800 z-[1000] ring-opacity-5 min-w-[264px] max-w-[264px] overflow-hidden bg-white shadow-md bg-slate-50">
             {form ? (
                 <LabelForm onClose={closeForm} onSubmit={handleCreateLabel} />
             ) : (
