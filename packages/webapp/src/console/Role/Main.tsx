@@ -6,34 +6,8 @@ import Users from "./Users";
 import { io } from "@console/types";
 import client from "@console/client";
 import { useParams } from "react-router-dom";
-import { Dialog, Button, Flow, Text } from "@colab/ui";
+import { Button, Flow, Text } from "@colab/ui";
 import Layout from "@console/Layout";
-
-interface ICustomize {
-    loading?: boolean;
-    name: string;
-    onConfirm?: (e: React.MouseEvent) => void;
-}
-
-function deleteText(name: string) {
-    return `Delete custom role (__${name}__). 
-
-Customized permissions will be lost permantly.
-###### Are you sure you want to proceed`;
-}
-
-const DeleteRoleDialog = Dialog.create<ICustomize>((props) => {
-    return (
-        <Dialog.Warning
-            open={props.open}
-            title={`Delete Role`}
-            onClose={props.loading ? undefined : props.onClose}
-            disabled={props.loading}
-            onConfirm={props.onConfirm as any}>
-            {deleteText(props.name)}
-        </Dialog.Warning>
-    );
-});
 
 const tabs = [
     {
