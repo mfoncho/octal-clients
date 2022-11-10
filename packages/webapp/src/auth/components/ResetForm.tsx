@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BiArrowBack as BackArrowIcon } from "react-icons/bi";
+import * as Icons from "@colab/icons";
 import Client from "@colab/client";
 import { Input, Button, Flow, Text } from "@colab/ui";
 import { useInput } from "src/utils";
@@ -78,7 +78,7 @@ export default React.memo(() => {
                 <Link
                     className="flex flex-row items-center text-sm font-semibold text-primary-700"
                     to={path.login}>
-                    <BackArrowIcon className="h-5 w-5" />
+                    <Icons.LeftArrow className="h-5 w-5" />
                     <span className="px-4">Login</span>
                 </Link>
             </div>

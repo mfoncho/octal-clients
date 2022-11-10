@@ -12,7 +12,7 @@ export default React.memo(() => {
     );
     return (
         <div className="flex-1 flex flex-row overflow-hidden bg-white">
-            <div className="flex-1 hidden sm:flex flex-col ">
+            <div className="flex-1 hidden sm:flex flex-col">
                 <Welcome />
             </div>
             <div className="flex-1 flex flex-col overflow-hidden pt-16">
