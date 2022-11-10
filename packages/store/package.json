@@ -14,15 +14,15 @@
         "jsxBracketSameLine": true
     },
     "dependencies": {
-        "@colab/markdown": "^1.0.0",
         "@colab/calendar": "^1.0.0",
-        "@colab/common": "^1.0.0",
         "@colab/client": "^1.0.0",
-        "redux-saga": "^1.1.3",
+        "@colab/common": "^1.0.0",
+        "@colab/markdown": "^1.0.0",
         "immutable": "^4.0.0-rc.12",
         "react": "^18.1.0",
         "react-dom": "^18.1.0",
-        "react-redux": "^7.2.1"
+        "react-redux": "^7.2.1",
+        "redux-saga": "^1.1.3"
     },
     "devDependencies": {
         "@types/react-dom": "^18.0.5",
