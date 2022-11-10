@@ -69,12 +69,9 @@ export { default as Pane } from "./Pane";
 export { default as ArrowUp } from "./ArrowUp";
 export { default as ArrowDown } from "./ArrowDown";
 export { default as Error } from "./Error";
-//export { default as Column } from "./Column";
 export { default as ThemeDot } from "./Theme";
 export { default as PresenceDot } from "./Presence";
 export { default as Preferences } from "./Preferences";
-//export { default as PublicChannels } from "./PublicChannels";
-//export { default as ArchivedChannels } from "./ArchivedChannels";
 export { default as Org } from "./Org";
 export { default as Storage } from "./Storage";
 
