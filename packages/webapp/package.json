@@ -73,7 +73,6 @@
         "resolve": "^1.17.0",
         "simplebar": "^5.2.1",
         "simplebar-react": "^2.3.6",
-        "typescript": "^4.7.2",
         "uuid": "^8.3.2",
         "web-vitals": "^2.1.0"
     },
@@ -115,16 +114,18 @@
         "eslint": "^8.6.0",
         "postcss": "^8.4.5",
         "react-scripts": "^5.0.0",
+        "source-map-explorer": "^2.5.3",
         "tailwindcss": "^3.0.15",
-        "typescript": "^4.5.4",
+        "typescript": "^4.7.2",
         "webpack-bundle-analyzer": "^4.7.0",
         "webpack-cli": "^4.10.0"
     },
     "scripts": {
         "start": "TAILWIND_MODE=watch BROWSER=none react-scripts start",
-        "build": "react-scripts build",
+        "build": "NODE_ENV=production react-scripts build",
         "test": "react-scripts test",
         "profile": "webpack --profile --json=compilation-stats.json",
+        "analyze": "source-map-explorer 'build/static/js/*.js'",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
