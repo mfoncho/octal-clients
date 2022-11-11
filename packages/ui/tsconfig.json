@@ -3,6 +3,8 @@
     "compilerOptions": {
         "outDir": "lib",
         "noEmit": false,
+        "module": "es6",
+        "target": "es6",
         "baseUrl": "./",
         "declaration": true,
         "paths": {
