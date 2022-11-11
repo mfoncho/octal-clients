@@ -2,9 +2,6 @@ import React, { useRef } from "react";
 import * as Icons from "@colab/icons";
 import TrackersDialog from "./TrackersDialog";
 import TemplateDialog from "./TemplateDialog";
-import { MdOutlineTrackChanges as TrackerIcon } from "react-icons/md";
-import { BsChatSquareTextFill as ThreadIcon } from "react-icons/bs";
-import { BsCheckCircleFill as DoneIcon } from "react-icons/bs";
 import { Dialog, Button } from "@colab/ui";
 import { CardRecord, useTrackers } from "@colab/store";
 import { useActions, useCardCapability } from "./hooks";
@@ -54,11 +51,11 @@ export default function Actions({ card, ...props }: IActions) {
                         thread_id: card.thread_id,
                     })
                 }>
-                <ThreadIcon className="text-gray-500" />
+                <Icons.Chat className="text-gray-500" />
             </Button>
             {can("card.track") && (
                 <Button variant="icon" onClick={dialog.opener("trackers")}>
-                    <TrackerIcon
+                    <Icons.Tracker
                         className={
                             events.isEmpty()
                                 ? "text-gray-500"
@@ -74,7 +71,7 @@ export default function Actions({ card, ...props }: IActions) {
             )}
             {can("card.manage") && (
                 <Button variant="icon" onClick={handleToggleComplete}>
-                    <DoneIcon
+                    <Icons.CheckedDot
                         className={
                             card.complete ? "text-green-500" : "text-gray-500"
                         }

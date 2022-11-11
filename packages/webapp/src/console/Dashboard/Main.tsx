@@ -5,14 +5,6 @@ import { io } from "@console/types";
 import * as Icons from "@colab/icons";
 import client from "@console/client";
 import paths from "@console/paths";
-import { useWorkspace } from "@colab/store";
-import {
-    FaClipboard as CardsIcon,
-    FaClipboardCheck as CompleteCardsIcon,
-} from "react-icons/fa";
-import { IoChatbox as MessagesIcon } from "react-icons/io5";
-import { SiCheckmarx as DoneTasksIcon } from "react-icons/si";
-import { ImCheckboxUnchecked as TasksIcon } from "react-icons/im";
 import usersmodule from "@console/Users";
 import spacesmodule from "@console/Spaces";
 
@@ -150,31 +142,31 @@ export default function Main() {
 
     infoCards.push({
         name: "Messages",
-        icon: MessagesIcon,
+        icon: Icons.Chat,
         count: counters.messages,
     });
 
     infoCards.push({
         name: "Cards",
-        icon: CardsIcon,
+        icon: Icons.Board,
         count: counters.cards,
     });
 
     infoCards.push({
         name: "Completed",
-        icon: CompleteCardsIcon,
+        icon: Icons.Complete,
         count: counters.complete_cards,
     });
 
     infoCards.push({
         name: "Tasks",
-        icon: TasksIcon,
+        icon: Icons.Task,
         count: counters.tasks,
     });
 
     infoCards.push({
         name: "Done",
-        icon: DoneTasksIcon,
+        icon: Icons.Task.DoneSolid,
         count: counters.done_tasks,
     });
 

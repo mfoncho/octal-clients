@@ -2,14 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import clx from "classnames";
 import Header from "./Header";
 import { List } from "immutable";
-import { MdOutlineArrowBackIosNew as BackIcon } from "react-icons/md";
 import { Calendar, Button, Popper, Text } from "@colab/ui";
 import { UseCards } from "@workspace/Records";
 import moment from "moment";
 import cal from "@colab/calendar";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import CardDialog from "@workspace/CardDialog";
-import * as CalendarActions from "@colab/store/lib/actions/calendar";
 import { useDispatch } from "react-redux";
 import {
     CardRecord,
@@ -17,8 +15,10 @@ import {
     useCalendarLoaded,
     useUser,
     useDateCardsIndex,
+    Actions,
 } from "@colab/store";
 import { sort, keyStingFromDate } from "@colab/common";
+import * as Icons from "@colab/icons";
 import { useCalendar } from "src/hooks";
 
 const defaultList = List<any>();
@@ -52,7 +52,7 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
                         variant="icon"
                         color="clear"
                         onClick={() => props.setYear(props.year - 1)}>
-                        <BackIcon />
+                        <Icons.Chevron />
                     </Button>
                     <span className="p-2 font-semibold">{props.year}</span>
                     <Button
@@ -60,7 +60,7 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
                         color="clear"
                         onClick={() => props.setYear(props.year + 1)}
                         className="rotate-180">
-                        <BackIcon />
+                        <Icons.Chevron />
                     </Button>
                 </div>
             </div>
@@ -86,18 +86,6 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
                     ))}
             </div>
         </Popper>
-    );
-});
-
-const UserIcon = React.memo((props: IUserAvatar) => {
-    const user = useUser(props.user);
-    return (
-        <img
-            key={user.id}
-            className="inline-block h-7 w-7 rounded-xl ring-2 ring-white"
-            alt={user.username}
-            src={user.avatar_url}
-        />
     );
 });
 
@@ -182,7 +170,7 @@ export default React.memo(function Main() {
 
     useEffect(() => {
         if (!loaded.includes("cards")) {
-            dispatch(CalendarActions.loadCalendar());
+            dispatch(Actions.Calendar.loadCalendar());
         }
     });
 
@@ -252,13 +240,13 @@ export default React.memo(function Main() {
         return (
             <div className="flex flex-row items-center justify-end space-x-2">
                 <Button variant="icon" onClick={() => actions.previous()}>
-                    <BackIcon />
+                    <Icons.Chevron />
                 </Button>
                 <Button
                     variant="icon"
                     onClick={() => actions.next()}
                     className="rotate-180">
-                    <BackIcon />
+                    <Icons.Chevron />
                 </Button>
             </div>
         );

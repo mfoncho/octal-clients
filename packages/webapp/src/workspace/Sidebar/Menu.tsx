@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import * as Icons from "@colab/icons";
 import emoji from "@colab/emoji";
+import * as Icons from "@colab/icons";
 import { Link } from "react-router-dom";
 import StatusDialog from "../StatusDialog";
 import AccountDialog from "../AccountDialog";
@@ -8,7 +8,6 @@ import PresenceDialog from "../PresenceDialog";
 import { presence as colors } from "src/colors";
 import { Popper, Button, Text, Dialog, Tooltip } from "@colab/ui";
 import { usePresence, useStatus, useWorkspace, useAuth } from "@colab/store";
-import { GoPrimitiveDot as PresenceDotIcon } from "react-icons/go";
 
 interface IOption {
     name: string;
@@ -56,9 +55,9 @@ const Status = React.memo<{}>(() => {
 const Presence = React.memo<IPresence>((props) => {
     const presence = usePresence();
     return (
-        <PresenceDotIcon
-            className={props.className}
-            style={{ color: colors.get(presence.state) }}
+        <div
+            className="w-3 h-3 rounded-full shadow"
+            style={{ backgroundColor: colors.get(presence.state) }}
         />
     );
 });

@@ -6,7 +6,6 @@ import RenameTopicDialog from "./RenameTopicDialog";
 import SearchDialog from "./Search";
 import { useParams } from "react-router-dom";
 import { useSpace } from "../Space/hooks";
-import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
 import { useNavigatorDrawer } from "src/hooks";
 
 export default React.memo(() => {
@@ -28,7 +27,7 @@ export default React.memo(() => {
                     color="clear"
                     onClick={() => navigator.toggle({})}
                     className="visible sm:hidden">
-                    <MenuIcon />
+                    <Icons.Menu />
                 </Button>
                 <div className="flex flex-col justify-center px-2 overflow-hidden">
                     <button

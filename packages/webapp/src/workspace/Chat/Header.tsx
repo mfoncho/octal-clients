@@ -2,7 +2,6 @@ import React from "react";
 import { Text, Button } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import { useUser, useAuthId, SpaceRecord } from "@colab/store";
-import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
 import { useNavigatorDrawer } from "src/hooks";
 
 export default React.memo<{ space: SpaceRecord }>(({ space }) => {
@@ -17,7 +16,7 @@ export default React.memo<{ space: SpaceRecord }>(({ space }) => {
                     color="clear"
                     onClick={() => navigator.toggle({})}
                     className="visible sm:hidden">
-                    <MenuIcon />
+                    <Icons.Menu/>
                 </Button>
                 <div className="flex flex-row items-center px-2 overflow-hidden space-x-2">
                     <img

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { List } from "immutable";
 import Field, { IField } from "./Field";
 import * as Icons from "@colab/icons";
-import { MdCancel as CancelIcon } from "react-icons/md";
 import { useFieldAction } from "@workspace/Board/hooks";
 import { useInput } from "src/utils";
 import { useAuthId } from "@colab/store";
@@ -160,7 +159,7 @@ function AddTask({ onSubmit }: ITaskCreator) {
                     />
                 </div>
                 <button onClick={handleClose}>
-                    <CancelIcon className="h-4 w-4 text-gray-500" />
+                    <Icons.Cancel.Solid className="h-4 w-4 text-gray-500" />
                 </button>
             </div>
         );

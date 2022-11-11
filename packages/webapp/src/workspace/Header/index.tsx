@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@colab/ui";
-import { HiMenuAlt4 as MenuIcon } from "react-icons/hi";
+import * as Icons from "@colab/icons";
 import { useNavigatorDrawer } from "src/hooks";
 
 export default React.forwardRef<
@@ -18,7 +18,7 @@ export default React.forwardRef<
                     color="clear"
                     onClick={() => navigator.toggle({})}
                     className="visible sm:hidden">
-                    <MenuIcon />
+                    <Icons.Menu />
                 </Button>
             </div>
             <div {...props}>{props.children}</div>

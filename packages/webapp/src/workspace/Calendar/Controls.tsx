@@ -2,11 +2,7 @@ import React, { useState, useRef } from "react";
 import { Button, Popper, Switch } from "@colab/ui";
 import { useCalendar } from "src/hooks";
 import moment from "moment";
-import {
-    BsCalendar2 as TodayIcon,
-    BsCalendar3 as MonthIcon,
-    BsCalendar3Event as DayIcon,
-} from "react-icons/bs";
+import * as Icons from "@colab/icons";
 
 interface IControls {
     calendar: string;
@@ -83,17 +79,17 @@ export default React.memo<IControls>((props) => {
         <React.Fragment>
             <div className="flex flex-row justify-end items-center space-x-2">
                 <Button variant="icon" onClick={() => calendarActions.setDay()}>
-                    <TodayIcon />
+                    <Icons.Calendar.Day />
                 </Button>
                 <Button variant="icon" onClick={handleMonth}>
-                    <MonthIcon />
+                    <Icons.Calendar.Month />
                 </Button>
                 <div>
                     <Button
                         variant="icon"
                         ref={pickerRef}
                         onClick={handleOpenPicker}>
-                        <DayIcon />
+                        <Icons.Controls />
                     </Button>
                     <DayPicker
                         open={picker}

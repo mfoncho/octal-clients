@@ -1,8 +1,8 @@
 import React from "react";
-import Drawer from "@material-ui/core/Drawer";
 import View from "../View";
 import Header from "./Header";
 import { useScreen, useNavigatorDrawer } from "src/hooks";
+import Drawer from "@material-ui/core/Drawer";
 
 interface IMenu {
     children: React.ReactNode | React.ReactNode[];

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FaTrello as BoardIcon } from "react-icons/fa";
 import * as Icons from "@colab/icons";
 import { useDispatch } from "react-redux";
 import { Dialog, Text } from "@colab/ui";
@@ -94,7 +93,7 @@ function Row({ board, onDelete, onArchive, onUnarchive }: ITopic) {
         <div className="flex group px-4 py-3 hover:bg-slate-100 flex-row p-2 items-center justify-between">
             <div className="flex flex-row items-center">
                 <div className="mx-2">
-                    <BoardIcon className="w-6 h-6 text-gray-500" />
+                    <Icons.Board className="w-6 h-6 text-gray-500" />
                 </div>
                 <span className="flex text-base font-semibold text-gray-700 flex-row items-center">
                     <Text>{board.name}</Text>

@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState, Suspense } from "react";
 import { useAuthId } from "@colab/store";
 import { useDispatch } from "react-redux";
 import { Actions } from "@colab/store";
 import Auth from "../auth";
-import App from "../workspace";
+//import Workspace from "../workspace";
+
+const Workspace = lazy(() => import("../workspace"));
+
+const Loading = () => <div>loading...</div>;
 
 export default React.memo(() => {
     const id = useAuthId();
@@ -38,7 +42,11 @@ export default React.memo(() => {
     }
 
     if (authenticated) {
-        return <App />;
+        return (
+            <Suspense fallback={<Loading />}>
+                <Workspace />
+            </Suspense>
+        );
     }
 
     return <Auth />;

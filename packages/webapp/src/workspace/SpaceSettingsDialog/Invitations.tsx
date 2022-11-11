@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@colab/ui";
-import { BsTrash as DeleteIcon } from "react-icons/bs";
+import * as Icons from "@colab/icons";
 import moment from "moment";
 import client, { io } from "@colab/client";
 import Layout from "./Layout";
@@ -83,7 +83,7 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
                             disabled={loading}
                             className="hover:text-red-500"
                             color="clear">
-                            <DeleteIcon />
+                            <Icons.Delete />
                         </Button>
                     </div>
                 </div>
