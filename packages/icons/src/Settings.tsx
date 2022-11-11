@@ -1,1 +1,1 @@
-export { GoSettings as default } from "react-icons/go";
+export { MdSettings as default } from "react-icons/md";
