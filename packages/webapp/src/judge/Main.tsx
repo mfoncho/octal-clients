@@ -2,9 +2,8 @@ import React, { lazy, useEffect, useState, Suspense } from "react";
 import { useAuthId } from "@colab/store";
 import { useDispatch } from "react-redux";
 import { Actions } from "@colab/store";
-import Auth from "../auth";
-//import Workspace from "../workspace";
 
+const Auth = lazy(() => import("../auth"));
 const Workspace = lazy(() => import("../workspace"));
 
 const Loading = () => <div>loading...</div>;
@@ -41,13 +40,9 @@ export default React.memo(() => {
         return <div />;
     }
 
-    if (authenticated) {
-        return (
-            <Suspense fallback={<Loading />}>
-                <Workspace />
-            </Suspense>
-        );
-    }
-
-    return <Auth />;
+    return (
+        <Suspense fallback={<Loading />}>
+            {authenticated ? <Workspace /> : <Auth />}
+        </Suspense>
+    );
 });
