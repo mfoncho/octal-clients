@@ -1,9 +1,8 @@
 import React from "react";
 import { Map } from "immutable";
 import Sections from "@workspace/Sections";
-import CreateSpaceBtn from "./CreateSpaceBtn";
 import { Scrollbars } from "react-custom-scrollbars";
-import { SpaceRecord, useSpaces, usePermissions } from "@colab/store";
+import { SpaceRecord, useSpaces } from "@colab/store";
 import Space from "./Space";
 
 type SpacesType = ReturnType<typeof useSpaces>;
@@ -19,8 +18,6 @@ const sortSpaces = (a: SpaceRecord, b: SpaceRecord) => {
 export default React.memo(() => {
     let spaces = useSpaces();
 
-    const permissions = usePermissions();
-
     function renderSpaces(space: SpaceRecord) {
         return <Space key={space.id} space={space} />;
     }
@@ -32,11 +29,6 @@ export default React.memo(() => {
     return (
         <div className="flex flex-grow flex-col overflow-hidden">
             <Sections />
-            {permissions.get("space.create") && (
-                <div className="py-2">
-                    <CreateSpaceBtn />
-                </div>
-            )}
             <Scrollbars autoHide className="flex flex-col">
                 <div className="flex flex-col overflow-hidden space-y-1">
                     {grouped
