@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import clx from "classnames";
-import { Text, Textarea } from "@colab/ui";
+import { Text, Dialog, Textarea } from "@colab/ui";
 import * as Icons from "@colab/icons";
+import Warning from "./DeleteWarning";
 import { CardFieldRecord } from "@colab/store";
 import { useInput } from "src/utils";
 import { useCardCapability } from "../hooks";
@@ -67,11 +68,11 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
     ({ field, icon, ...props }, rootRef) => {
         const Icon = icon;
 
+        const dialog = Dialog.useDialog();
+
         const actions = useFieldAction(field);
 
         const can = useCardCapability(field.card_id);
-
-        const [rename, setRename] = useState(false);
 
         return (
             <div
@@ -84,11 +85,8 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                     {...can("card.manage", props.handle)}
                     className="group flex flex-row justify-between items-center">
                     <div className="flex-1 flex flex-col">
-                        {rename ? (
-                            <Rename
-                                field={field}
-                                onClose={() => setRename(false)}
-                            />
+                        {dialog.rename ? (
+                            <Rename field={field} onClose={dialog.close} />
                         ) : (
                             <span className="text-gray-700 px-1 font-bold text-sm">
                                 <Text>{field.name}</Text>
@@ -100,7 +98,7 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                         <div
                             className={clx(
                                 "flex flex-row items-center space-x-2 group-hover:visible invisible",
-                                { hidden: rename }
+                                { hidden: dialog.rename }
                             )}>
                             {Boolean(icon) && (
                                 <button
@@ -111,15 +109,21 @@ export default React.forwardRef<HTMLDivElement, ICardField>(
                                 </button>
                             )}
                             <button
-                                onClick={() => setRename(true)}
+                                onClick={dialog.opener("rename")}
                                 className="p-1 rounded-md  hover:bg-gray-100">
                                 <Icons.Edit className="h-4 w-4 text-gray-500" />
                             </button>
                             <button
-                                onClick={() => actions.deleteField()}
+                                onClick={dialog.opener("warning")}
                                 className="p-1 rounded-md  hover:bg-gray-100">
                                 <DeleteIcon className="text-gray-500 h-4 w-4" />
                             </button>
+                            <Warning
+                                field={field}
+                                open={dialog.warning}
+                                onConfirm={() => actions.deleteField()}
+                                onClose={dialog.close}
+                            />
                         </div>
                     )}
                 </div>
