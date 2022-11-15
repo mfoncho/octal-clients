@@ -62,6 +62,7 @@ export { default as Chevron } from "./Chevron";
 export { default as Tracker } from "./Tracker";
 export { default as Cancel } from "./Cancel";
 export { default as Card } from "./Card";
+export { default as Loader } from "./Loader";
 
 export { default as Forum } from "./Forum";
 export { default as MoveCard } from "./LeftRight";
