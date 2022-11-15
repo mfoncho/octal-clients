@@ -27,6 +27,7 @@ export interface IDialog {
     fullWidth?: boolean;
     children?: any;
     actions?: JSX.Element;
+    className?: string;
     maxWidth?: "sm" | "md" | "xs" | "lg" | "xl";
     onClose?: (e: any, reason: string) => void;
 }
@@ -111,6 +112,7 @@ export const Dialog = React.forwardRef<HTMLDivElement, IDialog>(
             open = true,
             maxWidth = "sm",
             fullHeight,
+            className = "flex flex-col flex-1 justify-between overflow-hidden",
             fullWidth = true,
             ...props
         },
@@ -156,9 +158,7 @@ export const Dialog = React.forwardRef<HTMLDivElement, IDialog>(
                         </button>
                     )}
                 </div>
-                <div className="flex flex-col flex-1 justify-between">
-                    {props.children}
-                </div>
+                <div className={className}>{props.children}</div>
             </Base>
         );
     }
