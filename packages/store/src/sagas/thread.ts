@@ -13,11 +13,15 @@ function* load({
     resolve,
 }: ThreadActions.LoadThreadAction): Iterable<any> {
     const { threads } = (yield select()) as any as State;
-    if (threads.getThread(payload.thread_id)) return;
+    const thread = threads.getThread(payload.thread_id);
     try {
-        const data = (yield client.loadThread(payload)) as any;
-        yield put(ThreadActions.threadLoaded(data));
-        resolve.success(data);
+        if (thread) {
+            resolve.success(thread.toServer() as any);
+        } else {
+            const data = (yield client.loadThread(payload)) as any;
+            yield put(ThreadActions.threadLoaded(data));
+            resolve.success(data);
+        }
     } catch (e) {
         resolve.error(e);
     }
@@ -71,12 +75,12 @@ function* conversation({
     }
 }
 
-function* spaceshutdown({
+function* spacePurged({
     payload,
-}: SpaceActions.SpaceShutdownAction): Iterable<any> {
+}: SpaceActions.SpacePurgedAction): Iterable<any> {
     const { threads } = (yield select()) as any as State;
     threads.threads.forEach((thread) => {
-        if (thread.space_id == payload.id) {
+        if (thread.space_id == payload.space_id) {
             dispatch(
                 ThreadActions.threadDeleted({
                     id: thread.id,
@@ -216,7 +220,7 @@ export const tasks = [
     { effect: takeEvery, type: Actions.THREAD_LOADED, handler: subscribe },
     { effect: takeEvery, type: Actions.THREADS_LOADED, handler: subscribe },
     { effect: takeEvery, type: Actions.THREAD_DELETED, handler: unsubscribe },
-    { effect: takeEvery, type: Actions.SPACE_SHUTDOWN, handler: spaceshutdown },
+    { effect: takeEvery, type: Actions.SPACE_PURGED, handler: spacePurged },
 
     { effect: takeEvery, type: Actions.THREAD_ACTIVITY, handler: activity },
     {

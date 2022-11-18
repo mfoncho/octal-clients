@@ -4,15 +4,16 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedSpace } from "../../schemas";
 import {
+    SPACE_LEFT,
     SPACE_PURGED,
+    JOIN_SPACE,
+    LEAVE_SPACE,
     SPACE_CONNECTED,
     SEND_INVITATIONS,
     CREATE_SPACE,
     LOAD_SPACE,
     LOAD_SPACES,
     SPACE_CREATED,
-    SPACE_SHUTDOWN,
-    SPACE_RESTORED,
     SHUTDOWN_SPACE,
     UPDATE_SPACE,
     SPACE_LOADED,
@@ -23,14 +24,32 @@ import {
 
 export * from "./types";
 
-export interface SpaceConnectedPayload {
+export interface JoinSpacePayload {
     space_id: string;
+}
+
+export interface SpaceLeftPayload {
+    user_id: string;
+    space_id: string;
+    member_id: string;
+}
+
+export interface SpaceClearedPayload {
+    space_id: string;
+}
+
+export interface LeaveSpacePayload {
+    space_id: string;
+}
+
+export interface SpaceConnectedPayload {
     topic: string;
+    space_id: string;
     channel: Channel;
 }
 
 export interface SpacePurgedPayload {
-    id: string;
+    space_id: string;
 }
 
 export interface BelongsToSpace {
@@ -77,6 +96,8 @@ export type SpaceConnectedAction = Action<
     SpaceConnectedPayload
 >;
 
+export type SpaceLeftAction = Action<SPACE_LEFT, SpaceLeftPayload>;
+
 export type SpacePurgedAction = Action<SPACE_PURGED, SpacePurgedPayload>;
 
 export type SpaceUpdatedAction = Action<SPACE_UPDATED, NormalizedSpace>;
@@ -86,6 +107,10 @@ export type SpaceDeletedAction = Action<SPACE_DELETED, { id: string }>;
 export type SpaceLoadedAction = Action<SPACE_LOADED, NormalizedSpace>;
 
 export type SpacesLoadedAction = Action<SPACES_LOADED, NormalizedSpace[]>;
+
+export type JoinSpaceAction = IOAction<JOIN_SPACE, JoinSpacePayload, io.Space>;
+
+export type LeaveSpaceAction = IOAction<LEAVE_SPACE, LeaveSpacePayload, any>;
 
 export type SendInvitationsAction = IOAction<
     SEND_INVITATIONS,
@@ -121,10 +146,6 @@ export type LoadSpaceAction = IOAction<LOAD_SPACE, LoadSpacePayload, io.Space>;
 
 export type SpaceCreatedAction = Action<SPACE_CREATED, NormalizedSpace>;
 
-export type SpaceShutdownAction = Action<SPACE_SHUTDOWN, NormalizedSpace>;
-
-export type SpaceRestoredAction = Action<SPACE_RESTORED, NormalizedSpace>;
-
 export function shutdownSpace(
     payload: ShutdownSpacePayload
 ): ShutdownSpaceAction {
@@ -137,14 +158,6 @@ export function spaceCreated(payload: NormalizedSpace): SpaceCreatedAction {
 
 export function spaceUpdated(payload: NormalizedSpace): SpaceUpdatedAction {
     return createAction(SPACE_UPDATED, payload);
-}
-
-export function spaceShutdown(payload: NormalizedSpace): SpaceShutdownAction {
-    return createAction(SPACE_SHUTDOWN, payload);
-}
-
-export function spaceRestored(payload: NormalizedSpace): SpaceRestoredAction {
-    return createAction(SPACE_RESTORED, payload);
 }
 
 export function spaceDeleted(payload: io.Space): SpaceDeletedAction {
@@ -192,4 +205,16 @@ export function spaceConnected(
 
 export function purgeSpace(payload: SpacePurgedPayload): SpacePurgedAction {
     return createAction(SPACE_PURGED, payload);
+}
+
+export function leftSpace(payload: SpaceLeftPayload): SpaceLeftAction {
+    return createAction(SPACE_LEFT, payload);
+}
+
+export function joinSpace(space_id: string): JoinSpaceAction {
+    return createIOAction<JOIN_SPACE>(JOIN_SPACE, { space_id });
+}
+
+export function leaveSpace(space_id: string): LeaveSpaceAction {
+    return createIOAction<LEAVE_SPACE>(LEAVE_SPACE, { space_id });
 }

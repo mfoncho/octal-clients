@@ -213,7 +213,7 @@ function* spacePurged({
     payload,
 }: SpaceActions.SpacePurgedAction): Iterable<any> {
     const { boards } = (yield select()) as any as State;
-    const bids = boards.spaces.get(payload.id);
+    const bids = boards.spaces.get(payload.space_id);
     if (bids) {
         for (let id of bids.toArray()) {
             yield put(BoardActions.purgeBoard({ id }));

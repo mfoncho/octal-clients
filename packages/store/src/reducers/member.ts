@@ -2,6 +2,7 @@ import { Map, OrderedMap } from "immutable";
 import * as Actions from "../actions/types";
 import { MemberRecord } from "../records";
 import * as MemberActions from "../actions/member";
+import * as SpaceActions from "../actions/space";
 
 export type State = Map<string, OrderedMap<string, MemberRecord>>;
 
@@ -27,11 +28,8 @@ function remove(state: State, { payload }: MemberActions.MemberDeletedAction) {
     return state.deleteIn([payload.space_id, payload.id]);
 }
 
-function clear(
-    state: State,
-    { payload }: MemberActions.ClearSpaceMembersAction
-) {
-    return state.delete(payload.id);
+function clear(state: State, { payload }: SpaceActions.SpacePurgedAction) {
+    return state.delete(payload.space_id);
 }
 
 export const reducers = {
@@ -45,7 +43,7 @@ export const reducers = {
     [Actions.MEMBER_DELETED]: remove,
     [Actions.MEMBER_LEFT]: remove,
 
-    [Actions.SPACE_SHUTDOWN]: clear,
+    [Actions.SPACE_PURGED]: clear,
 };
 
 export default { state, reducers };

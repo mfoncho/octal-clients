@@ -2,8 +2,8 @@ import { put, takeEvery } from "redux-saga/effects";
 import client, { io } from "@colab/client";
 import { dispatch } from "..";
 import { SpaceSchema as Schema, NormalizedSpace } from "../schemas";
+import * as UserActions from "../actions/user";
 import * as SpaceActions from "../actions/space";
-import * as MemberActions from "../actions/member";
 import * as Actions from "../actions/types";
 import { relatedLoaded } from "../actions/app";
 
@@ -65,7 +65,7 @@ function* shutdown({
 }: SpaceActions.ShutdownSpaceAction): Iterable<any> {
     try {
         const data = (yield client.shutdownSpace(payload)) as any;
-        yield put(SpaceActions.purgeSpace({ id: payload.space_id }));
+        yield put(SpaceActions.purgeSpace({ space_id: payload.space_id }));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -117,14 +117,50 @@ function* update({
     }
 }
 
-function* left({ payload }: MemberActions.SpaceLeftAction): Iterable<any> {
-    yield put(SpaceActions.purgeSpace({ id: payload.space_id! }));
+function* joinSpace({
+    payload,
+    resolve,
+}: SpaceActions.JoinSpaceAction): Iterable<any> {
+    try {
+        const data = (yield client.joinSpace(payload)) as any;
+        const normalized = yield* normalize(data);
+        yield put(SpaceActions.spaceLoaded(normalized));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
+function* leaveSpace({
+    payload,
+    resolve,
+}: SpaceActions.LeaveSpaceAction): Iterable<any> {
+    try {
+        const data = (yield client.leaveSpace(payload)) as any;
+        //yield put(MemberActions.leaveSpace(payload));
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
+function* userConnected({
+    payload,
+}: UserActions.UserConnectedAction): Iterable<any> {
+    const { channel } = payload;
+
+    channel.on("space.joined", (payload: io.Member) => {
+        dispatch(SpaceActions.loadSpace(payload));
+    });
+    channel.on("space.left", (payload: any) => {
+        dispatch(SpaceActions.purgeSpace(payload));
+    });
 }
 
 function* disconnect({
     payload,
 }: SpaceActions.SpacePurgedAction): Iterable<any> {
-    const topic = `space:${payload.id}`;
+    const topic = `space:${payload.space_id}`;
     let channel = client.topic(topic);
     if (channel) {
         channel.unsubscribe();
@@ -140,21 +176,12 @@ function* subscribe({
         let normalized = normalizeSpace(payload);
         dispatch(SpaceActions.spaceUpdated(normalized));
     });
-
-    channel.on("space.shutdown", (payload: io.Space) => {
-        dispatch(SpaceActions.spaceShutdown(payload as any));
-    });
-
-    channel.on("restored", (payload: io.Space) => {
-        let normalized = normalizeSpace(payload);
-        dispatch(SpaceActions.spaceRestored(normalized as any));
-    });
 }
 
 export const tasks = [
     { effect: takeEvery, type: Actions.INIT, handler: init },
 
-    { effect: takeEvery, type: Actions.SPACE_LEFT, handler: left },
+    { effect: takeEvery, type: Actions.USER_CONNECTED, handler: userConnected },
 
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
 
@@ -166,15 +193,15 @@ export const tasks = [
 
     { effect: takeEvery, type: Actions.SPACE_LOADED, handler: connect },
 
-    { effect: takeEvery, type: Actions.SPACE_JOINED, handler: connect },
-
     { effect: takeEvery, type: Actions.SPACE_CREATED, handler: connect },
 
-    { effect: takeEvery, type: Actions.SPACE_RESTORED, handler: connect },
-
-    { effect: takeEvery, type: Actions.SPACE_SHUTDOWN, handler: disconnect },
+    { effect: takeEvery, type: Actions.SPACE_PURGED, handler: disconnect },
 
     { effect: takeEvery, type: Actions.LOAD_SPACE, handler: load },
+
+    { effect: takeEvery, type: Actions.JOIN_SPACE, handler: joinSpace },
+
+    { effect: takeEvery, type: Actions.LEAVE_SPACE, handler: leaveSpace },
 
     { effect: takeEvery, type: Actions.LOAD_SPACES, handler: loads },
 ];

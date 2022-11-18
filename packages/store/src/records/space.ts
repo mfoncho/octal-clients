@@ -46,6 +46,7 @@ export class SpaceRecord
     extends Record({
         id: "" as Id,
         name: "",
+        purpose: "",
         admin_id: "",
         users: List<Id>(),
         type: "" as SpaceType,
@@ -85,10 +86,6 @@ export class SpaceRecord
         return this.type === "direct";
     }
 
-    toServer() {
-        return this.toJS();
-    }
-
     patch(data: any) {
         return this.merge(SpaceRecord.objectFromJS(data));
     }
@@ -123,6 +120,20 @@ export class SpaceRecord
 
     deleteRole(role_id: string) {
         return this.deleteIn(["roles", role_id]);
+    }
+
+    toServer() {
+        return {
+            id: this.id,
+            type: this.type,
+            name: this.name,
+            purpose: this.purpose,
+            admin_id: this.admin_id,
+            topic_id: this.topic_id,
+            thread_id: this.thread_id,
+            joined_at: this.joined_at,
+            created_at: this.created_at,
+        };
     }
 
     static mapFromJS(data: any) {

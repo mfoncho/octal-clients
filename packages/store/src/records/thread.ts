@@ -317,4 +317,19 @@ export class ThreadRecord
 
         return thread;
     }
+
+    toServer() {
+        return {
+            id: this.id,
+            type: this.type,
+            is_active: this.is_active,
+            type_id: this.type_id,
+            created_at: this.created_at,
+            space_id: this.space_id,
+            last_seen: this.last_seen,
+            last_read: this.last_read,
+            unread_count: this.unread_count,
+            message_count: this.message_count,
+        };
+    }
 }

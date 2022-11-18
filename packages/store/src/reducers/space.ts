@@ -1,7 +1,7 @@
 import { Record, Map } from "immutable";
 import { SpaceRecord } from "../records";
 import * as AppActions from "../actions/app";
-import * as Actions from "../actions/types";
+import * as Actions from "../actions";
 
 const collections = ["topics", "boards", "members"];
 
@@ -85,12 +85,18 @@ export const reducers = {
     [Actions.SPACE_CREATED]: (store: SpacesStore, { payload }: any) => {
         return store.putSpace(payload);
     },
-    [Actions.SPACE_LOADED]: (store: SpacesStore, { payload }: any) => {
+    [Actions.SPACE_LOADED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpaceLoadedAction
+    ) => {
         return store.putSpace(payload);
     },
 
-    [Actions.SPACE_PURGED]: (store: SpacesStore, { payload }: any) => {
-        return store.removeSpace(payload.id);
+    [Actions.SPACE_PURGED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpacePurgedAction
+    ) => {
+        return store.removeSpace(payload.space_id);
     },
 
     [Actions.COLLECTION_LOADED]: (
@@ -107,42 +113,56 @@ export const reducers = {
         return store;
     },
 
-    [Actions.SPACES_LOADED]: (store: SpacesStore, { payload }: any) => {
+    [Actions.SPACES_LOADED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpacesLoadedAction
+    ) => {
         return payload.reduce(
             (store: SpacesStore, payload: any) => store.putSpace(payload),
             store
         );
     },
 
-    [Actions.SPACE_UPDATED]: (store: SpacesStore, { payload }: any) => {
+    [Actions.SPACE_UPDATED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpaceUpdatedAction
+    ) => {
         return store.patchSpace(payload);
     },
 
-    [Actions.SPACE_ROLE_LOADED]: (store: SpacesStore, { payload }: any) => {
+    [Actions.SPACE_ROLE_LOADED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpaceRoleLoadedAction
+    ) => {
         return store.putRole(payload);
     },
 
-    [Actions.SPACE_ROLE_CREATED]: (store: SpacesStore, { payload }: any) => {
+    [Actions.SPACE_ROLE_CREATED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpaceRoleCreatedAction
+    ) => {
         return store.putRole(payload);
     },
 
-    [Actions.SPACE_PERMISSION_SET]: (store: SpacesStore, { payload }: any) => {
+    [Actions.SPACE_PERMISSION_SET]: (
+        store: SpacesStore,
+        { payload }: Actions.SpacePermissionSetAction
+    ) => {
         return store.setPermission(payload);
     },
 
     [Actions.SPACE_PERMISSION_UNSET]: (
         store: SpacesStore,
-        { payload }: any
+        { payload }: Actions.SpacePermissionUnsetAction
     ) => {
         return store.unsetPermission(payload);
     },
 
-    [Actions.SPACE_ROLE_DELETED]: (store: SpacesStore, { payload }: any) => {
+    [Actions.SPACE_ROLE_DELETED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpaceRoleDeletedAction
+    ) => {
         return store.removeRole(payload);
-    },
-
-    [Actions.SPACE_SHUTDOWN]: (store: SpacesStore, { payload }: any) => {
-        return store.removeSpace(payload.id);
     },
 };
 

@@ -118,11 +118,11 @@ export const reducers = {
             return store.putTopic(topic);
         }, store);
     },
-    [Actions.SPACE_SHUTDOWN]: (
+    [Actions.SPACE_PURGED]: (
         store: TopicsStore,
-        { payload }: SpaceActions.SpaceShutdownAction
+        { payload }: SpaceActions.SpacePurgedAction
     ) => {
-        return store.removeSpaceTopics(payload.id!);
+        return store.removeSpaceTopics(payload.space_id);
     },
     [Actions.TOPIC_UPDATED]: (
         store: TopicsStore,

@@ -2,7 +2,6 @@ import { put, takeEvery } from "redux-saga/effects";
 import client, { io } from "@colab/client";
 import { dispatch } from "..";
 import * as Actions from "../actions/types";
-import * as UserActions from "../actions/user";
 import * as SpaceActions from "../actions/space";
 import * as MemberActions from "../actions/member";
 import { MemberSchema } from "../schemas";
@@ -64,24 +63,6 @@ function* load(action: MemberActions.LoadMembersAction): Iterable<any> {
     }
 }
 
-function* clear({ payload }: SpaceActions.SpaceShutdownAction): Iterable<any> {
-    yield put(MemberActions.clearSpaceMembers(payload as any));
-}
-
-function* userConnected({
-    payload,
-}: UserActions.UserConnectedAction): Iterable<any> {
-    const { channel } = payload;
-
-    channel.on("space.joined", (payload: io.Member) => {
-        dispatch(SpaceActions.loadSpace(payload));
-    });
-
-    channel.on("space.left", (payload: io.Member) => {
-        dispatch(MemberActions.spaceLeft(payload as any));
-    });
-}
-
 function* subscribe({
     payload,
 }: SpaceActions.SpaceConnectedAction): Iterable<any> {
@@ -96,11 +77,9 @@ function* subscribe({
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.USER_CONNECTED, handler: userConnected },
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.LOAD_MEMBERS, handler: load },
     { effect: takeEvery, type: Actions.FETCH_MEMBERS, handler: fetch },
     { effect: takeEvery, type: Actions.CREATE_MEMBER, handler: create },
     { effect: takeEvery, type: Actions.DELETE_MEMBER, handler: destroy },
-    { effect: takeEvery, type: Actions.SPACE_SHUTDOWN, handler: clear },
 ];

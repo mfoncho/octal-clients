@@ -6,9 +6,6 @@ export type SEND_INVITATIONS = typeof SEND_INVITATIONS;
 export const CLEAR_SPACE = "CLEAR_SPACE";
 export type CLEAR_SPACE = typeof CLEAR_SPACE;
 
-export const SPACE_PURGED = "SPACE_PURGED";
-export type SPACE_PURGED = typeof SPACE_PURGED;
-
 export const CREATE_SPACE = "CREATE_SPACE";
 export type CREATE_SPACE = typeof CREATE_SPACE;
 
@@ -23,12 +20,6 @@ export type LOAD_SPACES = typeof LOAD_SPACES;
 
 export const SPACE_CREATED = "SPACE_CREATED";
 export type SPACE_CREATED = typeof SPACE_CREATED;
-
-export const SPACE_SHUTDOWN = "SPACE_SHUTDOWN";
-export type SPACE_SHUTDOWN = typeof SPACE_SHUTDOWN;
-
-export const SPACE_RESTORED = "SPACE_RESTORED";
-export type SPACE_RESTORED = typeof SPACE_RESTORED;
 
 export const SHUTDOWN_SPACE = "SHUTDOWN_SPACE";
 export type SHUTDOWN_SPACE = typeof SHUTDOWN_SPACE;
@@ -47,3 +38,15 @@ export type SPACE_UPDATED = typeof SPACE_UPDATED;
 
 export const SPACE_DELETED = "SPACE_DELETED";
 export type SPACE_DELETED = typeof SPACE_DELETED;
+
+export const JOIN_SPACE = "JOIN_SPACE";
+export type JOIN_SPACE = typeof JOIN_SPACE;
+
+export const LEAVE_SPACE = "LEAVE_SPACE";
+export type LEAVE_SPACE = typeof LEAVE_SPACE;
+
+export const SPACE_LEFT = "SPACE_LEFT";
+export type SPACE_LEFT = typeof SPACE_LEFT;
+
+export const SPACE_PURGED = "SPACE_PURGED";
+export type SPACE_PURGED = typeof SPACE_PURGED;

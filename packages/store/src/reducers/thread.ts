@@ -95,7 +95,7 @@ export class Conversations extends Record(
     storeThread(thread: ThreadRecord) {
         const prev = this.getThread(thread.id);
         if (prev) {
-            thread = prev.merge(thread);
+            return this;
         }
         return this.setIn(["threads", thread.id], thread);
     }

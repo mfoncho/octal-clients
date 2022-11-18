@@ -210,8 +210,8 @@ export const reducers = {
         return store.patchBoard(payload);
     },
 
-    [Actions.SPACE_SHUTDOWN]: (store: BoardsStore, { payload }: any) => {
-        return store.removeSpaceBoards(payload.id);
+    [Actions.SPACE_PURGED]: (store: BoardsStore, { payload }: any) => {
+        return store.removeSpaceBoards(payload.space_id);
     },
 
     [Actions.LABEL_LOADED]: (

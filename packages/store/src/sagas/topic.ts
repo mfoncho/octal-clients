@@ -125,7 +125,7 @@ function* spacePurged({
     payload,
 }: SpaceActions.SpacePurgedAction): Iterable<any> {
     const { topics } = (yield select()) as any as State;
-    const bids = topics.spaces.get(payload.id);
+    const bids = topics.spaces.get(payload.space_id);
     if (bids) {
         for (let id of bids.toArray()) {
             yield put(TopicActions.purgeTopic({ id }));
