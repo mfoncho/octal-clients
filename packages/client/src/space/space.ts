@@ -85,6 +85,16 @@ export default class SpaceClient extends BaseClient {
         return data;
     }
 
+    async leaveSpace(
+        request: JoinSpaceRequest,
+        params?: Params
+    ): Promise<io.Space> {
+        const path = `/spaces/${request.space_id}/leave`;
+        const { data } = await this.endpoint.post(path, params);
+        return data;
+    }
+
+
     async updateSpace(
         request: UpdateSpaceRequest,
         params?: Params
