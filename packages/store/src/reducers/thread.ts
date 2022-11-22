@@ -26,9 +26,9 @@ const sort = (a: Timestamped & Unique, b: Timestamped & Unique) => {
 
 export class Conversations extends Record(
     {
-        paths: Map<Id, Id>(),
-        space: Map<string, List<string>>(),
+        ispaces: Map<string, List<string>>(),
         threads: Map<Id, ThreadRecord>(),
+        ithreads: Map<string, List<string>>(),
         messages: Map<Id, MessageRecord>(),
     },
     "threads"
@@ -49,10 +49,6 @@ export class Conversations extends Record(
         return this.messages.get(id);
     }
 
-    deleteThread({ id }: { id: string }) {
-        return this.update("threads", (threads) => threads.delete(id));
-    }
-
     updateDraft(payload: ThreadActions.ThreadDraftUpdatedPayload) {
         if (this.threads.has(payload.thread_id))
             return this.updateIn(["threads", payload.thread_id], (thread) =>
@@ -64,15 +60,38 @@ export class Conversations extends Record(
     deleteMessage(id: string) {
         const message = this.messages.get(id);
         if (message) {
-            return this.deleteIn(["threads", message.thread_id, "hcache", id])
-                .deleteIn(["threads", message.thread_id, "history", id])
-                .deleteIn(["messages", id]);
+            return this.deleteIn(["threads", message.thread_id, "history", id])
+                .deleteIn(["messages", id])
+                .update("ithreads", (ithreads) => {
+                    let imessages = ithreads.get(
+                        message!.thread_id,
+                        List<string>()
+                    );
+                    if (imessages.includes(message!.id)) {
+                        let index = imessages.findIndex(
+                            (val) => val === message!.id
+                        );
+                        if (index >= 0) {
+                            imessages = imessages.delete(index);
+                        }
+                    }
+                    return ithreads.set(message!.thread_id, imessages);
+                });
         }
         return this;
     }
 
     storeMessage(message: MessageRecord) {
-        return this.setIn(["messages", message.id], message);
+        return this.setIn(["messages", message.id], message).update(
+            "ithreads",
+            (ithreads) => {
+                let imessages = ithreads.get(message.thread_id, List<string>());
+                if (!imessages.includes(message.id)) {
+                    imessages = imessages.push(message.id);
+                }
+                return ithreads.set(message.thread_id, imessages);
+            }
+        );
     }
 
     udpateMessage(partial: Partial<MessageRecord>) {
@@ -92,8 +111,44 @@ export class Conversations extends Record(
         return this;
     }
 
+    deleteThread({ id }: { id: string }) {
+        let thread = this.getThread(id);
+        if (thread) {
+            let imessages = this.ithreads.get(id, List<string>());
+            return this.update("threads", (threads) => threads.delete(id))
+                .update("ispaces", (ispaces) => {
+                    let threads = ispaces.get(thread!.space_id, List<string>());
+                    if (threads.includes(thread!.id)) {
+                        let index = threads.findIndex(
+                            (val) => val === thread!.id
+                        );
+                        if (index >= 0) {
+                            threads = threads.delete(index);
+                        }
+                    }
+                    return ispaces.set(thread!.space_id, threads);
+                })
+                .update("messages", (messages) => {
+                    return imessages.reduce((messages, id) => {
+                        return messages.delete(id);
+                    }, messages);
+                })
+                .deleteIn(["ithreads", id]);
+        }
+        return this;
+    }
+
     storeThread(thread: ThreadRecord) {
-        return this.setIn(["threads", thread.id], thread);
+        return this.setIn(["threads", thread.id], thread).update(
+            "ispaces",
+            (ispaces) => {
+                let threads = ispaces.get(thread.space_id, List<string>());
+                if (!threads.includes(thread.id)) {
+                    threads = threads.push(thread.id);
+                }
+                return ispaces.set(thread.space_id, threads);
+            }
+        );
     }
 }
 

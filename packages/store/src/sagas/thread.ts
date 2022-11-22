@@ -71,16 +71,17 @@ function* spacePurged({
     payload,
 }: SpaceActions.SpacePurgedAction): Iterable<any> {
     const { threads } = (yield select()) as any as State;
-    threads.threads.forEach((thread) => {
-        if (thread.space_id == payload.space_id) {
-            dispatch(
+    let ithreads = threads.ispaces.get(payload.space_id);
+    if (ithreads) {
+        for (let id of ithreads.toArray()) {
+            yield put(
                 ThreadActions.threadDeleted({
-                    id: thread.id,
-                    space_id: thread.space_id,
+                    id: id,
+                    space_id: payload.space_id,
                 })
             );
         }
-    });
+    }
 }
 
 function* connect({
