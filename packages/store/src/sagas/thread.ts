@@ -2,6 +2,7 @@ import { put, select, takeEvery } from "redux-saga/effects";
 import { MessageSchema, NormalizedMessage } from "../schemas";
 import client, { io } from "@colab/client";
 import { dispatch, State } from "..";
+//import { ThreadRecord } from "../records"
 import * as AppActions from "../actions/app";
 import * as UserActions from "../actions/user";
 import * as SpaceActions from "../actions/space";
@@ -27,22 +28,13 @@ function* load({
     }
 }
 
-function* fetch(): Iterable<any> {
-    try {
-        const data = (yield client.fetchThreads()) as any;
-        yield put(ThreadActions.threadsLoaded(data));
-    } catch (e) {}
-}
-
 function* activity({
     payload,
 }: ThreadActions.ThreadActivityAction): Iterable<any> {
-    if (payload.type === "read") {
-        const topic = `thread:${payload.thread_id}`;
-        let ch = client.topic(topic);
-        if (ch) {
-            ch.push(payload.type, { timestamp: payload.timestamp });
-        }
+    const { threads } = (yield select()) as any as State;
+    const thread = threads.getThread(payload.thread_id);
+    if (thread && thread.channel && payload.type === "read") {
+        thread.channel.push(payload.type, { timestamp: payload.timestamp });
         const updates = {
             id: payload.thread_id,
             last_read: payload.timestamp,
@@ -91,77 +83,81 @@ function* spacePurged({
     });
 }
 
+function* connect({
+    payload,
+}: ThreadActions.ThreadLoadedAction): Iterable<any> {
+    const topic = `thread:${payload.id}`;
+
+    if (client.topic(topic)) return;
+
+    let channel = client.channel(topic);
+    yield put(
+        ThreadActions.threadConnected({
+            thread_id: payload.id,
+            channel: channel,
+        })
+    );
+}
+
 function* subscribe({
     payload,
-}:
-    | ThreadActions.ThreadLoadedAction
-    | ThreadActions.ThreadsLoadedAction): Iterable<any> {
-    if (!Array.isArray(payload)) payload = [payload];
+}: ThreadActions.ThreadConnectedAction): Iterable<any> {
+    let ch = payload.channel;
 
-    for (let thread of payload) {
-        const topic = `thread:${thread.id}`;
+    ch.on("thread.updated", (payload: io.Thread) => {
+        dispatch(ThreadActions.threadUpdated(payload as any));
+    });
 
-        if (client.topic(topic)) continue;
+    ch.on("new.message", (payload: io.UserMessage) => {
+        const [normalized, related] = MessageSchema.normalize(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(ThreadActions.newMessage(normalized as any));
+    });
 
-        let ch = client.channel(topic);
+    ch.on("user.reacted", (payload: any) => {
+        dispatch(ThreadActions.userReacted(payload));
+    });
 
-        ch.on("thread.updated", (payload: io.Thread) => {
-            dispatch(ThreadActions.threadUpdated(payload as any));
-        });
+    ch.on("user.unreacted", (payload: any) => {
+        dispatch(ThreadActions.userUnreacted(payload));
+    });
 
-        ch.on("new.message", (payload: io.UserMessage) => {
-            const [normalized, related] = MessageSchema.normalize(payload);
-            dispatch(AppActions.relatedLoaded(related));
-            dispatch(ThreadActions.newMessage(normalized as any));
-        });
+    ch.on("message.updated", (payload: io.UserMessage) => {
+        const [normalized, related] = MessageSchema.normalize(payload);
+        dispatch(AppActions.relatedLoaded(related));
+        dispatch(ThreadActions.messageUpdated(normalized as any));
+    });
 
-        ch.on("user.reacted", (payload: any) => {
-            dispatch(ThreadActions.userReacted(payload));
-        });
+    ch.on(
+        "message.deleted",
+        (payload: NormalizedMessage & { id: string; thread_id: string }) => {
+            dispatch(ThreadActions.messageDeleted(payload));
+        }
+    );
 
-        ch.on("user.unreacted", (payload: any) => {
-            dispatch(ThreadActions.userUnreacted(payload));
-        });
+    ch.on("message.pinned", (payload: NormalizedMessage) => {
+        dispatch(ThreadActions.messageUpdated(payload));
+    });
 
-        ch.on("message.updated", (payload: io.UserMessage) => {
-            const [normalized, related] = MessageSchema.normalize(payload);
-            dispatch(AppActions.relatedLoaded(related));
-            dispatch(ThreadActions.messageUpdated(normalized as any));
-        });
+    ch.on("message.flagged", (payload: NormalizedMessage) => {
+        dispatch(ThreadActions.messageUpdated(payload));
+    });
 
-        ch.on(
-            "message.deleted",
-            (
-                payload: NormalizedMessage & { id: string; thread_id: string }
-            ) => {
-                dispatch(ThreadActions.messageDeleted(payload));
-            }
-        );
+    ch.on("message.unpinned", (payload: NormalizedMessage) => {
+        dispatch(ThreadActions.messageUpdated(payload));
+    });
 
-        ch.on("message.pinned", (payload: NormalizedMessage) => {
-            dispatch(ThreadActions.messageUpdated(payload));
-        });
+    ch.on("message.unflagged", (payload: NormalizedMessage) => {
+        dispatch(ThreadActions.messageUpdated(payload));
+    });
 
-        ch.on("message.flagged", (payload: NormalizedMessage) => {
-            dispatch(ThreadActions.messageUpdated(payload));
-        });
+    ch.on("typing", (payload: io.Author) => {
+        dispatch({ type: "USER", payload });
+    });
 
-        ch.on("message.unpinned", (payload: NormalizedMessage) => {
-            dispatch(ThreadActions.messageUpdated(payload));
-        });
-
-        ch.on("message.unflagged", (payload: NormalizedMessage) => {
-            dispatch(ThreadActions.messageUpdated(payload));
-        });
-
-        ch.on("typing", (payload: io.Author) => {
-            dispatch({ type: "USER", payload });
-        });
-
-        ch.subscribe()
-            .receive("ok", () => {})
-            .receive("error", () => {});
-    }
+    ch.subscribe()
+        .receive("ok", () => {})
+        .receive("error", () => {});
 }
 
 function* broadcastDraft({
@@ -217,8 +213,8 @@ export const tasks = [
     },
     { effect: takeEvery, type: Actions.NEW_MESSAGE, handler: newMessage },
     { effect: takeEvery, type: Actions.LOAD_THREAD, handler: load },
-    { effect: takeEvery, type: Actions.THREAD_LOADED, handler: subscribe },
-    { effect: takeEvery, type: Actions.THREADS_LOADED, handler: subscribe },
+    { effect: takeEvery, type: Actions.THREAD_LOADED, handler: connect },
+    { effect: takeEvery, type: Actions.THREAD_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.THREAD_DELETED, handler: unsubscribe },
     { effect: takeEvery, type: Actions.SPACE_PURGED, handler: spacePurged },
 
@@ -228,5 +224,4 @@ export const tasks = [
         type: Actions.LOAD_CONVERSATION,
         handler: conversation,
     },
-    { effect: takeEvery, type: "FETCH_THREADS", handler: fetch },
 ];

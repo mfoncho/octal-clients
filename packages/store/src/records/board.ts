@@ -1,5 +1,6 @@
-import { Record, List } from "immutable";
+import type { Channel } from "@colab/endpoint";
 import { Unique, Id } from "@colab/client";
+import { Record, List } from "immutable";
 import { CardRecord } from "./card";
 
 export class CardFieldTemplateRecord extends Record({
@@ -91,6 +92,7 @@ export class BoardRecord
         icon: "",
         name: "",
         space_id: "",
+        channel: null as null | Channel,
         loaded: List<string>([]),
         templates: List<CardTemplateRecord>(),
         labels: List<LabelRecord>(),
@@ -171,6 +173,10 @@ export class BoardRecord
         return this.update("labels", (labels) =>
             labels.filter((label) => label.id !== id)
         );
+    }
+
+    setChannel(channel: Channel) {
+        return this.set("channel", channel);
     }
 
     static create(payload: any) {

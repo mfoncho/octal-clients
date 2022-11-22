@@ -129,19 +129,21 @@ function* connect({ payload }: BoardActions.BoardLoadedAction): Iterable<any> {
     yield put(BoardActions.boardConnected({ topic, channel, id: payload.id }));
 }
 
-function* related({ payload }: AppActions.RelatedLoadedAction): Iterable<any> {
-    let boards = Object.values(
-        payload[BoardSchema.collect] || {}
-    ) as io.Board[];
-    yield* load(boards);
-}
-
 function* load(boards: io.Board[]): Iterable<any> {
     let actions = boards.map((board) => {
         return put(BoardActions.boardLoaded(board));
     });
     yield all(actions);
 }
+
+/*
+function* related({ payload }: AppActions.RelatedLoadedAction): Iterable<any> {
+    let boards = Object.values(
+        payload[BoardSchema.collect] || {}
+    ) as io.Board[];
+    yield* load(boards);
+}
+*/
 
 /*
 function* loadBoard({ payload }: BoardActions.LoadBoardAction): Iterable<any> {

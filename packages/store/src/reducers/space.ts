@@ -17,7 +17,11 @@ export class SpacesStore extends Record({
     }
 
     putSpace(payload: any) {
-        return this.setIn(["entities", payload.id], SpaceRecord.make(payload));
+        let space: any = payload;
+        if (!(payload instanceof SpaceRecord)) {
+            space = SpaceRecord.make(payload);
+        }
+        return this.setIn(["entities", space.id], space);
     }
 
     patchSpace(payload: any) {
@@ -163,6 +167,17 @@ export const reducers = {
         { payload }: Actions.SpaceRoleDeletedAction
     ) => {
         return store.removeRole(payload);
+    },
+    [Actions.SPACE_CONNECTED]: (
+        store: SpacesStore,
+        { payload }: Actions.SpaceConnectedAction
+    ) => {
+        let space = store.getSpace(payload.space_id);
+        if (space) {
+            space = space.setChannel(payload.channel);
+            return store.putSpace(space);
+        }
+        return store;
     },
 };
 

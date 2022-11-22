@@ -1,3 +1,4 @@
+import type { Channel } from "@colab/endpoint";
 import { Record, List, Map } from "immutable";
 import { Permission } from "./permissions";
 import { Unique, Id, SpaceType } from "@colab/client";
@@ -53,6 +54,7 @@ export class SpaceRecord
         topic_id: "",
         thread_id: "",
         member_id: "" as Id,
+        channel: null as null | Channel,
         roles: Map<string, SpaceRoleRecord>(),
         joined_at: "",
         loaded: List<string>([]),
@@ -120,6 +122,10 @@ export class SpaceRecord
 
     deleteRole(role_id: string) {
         return this.deleteIn(["roles", role_id]);
+    }
+
+    setChannel(channel: Channel) {
+        return this.set("channel", channel);
     }
 
     toServer() {

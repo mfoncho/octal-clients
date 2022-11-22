@@ -1,9 +1,11 @@
+import type { Channel } from "@colab/endpoint";
 import type { Require } from "@colab/common";
 import type { io } from "@colab/client";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedMessage } from "../../schemas";
 import {
+    THREAD_CONNECTED,
     THREAD_DRAFT_REPLY_SET,
     THREAD_PAGE_UPDATED,
     CONVERSATION_LOADED,
@@ -17,7 +19,6 @@ import {
     THREAD_UPDATED,
     LOAD_THREAD,
     THREAD_LOADED,
-    THREADS_LOADED,
     DELETE_MESSAGE,
     REACT_MESSAGE,
     UNREACT_MESSAGE,
@@ -61,6 +62,11 @@ export interface ThreadPageUpdatedPayload {
         autoScroll?: boolean;
         scrollPercentage?: number;
     };
+}
+
+export interface ThreadConnectedPayload {
+    thread_id: string;
+    channel: Channel;
 }
 
 export interface PostDirectMessagePayload {
@@ -256,6 +262,11 @@ export type ThreadDraftReplySetAction = Action<
     ThreadDraftReplySetPayload
 >;
 
+export type ThreadConnectedAction = Action<
+    THREAD_CONNECTED,
+    ThreadConnectedPayload
+>;
+
 export type MessageReactionAction = Action<
     REACTION_LOADED,
     MessageReactionPayload
@@ -302,8 +313,6 @@ export type LoadingConversationAction = Action<
 >;
 
 export type ThreadLoadedAction = Action<THREAD_LOADED, io.Thread>;
-
-export type ThreadsLoadedAction = Action<THREADS_LOADED, io.Thread[]>;
 
 export type MessageUpdatedAction = Action<MESSAGE_UPDATED, NormalizedMessage>;
 
@@ -494,10 +503,6 @@ export function threadLoaded(payload: io.Thread): ThreadLoadedAction {
     return createAction(THREAD_LOADED, payload);
 }
 
-export function threadsLoaded(payload: io.Thread[]): ThreadsLoadedAction {
-    return createAction(THREADS_LOADED, payload);
-}
-
 export function loadThread(payload: LoadThreadPayload): LoadThreadAction {
     return createIOAction<LOAD_THREAD>(LOAD_THREAD, payload);
 }
@@ -608,6 +613,12 @@ export function setDraftReply(
     payload: ThreadDraftReplySetPayload
 ): ThreadDraftReplySetAction {
     return createAction(THREAD_DRAFT_REPLY_SET, payload);
+}
+
+export function threadConnected(
+    payload: ThreadConnectedPayload
+): ThreadConnectedAction {
+    return createAction(THREAD_CONNECTED, payload);
 }
 
 export function updateThreadPage(

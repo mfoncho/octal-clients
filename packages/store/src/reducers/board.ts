@@ -272,6 +272,16 @@ export const reducers = {
         }
         return store;
     },
+    [Actions.BOARD_CONNECTED]: (
+        store: BoardsStore,
+        { payload }: BoardActions.BoardConnectedAction
+    ) => {
+        let board = store.getBoard(payload.id);
+        if (board) {
+            board = board.setChannel(payload.channel);
+        }
+        return store.putBoard(board);
+    },
 };
 
 export default { state, reducers };

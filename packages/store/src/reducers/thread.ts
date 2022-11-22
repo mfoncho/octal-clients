@@ -1,4 +1,4 @@
-import { Record, Map, OrderedMap } from "immutable";
+import { Record, Map, List, OrderedMap } from "immutable";
 import * as ThreadActions from "../actions/thread";
 import {
     LoadingConversationAction,
@@ -6,7 +6,6 @@ import {
     MessagesLoadedAction,
     TrimConversationAction,
     ThreadLoadedAction,
-    ThreadsLoadedAction,
 } from "../actions/thread";
 import * as Actions from "../actions/types";
 import {
@@ -28,6 +27,7 @@ const sort = (a: Timestamped & Unique, b: Timestamped & Unique) => {
 export class Conversations extends Record(
     {
         paths: Map<Id, Id>(),
+        space: Map<string, List<string>>(),
         threads: Map<Id, ThreadRecord>(),
         messages: Map<Id, MessageRecord>(),
     },
@@ -93,10 +93,6 @@ export class Conversations extends Record(
     }
 
     storeThread(thread: ThreadRecord) {
-        const prev = this.getThread(thread.id);
-        if (prev) {
-            return this;
-        }
         return this.setIn(["threads", thread.id], thread);
     }
 }
@@ -111,6 +107,9 @@ export const reducers = {
         state: Conversations,
         { payload }: ThreadActions.ThreadLoadedAction
     ) => {
+        if (state.getThread(payload.id)) {
+            return state;
+        }
         const thread = new ThreadRecord(payload as any);
         return state.storeThread(thread);
     },
@@ -131,16 +130,6 @@ export const reducers = {
         { payload }: ThreadActions.ThreadDraftUpdatedAction
     ) => {
         return state.updateDraft(payload);
-    },
-
-    [Actions.THREADS_LOADED]: (
-        state: Conversations,
-        { payload }: ThreadActions.ThreadsLoadedAction
-    ) => {
-        return payload.reduce((state, thr) => {
-            const thread = new ThreadRecord(thr as any);
-            return state.storeThread(thread);
-        }, state);
     },
 
     [Actions.THREAD_UPDATED]: (
@@ -352,6 +341,16 @@ export const reducers = {
         let thread = store.getThread(payload.thread_id);
         if (thread) {
             return store.storeThread(thread.updatePage(payload.params));
+        }
+        return store;
+    },
+    [Actions.THREAD_CONNECTED]: (
+        store: Conversations,
+        { payload }: ThreadActions.ThreadConnectedAction
+    ) => {
+        let thread = store.getThread(payload.thread_id);
+        if (thread) {
+            return store.storeThread(thread.setChannel(payload.channel));
         }
         return store;
     },

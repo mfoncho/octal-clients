@@ -76,9 +76,6 @@ export type GET_THREAD = typeof GET_THREAD;
 export const THREAD_LOADED = "THREAD_LOADED";
 export type THREAD_LOADED = typeof THREAD_LOADED;
 
-export const THREADS_LOADED = "THREADS_LOADED";
-export type THREADS_LOADED = typeof THREADS_LOADED;
-
 export const THREAD_ACTIVITY = "THREAD_ACTIVITY";
 export type THREAD_ACTIVITY = typeof THREAD_ACTIVITY;
 
@@ -91,14 +88,11 @@ export type THREAD_UPDATED = typeof THREAD_UPDATED;
 export const THREAD_DELETED = "THREAD_DELETED";
 export type THREAD_DELETED = typeof THREAD_DELETED;
 
-export const CREATE_THREAD = "CREATE_THREAD";
-export type CREATE_THREAD = typeof CREATE_THREAD;
-
-export const FETCH_THREADS = "FETCH_THREADS";
-export type FETCH_THREADS = typeof FETCH_THREADS;
-
 export const LOAD_THREAD = "LOAD_THREAD";
 export type LOAD_THREAD = typeof LOAD_THREAD;
+
+export const THREAD_CONNECTED = "THREAD_CONNECTED";
+export type THREAD_CONNECTED = typeof THREAD_CONNECTED;
 
 export const DEACTIVATE_THREAD = "DEACTIVATE_THREAD";
 export type DEACTIVATE_THREAD = typeof DEACTIVATE_THREAD;

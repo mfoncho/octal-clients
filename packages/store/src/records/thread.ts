@@ -1,3 +1,4 @@
+import type { Channel } from "@colab/endpoint";
 import { Record, fromJS, List, OrderedMap } from "immutable";
 import { Unique, BelongsToSpace, Id, ThreadType } from "@colab/client";
 
@@ -119,6 +120,7 @@ export class ThreadRecord
         init: false,
         is_active: false,
         type_id: "",
+        channel: null as null | Channel,
         draft: new ThreadDraft(),
         created_at: "",
         space_id: "0" as Id,
@@ -224,6 +226,10 @@ export class ThreadRecord
 
     updateDraft(draft: any) {
         return this.update("draft", (daft) => daft.merge(draft));
+    }
+
+    setChannel(channel: Channel) {
+        return this.set("channel", channel);
     }
 
     patch(payload: any) {
