@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
-import BoardCard from "./BoardCard";
+import BoardCard from "./Card";
 import { Draggable } from "react-beautiful-dnd";
-import { CardRecord } from "@colab/store";
+import { CardRecord, useBoard } from "@colab/store";
 import { useNavigator } from "src/hooks";
 export { default as Context } from "./Context";
 export * from "./hooks";
@@ -24,9 +24,26 @@ export const Card = React.memo<ICard>(({ card, dragHandle }) => {
         navigator.openCard(card);
     }, [card.id]);
 
+    const blabel = useBoard(card.board_id)
+        .labels.toMap()
+        .mapKeys((_index, val) => val.id);
+
+    const labels = card.labels
+        .map((val) => blabel.get(val)!)
+        .filter(Boolean)
+        .toList();
+
+    const checklists = card.fields
+        .filter((field) => field.type == "checklist")
+        .map((field) => field.name);
+
     return (
         <BoardCard
-            card={card}
+            name={card.name}
+            users={card.users}
+            labels={labels}
+            complete={card.complete}
+            checklists={checklists}
             dragHandle={dragHandle}
             onClick={handleOpenCardDialog}
         />

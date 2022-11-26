@@ -4,32 +4,26 @@ import Header from "./Header";
 import Filters from "./Filters";
 import Drawer from "./Drawer";
 import CardDialog from "@workspace/CardDialog";
-import { useCard } from "@colab/store";
 import { useParams, useNavigate } from "react-router-dom";
 
 const Dialog = React.memo<{ id: string }>((props) => {
     const navigate = useNavigate();
-    const card = useCard(props.id);
-    const params = useParams<{ board_id: string; space_id: string }>();
+    const params =
+        useParams<{ board_id: string; space_id: string; card_id: string }>();
 
     function handleCloseDialog() {
         if (history.length > 0) {
             navigate(`/spaces/${params.space_id}/boards/${params.board_id}`);
-        } else {
-            console.log("Oops where to?");
         }
     }
 
-    if (card) {
-        return (
-            <CardDialog
-                open={card.id == props.id}
-                id={props.id}
-                onClose={handleCloseDialog}
-            />
-        );
-    }
-    return <></>;
+    return (
+        <CardDialog
+            id={props.id}
+            onClose={handleCloseDialog}
+            open={Boolean(params.card_id)}
+        />
+    );
 });
 
 export default function Main() {

@@ -4,10 +4,11 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import Drawer from "./Drawer";
 import Header from "./Header";
 import Fields from "./Fields";
+import { useDispatch } from "react-redux";
 import { useDrawer } from "./hooks";
 import ActionsField from "./ActionsField";
 import { Context } from "@workspace/Board/Card";
-import { useAuthId, useCard } from "@colab/store";
+import { useAuthId, useCard, Actions } from "@colab/store";
 import { useScreen } from "src/hooks";
 import { CardRecord } from "@colab/store";
 
@@ -28,6 +29,11 @@ interface IPreCard {
 interface ICardDialog {
     open: boolean;
     card: CardRecord;
+    onClose: (e: any, reason: string) => void;
+}
+
+interface ILoadingDialog {
+    open: boolean;
     onClose: (e: any, reason: string) => void;
 }
 
@@ -97,9 +103,30 @@ export const CardDialog = React.memo<ICardDialog>(({ card, onClose, open }) => {
     );
 });
 
+function LoadDialog({ open, onClose }: ILoadingDialog) {
+    const screen = useScreen();
+    return (
+        <Dialog
+            title=""
+            open={open}
+            onClose={onClose}
+            maxWidth="sm"
+            fullHeight={true}
+            fullWidth={true}
+            fullScreen={screen.mobile}></Dialog>
+    );
+}
+
 const CardLoader = React.memo<IPreCard>((props: IPreCard) => {
     const card = useCard(props.id);
-    if (card) {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (props.id !== card?.id) {
+            const action = Actions.Board.loadCard({ card_id: props.id });
+            dispatch(action);
+        }
+    }, [card?.id]);
+    if (card && card?.id === props.id) {
         return (
             <Context card={card}>
                 <CardDialog
@@ -110,7 +137,7 @@ const CardLoader = React.memo<IPreCard>((props: IPreCard) => {
             </Context>
         );
     }
-    return <div />;
+    return <LoadDialog open={props.open} onClose={props.onClose} />;
 });
 
 export default React.memo<ICard>(({ id, onClose, ...props }) => {
