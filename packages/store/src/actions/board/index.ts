@@ -69,6 +69,7 @@ import {
     COMPLETE_CARD,
     UNCOMPLETE_CARD,
     LOAD_CARDS,
+    LOAD_CARD,
     LOAD_COLUMNS,
     FETCH_COLUMNS,
     DELETE_COLUMN,
@@ -105,6 +106,11 @@ export * from "./types";
 
 export interface BoardPurgedPayload {
     id: string;
+}
+
+export interface LoadCardPayload {
+    board_id?: string;
+    card_id: string;
 }
 
 export interface LoadArchivedCardsPayload {
@@ -533,6 +539,8 @@ export type BoardFilterUpdatedAction = Action<
     BoardFilterPayload
 >;
 
+export type LoadCardAction = IOAction<LOAD_CARD, LoadCardPayload, io.Card>;
+
 export type CreateCardTemplateAction = IOAction<
     CREATE_CARD_TEMPLATE,
     CreateCardTemplatePayload,
@@ -915,6 +923,10 @@ export type CardFieldCreatedAction = Action<CARD_FIELD_CREATED, io.CardField>;
 
 export function fetchColumns(payload: FetchColumnsPayload): FetchColumnsAction {
     return createIOAction<FETCH_COLUMNS>(FETCH_COLUMNS, payload);
+}
+
+export function loadCard(payload: LoadCardPayload): LoadCardAction {
+    return createIOAction<LOAD_CARD>(LOAD_CARD, payload);
 }
 
 export function loadBoardCards(payload: LoadCardsPayload): LoadCardsAction {

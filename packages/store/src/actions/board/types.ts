@@ -156,6 +156,9 @@ export type FETCH_CARDS = typeof FETCH_CARDS;
 export const ARCHIVE_CARD = "ARCHIVE_CARD";
 export type ARCHIVE_CARD = typeof ARCHIVE_CARD;
 
+export const LOAD_CARD = "LOAD_CARD";
+export type LOAD_CARD = typeof LOAD_CARD;
+
 export const LOAD_CARDS = "LOAD_CARDS";
 export type LOAD_CARDS = typeof LOAD_CARDS;
 

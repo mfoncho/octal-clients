@@ -68,6 +68,19 @@ function* loadBoardCards({
     }
 }
 
+function* loadCard({
+    payload,
+    resolve,
+}: BoardActions.LoadCardAction): Iterable<any> {
+    try {
+        const data = (yield Client.getCard(payload)) as any as io.Card;
+        yield* normalizeLoad(data);
+        resolve.success(data);
+    } catch (e) {
+        resolve.error(e);
+    }
+}
+
 function* loadArchivedCards({
     payload,
     resolve,
@@ -305,6 +318,8 @@ export const tasks = [
     { effect: takeEvery, type: Actions.DELETE_CARD, handler: trash },
 
     { effect: takeEvery, type: Actions.COMPLETE_CARD, handler: done },
+
+    { effect: takeEvery, type: Actions.LOAD_CARD, handler: loadCard },
 
     { effect: takeEvery, type: Actions.UNCOMPLETE_CARD, handler: undone },
 

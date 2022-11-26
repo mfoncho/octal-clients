@@ -4,7 +4,7 @@ import { dispatch, State } from "..";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
 import * as SpaceActions from "../actions/space";
-import { BoardSchema } from "../schemas";
+//import { BoardSchema } from "../schemas";
 import * as AppActions from "../actions/app";
 
 function* create({
