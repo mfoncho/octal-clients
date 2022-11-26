@@ -14,7 +14,7 @@ import { useDebouncedEffect } from "@colab/hooks";
 import { Dialog, Button, Textarea, UIEvent } from "@colab/ui";
 import { TopicRecord, MemberRecord } from "@colab/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/material/Pagination";
 
 interface ISearch {
     topic: TopicRecord;
