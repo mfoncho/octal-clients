@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-//import Switch from "@material-ui/core/Switch";
 import { useDispatch } from "react-redux";
-import { Dialog, Button, Switch, Textarea, UIEvent } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import { useInput } from "src/utils";
+import client, { io } from "@colab/client";
 import { useNavigator } from "src/hooks";
-import { createSpace } from "@colab/store/lib/actions/space";
+import { Actions, usePermissions, useSpaces, useAuthId } from "@colab/store";
+import { Dialog, Button, Text, Switch, Textarea, UIEvent } from "@colab/ui";
 
 interface ISpaceCreator {
     open: boolean;
@@ -45,37 +45,17 @@ function Input(props: IInput) {
     );
 }
 
-export default React.memo<ISpaceCreator>((props) => {
+function SpaceCreator(props: any) {
+    const permissions = usePermissions();
     const nav = useNavigator();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [type, setType] = useState<"public" | "private">("public");
 
     const name = useInput("");
 
     const topic = useInput("");
-
-    const [creating, setCreating] = useState<boolean>(false);
-
-    function handleCreateSpace(event: React.MouseEvent) {
-        event.preventDefault();
-        event.stopPropagation();
-        let payload: any = {
-            name: name.value,
-            type: type,
-            topic: topic.value,
-        };
-        const action = createSpace(payload);
-        dispatch(action)
-            .then((space) => {
-                setCreating(false);
-                nav.openSpace(space);
-                name.setValue("");
-                topic.setValue("");
-            })
-            .then(props.onClose);
-        setCreating(true);
-    }
 
     function toggleAccess() {
         if (type == "public") {
@@ -85,14 +65,32 @@ export default React.memo<ISpaceCreator>((props) => {
         }
     }
 
+    function handleCreateSpace(event: React.MouseEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+        let payload: any = {
+            type: type,
+            name: name.value,
+            topic: topic.value,
+        };
+        const action = Actions.Space.createSpace(payload);
+        setLoading(true);
+        dispatch(action)
+            .then((space) => {
+                setLoading(false);
+                nav.openSpace(space);
+            })
+            .then(props.onClose);
+    }
+
     return (
         <Dialog
-            title="Create space"
+            title="Create Space"
             maxWidth="xs"
             open={props.open}
-            fullWidth={false}
+            fullWidth={true}
             fullHeight={false}
-            onClose={creating ? undefined : props.onClose}>
+            onClose={loading ? undefined : props.onClose}>
             <Dialog.Content className="flex flex-col overflow-y-auto">
                 <Input label="Name" placeholder="name" {...name.props} />
 
@@ -119,14 +117,153 @@ export default React.memo<ISpaceCreator>((props) => {
                     </span>
                 </div>
             </Dialog.Content>
-            <Dialog.Actions>
+            <Dialog.Actions className="space-x-2">
+                <Button
+                    color="primary"
+                    onClick={() => props.setMode("discover")}
+                    disabled={loading}>
+                    Discover
+                </Button>
                 <Button
                     color="primary"
                     onClick={handleCreateSpace}
-                    disabled={!name.valid || !topic.valid}>
+                    disabled={
+                        !permissions.get("space.create") ||
+                        !name.valid ||
+                        !topic.valid ||
+                        loading
+                    }>
                     Create
                 </Button>
             </Dialog.Actions>
         </Dialog>
+    );
+}
+
+function Discover(props: any) {
+    const authid = useAuthId();
+    const nav = useNavigator();
+    const spaces = useSpaces();
+    const dispatch = useDispatch();
+    const permissions = usePermissions();
+    const [loading, setLoading] = useState<string[]>([]);
+    const [available, setAvailable] = useState<io.Space[]>([]);
+    React.useEffect(() => {
+        client.fetchSpaces({ params: { type: "public" } }).then(setAvailable);
+    }, []);
+
+    function blockSpace(id: string) {
+        setLoading((loading) =>
+            loading.includes(id) ? loading : loading.concat([id])
+        );
+    }
+
+    function freeSpace(id: string) {
+        setLoading((loading) => {
+            const index = loading.indexOf(id);
+            if (index >= 0) {
+                loading.splice(index, 1);
+            }
+            return [...loading];
+        });
+    }
+
+    function joinSpace(id: string) {
+        blockSpace(id);
+        const action = Actions.Space.joinSpace(id);
+        dispatch(action)
+            .then((space) => {
+                nav.openSpace(space);
+                props.onClose({})
+            })
+            .finally(() => freeSpace(id));
+    }
+
+    function leaveSpace(id: string) {
+        if (spaces.get(id)!.admin_id === authid) {
+            return;
+        }
+        blockSpace(id);
+        const action = Actions.Space.leaveSpace(id);
+        dispatch(action).finally(() => freeSpace(id));
+    }
+
+    function renderSpaces() {
+        return available.map((space) => (
+            <div
+                key={space.id}
+                className="group flex flex-row justify-between hover:bg-primary-500 py-2 px-6">
+                <div className="flex flex-col">
+                    <div className="group-hover:text-white font-black text-gray-800">
+                        <Text>{space.name}</Text>
+                    </div>
+                    <div className="text-sm text-gray-500 group-hover:text-gray-200 font-semibold">
+                        <Text>purpose</Text>
+                    </div>
+                </div>
+                <div>
+                    {loading.includes(space.id) ? (
+                        <div className="group-hover:text-white text-primary-500 px-6 py-2">
+                            <Icons.Loader.Crescent className="text-2xl animate-spin" />
+                        </div>
+                    ) : spaces.has(space.id) ? (
+                        <button
+                            disabled={spaces.get(space.id)!.admin_id === authid}
+                            onClick={() => leaveSpace(space.id)}
+                            className="group-hover:visible invisible text-white text-sm font-bold px-3 py-1 border border-2 border-white rounded-md hover:shadow-md disabled:text-primary-400 disabled:border-primary-400">
+                            Leave
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => joinSpace(space.id)}
+                            className="group-hover:visible invisible text-white text-sm font-bold px-3 py-1 border border-2 border-white rounded-md hover:shadow-md">
+                            Join
+                        </button>
+                    )}
+                </div>
+            </div>
+        ));
+    }
+    return (
+        <Dialog
+            title="Discover"
+            maxWidth="xs"
+            open={props.open}
+            fullWidth={true}
+            fullHeight={true}
+            onClose={loading.length > 0 ? undefined : props.onClose}>
+            <div className="flex flex-col overflow-y-auto max-h-full w-full pb-8 divide-y divider-gray-200">
+                {renderSpaces()}
+            </div>
+            {permissions.get("space.create") && (
+                <Dialog.Actions>
+                    <Button
+                        color="primary"
+                        onClick={() => props.setMode("creator")}
+                        disabled={loading.length > 0}>
+                        Create Space
+                    </Button>
+                </Dialog.Actions>
+            )}
+        </Dialog>
+    );
+}
+
+export default React.memo<ISpaceCreator>((props) => {
+    const mode = Dialog.useDialog("discover");
+
+    return (
+        <React.Fragment>
+            {props.open && (
+                <>
+                    {mode.discover && (
+                        <Discover {...props} setMode={mode.open} />
+                    )}
+                    {mode.creator && (
+                        <SpaceCreator {...props} setMode={mode.open} />
+                    )}
+                </>
+            )}
+        </React.Fragment>
     );
 });
