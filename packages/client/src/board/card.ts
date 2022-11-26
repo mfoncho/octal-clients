@@ -1,4 +1,4 @@
-import { io } from "../types";
+import { io, Page } from "../types";
 import BaseClient, { Params } from "../base";
 
 export interface CreateCardTemplateRequest {
@@ -78,12 +78,16 @@ export interface FetchArchivedCardsRequest {
     board_id: string;
 }
 
+export interface GetCardRequest {
+    card_id: string;
+}
+
 export default class CardClient extends BaseClient {
     async fetchArchivedCards(
         request: FetchArchivedCardsRequest,
         params?: Params
-    ): Promise<io.Card[]> {
-        const path = `/boards/${request.board_id}/cards?archived`;
+    ): Promise<Page<io.Card>> {
+        const path = `/boards/${request.board_id}/archive`;
         const { data } = await this.endpoint.get(path, params);
         return data;
     }
@@ -137,6 +141,12 @@ export default class CardClient extends BaseClient {
         };
         const path = `/boards/${request.board_id}/cards/${request.card_id}/move/${request.column_id}`;
         const { data } = await this.endpoint.put(path, payload, params);
+        return data;
+    }
+
+    async getCard(request: GetCardRequest, params?: Params): Promise<io.Card> {
+        const path = `/cards/${request.card_id}`;
+        const { data } = await this.endpoint.get(path, params);
         return data;
     }
 

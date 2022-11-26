@@ -1,6 +1,8 @@
 import { Socket } from "@colab/endpoint";
 
-export interface Params {}
+export interface Params {
+    [key: string]: any;
+}
 
 export default class BaseClient {
     endpoint: any;
