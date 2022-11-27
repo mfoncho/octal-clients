@@ -178,13 +178,12 @@ export default class Channel {
         return ref;
     }
 
-    off(event: string, ref?: string) {
-        this.bindings = this.bindings.filter((bind) => {
-            return !(
-                bind.event === event &&
-                (typeof ref === "undefined" || ref === bind.ref)
-            );
-        });
+    off(ref: string) {
+        this.bindings = this.bindings.filter((bind) => ref !== bind.ref);
+    }
+
+    unbind(event: string) {
+        this.bindings = this.bindings.filter((bind) => bind.event !== event);
     }
 
     push(event: string, payload: any, timeout?: number) {
