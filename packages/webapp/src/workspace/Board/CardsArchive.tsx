@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { List } from "immutable";
 import * as Icons from "@colab/icons";
 import BoardCard from "./Card/Card";
-import { useCard } from "@colab/store";
+import { useCard, BoardRecord } from "@colab/store";
 import client, { io, Page } from "@colab/client";
 import Pagination from "@mui/material/Pagination";
 import { useDebouncedEffect } from "@colab/hooks";
 import { useNavigator, useInput } from "src/hooks";
 
 interface ICardsArchive {
-    board: { id: string };
+    board: BoardRecord;
 }
 
 interface IArchivedCard {
@@ -82,6 +82,20 @@ export default function CardsArchive({ board }: ICardsArchive) {
     function handleOpenCard(card: io.Card) {
         nav.openCard(card);
     }
+
+    useEffect(() => {
+        if (board.channel) {
+            let ref = board.channel.on("card.deleted", ({ id }: any) => {
+                setResults((results) => ({
+                    ...results,
+                    entries: results.entries.filter((card) => card.id !== id),
+                }));
+            });
+            return () => {
+                if (board.channel) board.channel.off(ref);
+            };
+        }
+    }, []);
 
     useDebouncedEffect(
         () => {
