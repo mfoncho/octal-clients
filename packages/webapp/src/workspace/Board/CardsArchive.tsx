@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { List } from "immutable";
+import * as Icons from "@colab/icons";
 import BoardCard from "./Card/Card";
-import { useNavigator } from "src/hooks";
 import { useCard } from "@colab/store";
 import client, { io, Page } from "@colab/client";
 import Pagination from "@mui/material/Pagination";
+import { useDebouncedEffect } from "@colab/hooks";
+import { useNavigator, useInput } from "src/hooks";
 
 interface ICardsArchive {
     board: { id: string };
@@ -65,11 +67,15 @@ const defaultPage: Page<io.Card> = {
 
 export default function CardsArchive({ board }: ICardsArchive) {
     const nav = useNavigator();
+    const input = useInput("");
+    const [name, setName] = useState(input.value);
     const [page, setPage] = useState<number>(1);
     const [results, setResults] = useState<Page<io.Card>>(defaultPage);
-    function fetchPageCards(page: number) {
+    function fetchPageCards(page: number, name: string) {
+        const params: any = { page };
+        if (Boolean(name.trim())) params.name = name.trim();
         client
-            .fetchArchivedCards({ board_id: board.id }, { params: { page } })
+            .fetchArchivedCards({ board_id: board.id }, { params })
             .then(setResults);
     }
 
@@ -77,18 +83,37 @@ export default function CardsArchive({ board }: ICardsArchive) {
         nav.openCard(card);
     }
 
+    useDebouncedEffect(
+        () => {
+            setName(input.value);
+        },
+        700,
+        [input.value]
+    );
+
     useEffect(() => {
         if (page !== results.page_number) {
-            fetchPageCards(page);
+            fetchPageCards(page, name);
+        } else if (page !== 1) {
+            setPage(1);
+        } else {
+            fetchPageCards(page, name);
         }
-    }, [page, results.page_number]);
+    }, [page, name]);
 
     return (
         <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="flex border-b flex-none border-gray-200 flex-row items-center h-14 sm:h-20 bg-primary-50 px-4 space-x-2">
-                <span className="font-black text-md text-gray-700">
-                    Archive
-                </span>
+            <div className="flex flex-col border-b flex-none border-gray-200 flex-row h-14 sm:h-20 bg-primary-50 px-4 justify-center">
+                <div className="relative hidden sm:flex items-center">
+                    <input
+                        {...input.props}
+                        placeholder="Search archive"
+                        className="pl-8 bg-white font-semibold outline-none placeholder:text-gray-400 text-gray-700 focus:ring-primary-500 border-gray-400 ring rounded py-1 px-2 focus:shadow"
+                    />
+                    <div className="px-2 absolute">
+                        <Icons.Archive className="text-gray-500" />
+                    </div>
+                </div>
             </div>
             <div className="flex-1 flex flex-col overflow-x-hidden overflow-y-auto px-1 space-y-2 pb-16">
                 {results.entries.map((card: io.Card) => (
@@ -101,7 +126,7 @@ export default function CardsArchive({ board }: ICardsArchive) {
                     </div>
                 ))}
             </div>
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-row justify-center py-2">
                 {results.total_entries > 0 && (
                     <Pagination
                         variant="outlined"
