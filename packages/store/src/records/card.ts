@@ -220,7 +220,6 @@ export class CardRecord
     extends Record({
         id: "",
         name: "",
-        icon: null as string | null,
         complete: false,
         fields: List<CardFieldRecord>(),
         user_id: "",
