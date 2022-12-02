@@ -10,6 +10,7 @@ import * as Icons from "@colab/icons";
 import Topic from "./Topic";
 import Board from "./Board";
 import SpaceSettingsDialog from "../SpaceSettingsDialog";
+import SpaceDialog from "../SpaceDialog";
 import InviteDialog from "../InviteDialog";
 import store, {
     SpaceRecord,
@@ -150,8 +151,6 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
     const [hovering, setHovering] = useState<boolean>(false);
 
-    const highlight = params.space_id == space.id && !expaned;
-
     useEffect(() => {
         let menu: IMenuItem[] = [];
         let creators: IMenuItem[] = [];
@@ -229,18 +228,13 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     return (
         <React.Fragment>
             <div
-                className={clx(
-                    "group flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded cursor-pointer overflow-hidden h-8 justify-between",
-                    highlight && " bg-primary-500"
-                )}
+                className="group flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded overflow-hidden h-8 justify-between"
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
                 <p
-                    onClick={handleToggleExpanded}
-                    className={clx(
-                        "text-xs font-semibold truncate",
-                        highlight ? "text-white" : "text-primary-200"
-                    )}>
+                    role="button"
+                    onClick={dialog.opener("space")}
+                    className="text-xs font-semibold truncate text-primary-200">
                     <Text>{space.name.toUpperCase()}</Text>
                 </p>
                 <div className="flex flex-row items-center hidden group-hover:flex">
@@ -266,10 +260,8 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                     onClickAway={dialog.close}
                 />
             )}
-            <Collapse unmountOnExit={false} in={expaned}>
-                {renderBoards()}
-                {renderTopics()}
-            </Collapse>
+            {renderBoards()}
+            {renderTopics()}
             {permissions.get("space.manage") && (
                 <React.Fragment>
                     <CreateBoardDialog
@@ -299,6 +291,11 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                     onClose={dialog.close}
                 />
             )}
+            <SpaceDialog
+                space={space}
+                open={dialog.space}
+                onClose={dialog.close}
+            />
         </React.Fragment>
     );
 });
