@@ -16,6 +16,12 @@ interface IDialog {
     space: SpaceRecord;
 }
 
+interface ILeaveDialog {
+    space: SpaceRecord;
+    onConfirm: () => void;
+    loading?: boolean;
+}
+
 interface IView {
     space: SpaceRecord;
 }
@@ -29,6 +35,25 @@ interface ITab {
     active: boolean;
     onClick?: () => void;
 }
+
+const warning = (space: SpaceRecord) => `
+You are about to leave space __${space.name}__
+`;
+
+export const LeaveWarning = Dialog.create<ILeaveDialog>(
+    ({ space, ...props }) => {
+        return (
+            <Dialog.Warning
+                open={props.open}
+                title="Leave Space"
+                onClose={props.loading ? undefined : props.onClose}
+                disabled={props.loading}
+                onConfirm={props.onConfirm}>
+                {warning(space)}
+            </Dialog.Warning>
+        );
+    }
+);
 
 function Member(props: IMember) {
     const user = useUser(props.member.user_id);
@@ -69,6 +94,7 @@ function Members(props: IView) {
 
 function About(props: IView) {
     const dispatch = useDispatch();
+    const [warning, setWarning] = useState<boolean>(false);
     const [leaving, setLeaving] = useState<boolean>(false);
 
     function handleLeave() {
@@ -85,11 +111,18 @@ function About(props: IView) {
             {props.space.is_public && (
                 <div className="flex flex-row justify-end px-4 pb-8 pt-4">
                     <button
-                        onClick={handleLeave}
+                        onClick={() => setWarning(true)}
                         disabled={leaving}
                         className="bg-red-500 font-bold px-4 py-2 rounded-lg text-white disabled:bg-red-200">
                         Leave
                     </button>
+                    <LeaveWarning
+                        space={props.space}
+                        onConfirm={handleLeave}
+                        loading={leaving}
+                        open={warning}
+                        onClose={() => setWarning(false)}
+                    />
                 </div>
             )}
         </div>

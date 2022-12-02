@@ -4,6 +4,7 @@ import * as Icons from "@colab/icons";
 import { useInput } from "src/utils";
 import client, { io } from "@colab/client";
 import { useNavigator } from "src/hooks";
+import { LeaveWarning } from "../SpaceDialog";
 import { Actions, usePermissions, useSpaces, useAuthId } from "@colab/store";
 import { Dialog, Button, Text, Switch, Textarea, UIEvent } from "@colab/ui";
 
@@ -147,6 +148,7 @@ function Discover(props: any) {
     const dispatch = useDispatch();
     const permissions = usePermissions();
     const [loading, setLoading] = useState<string[]>([]);
+    const [warning, setWarning] = useState<string | null>(null);
     const [available, setAvailable] = useState<io.Space[]>([]);
     React.useEffect(() => {
         client.fetchSpaces({ params: { type: "public" } }).then(setAvailable);
@@ -174,7 +176,7 @@ function Discover(props: any) {
         dispatch(action)
             .then((space) => {
                 nav.openSpace(space);
-                props.onClose({})
+                props.onClose({});
             })
             .finally(() => freeSpace(id));
     }
@@ -185,7 +187,10 @@ function Discover(props: any) {
         }
         blockSpace(id);
         const action = Actions.Space.leaveSpace(id);
-        dispatch(action).finally(() => freeSpace(id));
+        dispatch(action).finally(() => {
+            freeSpace(id);
+            setWarning(null);
+        });
     }
 
     function renderSpaces() {
@@ -209,7 +214,7 @@ function Discover(props: any) {
                     ) : spaces.has(space.id) ? (
                         <button
                             disabled={spaces.get(space.id)!.admin_id === authid}
-                            onClick={() => leaveSpace(space.id)}
+                            onClick={() => setWarning(space.id)}
                             className="group-hover:visible invisible text-white text-sm font-bold px-3 py-1 border border-2 border-white rounded-md hover:shadow-md disabled:text-primary-400 disabled:border-primary-400">
                             Leave
                         </button>
@@ -234,6 +239,15 @@ function Discover(props: any) {
             onClose={loading.length > 0 ? undefined : props.onClose}>
             <div className="flex flex-col overflow-y-auto max-h-full w-full pb-8 divide-y divider-gray-200">
                 {renderSpaces()}
+                {Boolean(warning) && spaces.get(warning!) && (
+                    <LeaveWarning
+                        space={spaces.get(warning!)!}
+                        loading={loading.includes(warning!)}
+                        onClose={() => setWarning(null)}
+                        open={Boolean(warning)}
+                        onConfirm={() => leaveSpace(warning!)}
+                    />
+                )}
             </div>
             {permissions.get("space.create") && (
                 <Dialog.Actions>
