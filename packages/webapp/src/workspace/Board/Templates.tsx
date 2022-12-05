@@ -29,6 +29,7 @@ export default Dialog.create<IDialog>((props) => {
             maxWidth="xs"
             open={props.open}
             fullWidth={true}
+            fullHeight={true}
             onClose={props.onClose}>
             <div className="flex flex-col pb-8 border divide-y divider-gray-200">
                 {props.board.templates.map((template) => (
