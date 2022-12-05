@@ -163,6 +163,9 @@ export default Dialog.create<IDialog>((props) => {
     const View = tabs.find(
         (config) => config.name.toLowerCase() === tab
     )?.component;
+    function handleTabClick(e: UIEvent<{ value: string }>) {
+        setTab(e.target.value);
+    }
     return (
         <Dialog
             title={props.space.name.toLocaleUpperCase()}
@@ -177,9 +180,7 @@ export default Dialog.create<IDialog>((props) => {
                         key={config.name}
                         value={config.name.toLowerCase()}
                         active={tab == config.name.toLowerCase()}
-                        onClick={(e: UIEvent<{ value: string }>) =>
-                            setTab(e.target.value)
-                        }>
+                        onClick={handleTabClick}>
                         {config.name}
                     </Tab>
                 ))}

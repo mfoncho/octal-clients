@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import clx from "classnames";
-import { Dialog, Button, Flow } from "@colab/ui";
+import { Dialog, Flow, UIEvent } from "@colab/ui";
 import { useUser } from "@colab/store/lib/hooks";
 import Preferences from "./Preferences";
 import Session from "./Session";
 import Profile from "./Profile";
 import Security from "./Security";
+import { Tab } from "../SpaceDialog";
 
 interface IDialog {}
 
@@ -20,10 +20,8 @@ export default Dialog.create<IDialog>((props) => {
 
     const [active, setActive] = useState<string>("profile");
 
-    function handleSwitchTab(preference: string) {
-        return () => {
-            setActive(preference);
-        };
+    function handleSwitchTab(event: UIEvent<{ value: string }>) {
+        setActive(event.target.value);
     }
 
     return (
@@ -32,22 +30,15 @@ export default Dialog.create<IDialog>((props) => {
             fullHeight={true}
             title="Account"
             onClose={props.onClose}>
-            <div className="flex flex-row items-center px-4">
+            <div className="flex flex-row bg-slate-100 px-5 py-3 overflow-x-auto space-x-2">
                 {tabs.map((tab) => (
-                    <div key={tab.value} className="flex flex-col mr-4">
-                        <Button
-                            key={tab.value}
-                            color="clear"
-                            onClick={handleSwitchTab(tab.value)}>
-                            {tab.name}
-                        </Button>
-                        <div
-                            className={clx(
-                                "h-1 rounded-t-md",
-                                active == tab.value && "bg-primary-500"
-                            )}
-                        />
-                    </div>
+                    <Tab
+                        key={tab.value}
+                        value={tab.value}
+                        active={active === tab.value}
+                        onClick={handleSwitchTab}>
+                        {tab.name}
+                    </Tab>
                 ))}
             </div>
             <div className="flex flex-col flex-1 overflow-hidden justify-between">
