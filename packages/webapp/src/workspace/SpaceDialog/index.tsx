@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useDispatch } from "react-redux";
 import UserCard from "@workspace/UserCard";
-import { Avatar, Dialog, Text } from "@colab/ui";
+import { Avatar, Dialog, Text, UIEvent } from "@colab/ui";
 import {
     useMembers,
     Actions,
@@ -30,10 +30,11 @@ interface IMember {
     member: MemberRecord;
 }
 
-interface ITab {
+interface ITab<T = string> {
+    value: T;
     children?: any;
     active: boolean;
-    onClick?: () => void;
+    onClick?: (e: UIEvent<{ value: T }>) => void;
 }
 
 const warning = (space: SpaceRecord) => `
@@ -129,16 +130,24 @@ function About(props: IView) {
     );
 }
 
-const Tab = (props: ITab) =>
+export const Tab = (props: ITab) =>
     props.active ? (
         <button
-            onClick={props.onClick}
+            onClick={(e) =>
+                props.onClick
+                    ? props.onClick(UIEvent.create({ value: props.value }, e))
+                    : null
+            }
             className="bg-slate-300 font-bold text-gray-700 rounded-full py-1 px-4 justify-center text-sm focus:ring-4 ring-slate-200">
             {props.children}
         </button>
     ) : (
         <button
-            onClick={props.onClick}
+            onClick={(e) =>
+                props.onClick
+                    ? props.onClick(UIEvent.create({ value: props.value }, e))
+                    : null
+            }
             className="font-bold text-gray-600 rounded-full py-1 px-4 justify-center text-sm hover:bg-slate-200 hover:text-gray-700">
             {props.children}
         </button>
@@ -166,8 +175,11 @@ export default Dialog.create<IDialog>((props) => {
                 {tabs.map((config) => (
                     <Tab
                         key={config.name}
+                        value={config.name.toLowerCase()}
                         active={tab == config.name.toLowerCase()}
-                        onClick={() => setTab(config.name.toLowerCase())}>
+                        onClick={(e: UIEvent<{ value: string }>) =>
+                            setTab(e.target.value)
+                        }>
                         {config.name}
                     </Tab>
                 ))}
