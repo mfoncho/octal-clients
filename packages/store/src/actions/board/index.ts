@@ -3,7 +3,7 @@ import type { Channel } from "@colab/endpoint";
 import type { Require } from "@colab/common";
 import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
-import { NormalizedCard, NormalizedColumn } from "../../schemas";
+import { NormalizedCard, NormalizedCollection } from "../../schemas";
 import {
     BOARD_PURGED,
     LOAD_ARCHIVED_CARDS,
@@ -15,11 +15,11 @@ import {
     BOARD_CONNECTED,
     LOAD_BOARD,
     LOAD_BOARDS,
-    BOARD_COLUMNS_LOADED,
+    BOARD_COLLECTIONS_LOADED,
     BOARD_CARDS_LOADED,
     BOARD_DELETED,
     BOARDS_LOADED,
-    COLUMNS_UPDATED,
+    COLLECTIONS_UPDATED,
     CARDS_UPDATED,
     CREATE_BOARD,
     BOARD_CREATED,
@@ -33,11 +33,11 @@ import {
     LABEL_LOADED,
     LABELS_LOADED,
     MOVE_CARD,
-    ARCHIVE_COLUMN,
-    STORE_COLUMNS,
-    UNARCHIVE_COLUMN,
-    MOVE_COLUMN,
-    UPDATE_COLUMN,
+    ARCHIVE_COLLECTION,
+    STORE_COLLECTIONS,
+    UNARCHIVE_COLLECTION,
+    MOVE_COLLECTION,
+    UPDATE_COLLECTION,
     CREATE_CARD,
     UPDATE_CARD,
     CARDS_REORDERED,
@@ -47,18 +47,18 @@ import {
     CARDS_LOADED,
     CARD_UPDATED,
     CARD_DELETED,
-    COLUMN_DELETED,
-    CREATE_COLUMN,
+    COLLECTION_DELETED,
+    CREATE_COLLECTION,
     FETCH_CARDS,
-    COLUMN_LOADED,
-    COLUMNS_LOADED,
-    COLUMNS_REORDERED,
-    COLUMN_UPDATED,
+    COLLECTION_LOADED,
+    COLLECTIONS_LOADED,
+    COLLECTIONS_REORDERED,
+    COLLECTION_UPDATED,
     ARCHIVE_CARD,
     CARD_CREATED,
-    COLUMN_CREATED,
-    COLUMN_ARCHIVED,
-    COLUMN_UNARCHIVED,
+    COLLECTION_CREATED,
+    COLLECTION_ARCHIVED,
+    COLLECTION_UNARCHIVED,
     GET_CARD,
     CARD_LABELED,
     CARD_UNLABELED,
@@ -70,11 +70,11 @@ import {
     UNCOMPLETE_CARD,
     LOAD_CARDS,
     LOAD_CARD,
-    LOAD_COLUMNS,
-    FETCH_COLUMNS,
-    DELETE_COLUMN,
+    LOAD_COLLECTIONS,
+    FETCH_COLLECTIONS,
+    DELETE_COLLECTION,
     UPDATE_CARD_FIELD,
-    COLUMN_MOVED,
+    COLLECTION_MOVED,
     UPDATE_BOARD,
     ASSIGN_CHECKLIST,
     CHECKLIST_ASSIGNED,
@@ -177,9 +177,9 @@ export interface LoadMetadata {
     type: string;
 }
 
-export interface BoardColumnsLoadedPayload {
+export interface BoardCollectionsLoadedPayload {
     board_id: string;
-    columns: NormalizedColumn[];
+    collections: NormalizedCollection[];
 }
 
 export interface BoardCardsLoadedPayload {
@@ -196,10 +196,10 @@ export interface AssignChecklistPayload {
 export interface CardMovedPayload {
     id: string;
     index: number;
-    column_id: string;
+    collection_id: string;
 }
 
-export interface ColumnMovedPayload {
+export interface CollectionMovedPayload {
     id: string;
     index: number;
 }
@@ -345,11 +345,11 @@ export interface GetCardPayload {
 export interface ClearCardPayload {
     id: string;
     thread_id: string;
-    column_id: string | null;
+    collection_id: string | null;
     board_id: string;
 }
 
-export interface CreateColumnPayload {
+export interface CreateCollectionPayload {
     name: string;
     origin: boolean;
     capacity: number;
@@ -357,56 +357,56 @@ export interface CreateColumnPayload {
     type: "stack" | "queue";
 }
 
-export interface UpdateColumnPayload {
+export interface UpdateCollectionPayload {
     name?: string;
     origin?: boolean;
-    column_id: string;
+    collection_id: string;
     board_id: string;
     capacity?: number;
     type?: "stack" | "queue";
 }
 
-export interface MoveColumnPayload {
+export interface MoveCollectionPayload {
     index: number;
-    column_id: string;
+    collection_id: string;
     board_id: string;
 }
 
-export interface ArchiveColumnPayload {
-    column_id: string;
+export interface ArchiveCollectionPayload {
+    collection_id: string;
     board_id: string;
 }
 
-export interface UnarchiveColumnPayload {
-    column_id: string;
+export interface UnarchiveCollectionPayload {
+    collection_id: string;
     board_id: string;
 }
 
-export interface DeleteColumnPayload {
+export interface DeleteCollectionPayload {
     board_id: string;
-    column_id: string;
+    collection_id: string;
 }
 
 export interface FetchCardsPayload {
     board_id: string;
-    column_id?: string;
+    collection_id?: string;
 }
 
-export interface FetchColumnsPayload {
+export interface FetchCollectionsPayload {
     board_id: string;
 }
 
 export interface MoveCardPayload {
     card_id: string;
     index?: number;
-    column_id: string;
+    collection_id: string;
     board_id: string;
 }
 
 export interface CardPosition {
     id: string;
     index: number;
-    column_id: string;
+    collection_id: string;
 }
 
 export interface DeleteCardPayload {
@@ -414,7 +414,7 @@ export interface DeleteCardPayload {
     card_id: string;
 }
 
-export interface ColumnPosition {
+export interface CollectionPosition {
     id: string;
     index: number;
 }
@@ -432,7 +432,7 @@ export interface CreateCardPayload {
         name: string;
     };
     board_id: string;
-    column_id: string;
+    collection_id: string;
     template_id?: string;
 }
 
@@ -476,7 +476,7 @@ export interface DeleteChecklistPayload {
     checklist_id: string;
 }
 
-export interface LoadColumnsPayload {
+export interface LoadCollectionsPayload {
     board_id: string;
 }
 
@@ -508,7 +508,7 @@ export interface UpdateLabelPayload {
     };
 }
 
-export interface RemoveChecklistPayload extends Unique {}
+export interface RemoveChecklistPayload extends Unique { }
 
 export type BoardPartial = Require<Partial<io.Board>, "id" | "space_id">;
 
@@ -522,7 +522,7 @@ export type ChecklistDeletedPayload = Require<
     "id" | "card_id"
 >;
 
-export interface UnarchiveColumnPayload extends ArchiveColumnPayload {}
+export interface UnarchiveCollectionPayload extends ArchiveCollectionPayload { }
 
 export type RemoveLabelPayload = Require<Partial<io.Label>, "id" | "board_id">;
 
@@ -794,10 +794,10 @@ export type FetchCardsAction = IOAction<
     io.Card[]
 >;
 
-export type FetchColumnsAction = IOAction<
-    FETCH_COLUMNS,
-    FetchColumnsPayload,
-    io.Column[]
+export type FetchCollectionsAction = IOAction<
+    FETCH_COLLECTIONS,
+    FetchCollectionsPayload,
+    io.Collection[]
 >;
 
 export type GetCardAction = IOAction<GET_CARD, GetCardPayload, io.Card>;
@@ -824,83 +824,83 @@ export type CardArchivedAction = Action<CARD_ARCHIVED, io.Card>;
 
 export type CardUnarchivedAction = Action<CARD_UNARCHIVED, io.Card>;
 
-export type ColumnCreatedAction = Action<COLUMN_CREATED, io.Column>;
+export type CollectionCreatedAction = Action<COLLECTION_CREATED, io.Collection>;
 
-export type ColumnDeletedAction = Action<
-    COLUMN_DELETED,
+export type CollectionDeletedAction = Action<
+    COLLECTION_DELETED,
     Unique & { board_id: string }
 >;
 
-export type ColumnUpdatedAction = Action<COLUMN_UPDATED, NormalizedColumn>;
+export type CollectionUpdatedAction = Action<COLLECTION_UPDATED, NormalizedCollection>;
 
-export type ColumnsUpdatedAction = Action<COLUMNS_UPDATED, NormalizedColumn[]>;
+export type CollectionsUpdatedAction = Action<COLLECTIONS_UPDATED, NormalizedCollection[]>;
 
-export type ColumnArchivedAction = Action<COLUMN_ARCHIVED, io.Column>;
+export type CollectionArchivedAction = Action<COLLECTION_ARCHIVED, io.Collection>;
 
-export type ColumnUnarchivedAction = Action<COLUMN_UNARCHIVED, io.Column>;
+export type CollectionUnarchivedAction = Action<COLLECTION_UNARCHIVED, io.Collection>;
 
-export type StoreColumnsAction = Action<STORE_COLUMNS, io.Column[]>;
+export type StoreCollectionsAction = Action<STORE_COLLECTIONS, io.Collection[]>;
 
-export type ColumnLoadedAction = Action<
-    COLUMN_LOADED,
-    NormalizedColumn,
+export type CollectionLoadedAction = Action<
+    COLLECTION_LOADED,
+    NormalizedCollection,
     LoadMetadata
 >;
 
-export type ColumnsLoadedAction = Action<
-    COLUMNS_LOADED,
-    NormalizedColumn[],
+export type CollectionsLoadedAction = Action<
+    COLLECTIONS_LOADED,
+    NormalizedCollection[],
     LoadMetadata
 >;
 
-export type BoardColumnsLoadedAction = Action<
-    BOARD_COLUMNS_LOADED,
-    BoardColumnsLoadedPayload
+export type BoardCollectionsLoadedAction = Action<
+    BOARD_COLLECTIONS_LOADED,
+    BoardCollectionsLoadedPayload
 >;
 
-export type ColumnsReorderedAction = Action<COLUMNS_REORDERED, CardPosition[]>;
+export type CollectionsReorderedAction = Action<COLLECTIONS_REORDERED, CardPosition[]>;
 
-export type LoadColumnsAction = IOAction<
-    LOAD_COLUMNS,
-    LoadColumnsPayload,
-    io.Column[],
+export type LoadCollectionsAction = IOAction<
+    LOAD_COLLECTIONS,
+    LoadCollectionsPayload,
+    io.Collection[],
     LoadMetadata
 >;
 
-export type CreateColumnAction = IOAction<
-    CREATE_COLUMN,
-    CreateColumnPayload,
-    io.Column
+export type CreateCollectionAction = IOAction<
+    CREATE_COLLECTION,
+    CreateCollectionPayload,
+    io.Collection
 >;
 
-export type DeleteColumnAction = IOAction<
-    DELETE_COLUMN,
-    DeleteColumnPayload,
+export type DeleteCollectionAction = IOAction<
+    DELETE_COLLECTION,
+    DeleteCollectionPayload,
     any
 >;
 
-export type UpdateColumnAction = IOAction<
-    UPDATE_COLUMN,
-    UpdateColumnPayload,
-    io.Column
+export type UpdateCollectionAction = IOAction<
+    UPDATE_COLLECTION,
+    UpdateCollectionPayload,
+    io.Collection
 >;
 
-export type MoveColumnAction = IOAction<
-    MOVE_COLUMN,
-    MoveColumnPayload,
-    ColumnPosition
+export type MoveCollectionAction = IOAction<
+    MOVE_COLLECTION,
+    MoveCollectionPayload,
+    CollectionPosition
 >;
 
-export type ArchiveColumnAction = IOAction<
-    ARCHIVE_COLUMN,
-    ArchiveColumnPayload,
-    io.Column
+export type ArchiveCollectionAction = IOAction<
+    ARCHIVE_COLLECTION,
+    ArchiveCollectionPayload,
+    io.Collection
 >;
 
-export type UnarchiveColumnAction = IOAction<
-    UNARCHIVE_COLUMN,
-    ArchiveColumnPayload,
-    io.Column
+export type UnarchiveCollectionAction = IOAction<
+    UNARCHIVE_COLLECTION,
+    ArchiveCollectionPayload,
+    io.Collection
 >;
 
 export type CreateBoardAction = IOAction<
@@ -911,7 +911,7 @@ export type CreateBoardAction = IOAction<
 
 export type CardMovedAction = Action<CARD_MOVED, CardMovedPayload>;
 
-export type ColumnMovedAction = Action<COLUMN_MOVED, ColumnMovedPayload>;
+export type CollectionMovedAction = Action<COLLECTION_MOVED, CollectionMovedPayload>;
 
 export type DeleteBoardAction = IOAction<DELETE_BOARD, DeleteBoardPayload, any>;
 
@@ -921,8 +921,8 @@ export type BoardUpdatedAction = Action<BOARD_UPDATED, BoardPartial>;
 
 export type CardFieldCreatedAction = Action<CARD_FIELD_CREATED, io.CardField>;
 
-export function fetchColumns(payload: FetchColumnsPayload): FetchColumnsAction {
-    return createIOAction<FETCH_COLUMNS>(FETCH_COLUMNS, payload);
+export function fetchCollections(payload: FetchCollectionsPayload): FetchCollectionsAction {
+    return createIOAction<FETCH_COLLECTIONS>(FETCH_COLLECTIONS, payload);
 }
 
 export function loadCard(payload: LoadCardPayload): LoadCardAction {
@@ -937,14 +937,14 @@ export function loadBoardCards(payload: LoadCardsPayload): LoadCardsAction {
     return createIOAction<LOAD_CARDS>(LOAD_CARDS, payload, metadata);
 }
 
-export function loadBoardColumns(
-    payload: LoadColumnsPayload
-): LoadColumnsAction {
+export function loadBoardCollections(
+    payload: LoadCollectionsPayload
+): LoadCollectionsAction {
     let metadata: LoadMetadata = {
         root_id: payload.board_id,
         type: "board",
     };
-    return createIOAction<LOAD_COLUMNS>(LOAD_COLUMNS, payload, metadata);
+    return createIOAction<LOAD_COLLECTIONS>(LOAD_COLLECTIONS, payload, metadata);
 }
 
 export function getCard(payload: GetCardPayload): GetCardAction {
@@ -1035,84 +1035,84 @@ export function delelteCard(payload: DeleteCardPayload): DeleteCardAction {
     return createIOAction<DELETE_CARD>(DELETE_CARD, payload);
 }
 
-export function columnDeleted(
-    column: Unique & BelongsToBoard
-): ColumnDeletedAction {
-    return createAction(COLUMN_DELETED, column);
+export function collectionDeleted(
+    collection: Unique & BelongsToBoard
+): CollectionDeletedAction {
+    return createAction(COLLECTION_DELETED, collection);
 }
 
-export function columnUnarchived(column: io.Column): ColumnUnarchivedAction {
-    return createAction(COLUMN_UNARCHIVED, column);
+export function collectionUnarchived(collection: io.Collection): CollectionUnarchivedAction {
+    return createAction(COLLECTION_UNARCHIVED, collection);
 }
 
-export function columnArchived(column: io.Column): ColumnArchivedAction {
-    return createAction(COLUMN_ARCHIVED, column);
+export function collectionArchived(collection: io.Collection): CollectionArchivedAction {
+    return createAction(COLLECTION_ARCHIVED, collection);
 }
 
-export function columnCreated(column: io.Column): ColumnCreatedAction {
-    return createAction(COLUMN_CREATED, column);
+export function collectionCreated(collection: io.Collection): CollectionCreatedAction {
+    return createAction(COLLECTION_CREATED, collection);
 }
 
-export function columnLoaded(
-    column: NormalizedColumn,
+export function collectionLoaded(
+    collection: NormalizedCollection,
     metadata?: LoadMetadata
-): ColumnLoadedAction {
-    return createAction(COLUMN_LOADED, column, metadata);
+): CollectionLoadedAction {
+    return createAction(COLLECTION_LOADED, collection, metadata);
 }
 
-export function columnsLoaded(
-    columns: NormalizedColumn[],
+export function collectionsLoaded(
+    collections: NormalizedCollection[],
     metadata?: LoadMetadata
-): ColumnsLoadedAction {
-    return createAction(COLUMNS_LOADED, columns, metadata);
+): CollectionsLoadedAction {
+    return createAction(COLLECTIONS_LOADED, collections, metadata);
 }
 
-export function moveColumn(payload: MoveColumnPayload): MoveColumnAction {
-    return createIOAction<MOVE_COLUMN>(MOVE_COLUMN, payload);
+export function moveCollection(payload: MoveCollectionPayload): MoveCollectionAction {
+    return createIOAction<MOVE_COLLECTION>(MOVE_COLLECTION, payload);
 }
 
-export function updateColumn(payload: UpdateColumnPayload): UpdateColumnAction {
-    return createIOAction<UPDATE_COLUMN>(UPDATE_COLUMN, payload);
+export function updateCollection(payload: UpdateCollectionPayload): UpdateCollectionAction {
+    return createIOAction<UPDATE_COLLECTION>(UPDATE_COLLECTION, payload);
 }
 
-export function deleteColumn(payload: DeleteColumnPayload): DeleteColumnAction {
-    return createIOAction<DELETE_COLUMN>(DELETE_COLUMN, payload);
+export function deleteCollection(payload: DeleteCollectionPayload): DeleteCollectionAction {
+    return createIOAction<DELETE_COLLECTION>(DELETE_COLLECTION, payload);
 }
 
-export function columnUpdated(payload: NormalizedColumn): ColumnUpdatedAction {
-    return createAction(COLUMN_UPDATED, payload);
+export function collectionUpdated(payload: NormalizedCollection): CollectionUpdatedAction {
+    return createAction(COLLECTION_UPDATED, payload);
 }
 
-export function columnsUpdated(
-    payload: NormalizedColumn[]
-): ColumnsUpdatedAction {
-    return createAction(COLUMNS_UPDATED, payload);
+export function collectionsUpdated(
+    payload: NormalizedCollection[]
+): CollectionsUpdatedAction {
+    return createAction(COLLECTIONS_UPDATED, payload);
 }
 
-export function createColumn(payload: CreateColumnPayload): CreateColumnAction {
-    return createIOAction<CREATE_COLUMN>(CREATE_COLUMN, payload);
+export function createCollection(payload: CreateCollectionPayload): CreateCollectionAction {
+    return createIOAction<CREATE_COLLECTION>(CREATE_COLLECTION, payload);
 }
 
-export function storeColumns(payload: io.Column[]): StoreColumnsAction {
-    return createAction<STORE_COLUMNS>(STORE_COLUMNS, payload);
+export function storeCollections(payload: io.Collection[]): StoreCollectionsAction {
+    return createAction<STORE_COLLECTIONS>(STORE_COLLECTIONS, payload);
 }
 
-export function columnsReordered(
-    payload: ColumnPosition[]
-): ColumnsReorderedAction {
-    return createAction<COLUMNS_REORDERED>(COLUMNS_REORDERED, payload);
+export function collectionsReordered(
+    payload: CollectionPosition[]
+): CollectionsReorderedAction {
+    return createAction<COLLECTIONS_REORDERED>(COLLECTIONS_REORDERED, payload);
 }
 
-export function archiveColumn(
-    payload: ArchiveColumnPayload
-): ArchiveColumnAction {
-    return createIOAction<ARCHIVE_COLUMN>(ARCHIVE_COLUMN, payload);
+export function archiveCollection(
+    payload: ArchiveCollectionPayload
+): ArchiveCollectionAction {
+    return createIOAction<ARCHIVE_COLLECTION>(ARCHIVE_COLLECTION, payload);
 }
 
-export function unarchiveColumn(
-    payload: UnarchiveColumnPayload
-): UnarchiveColumnAction {
-    return createIOAction<UNARCHIVE_COLUMN>(UNARCHIVE_COLUMN, payload);
+export function unarchiveCollection(
+    payload: UnarchiveCollectionPayload
+): UnarchiveCollectionAction {
+    return createIOAction<UNARCHIVE_COLLECTION>(UNARCHIVE_COLLECTION, payload);
 }
 
 // Label
@@ -1313,8 +1313,8 @@ export function cardMoved(payload: CardMovedPayload): CardMovedAction {
     return createAction(CARD_MOVED, payload);
 }
 
-export function columnMoved(payload: ColumnMovedPayload): ColumnMovedAction {
-    return createAction(COLUMN_MOVED, payload);
+export function collectionMoved(payload: CollectionMovedPayload): CollectionMovedAction {
+    return createAction(COLLECTION_MOVED, payload);
 }
 
 export function boardCardsLoaded(
@@ -1333,10 +1333,10 @@ export function boardCreated(payload: io.Board): BoardCreatedAction {
     return createAction(BOARD_CREATED, payload);
 }
 
-export function boardColumnsLoaded(
-    payload: BoardColumnsLoadedPayload
-): BoardColumnsLoadedAction {
-    return createAction(BOARD_COLUMNS_LOADED, payload);
+export function boardCollectionsLoaded(
+    payload: BoardCollectionsLoadedPayload
+): BoardCollectionsLoadedAction {
+    return createAction(BOARD_COLLECTIONS_LOADED, payload);
 }
 
 export function updateBoardFilter(

@@ -7,23 +7,23 @@ import * as Icons from "@colab/icons";
 import { DraggableCard as Card } from "../Card";
 import Menu from "./Menu";
 import { sort } from "@colab/common";
-import UpdateColumnDialog from "./UpdateDialog";
+import UpdateCollectionDialog from "./UpdateDialog";
 import CreateCardPopper from "./CreateCardPopper";
-import StashColumnWarningDialog from "./StashColumnWarningDialog";
-import { ColumnRecord, CardRecord } from "@colab/store";
+import StashCollectionWarningDialog from "./StashCollectionWarningDialog";
+import { CollectionRecord, CardRecord } from "@colab/store";
 import { useDragged, useBoard } from "../hooks";
 import { usePermissions } from "@workspace/Space";
-import { useColumnCards } from "@colab/store";
+import { useCollectionCards } from "@colab/store";
 export { default as Context } from "./Context";
 
-interface IColumn {
+interface ICollection {
     handle: any;
-    column: ColumnRecord;
+    collection: CollectionRecord;
 }
 
 const positionSort = sort("index", "asc");
 
-const Column = React.memo<IColumn>(({ column, handle }) => {
+const Collection = React.memo<ICollection>(({ collection, handle }) => {
     const board = useBoard();
 
     const dragged = useDragged();
@@ -35,7 +35,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
 
     const [dialog, setDialog] = useState<string | null>(null);
 
-    const cards = useColumnCards(column.id).sort(positionSort);
+    const cards = useCollectionCards(collection.id).sort(positionSort);
 
     const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -94,9 +94,9 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
 
     const canManageBoard = permissions.get("board.manage");
 
-    const isFull = cards.size >= column.capacity;
+    const isFull = cards.size >= collection.capacity;
 
-    const droppableId = `column:${column.id}`;
+    const droppableId = `collection:${collection.id}`;
 
     const isDragging = droppableId == dragged?.draggableId;
 
@@ -122,7 +122,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                         onClick={canManageBoard ? handleOpenMenu : undefined}
                         className="flex flex-row items-center">
                         <span className="px-2 text-gray-800 font-semibold">
-                            <Text>{column.name}</Text>
+                            <Text>{collection.name}</Text>
                         </span>
                     </button>
                     <div className="flex flex-row items-center justify-end">
@@ -141,7 +141,7 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                                 </Button>
                             </Tooltip>
                         ) : (
-                            column.origin &&
+                            collection.origin &&
                             permissions.get("card.create") && (
                                 <Button
                                     color="clear"
@@ -184,43 +184,43 @@ const Column = React.memo<IColumn>(({ column, handle }) => {
                 anchorEl={cardCreatorAnchorEl}
                 onClose={handleCloseCardCreator}
                 onClickAway={handleCloseCardCreator}
-                column={column}
+                collection={collection}
             />
-            <UpdateColumnDialog
+            <UpdateCollectionDialog
                 open={dialog == "edit"}
-                column={column}
+                collection={collection}
                 onClose={handleCloseDialog}
             />
-            <StashColumnWarningDialog
+            <StashCollectionWarningDialog
                 open={dialog == "stash"}
-                column={column}
+                collection={collection}
                 onClose={handleCloseDialog}
             />
         </React.Fragment>
     );
 });
 
-interface IColumnMain {
+interface ICollectionMain {
     index: number;
-    column: ColumnRecord;
+    collection: CollectionRecord;
 }
 
-export default React.memo<IColumnMain>(({ column, index }) => {
+export default React.memo<ICollectionMain>(({ collection, index }) => {
     const permissions = usePermissions();
 
     return (
         <Draggable
             index={index}
             isDragDisabled={!permissions.get("board.manage")}
-            draggableId={`column:${column.id}`}>
+            draggableId={`collection:${collection.id}`}>
             {(provided) => (
                 <div
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                     className="flex flex-row pt-0 p-3">
-                    <Context column={column}>
-                        <Column
-                            column={column}
+                    <Context collection={collection}>
+                        <Collection
+                            collection={collection}
                             handle={provided.dragHandleProps}
                         />
                     </Context>

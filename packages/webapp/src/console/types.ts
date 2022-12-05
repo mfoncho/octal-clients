@@ -169,7 +169,7 @@ export namespace io {
     }
 
     export interface Account extends User {
-        status: string;
+        status?: { icon: string; text: string; timeout_at: string };
         about: string;
         roles: Role[];
         presence: Presence;

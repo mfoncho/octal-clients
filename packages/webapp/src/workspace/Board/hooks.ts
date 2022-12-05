@@ -1,11 +1,11 @@
-import { CardRecord, ColumnRecord, CardFieldRecord } from "@colab/store";
+import { CardRecord, CollectionRecord, CardFieldRecord } from "@colab/store";
 import { OrderedMap } from "immutable";
 import { useContext, useCallback, useMemo } from "react";
 import * as BoardAction from "@colab/store/lib/actions/board";
 import Context, { Cards, Dragged } from "./Context";
 import { useDispatch } from "react-redux";
 import { useDrawer as useWorkspaceDrawer } from "src/hooks";
-import { useBoardColumns, Actions } from "@colab/store";
+import { useBoardCollections, Actions } from "@colab/store";
 export { useMembers, useMember } from "../Space/hooks";
 
 const defaultCards = OrderedMap<string, CardRecord>();
@@ -42,7 +42,7 @@ export function useCards() {
     return useContext(Cards);
 }
 
-export function useColumnCards(id: string) {
+export function useCollectionCards(id: string) {
     return useCards().get(id, defaultCards);
 }
 
@@ -50,9 +50,9 @@ export function useDrawer(id: string) {
     return useWorkspaceDrawer(id, drawer);
 }
 
-export function useColumns() {
+export function useCollections() {
     const board = useBoard();
-    return useBoardColumns(board.id);
+    return useBoardCollections(board.id);
 }
 
 export function useBoardActions() {
@@ -152,46 +152,46 @@ export function useBoardActions() {
     };
 }
 
-export function useColumnActions(column: ColumnRecord) {
+export function useCollectionActions(collection: CollectionRecord) {
     const dispatch = useDispatch();
 
     const update = useCallback(
         (
             params: Omit<
-                BoardAction.UpdateColumnPayload,
-                "column_id" | "board_id"
+                BoardAction.UpdateCollectionPayload,
+                "collection_id" | "board_id"
             >
         ) => {
-            const action = BoardAction.updateColumn({
+            const action = BoardAction.updateCollection({
                 ...params,
-                column_id: column.id,
-                board_id: column.board_id,
+                collection_id: collection.id,
+                board_id: collection.board_id,
             });
             return dispatch(action);
         },
-        [column.id]
+        [collection.id]
     );
 
     const destroy = useCallback(() => {
-        const action = BoardAction.deleteColumn({
-            column_id: column.id,
-            board_id: column.board_id,
+        const action = BoardAction.deleteCollection({
+            collection_id: collection.id,
+            board_id: collection.board_id,
         });
         return dispatch(action);
     }, []);
 
     const stash = useCallback(() => {
-        const action = BoardAction.archiveColumn({
-            column_id: column.id,
-            board_id: column.board_id,
+        const action = BoardAction.archiveCollection({
+            collection_id: collection.id,
+            board_id: collection.board_id,
         });
         return dispatch(action);
     }, []);
 
     const unstash = useCallback(() => {
-        const action = BoardAction.unarchiveColumn({
-            column_id: column.id,
-            board_id: column.board_id,
+        const action = BoardAction.unarchiveCollection({
+            collection_id: collection.id,
+            board_id: collection.board_id,
         });
         return dispatch(action);
     }, []);
@@ -202,8 +202,8 @@ export function useColumnActions(column: ColumnRecord) {
                 name: name,
             },
             template_id: template,
-            board_id: column.board_id,
-            column_id: column.id,
+            board_id: collection.board_id,
+            collection_id: collection.id,
         });
         return dispatch(action);
     }, []);
@@ -395,10 +395,10 @@ export function useCardActions(card: CardRecord) {
 
     const moveCard = useCallback(
         (id: string) => {
-            if (id != card.column_id) {
+            if (id != card.collection_id) {
                 const params = {
                     card_id: card.id,
-                    column_id: id,
+                    collection_id: id,
                     board_id: card.board_id,
                 };
                 const action = BoardAction.moveCard(params);
@@ -407,7 +407,7 @@ export function useCardActions(card: CardRecord) {
                 return Promise.resolve(card);
             }
         },
-        [card.id, card.column_id]
+        [card.id, card.collection_id]
     );
 
     const updateCard = useCallback(

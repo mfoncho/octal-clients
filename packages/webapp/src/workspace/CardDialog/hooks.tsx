@@ -111,10 +111,10 @@ export function useActions(card: CardRecord) {
 
     const moveCard = useCallback(
         (id: string) => {
-            if (id != card.column_id) {
+            if (id != card.collection_id) {
                 const params = {
                     card_id: card.id,
-                    column_id: id,
+                    collection_id: id,
                     board_id: card.board_id,
                 };
                 const action = BoardAction.moveCard(params);
@@ -123,7 +123,7 @@ export function useActions(card: CardRecord) {
                 return Promise.resolve(card);
             }
         },
-        [card.id, card.column_id]
+        [card.id, card.collection_id]
     );
 
     const updateCard = useCallback(

@@ -13,7 +13,7 @@ import {
     Calendar,
     Preference,
     CardRecord,
-    ColumnRecord,
+    CollectionRecord,
     ThreadRecord,
     UserRecord,
     SpaceRecord,
@@ -35,7 +35,7 @@ const defaultTopic = TopicRecord.make({});
 
 const defaultCard = CardRecord.make({});
 
-const defaultColumn = ColumnRecord.make({});
+const defaultCollection = CollectionRecord.make({});
 
 const defaultStringList = List<string>();
 
@@ -51,10 +51,10 @@ export class UserChecklist extends Record({
     created_at: "",
     card: new CardRecord({}),
     board: new BoardRecord({}),
-    column: new ColumnRecord({}),
+    collection: new CollectionRecord({}),
     users: List<UserRecord>(),
     tasks: List<CardTaskValueRecord>(),
-}) {}
+}) { }
 
 export function useSpaceLoaded(id: string) {
     return useSelector(
@@ -133,8 +133,8 @@ export function useCardsStore() {
     return useSelector(selectors.cards);
 }
 
-export function useColumnsStore() {
-    return useSelector(selectors.columns);
+export function useCollectionsStore() {
+    return useSelector(selectors.collections);
 }
 
 export function useBoardsStore() {
@@ -168,10 +168,10 @@ export function useSpaceTopicsIndex(
     return useSelector(selector);
 }
 
-export function useColumnCardsIndex(id: string) {
+export function useCollectionCardsIndex(id: string) {
     const selector = useCallback(
         ({ cards }: State) => {
-            return cards.columns.get(id, defaultStringList);
+            return cards.collections.get(id, defaultStringList);
         },
         [id]
     );
@@ -263,8 +263,8 @@ export function useMembers(id?: string) {
     const select = useCallback(
         id
             ? ({ members }: State) => {
-                  return members.get(id, defaultMembers);
-              }
+                return members.get(id, defaultMembers);
+            }
             : selectors.members,
         [id]
     );
@@ -467,18 +467,18 @@ export function useSpaces() {
     return useSelector(selectors.spaces);
 }
 
-export function useDirectSpaces() {}
+export function useDirectSpaces() { }
 
-export function useBoardColumns(id: string) {
-    const store = useColumnsStore();
+export function useBoardCollections(id: string) {
+    const store = useCollectionsStore();
     const selector = useCallback(
-        ({ columns }: State) => {
-            return columns.boards.get(id, defaultStringList);
+        ({ collections }: State) => {
+            return collections.boards.get(id, defaultStringList);
         },
         [id]
     );
     return useSelector(selector)
-        .map((id) => store.getColumn(id)!)
+        .map((id) => store.getCollection(id)!)
         .filter(Boolean);
 }
 
@@ -508,11 +508,11 @@ export function useUserCards(id: string) {
         .filter(Boolean);
 }
 
-export function useColumnCards(id: string) {
+export function useCollectionCards(id: string) {
     const store = useCardsStore();
     const selector = useCallback(
         ({ cards }: State) => {
-            return cards.columns.get(id, defaultStringList);
+            return cards.collections.get(id, defaultStringList);
         },
         [id]
     );
@@ -521,10 +521,10 @@ export function useColumnCards(id: string) {
         .filter(Boolean);
 }
 
-export function useColumn(id: string, defaultValue = defaultColumn) {
+export function useCollection(id: string, defaultValue = defaultCollection) {
     const selector = useCallback(
-        ({ columns }: State) => {
-            return columns.entities.get(id, defaultValue);
+        ({ collections }: State) => {
+            return collections.entities.get(id, defaultValue);
         },
         [id]
     );
@@ -549,7 +549,7 @@ export function useLabels(id: string) {
 // Naive
 export function useUserChecklists(user_id: string): List<UserChecklist> {
     const selector = useCallback(
-        ({ cards, boards, columns, users }: State) => {
+        ({ cards, boards, collections, users }: State) => {
             return cards.users
                 .get(user_id, defaultStringList)
                 .filter((card_id) => {
@@ -572,7 +572,7 @@ export function useUserChecklists(user_id: string): List<UserChecklist> {
                                     (id) => users.getUser(id)!
                                 ),
                                 tasks: checklist.values,
-                                column: columns.entities.get(card.column_id),
+                                collection: collections.entities.get(card.collection_id),
                                 board: boards.entities.get(
                                     card.board_id,
                                     defaultBoard

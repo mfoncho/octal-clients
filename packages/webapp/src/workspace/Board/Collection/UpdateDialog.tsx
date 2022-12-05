@@ -3,41 +3,41 @@ import clx from "classnames";
 import { Textarea } from "@colab/ui";
 import { Switch, Dialog, Button, Range } from "@colab/ui";
 import { useInput } from "src/utils";
-import { ColumnRecord } from "@colab/store/lib/records";
-import { useColumnActions } from "../hooks";
+import { CollectionRecord } from "@colab/store/lib/records";
+import { useCollectionActions } from "../hooks";
 
 const types: { type: "stack" | "queue"; description: string }[] = [
     {
         type: "stack",
-        description: "cards are added to the top of the column",
+        description: "cards are added to the top of the collection",
     },
     {
         type: "queue",
-        description: "cards are added to the bottom of the column",
+        description: "cards are added to the bottom of the collection",
     },
 ];
 
 interface IDialog {
-    column: ColumnRecord;
+    collection: CollectionRecord;
 }
 
-export default Dialog.create<IDialog>(({ column, ...props }) => {
-    const actions = useColumnActions(column);
+export default Dialog.create<IDialog>(({ collection, ...props }) => {
+    const actions = useCollectionActions(collection);
 
-    const [origin, setOrigin] = useState<boolean>(column.origin);
+    const [origin, setOrigin] = useState<boolean>(collection.origin);
 
-    const [type, setType] = useState<"stack" | "queue">(column.type);
+    const [type, setType] = useState<"stack" | "queue">(collection.type);
 
     const [loading, setLoading] = useState(false);
 
-    const name = useInput(column.name, (value) => value.length >= 3);
+    const name = useInput(collection.name, (value) => value.length >= 3);
 
     const capacity = useInput<string>(
-        String(column.capacity),
+        String(collection.capacity),
         (cap) => cap >= "1"
     );
 
-    function handleSaveColumn() {
+    function handleSaveCollection() {
         actions
             .update({
                 name: name.value,
@@ -67,16 +67,16 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
 
     function hasChanges() {
         return (
-            type != column.type ||
-            column.origin != origin ||
-            name.value != column.name ||
-            parseInt(capacity.value) != column.capacity
+            type != collection.type ||
+            collection.origin != origin ||
+            name.value != collection.name ||
+            parseInt(capacity.value) != collection.capacity
         );
     }
 
     return (
         <Dialog
-            title="Update Column"
+            title="Update Collection"
             maxWidth="xs"
             open={props.open}
             fullWidth={false}
@@ -86,7 +86,7 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
                     <Textarea.Input
                         autoFocus={true}
                         disabled={loading}
-                        placeholder="Column name"
+                        placeholder="Collection name"
                         className="mx-0 focus:border-primary-700 py-1.5 focus:shadow border-slate-500 border-2 px-2 w-full rounded-md mx-2 font-semibold text-base text-gray-900"
                         {...name.props}
                     />
@@ -134,7 +134,7 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
                     <div className="flex flex-col pr-8">
                         <span className="font-semibold">Origin</span>
                         <span className="text-sm text-gray-500">
-                            New cards can only be created on origin columns
+                            New cards can only be created on origin collections
                         </span>
                     </div>
 
@@ -152,7 +152,7 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
                         !(name.valid && capacity.valid && hasChanges()) ||
                         loading
                     }
-                    onClick={handleSaveColumn}
+                    onClick={handleSaveCollection}
                     color="primary">
                     Save
                 </Button>

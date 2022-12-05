@@ -1,12 +1,12 @@
 import { io } from "../types";
 import BaseClient, { Params } from "../base";
 
-export interface ArchiveColumnRequest {
+export interface ArchiveCollectionRequest {
     board_id: string;
-    column_id: string;
+    collection_id: string;
 }
 
-export interface CreateColumnRequest {
+export interface CreateCollectionRequest {
     name: string;
     type: "stack" | "queue";
     origin: boolean;
@@ -14,58 +14,58 @@ export interface CreateColumnRequest {
     board_id: string;
 }
 
-export interface UpdateColumnRequest {
+export interface UpdateCollectionRequest {
     name?: string;
     type?: "stack" | "queue";
     origin?: boolean;
     capacity?: number;
-    column_id: string;
+    collection_id: string;
     board_id?: string;
 }
 
-export interface MoveColumnRequest {
+export interface MoveCollectionRequest {
     index: number;
-    column_id: string;
+    collection_id: string;
     board_id: string;
 }
 
-export interface DeleteColumnRequest {
-    column_id: string;
+export interface DeleteCollectionRequest {
+    collection_id: string;
     board_id: string;
 }
 
-export interface FetchColumnsRequest {
+export interface FetchCollectionsRequest {
     board_id: string;
 }
 
-export interface FetchArchivedColumnsRequest {
+export interface FetchArchivedCollectionsRequest {
     board_id: string;
 }
 
-export default class ColumnClient extends BaseClient {
-    async fetchArchivedColumns(
-        request: FetchArchivedColumnsRequest,
+export default class CollectionClient extends BaseClient {
+    async fetchArchivedCollections(
+        request: FetchArchivedCollectionsRequest,
         params?: Params
-    ): Promise<io.Column[]> {
-        const path = `/boards/${request.board_id}/columns?archived`;
+    ): Promise<io.Collection[]> {
+        const path = `/boards/${request.board_id}/collections?archived`;
         const { data } = await this.endpoint.get(path, params);
         return data;
     }
 
-    async fetchColumns(
-        request: FetchColumnsRequest,
+    async fetchCollections(
+        request: FetchCollectionsRequest,
         params?: Params
-    ): Promise<io.Column[]> {
-        const path = `/boards/${request.board_id}/columns`;
+    ): Promise<io.Collection[]> {
+        const path = `/boards/${request.board_id}/collections`;
         const { data } = await this.endpoint.get(path, params);
         return data;
     }
 
-    async createColumn(
-        request: CreateColumnRequest,
+    async createCollection(
+        request: CreateCollectionRequest,
         params?: Params
-    ): Promise<io.Column> {
-        const path = `/boards/${request.board_id}/columns`;
+    ): Promise<io.Collection> {
+        const path = `/boards/${request.board_id}/collections`;
         const payload = {
             name: request.name,
             type: request.type,
@@ -76,29 +76,29 @@ export default class ColumnClient extends BaseClient {
         return data;
     }
 
-    async archiveColumn(
-        request: ArchiveColumnRequest,
+    async archiveCollection(
+        request: ArchiveCollectionRequest,
         params?: Params
-    ): Promise<io.Column> {
-        const path = `/columns/${request.column_id}/archive`;
+    ): Promise<io.Collection> {
+        const path = `/collections/${request.collection_id}/archive`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }
 
-    async unarchiveColumn(
-        request: ArchiveColumnRequest,
+    async unarchiveCollection(
+        request: ArchiveCollectionRequest,
         params?: Params
-    ): Promise<io.Column> {
-        const path = `/columns/${request.column_id}/unarchive`;
+    ): Promise<io.Collection> {
+        const path = `/collections/${request.collection_id}/unarchive`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }
 
-    async updateColumn(
-        request: UpdateColumnRequest,
+    async updateCollection(
+        request: UpdateCollectionRequest,
         params?: Params
-    ): Promise<io.Column> {
-        const path = `/columns/${request.column_id}`;
+    ): Promise<io.Collection> {
+        const path = `/collections/${request.collection_id}`;
         const payload = {
             name: request.name,
             type: request.type,
@@ -109,11 +109,11 @@ export default class ColumnClient extends BaseClient {
         return data;
     }
 
-    async moveColumn(
-        request: MoveColumnRequest,
+    async moveCollection(
+        request: MoveCollectionRequest,
         params?: Params
-    ): Promise<io.Column> {
-        const path = `/columns/${request.column_id}/move`;
+    ): Promise<io.Collection> {
+        const path = `/collections/${request.collection_id}/move`;
         const payload = {
             index: request.index,
         };
@@ -121,11 +121,11 @@ export default class ColumnClient extends BaseClient {
         return data;
     }
 
-    async deleteColumn(
-        request: DeleteColumnRequest,
+    async deleteCollection(
+        request: DeleteCollectionRequest,
         params?: Params
     ): Promise<any> {
-        const path = `/columns/${request.column_id}`;
+        const path = `/collections/${request.collection_id}`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }

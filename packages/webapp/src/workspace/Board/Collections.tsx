@@ -3,22 +3,24 @@ import { Button } from "@colab/ui";
 import { Droppable } from "react-beautiful-dnd";
 import { sort } from "@colab/common";
 import * as Icons from "@colab/icons";
-import { ColumnRecord } from "@colab/store/lib/records";
+import { CollectionRecord } from "@colab/store/lib/records";
 import { useDispatch } from "react-redux";
-import { createColumn } from "@colab/store/lib/actions/board";
-import Column from "./Column";
-import { useColumns, useBoard } from "./hooks";
+import { createCollection } from "@colab/store/lib/actions/board";
+import Collection from "./Collection";
+import { useCollections, useBoard } from "./hooks";
 import { usePermissions } from "../Space/hooks";
-import ColumnNameInput, { IColumnNameInputRef } from "./Column/NameInput";
+import CollectionNameInput, {
+    ICollectionNameInputRef,
+} from "./Collection/NameInput";
 
 const positionSort = sort("index", "asc");
 
-function CreateColumn() {
+function CreateCollection() {
     const board = useBoard();
 
     const dispatch = useDispatch();
 
-    const creatorRef = useRef<IColumnNameInputRef>(null);
+    const creatorRef = useRef<ICollectionNameInputRef>(null);
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -32,10 +34,10 @@ function CreateColumn() {
         setOpen(false);
     }, []);
 
-    const handleCreateColumn = useCallback(
+    const handleCreateCollection = useCallback(
         (name: string) => {
             setCreating(true);
-            const action = createColumn({
+            const action = createCollection({
                 name: name,
                 type: "stack",
                 origin: true,
@@ -60,10 +62,10 @@ function CreateColumn() {
             className="flex-zeros-auto pt-2.5 pl-4 mt-1 mx-4 flex-col"
             style={{ width: "330px" }}>
             {open ? (
-                <ColumnNameInput
+                <CollectionNameInput
                     ref={creatorRef}
                     disabled={creating}
-                    onSubmit={handleCreateColumn}
+                    onSubmit={handleCreateCollection}
                     onClose={handleClose}
                 />
             ) : (
@@ -77,16 +79,19 @@ function CreateColumn() {
     );
 }
 
-function renderColumn(column: ColumnRecord, index: number) {
-    return <Column key={column.id} index={index} column={column} />;
+function renderCollection(collection: CollectionRecord, index: number) {
+    return (
+        <Collection key={collection.id} index={index} collection={collection} />
+    );
 }
 
-interface IColumns {}
+interface ICollections {}
 
-const unarchived = (column: ColumnRecord) => !Boolean(column.archived_at);
+const unarchived = (collection: CollectionRecord) =>
+    !Boolean(collection.archived_at);
 
-export default React.memo<IColumns>(() => {
-    const columns = useColumns();
+export default React.memo<ICollections>(() => {
+    const collections = useCollections();
     const permissions = usePermissions();
 
     function renderProvided(provided: any) {
@@ -95,18 +100,21 @@ export default React.memo<IColumns>(() => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className="flex flex-row first-child:pl-8 last-child:pr-12">
-                {columns
+                {collections
                     .filter(unarchived)
                     .sort(positionSort)
-                    .map(renderColumn)}
+                    .map(renderCollection)}
                 {provided.placeholder}
-                {permissions.get("board.manage") && <CreateColumn />}
+                {permissions.get("board.manage") && <CreateCollection />}
             </div>
         );
     }
 
     return (
-        <Droppable droppableId="columns" direction="horizontal" type="column">
+        <Droppable
+            droppableId="collections"
+            direction="horizontal"
+            type="collection">
             {renderProvided}
         </Droppable>
     );

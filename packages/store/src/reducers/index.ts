@@ -19,7 +19,7 @@ import drawer from "./drawer";
 import presence from "./presence";
 import card from "./card";
 import space from "./space";
-import column from "./column";
+import collection from "./collection";
 import workspace from "./workspace";
 
 interface IAction extends Action {
@@ -52,12 +52,12 @@ const RootStates = {
     presence: presence.state,
     drawers: drawer.state,
     threads: thread.state,
-    columns: column.state,
+    collections: collection.state,
     spaces: space.state,
     workspace: workspace.state,
 };
 
-export class RootStateRecord extends Record(RootStates, "root") {}
+export class RootStateRecord extends Record(RootStates, "root") { }
 
 export const RootState = new RootStateRecord({});
 
@@ -113,7 +113,7 @@ const reducers = {
     drawers: createReducer(drawer.reducers, drawer.state),
     snacks: createReducer(snack.reducers, snack.state),
     threads: createReducer(thread.reducers, thread.state),
-    columns: createReducer(column.reducers, column.state),
+    collections: createReducer(collection.reducers, collection.state),
     spaces: createReducer(space.reducers, space.state),
     workspace: createReducer(workspace.reducers, workspace.state),
 };

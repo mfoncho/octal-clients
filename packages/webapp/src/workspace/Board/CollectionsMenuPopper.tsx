@@ -1,9 +1,9 @@
 import React from "react";
 import { Popper, Text } from "@colab/ui";
 import { sort } from "@colab/common";
-import { ColumnRecord, useColumnCardsIndex } from "@colab/store";
+import { CollectionRecord, useCollectionCardsIndex } from "@colab/store";
 import * as Icons from "@colab/icons";
-import { useColumns } from "./hooks";
+import { useCollections } from "./hooks";
 
 export interface IMenu {
     onSelect: (e: React.MouseEvent, id: string) => any;
@@ -13,26 +13,27 @@ export interface IMenu {
 
 const positionSort = sort("index", "asc");
 
-const unarchived = (column: ColumnRecord) => !Boolean(column.archived_at);
+const unarchived = (collection: CollectionRecord) =>
+    !Boolean(collection.archived_at);
 
-interface IColumn {
-    column: ColumnRecord;
+interface ICollection {
+    collection: CollectionRecord;
     onSelect: (e: React.MouseEvent, id: string) => void;
 }
 
-function Column({ column, ...props }: IColumn) {
-    const indexed = useColumnCardsIndex(column.id);
+function Collection({ collection, ...props }: ICollection) {
+    const indexed = useCollectionCardsIndex(collection.id);
 
-    let full = indexed.size >= column.capacity;
+    let full = indexed.size >= collection.capacity;
 
-    const Icon = column.type == "stack" ? Icons.Stack : Icons.Queue;
+    const Icon = collection.type == "stack" ? Icons.Stack : Icons.Queue;
     if (full) {
         return (
             <li
-                key={column.id}
+                key={collection.id}
                 className="flex group flex-row items-center p-2 bg-gray-100 justify-between">
                 <span className="text-gray-600 font-semibold">
-                    <Text>{column.name}</Text>
+                    <Text>{collection.name}</Text>
                 </span>
                 <div className="flex flex-row">
                     <Icons.Full className="text-gray-400" />
@@ -42,12 +43,12 @@ function Column({ column, ...props }: IColumn) {
     } else {
         return (
             <li
-                key={column.id}
+                key={collection.id}
                 role="button"
                 className="flex group cursor-pointer flex-row  items-center p-2 hover:bg-primary-500 justify-between"
-                onClick={(e) => props.onSelect(e, column.id)}>
+                onClick={(e) => props.onSelect(e, collection.id)}>
                 <span className="group-hover:text-white text-gray-800 font-semibold">
-                    <Text>{column.name}</Text>
+                    <Text>{collection.name}</Text>
                 </span>
                 <Icon className="group-hover:text-white text-gray-500" />
             </li>
@@ -56,11 +57,15 @@ function Column({ column, ...props }: IColumn) {
 }
 
 export default Popper.create<HTMLUListElement, IMenu>((props) => {
-    const columns = useColumns();
+    const collections = useCollections();
 
-    function renderColumnOption(column: ColumnRecord) {
+    function renderCollectionOption(collection: CollectionRecord) {
         return (
-            <Column key={column.id} column={column} onSelect={props.onSelect} />
+            <Collection
+                key={collection.id}
+                collection={collection}
+                onSelect={props.onSelect}
+            />
         );
     }
 
@@ -104,10 +109,10 @@ export default Popper.create<HTMLUListElement, IMenu>((props) => {
             anchorEl={props.anchorEl}
             onClickAway={props.onClickAway}
             className="z-10 flex w-60 flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-64 bg-white shadow-lg overflow-x-hidden overflow-y-auto divide-y">
-            {columns
+            {collections
                 .filter(unarchived)
                 .sort(positionSort)
-                .map(renderColumnOption)}
+                .map(renderCollectionOption)}
             {props.action && renderAction(props.action)}
         </Popper>
     );

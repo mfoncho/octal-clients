@@ -1,7 +1,7 @@
 import { Record, Map } from "immutable";
 import { Unique, Positioned, Id, BelongsToBoard } from "@colab/client";
 
-export class ColumnRecord
+export class CollectionRecord
     extends Record({
         id: "" as Id,
         type: "" as "stack" | "queue",
@@ -12,10 +12,9 @@ export class ColumnRecord
         board_id: "" as Id,
         archived_at: null as string | null,
     })
-    implements Unique, Positioned, BelongsToBoard
-{
+    implements Unique, Positioned, BelongsToBoard {
     patch(data: any) {
-        return this.merge(ColumnRecord.objectFromJS(data));
+        return this.merge(CollectionRecord.objectFromJS(data));
     }
 
     getStorePath(): [Id, Id] {
@@ -23,7 +22,7 @@ export class ColumnRecord
     }
 
     static mapFromJS(data: any) {
-        return Map(ColumnRecord.objectFromJS(data));
+        return Map(CollectionRecord.objectFromJS(data));
     }
 
     static objectFromJS(data: any) {
@@ -35,8 +34,8 @@ export class ColumnRecord
 
     static make(payload: any) {
         if (Record.isRecord(payload)) {
-            return payload as any as ColumnRecord;
+            return payload as any as CollectionRecord;
         }
-        return new ColumnRecord(payload);
+        return new CollectionRecord(payload);
     }
 }

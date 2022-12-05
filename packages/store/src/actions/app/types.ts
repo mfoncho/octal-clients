@@ -18,8 +18,8 @@ export type NAME_DELETED = typeof NAME_DELETED;
 export const NAME_UPDATED = "NAME_UPDATED";
 export type NAME_UPDATED = typeof NAME_UPDATED;
 
-export const COLLECTION_LOADED = "COLLECTION_LOADED";
-export type COLLECTION_LOADED = typeof COLLECTION_LOADED;
+export const DATA_LOADED = "DATA_LOADED";
+export type DATA_LOADED = typeof DATA_LOADED;
 
 export const CREATE_TRACKER = "CREATE_TRACKER";
 export type CREATE_TRACKER = typeof CREATE_TRACKER;

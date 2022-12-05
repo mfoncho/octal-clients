@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { Dialog } from "@colab/ui";
-import { ColumnRecord } from "@colab/store";
-import { useColumnActions } from "@workspace/Board/hooks";
+import { CollectionRecord } from "@colab/store";
+import { useCollectionActions } from "@workspace/Board/hooks";
 
 interface IDialog {
-    column: ColumnRecord;
+    collection: CollectionRecord;
 }
 
-const warning = (column: ColumnRecord) => `
-All cards in __${column.name}__ will be hidden untill the column is unstashed
+const warning = (collection: CollectionRecord) => `
+All cards in __${collection.name}__ will be hidden untill the collection is unstashed
 `;
 
-export default Dialog.create<IDialog>(({ column, ...props }) => {
+export default Dialog.create<IDialog>(({ collection, ...props }) => {
     const [loading, setLoading] = useState(false);
 
-    const actions = useColumnActions(column);
+    const actions = useCollectionActions(collection);
 
     function handleConfirm(e: React.MouseEvent) {
         e.preventDefault();
@@ -26,11 +26,11 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
     return (
         <Dialog.Warning
             open={props.open}
-            title="Stach Column"
+            title="Stach Collection"
             onClose={loading ? undefined : props.onClose}
             disabled={loading}
             onConfirm={handleConfirm}>
-            {warning(column)}
+            {warning(collection)}
         </Dialog.Warning>
     );
 });

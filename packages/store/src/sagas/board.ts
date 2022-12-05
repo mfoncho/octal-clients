@@ -123,8 +123,8 @@ function* connect({ payload }: BoardActions.BoardLoadedAction): Iterable<any> {
 
     channel
         .subscribe()
-        .receive("ok", () => {})
-        .receive("error", () => {});
+        .receive("ok", () => { })
+        .receive("error", () => { });
 
     yield put(BoardActions.boardConnected({ topic, channel, id: payload.id }));
 }
@@ -158,7 +158,7 @@ function* loadSpaceBoard({
     //@ts-ignore
     const boards: io.Board[] = yield client.fetchBoards(payload.id);
     yield* load(boards);
-    yield put(AppActions.collectionLoaded(payload.id, "boards", boards));
+    yield put(AppActions.dataLoaded(payload.id, "boards", boards));
 }
 
 function* spaceLoaded({

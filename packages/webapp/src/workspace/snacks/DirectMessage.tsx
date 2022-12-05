@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default React.forwardRef((props: any, ref: any) => {
-    const classes = useStyles();
+    const classes = useStyles() as any;
 
     const dispatch = useDispatch();
 

@@ -32,7 +32,7 @@ export interface UncompleteCardRequest {
 export interface MoveCardRequest {
     card_id: string;
     index?: number;
-    column_id: string;
+    collection_id: string;
     board_id: string;
 }
 
@@ -46,13 +46,13 @@ export interface CreateCardRequest {
         name: string;
     };
     board_id: string;
-    column_id: string;
+    collection_id: string;
     template_id?: string;
 }
 
 export interface FetchCardsRequest {
     board_id: string;
-    column_id?: string;
+    collection_id?: string;
 }
 
 export interface ArchiveCardRequest {
@@ -62,7 +62,7 @@ export interface ArchiveCardRequest {
 
 export interface UnarchiveCardRequest {
     card_id: string;
-    column_id: string;
+    collection_id: string;
     board_id: string;
 }
 
@@ -97,8 +97,8 @@ export default class CardClient extends BaseClient {
         params?: Params
     ): Promise<io.Card[]> {
         let url: string;
-        if (request.column_id != null) {
-            url = `/boards/${request.board_id}/columns/${request.column_id}/cards`;
+        if (request.collection_id != null) {
+            url = `/boards/${request.board_id}/collections/${request.collection_id}/cards`;
         } else {
             url = `/boards/${request.board_id}/cards`;
         }
@@ -114,7 +114,7 @@ export default class CardClient extends BaseClient {
             ...request.params,
             template_id: request.template_id,
         };
-        const url = `/boards/${request.board_id}/columns/${request.column_id}/cards`;
+        const url = `/boards/${request.board_id}/collections/${request.collection_id}/cards`;
         const { data } = await this.endpoint.post(url, payload, params);
         return data;
     }
@@ -139,7 +139,7 @@ export default class CardClient extends BaseClient {
         const payload = {
             index: request.index,
         };
-        const path = `/boards/${request.board_id}/cards/${request.card_id}/move/${request.column_id}`;
+        const path = `/boards/${request.board_id}/cards/${request.card_id}/move/${request.collection_id}`;
         const { data } = await this.endpoint.put(path, payload, params);
         return data;
     }

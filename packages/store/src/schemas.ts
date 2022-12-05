@@ -90,7 +90,7 @@ const MessageStruct = {
 
 const StatusStruct = {};
 
-const ColumnStruct = {
+const CollectionStruct = {
     cards: cards,
 };
 
@@ -196,11 +196,11 @@ export const ChecklistSchema = Schema.create<
     "checklists"
 >(ChecklistStruct, "checklist", "checklists");
 
-export const ColumnSchema = Schema.create<
-    io.Column,
-    typeof ColumnStruct,
-    "columns"
->(ColumnStruct, "column", "columns");
+export const CollectionSchema = Schema.create<
+    io.Collection,
+    typeof CollectionStruct,
+    "collections"
+>(CollectionStruct, "collection", "collections");
 
 export const MessageSchema = Schema.create<
     io.Message,
@@ -240,8 +240,8 @@ export type NormalizedMember = ReturnType<
     typeof MemberSchema["normalizeOne"]
 >[0];
 
-export type NormalizedColumn = ReturnType<
-    typeof ColumnSchema["normalizeOne"]
+export type NormalizedCollection = ReturnType<
+    typeof CollectionSchema["normalizeOne"]
 >[0];
 
 export type NormalizedMessage = ReturnType<
@@ -257,7 +257,7 @@ export type RelatedRecord<T> = Record<string, T>;
 export type NormalizedRelated = {
     [UserSchema.collect]?: RelatedRecord<NormalizedUser>;
     [CardSchema.collect]?: RelatedRecord<NormalizedCard>;
-    [ColumnSchema.collect]?: RelatedRecord<NormalizedColumn>;
+    [CollectionSchema.collect]?: RelatedRecord<NormalizedCollection>;
     [ThreadSchema.collect]?: RelatedRecord<NormalizedThread>;
     [MessageSchema.collect]?: RelatedRecord<NormalizedMessage>;
     [ChecklistSchema.collect]?: RelatedRecord<NormalizedChecklist>;

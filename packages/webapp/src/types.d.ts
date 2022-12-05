@@ -59,7 +59,7 @@ declare global {
 }
 
 declare module "react-redux" {
-    interface DefaultRootState extends State {}
+    interface DefaultRootState extends State { }
 }
 
 declare module "@material-ui/core/styles/createPalette" {
@@ -124,7 +124,7 @@ declare module "@material-ui/core/styles/createPalette" {
     }
 }
 
-export type ColumnType = "stack" | "queue";
+export type CollectionType = "stack" | "queue";
 
 export type SpaceType = "board" | "discuss" | "direct";
 
@@ -188,10 +188,10 @@ export interface Thenable<T = any> {
 
 export type PartialTurtle<T> = {
     [P in keyof T]?: T[P] extends (infer U)[]
-        ? PartialTurtle<U>[]
-        : T[P] extends object
-        ? PartialTurtle<T[P]>
-        : T[P];
+    ? PartialTurtle<U>[]
+    : T[P] extends object
+    ? PartialTurtle<T[P]>
+    : T[P];
 };
 
 export interface Finalizable<T = any> {
@@ -204,8 +204,8 @@ export interface Catchable<T = any> {
 
 export interface Promiseable<T = any, E = any>
     extends Thenable<T>,
-        Finalizable<T>,
-        Catchable<E> {}
+    Finalizable<T>,
+    Catchable<E> { }
 
 export interface RouteLocation {
     state: any;
@@ -241,7 +241,7 @@ export interface Unique {
     id: Id;
 }
 
-export interface Timestamp extends String {}
+export interface Timestamp extends String { }
 
 export interface Timestamped {
     timestamp: Timestamp;

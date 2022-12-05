@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import Columns from "./Columns";
+import Collections from "./Collections";
 import { Dragged } from "./Context";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { DragDropContext, DropResult, DragStart } from "react-beautiful-dnd";
@@ -44,17 +44,17 @@ export default function Board() {
                             card_id: id,
                             board_id: board.id,
                             index: index,
-                            column_id:
+                            collection_id:
                                 drop.destination.droppableId.split(":")[1],
                         });
                         dispatch(action);
                     }
                     break;
 
-                case "column":
+                case "collection":
                     {
-                        let action = BoardAction.moveColumn({
-                            column_id: id,
+                        let action = BoardAction.moveCollection({
+                            collection_id: id,
                             index: index,
                             board_id: board.id,
                         });
@@ -78,7 +78,7 @@ export default function Board() {
                     onDragEnd={handleDragEnd}
                     onDragStart={handleDragStart}>
                     <div className="flex flex-grow">
-                        <Columns />
+                        <Collections />
                     </div>
                 </DragDropContext>
             </PerfectScrollbar>

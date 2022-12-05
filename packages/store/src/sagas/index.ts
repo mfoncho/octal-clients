@@ -23,7 +23,7 @@ const watchers = [
     ...require("./status").tasks,
     ...require("./dialog").tasks,
     ...require("./router").tasks,
-    ...require("./column").tasks,
+    ...require("./collection").tasks,
     ...require("./space").tasks,
     ...require("./member").tasks,
     ...require("./message").tasks,

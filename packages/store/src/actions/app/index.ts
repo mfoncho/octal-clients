@@ -24,7 +24,7 @@ import {
     TRACKERS_LOADED,
     TRACKER_CREATED,
     TRACKER_DELETED,
-    COLLECTION_LOADED,
+    DATA_LOADED,
     WORKSPACE_UPDATED,
     WORKSPACE_LOADED,
     WORKSPACE_CONNECTED,
@@ -40,7 +40,7 @@ export interface DeleteTrackerPayload {
     id: string;
 }
 
-export interface LoggedOutPyaload {}
+export interface LoggedOutPyaload { }
 
 export interface CreateTrackerPayload {
     event: string;
@@ -65,7 +65,7 @@ export interface ILoginPayload {
     remember_me?: boolean;
 }
 
-export interface CollectionLoadedPayload {
+export interface DataLoadedPayload {
     type: string;
     data?: any;
     collection: string;
@@ -86,9 +86,9 @@ export type WorkspaceConnectedAction = Action<
     WorkspaceConnectedPayload
 >;
 
-export type CollectionLoadedAction = Action<
-    COLLECTION_LOADED,
-    CollectionLoadedPayload
+export type DataLoadedAction = Action<
+    DATA_LOADED,
+    DataLoadedPayload
 >;
 
 export type NameLoadedAction = Action<NAME_LOADED, io.Name>;
@@ -185,12 +185,12 @@ export function relatedLoaded(related: NormalizedRelated): RelatedLoadedAction {
     return createAction(RELATED_LOADED, related);
 }
 
-export function collectionLoaded(
+export function dataLoaded(
     collection: string,
     type: string,
     data?: any
-): CollectionLoadedAction {
-    return createAction(COLLECTION_LOADED, { collection, type, data });
+): DataLoadedAction {
+    return createAction(DATA_LOADED, { collection, type, data });
 }
 
 export function workspaceLoaded(

@@ -1,22 +1,22 @@
 import React, { useState, useRef } from "react";
 import * as Icons from "@colab/icons";
-import ColumnsMenuPopper from "@workspace/Board/ColumnsMenuPopper";
-import { CardRecord, useColumn, useAuthId } from "@colab/store";
+import CollectionsMenuPopper from "@workspace/Board/CollectionsMenuPopper";
+import { CardRecord, useCollection, useAuthId } from "@colab/store";
 import { Text, useScreen } from "@colab/ui";
 import Actions from "./Actions";
 import { useActions } from "./hooks";
 import { usePermissions } from "@workspace/Space";
 
-interface IColumnField {
+interface ICollectionField {
     card: CardRecord;
     onClose: (e: React.MouseEvent) => void;
 }
 
-export default function ColumnField({ card, ...props }: IColumnField) {
+export default function CollectionField({ card, ...props }: ICollectionField) {
     const actions = useActions(card);
     const screen = useScreen();
     const root = useRef<HTMLButtonElement>(null);
-    const column = useColumn(card.column_id);
+    const collection = useCollection(card.collection_id);
     const [popper, setPopper] = useState(false);
     const permissions = usePermissions();
 
@@ -26,11 +26,11 @@ export default function ColumnField({ card, ...props }: IColumnField) {
 
     const moveable = permissions.get("board.manage") || owner;
 
-    function handleColumnSelect(e: React.MouseEvent, id: string) {
+    function handleCollectionSelect(e: React.MouseEvent, id: string) {
         e.preventDefault();
         e.stopPropagation();
         setPopper(false);
-        if (moveable && card.column_id !== id) {
+        if (moveable && card.collection_id !== id) {
             if (id == "Archive") {
                 return actions.archiveCard();
             } else {
@@ -61,7 +61,7 @@ export default function ColumnField({ card, ...props }: IColumnField) {
                             {card.index + 1}
                         </span>
                         <span className="px-2 mx-1 text-base font-bold text-gray-700">
-                            <Text>{column.name}</Text>
+                            <Text>{collection.name}</Text>
                         </span>
                     </>
                 )}
@@ -71,11 +71,11 @@ export default function ColumnField({ card, ...props }: IColumnField) {
                     <Actions card={card} onClose={props.onClose} />
                 </div>
             )}
-            <ColumnsMenuPopper
+            <CollectionsMenuPopper
                 open={popper}
                 anchorEl={root.current}
-                selected={card.column_id}
-                onSelect={handleColumnSelect}
+                selected={card.collection_id}
+                onSelect={handleCollectionSelect}
                 action={card.archived ? undefined : "Archive"}
                 onClickAway={() => setPopper(false)}
             />

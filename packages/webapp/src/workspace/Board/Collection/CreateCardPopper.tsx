@@ -3,12 +3,12 @@ import { Popper, Text, Textarea } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import { useNavigator } from "src/hooks";
 import { useBoard } from "../hooks";
-import { ColumnRecord, BoardRecord } from "@colab/store/lib/records";
+import { CollectionRecord, BoardRecord } from "@colab/store/lib/records";
 import { useInput } from "src/utils";
-import { useColumnActions } from "@workspace/Board/hooks";
+import { useCollectionActions } from "@workspace/Board/hooks";
 
 interface ICreateCardPopper {
-    column: ColumnRecord;
+    collection: CollectionRecord;
     onClose: (event: any, reason: string) => void;
 }
 
@@ -68,8 +68,8 @@ const TemplateDropdown = Popper.create<HTMLDivElement, IDropdownPopper>(
 );
 
 export default Popper.create<HTMLDivElement, ICreateCardPopper>(
-    ({ column, ...props }) => {
-        const actions = useColumnActions(column);
+    ({ collection, ...props }) => {
+        const actions = useCollectionActions(collection);
 
         const navigator = useNavigator();
 

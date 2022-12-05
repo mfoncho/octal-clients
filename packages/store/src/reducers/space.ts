@@ -105,7 +105,7 @@ export const reducers = {
 
     [Actions.COLLECTION_LOADED]: (
         store: SpacesStore,
-        { payload }: AppActions.CollectionLoadedAction
+        { payload }: AppActions.DataLoadedAction
     ) => {
         const space = store.getSpace(payload.collection);
         if (space && collections.includes(payload.type)) {

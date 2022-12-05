@@ -47,7 +47,7 @@ export class BooleanPermission
         value: false,
         overwrite: false,
     })
-    implements BasePermission<boolean> {}
+    implements BasePermission<boolean> { }
 
 export class NumberPermission
     extends Record({
@@ -55,13 +55,13 @@ export class NumberPermission
         overwrite: false,
         name: "",
     })
-    implements BasePermission<number> {}
+    implements BasePermission<number> { }
 
 export class ListPermission extends Record({
     value: [] as any[],
     overwrite: false,
     name: "",
-}) {}
+}) { }
 
 export class StringPermission
     extends Record({
@@ -69,7 +69,7 @@ export class StringPermission
         overwrite: false,
         name: "",
     })
-    implements BasePermission<string> {}
+    implements BasePermission<string> { }
 
 const booleanPermission = new BooleanPermission();
 
@@ -102,7 +102,7 @@ export type BasePermissionScheme = typeof permissions;
 
 export type Permission = keyof BasePermissionScheme;
 
-export class Permissions extends Record(permissions) {}
+export class Permissions extends Record(permissions) { }
 
 export const PermissionGroups: IPermissionsGroup[] = [
     {
@@ -208,7 +208,7 @@ export const PermissionGroups: IPermissionsGroup[] = [
                 permission: "board.manage",
                 type: "boolean",
                 description:
-                    "Create columns, Delete cards, move and reorder cards and columns",
+                    "Create collections, Delete cards, move and reorder cards and collections",
             },
         ],
     },

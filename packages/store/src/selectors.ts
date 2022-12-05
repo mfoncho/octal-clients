@@ -28,8 +28,8 @@ export function cards({ cards }: State) {
     return cards;
 }
 
-export function columns({ columns }: State) {
-    return columns;
+export function collections({ collections }: State) {
+    return collections;
 }
 
 export function topics({ topics }: State) {
@@ -86,7 +86,7 @@ export default {
     boards,
     topics,
     threads,
-    columns,
+    collections,
     members,
     calendarLoaded,
     workspace,

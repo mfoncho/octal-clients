@@ -4,7 +4,7 @@ export * from "./drawer";
 export * from "./user";
 export * from "./misc";
 export * from "./workspace";
-export * from "./column";
+export * from "./collection";
 export * from "./card";
 export * from "./auth";
 export * from "./space";

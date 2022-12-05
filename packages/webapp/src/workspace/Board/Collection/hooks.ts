@@ -1,12 +1,12 @@
 import React from "react";
-import { Actions, Column, Cards } from "./Context";
+import { Actions, Collection, Cards } from "./Context";
 
 export function useActions() {
     return React.useContext(Actions);
 }
 
-export function useColumn() {
-    return React.useContext(Column);
+export function useCollection() {
+    return React.useContext(Collection);
 }
 
 export function useCards() {

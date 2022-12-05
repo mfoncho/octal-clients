@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Dialog, Markdown } from "@colab/ui";
-import { useColumnActions } from "@workspace/Board/hooks";
-import { ColumnRecord } from "@colab/store";
+import { useCollectionActions } from "@workspace/Board/hooks";
+import { CollectionRecord } from "@colab/store";
 
 interface IDialog {
-    column: ColumnRecord;
+    collection: CollectionRecord;
 }
 
-export default Dialog.create<IDialog>(({ column, ...props }) => {
+export default Dialog.create<IDialog>(({ collection, ...props }) => {
     const [loading, setLoading] = useState(false);
 
-    const actions = useColumnActions(column);
+    const actions = useCollectionActions(collection);
 
     function handleConfirm(e: React.MouseEvent) {
         e.preventDefault();
@@ -22,12 +22,12 @@ export default Dialog.create<IDialog>(({ column, ...props }) => {
     return (
         <Dialog.Warning
             open={props.open}
-            title="Delete Column"
+            title="Delete Collection"
             onClose={loading ? undefined : props.onClose}
             disabled={loading}
             onConfirm={handleConfirm}>
             <Markdown>
-                {`All data related to __${column.name}__ will be lost permently.`}
+                {`All data related to __${collection.name}__ will be lost permently.`}
             </Markdown>
         </Dialog.Warning>
     );

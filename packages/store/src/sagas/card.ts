@@ -61,7 +61,7 @@ function* loadBoardCards({
         )) as any as io.Card[];
 
         yield* normalizeLoad(data);
-        yield put(AppActions.collectionLoaded(payload.board_id, "cards", data));
+        yield put(AppActions.dataLoaded(payload.board_id, "cards", data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -89,7 +89,7 @@ function* loadArchivedCards({
         const data = (yield Client.fetchArchivedCards(payload)) as any;
         yield* normalizeLoad(data);
         yield put(
-            AppActions.collectionLoaded(
+            AppActions.dataLoaded(
                 payload.board_id,
                 "cards.archived",
                 data
@@ -146,7 +146,7 @@ function* move({
                 BoardActions.cardMoved({
                     id: payload.card_id,
                     index: payload.index,
-                    column_id: payload.column_id,
+                    collection_id: payload.collection_id,
                 })
             );
         }

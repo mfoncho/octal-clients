@@ -7,7 +7,7 @@ export interface SlateNode {
 
 export interface ILocation {
     line: number;
-    column: number;
+    collection: number;
     offset: number;
 }
 export interface IPosition {

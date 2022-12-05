@@ -2,19 +2,19 @@ import React, { useImperativeHandle, useRef } from "react";
 import { Textarea } from "@colab/ui";
 import { useInput } from "src/utils";
 
-export interface IColumnNameInput {
+export interface ICollectionNameInput {
     defaultValue?: string;
     disabled?: boolean;
     onClose: (e: React.MouseEvent | any) => void;
     onSubmit?: (name: string) => void;
 }
 
-export interface IColumnNameInputRef {
+export interface ICollectionNameInputRef {
     reset: () => void;
     focus: () => void;
 }
 
-export default React.forwardRef<IColumnNameInputRef, IColumnNameInput>(
+export default React.forwardRef<ICollectionNameInputRef, ICollectionNameInput>(
     ({ defaultValue = "", ...props }, ref) => {
         const name = useInput(defaultValue);
 

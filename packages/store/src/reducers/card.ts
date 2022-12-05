@@ -5,7 +5,7 @@ import { CardRecord } from "../records";
 
 const positionSort = sort("index", "asc");
 
-type Index = "users" | "boards" | "columns" | "dates";
+type Index = "users" | "boards" | "collections" | "dates";
 
 export class CardsStore extends Record({
     fields: Map<string, string>(),
@@ -13,7 +13,7 @@ export class CardsStore extends Record({
     dates: Map<string, List<string>>(),
     users: Map<string, List<string>>(),
     boards: Map<string, List<string>>(),
-    columns: Map<string, List<string>>(),
+    collections: Map<string, List<string>>(),
     entities: Map<string, CardRecord>(),
 }) {
     static makeCard(payload: any) {
@@ -113,10 +113,10 @@ export class CardsStore extends Record({
                     store.setIn(["fields", field.id], field.card_id);
                 });
 
-                // index column_id
-                let columns = store.columns.get(card.column_id, List<string>());
-                if (!columns.includes(card.id)) {
-                    let indexed = columns
+                // index collection_id
+                let collections = store.collections.get(card.collection_id, List<string>());
+                if (!collections.includes(card.id)) {
+                    let indexed = collections
                         .map((id) => store.getCard(id)!)
                         .filter(Boolean)
                         .sort(positionSort)
@@ -126,7 +126,7 @@ export class CardsStore extends Record({
                             store.setIn(["entities", card.id], card);
                             return card.id;
                         });
-                    store.setIn(["columns", card.column_id], indexed);
+                    store.setIn(["collections", card.collection_id], indexed);
                 } else {
                     // this should never happen but edges are always sharp
                     // and like a knife handle with care
@@ -149,20 +149,20 @@ export class CardsStore extends Record({
                 CardsStore.indexCardUsers(store, updated);
                 CardsStore.indexCardDates(store, updated);
 
-                if (updated.column_id !== card.column_id) {
-                    // remove old index column_id
-                    let columns = store.columns.get(
-                        card.column_id,
+                if (updated.collection_id !== card.collection_id) {
+                    // remove old index collection_id
+                    let collections = store.collections.get(
+                        card.collection_id,
                         List<string>()
                     );
-                    if (columns.includes(card.id)) {
-                        // reindex destination column cards
-                        let indexed = columns
+                    if (collections.includes(card.id)) {
+                        // reindex destination collection cards
+                        let indexed = collections
                             // filter out current card id from index
                             .filter(filter)
                             .map((id) => store.getCard(id)!)
                             .filter(Boolean)
-                            // sort the in columns index
+                            // sort the in collections index
                             .sort(positionSort)
                             // reposition cards and collect id for new index
                             .map((card, index) => {
@@ -171,17 +171,17 @@ export class CardsStore extends Record({
                                 store.setIn(["entities", card.id], card);
                                 return card.id;
                             });
-                        store.setIn(["columns", card.column_id], indexed);
+                        store.setIn(["collections", card.collection_id], indexed);
                     }
                 }
 
                 if (
                     card.index !== updated.index ||
-                    card.column_id !== updated.column_id
+                    card.collection_id !== updated.collection_id
                 ) {
-                    // add new index column_id
-                    let indexed = store.columns
-                        .get(updated.column_id, List<string>())
+                    // add new index collection_id
+                    let indexed = store.collections
+                        .get(updated.collection_id, List<string>())
                         .filter(filter)
                         .map((id) => store.getCard(id)!)
                         .filter(Boolean)
@@ -194,7 +194,7 @@ export class CardsStore extends Record({
                             return card.id;
                         });
 
-                    store.setIn(["columns", updated.column_id], indexed);
+                    store.setIn(["collections", updated.collection_id], indexed);
                 } else {
                     // update entry
                     store.setIn(["entities", card.id], updated);
@@ -233,9 +233,9 @@ export class CardsStore extends Record({
                         boards.filter(filter)
                     );
 
-                // indexed column_id
-                let columns = store.columns
-                    .get(card.column_id, List<string>())
+                // indexed collection_id
+                let collections = store.collections
+                    .get(card.collection_id, List<string>())
                     .filter(filter)
                     .map((id) => store.getCard(id)!)
                     .filter(Boolean)
@@ -244,7 +244,7 @@ export class CardsStore extends Record({
                         store.setIn(["entities", card.id], card);
                         return card.id;
                     });
-                store.setIn(["columns", card.column_id], columns);
+                store.setIn(["collections", card.collection_id], collections);
 
                 // delete entry
                 store.deleteIn(["entities", payload.id]);
@@ -280,8 +280,8 @@ export const reducers = {
         }
         return store;
     },
-    [Actions.COLUMN_DELETED]: (store: CardsStore, { payload }: any) => {
-        let cids = store.columns.get(payload.id);
+    [Actions.COLLECTION_DELETED]: (store: CardsStore, { payload }: any) => {
+        let cids = store.collections.get(payload.id);
         if (cids && !cids.isEmpty()) {
             return cids.reduce((id) => {
                 return store.removeCard({ id });

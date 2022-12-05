@@ -3,7 +3,7 @@ import * as patterns from "@colab/patterns";
 
 export interface ILocation {
     line: number;
-    column: number;
+    collection: number;
     offset: number;
 }
 

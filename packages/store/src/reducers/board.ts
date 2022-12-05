@@ -4,7 +4,7 @@ import * as AppActions from "../actions/app";
 import * as BoardActions from "../actions/board";
 import { BoardRecord } from "../records";
 
-const collections = ["cards", "columns", "archived_cards"];
+const collections = ["cards", "collections", "archived_cards"];
 
 export class BoardsStore extends Record({
     loaded: Map<string, List<string>>(),
@@ -159,7 +159,7 @@ export const reducers = {
         store: BoardsStore,
         { payload }: BoardActions.BoardArchivedAction
     ) => {
-        return store.patchBoard({ ...payload, column_id: null });
+        return store.patchBoard({ ...payload, collection_id: null });
     },
     [Actions.BOARD_UNARCHIVED]: (
         store: BoardsStore,
@@ -182,7 +182,7 @@ export const reducers = {
 
     [Actions.COLLECTION_LOADED]: (
         store: BoardsStore,
-        { payload }: AppActions.CollectionLoadedAction
+        { payload }: AppActions.DataLoadedAction
     ) => {
         const board = store.getBoard(payload.collection);
         if (board && collections.includes(payload.type)) {
@@ -266,9 +266,9 @@ export const reducers = {
         return store;
     },
 
-    [Actions.COLUMNS_LOADED]: (store: BoardsStore, { metadata }: any) => {
+    [Actions.COLLECTIONS_LOADED]: (store: BoardsStore, { metadata }: any) => {
         if (metadata && metadata.type == "board") {
-            return store.putLoaded(metadata.root_id, "columns");
+            return store.putLoaded(metadata.root_id, "collections");
         }
         return store;
     },

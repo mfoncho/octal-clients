@@ -112,7 +112,7 @@ function* loadSpaceTopics({
     //@ts-ignore
     const topics: io.Topic[] = yield Client.fetchTopics(payload.id);
     yield* load(topics);
-    yield put(AppActions.collectionLoaded(payload.id, "topics", topics));
+    yield put(AppActions.dataLoaded(payload.id, "topics", topics));
 }
 
 function* spaceLoaded({

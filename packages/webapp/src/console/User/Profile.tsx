@@ -31,7 +31,7 @@ export default React.memo<{ user: io.Account }>(({ user }) => {
                 </div>
                 <div className="flex items-center flex-row px-4">
                     <span className="text-gray-800">
-                        <Text>{user.status}</Text>
+                        <Text>{`${user.status?.icon} ${user.status?.text}`}</Text>
                     </span>
                 </div>
             </div>

@@ -3,23 +3,23 @@ import BaseClient from "../base";
 import BoardClient from "./board";
 import CardClient from "./card";
 import LabelClient from "./label";
-import ColumnClient from "./column";
+import CollectionClient from "./collection";
 import CardFieldClient from "./cardfield";
 
-class Client extends BaseClient {}
+class Client extends BaseClient { }
 
 interface Client
     extends BoardClient,
-        ColumnClient,
-        LabelClient,
-        CardClient,
-        CardFieldClient {}
+    CollectionClient,
+    LabelClient,
+    CardClient,
+    CardFieldClient { }
 
 mixin(Client, [
     BoardClient,
     LabelClient,
     CardClient,
-    ColumnClient,
+    CollectionClient,
     CardFieldClient,
 ]);
 

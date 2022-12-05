@@ -33,16 +33,16 @@ export default React.memo(() => {
         if (init && board.id !== params.board_id) {
             return;
         }
-        if (loaded.includes("columns")) {
-            if (loading.includes("columns")) {
+        if (loaded.includes("collections")) {
+            if (loading.includes("collections")) {
                 setLoading((loading) =>
-                    loading.filter((col) => col !== "columns")
+                    loading.filter((col) => col !== "collections")
                 );
             }
-        } else if (!loading.includes("columns")) {
-            const action = BoardAction.loadBoardColumns(params as any);
+        } else if (!loading.includes("collections")) {
+            const action = BoardAction.loadBoardCollections(params as any);
             dispatch(action);
-            setLoading((loading) => loading.concat(["columns"]));
+            setLoading((loading) => loading.concat(["collections"]));
         }
 
         if (loaded.includes("cards")) {

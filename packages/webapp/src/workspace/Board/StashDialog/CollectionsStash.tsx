@@ -1,27 +1,27 @@
 import React from "react";
 import { Dialog, Tooltip, Button, Text } from "@colab/ui";
-import { ColumnRecord, CardRecord } from "@colab/store";
+import { CollectionRecord, CardRecord } from "@colab/store";
 import Card from "@workspace/Board/Card";
 import * as Icons from "@colab/icons";
-import { useColumns } from "@workspace/Board";
-import { useColumnActions } from "@workspace/Board";
+import { useCollections } from "@workspace/Board";
+import { useCollectionActions } from "@workspace/Board";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import DestroyColumnWarningDialog from "./DestroyColumnWaringDialog";
-import { useColumnCards } from "@colab/store";
+import DestroyCollectionWarningDialog from "./DestroyCollectionWaringDialog";
+import { useCollectionCards } from "@colab/store";
 
-interface IColumnsStash {
+interface ICollectionsStash {
     board: { id: string };
 }
 
-interface IColumn {
-    column: ColumnRecord;
+interface ICollection {
+    collection: CollectionRecord;
 }
 
-function Column({ column }: IColumn) {
+function Collection({ collection }: ICollection) {
     const dialog = Dialog.useDialog("");
-    const cards = useColumnCards(column.id);
-    const isFull = cards.size >= column.capacity;
-    const actions = useColumnActions(column);
+    const cards = useCollectionCards(collection.id);
+    const isFull = cards.size >= collection.capacity;
+    const actions = useCollectionActions(collection);
 
     function renderCard(card: CardRecord) {
         return (
@@ -38,7 +38,7 @@ function Column({ column }: IColumn) {
             <div className="flex bg-slate-100 rounded-lg shadow pl-2 pr-1 py-1.5 flex-row items-center justify-between">
                 <div className="flex flex-row items-center">
                     <span className="px-2 text-gray-800 font-semibold">
-                        <Text>{column.name}</Text>
+                        <Text>{collection.name}</Text>
                     </span>
                 </div>
                 <div className="flex flex-row items-center justify-end space-x-1">
@@ -68,23 +68,25 @@ function Column({ column }: IColumn) {
                     {cards.toList().map(renderCard)}
                 </div>
             </PerfectScrollbar>
-            <DestroyColumnWarningDialog
+            <DestroyCollectionWarningDialog
                 open={dialog.destroy}
                 onClose={dialog.close}
-                column={column}
+                collection={collection}
             />
         </div>
     );
 }
 
-export default function ColumnsArchive(props: IColumnsStash) {
-    const columns = useColumns().filter((column) =>
-        Boolean(column.archived_at)
+export default function CollectionsArchive(props: ICollectionsStash) {
+    const collections = useCollections().filter((collection) =>
+        Boolean(collection.archived_at)
     );
     return (
         <Dialog.Content className="flex flex-1 flex-row overflow-x-auto overflow-y-hidden">
-            {columns
-                .map((column) => <Column key={column.id} column={column} />)
+            {collections
+                .map((collection) => (
+                    <Collection key={collection.id} collection={collection} />
+                ))
                 .toList()}
         </Dialog.Content>
     );

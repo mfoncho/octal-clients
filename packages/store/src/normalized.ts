@@ -1,6 +1,6 @@
 import {
     ThreadSchema, SpaceSchema, CardSchema, ChecklistSchema, UserSchema,
-    ColumnSchema, MessageSchema, BoardSchema, MemberSchema
+    CollectionSchema, MessageSchema, BoardSchema, MemberSchema
 } from './schemas'
 
 export type NormalizedThread = ReturnType<
@@ -31,8 +31,8 @@ export type NormalizedSpace = ReturnType<
     typeof SpaceSchema["normalizeOne"]
 >[0];
 
-export type NormalizedColumn = ReturnType<
-    typeof ColumnSchema["normalizeOne"]
+export type NormalizedCollection = ReturnType<
+    typeof CollectionSchema["normalizeOne"]
 >[0];
 
 export type NormalizedMessage = ReturnType<

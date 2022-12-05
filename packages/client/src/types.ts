@@ -1,6 +1,6 @@
-export interface Timestamp extends String {}
+export interface Timestamp extends String { }
 
-export type ColumnType = "stack" | "queue";
+export type CollectionType = "stack" | "queue";
 
 export type ThreadType =
     | "main"
@@ -255,14 +255,14 @@ export namespace io {
         fields: CardField[];
         complete: boolean;
         index: number;
-        column_id: string;
+        collection_id: string;
         created_at: string;
         archived_at?: string | null;
     }
 
-    export interface Column extends Unique, BelongsToBoard {
+    export interface Collection extends Unique, BelongsToBoard {
         name: string;
-        type: ColumnType;
+        type: CollectionType;
         origin: boolean;
         capacity: number;
         index: number;
@@ -324,7 +324,7 @@ export namespace io {
         archived_at: Timestamp;
     }
 
-    export interface TopicSearchResult extends Page<Message> {}
+    export interface TopicSearchResult extends Page<Message> { }
 
     export interface Space extends Unique {
         name: string;

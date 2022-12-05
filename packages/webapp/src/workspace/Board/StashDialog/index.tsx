@@ -1,6 +1,6 @@
 import React from "react";
 import { Dialog } from "@colab/ui";
-import ColumnsStash from "./ColumnsStash";
+import CollectionsStash from "./CollectionsStash";
 
 interface IDialog {
     board: { id: string; space_id: string };
@@ -15,7 +15,7 @@ export default Dialog.create<IDialog>((props) => {
             fullWidth={true}
             fullHeight={true}
             onClose={props.onClose}>
-            <ColumnsStash board={props.board} />
+            <CollectionsStash board={props.board} />
         </Dialog>
     );
 });
