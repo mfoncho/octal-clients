@@ -1,4 +1,4 @@
-import React, { useState, HTMLAttributes } from "react";
+import React, { HTMLAttributes } from "react";
 import clx from "classnames";
 import { useUser } from "@colab/store";
 
@@ -24,6 +24,7 @@ export default function UserItem({
                 )}
                 {...props}>
                 <img
+                    alt={user.username}
                     className="inline-block mx-3 h-8 w-8 rounded-full bg-primary-500"
                     src={user.avatar_url}
                 />
