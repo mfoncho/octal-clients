@@ -174,7 +174,7 @@ export default Dialog.create<IDialog>((props) => {
             fullHeight={true}
             open={props.open}
             onClose={props.onClose}>
-            <div className="flex flex-row bg-slate-100 px-5 py-3 overflow-x-auto space-x-2">
+            <div className="flex flex-row bg-slate-100 px-5 py-3 overflow-x-auto space-x-4">
                 {tabs.map((config) => (
                     <Tab
                         key={config.name}
