@@ -45,7 +45,7 @@ const Card = React.memo<IArchivedCard>(({ card, onClick }) => {
         }, {} as { [key: string]: any });
 
     return (
-        <div key={card.id} onClick={onClick}>
+        <div key={card.id} onClick={onClick} role="button">
             <BoardCard
                 name={card.name}
                 labels={List(Object.values(labels))}
