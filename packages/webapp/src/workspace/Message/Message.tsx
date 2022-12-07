@@ -125,9 +125,11 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                                 <Text>{message.content}</Text>
                             </div>
                         ) : (
-                            <div className="text-msg">
-                                <Markdown>{message.parsed}</Markdown>
-                            </div>
+                            message.content.length > 0 && (
+                                <div className="text-msg">
+                                    <Markdown>{message.parsed}</Markdown>
+                                </div>
+                            )
                         )}
                     </div>
 

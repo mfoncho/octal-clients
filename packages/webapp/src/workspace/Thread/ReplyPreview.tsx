@@ -2,6 +2,7 @@ import React from "react";
 import * as Icons from "@colab/icons";
 import { Markdown } from "@colab/ui";
 import { useUser } from "@colab/store";
+
 import ReplyIcon from "@material-ui/icons/Reply";
 import UserCard from "@workspace/UserCard";
 import { MessageRecord } from "@colab/store/lib/records";
