@@ -7,6 +7,7 @@ import { Avatar, Dialog, Text, UIEvent } from "@colab/ui";
 import {
     useMembers,
     Actions,
+    useAuthId,
     MemberRecord,
     SpaceRecord,
     useUser,
@@ -94,12 +95,15 @@ function Members(props: IView) {
 }
 
 function About(props: IView) {
+    const authid = useAuthId();
     const dispatch = useDispatch();
     const [warning, setWarning] = useState<boolean>(false);
     const [leaving, setLeaving] = useState<boolean>(false);
 
+    const notLeavable = leaving || authid == props.space.admin_id;
+
     function handleLeave() {
-        if (leaving) return;
+        if (notLeavable) return;
         const action = Actions.Space.leaveSpace(props.space.id);
         dispatch(action).finally(() => setLeaving(false));
         setLeaving(true);
@@ -113,7 +117,7 @@ function About(props: IView) {
                 <div className="flex flex-row justify-end px-4 pb-8 pt-4">
                     <button
                         onClick={() => setWarning(true)}
-                        disabled={leaving}
+                        disabled={notLeavable}
                         className="bg-red-500 font-bold px-4 py-2 rounded-lg text-white disabled:bg-red-200">
                         Leave
                     </button>
