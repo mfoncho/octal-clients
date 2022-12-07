@@ -59,10 +59,7 @@ export class MessageRecord
         if (Boolean(this.__parsed__)) {
             return this.__parsed__;
         }
-        if (Boolean(this.content)) {
-            (this as any).__parsed__ = slater.parse(this.content);
-            return this.__parsed__;
-        }
+        this.__parsed__ = slater.parse(this.content);
         return this.__parsed__;
     }
 
