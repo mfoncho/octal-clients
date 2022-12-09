@@ -215,7 +215,7 @@ function Discover(props: any) {
                         <button
                             disabled={spaces.get(space.id)?.admin_id === authid}
                             onClick={() => setWarning(space.id)}
-                            className="group-hover:visible invisible text-white text-sm font-bold px-3 py-1 border border-2 border-white rounded-md hover:shadow-md disabled:text-primary-400 disabled:border-primary-400">
+                            className="group-hover:visible invisible text-white text-sm font-bold px-3 py-1 border border-2 border-white rounded-md hover:shadow-md disabled:text-primary-400 disabled:border-primary-400 disabled:shadow-none">
                             Leave
                         </button>
                     ) : (
