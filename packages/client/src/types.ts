@@ -1,4 +1,4 @@
-export interface Timestamp extends String { }
+export interface Timestamp extends String {}
 
 export type CollectionType = "stack" | "queue";
 
@@ -324,10 +324,12 @@ export namespace io {
         archived_at: Timestamp;
     }
 
-    export interface TopicSearchResult extends Page<Message> { }
+    export interface TopicSearchResult extends Page<Message> {}
 
     export interface Space extends Unique {
         name: string;
+        purpose: string;
+        admin_id: string;
         type: SpaceType;
         created_at: Timestamp;
     }

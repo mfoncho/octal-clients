@@ -84,6 +84,7 @@ export interface LoadSpacesPayload {}
 export interface UpdateSpaceParams {
     name?: string;
     type?: string;
+    purpose?: string;
 }
 
 export interface UpdateSpacePayload extends Unique {

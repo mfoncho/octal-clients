@@ -5,13 +5,24 @@ import { SpaceManagerProps } from "./index";
 import { Actions } from "@colab/store";
 import { useDispatch } from "react-redux";
 import * as Icons from "@colab/icons";
-import { Switch, Button } from "@colab/ui";
+import { Switch, Button, Textarea } from "@colab/ui";
 import Layout from "./Layout";
 
-type ChangesType = {
-    name?: string;
-    type?: string;
-};
+export interface IAsInput extends React.InputHTMLAttributes<HTMLInputElement> {
+    as?: "input";
+}
+
+export interface IAsSpan
+    extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+    as?: "textarea";
+}
+
+export type IAsComboAttributes = IAsInput | IAsSpan;
+
+export type IInput = {
+    label: string;
+    description?: string;
+} & IAsComboAttributes;
 
 const TypeDescription = {
     public: "Everyone in the space workspace can join and leave the space as they please. Other must be invited to join the space",
@@ -20,45 +31,44 @@ const TypeDescription = {
     direct: "",
 };
 
+export function Input({ label, as = "input", description, ...props }: IInput) {
+    const AsComponent: any = as;
+    return (
+        <div className="flex flex-col pb-8">
+            <span className="font-bold text-xs text-gray-700 px-1">
+                {label.toUpperCase()}
+            </span>
+            <AsComponent
+                {...props}
+                className={`focus:outline-none focus:ring focus:border-blue-300  rounded-lg border border-gray-200 p-2 w-full text-base text-gray-800 ${
+                    props.className ?? ""
+                }`}
+            />
+            {description && (
+                <span className="text-gray-500 px-1 text-xs font-semibold">
+                    {description}
+                </span>
+            )}
+        </div>
+    );
+}
+
 const Manager = React.memo(({ space }: SpaceManagerProps) => {
     const dispatch = useDispatch();
     const name = useInput(space.name);
 
     const type = useInput(space.type);
 
+    const purpose = useInput(space.purpose);
+
     const rootRef = useRef<HTMLDivElement>(null);
 
     const [loading, setLoading] = useState(false);
 
-    const [changes, setChanges] = useState<ChangesType>({});
-
-    useEffect(() => {
-        name.setValue(space.name);
-    }, [space.name]);
-
-    useEffect(() => {
-        type.setValue(space.is_private ? "private" : "public");
-    }, [space.is_private]);
-
-    useEffect(() => {
-        if (type.value == (space.is_private ? "private" : "public")) {
-            if ("type" in changes) {
-                setChanges(({ type, ...vals }) => vals);
-            }
-        } else if (type.valid) {
-            setChanges((vals) => ({ ...vals, type: type.value }));
-        }
-    }, [type.value, type.valid]);
-
-    useEffect(() => {
-        if (name.value == space.name || !name.valid) {
-            if ("name" in changes) {
-                setChanges(({ name, ...vals }) => vals);
-            }
-        } else if (name.valid) {
-            setChanges((vals) => ({ ...vals, name: name.value }));
-        }
-    }, [name.value, name.valid]);
+    const hasChanges =
+        space.type !== type.value.trim() ||
+        name.value.trim() !== space.name.trim() ||
+        purpose.value.trim() !== space.purpose.trim();
 
     function toggleAccess() {
         if (type.value == "public") {
@@ -69,32 +79,42 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
     }
 
     function handleSave() {
-        const patches: any = { ...changes };
-        if (changes.type) {
-            patches.type = changes.type;
+        const patches: any = {};
+        if (name.valid) {
+            patches.name = name.value.trim();
         }
+        if (!space.is_common && type.valid) {
+            patches.type = type.value.trim();
+        }
+        if (purpose.value.trim() !== space.purpose) {
+            patches.purpose = purpose.value.trim();
+        }
+
         const actions = Actions.Space.updateSpace(space.id, patches);
-        dispatch(actions)
-            .then(() => setChanges({} as any))
-            .finally(() => setLoading(false));
+        dispatch(actions).finally(() => setLoading(false));
         setLoading(true);
     }
-    const hasChanges = Object.keys(changes).length > 0;
     return (
         <Layout
             ref={rootRef}
             title="General"
             className="flex flex-col flex-grow justify-between">
             <div className="flex flex-col flex-grow">
-                <div className="flex flex-col py-8">
-                    <span className="font-semibold py-2 text-gray-500 text-sm">
-                        Space Name
-                    </span>
-                    <input
-                        {...name.props}
-                        className="form-input font-semibold tex-gray-800 flex-grow rounded-md shadow-sm border border-gray-300"
-                    />
-                </div>
+                <Input
+                    label="Name"
+                    disabled={loading}
+                    className="min-h-[40px]"
+                    description="Space name"
+                    {...name.props}
+                />
+                <Input
+                    as={Textarea as any}
+                    disabled={loading}
+                    label="Purpose"
+                    className="min-h-[40px]"
+                    description="Describe space purpose, what being accomplished by the members og this space"
+                    {...purpose.props}
+                />
 
                 {!space.is_common && (
                     <div className="flex flex-col py-8">
@@ -104,6 +124,7 @@ const Manager = React.memo(({ space }: SpaceManagerProps) => {
                                 Private
                             </span>
                             <Switch
+                                disabled={loading}
                                 checked={type.value == "private"}
                                 onChange={toggleAccess}
                             />

@@ -6,7 +6,15 @@ import client, { io } from "@colab/client";
 import { useNavigator } from "src/hooks";
 import { LeaveWarning } from "../SpaceDialog";
 import { Actions, usePermissions, useSpaces, useAuthId } from "@colab/store";
-import { Dialog, Button, Text, Switch, Textarea, UIEvent } from "@colab/ui";
+import {
+    Dialog,
+    Button,
+    Text,
+    Switch,
+    Textarea,
+    Markdown,
+    UIEvent,
+} from "@colab/ui";
 
 interface ISpaceCreator {
     open: boolean;
@@ -197,13 +205,13 @@ function Discover(props: any) {
         return available.map((space) => (
             <div
                 key={space.id}
-                className="group flex flex-row justify-between hover:bg-primary-500 py-2 px-6">
+                className="group flex flex-row justify-between hover:bg-primary-500 py-2 px-2 border border-gray-300 rounded-lg">
                 <div className="flex flex-col">
                     <div className="group-hover:text-white font-black text-gray-800">
                         <Text>{space.name}</Text>
                     </div>
                     <div className="text-sm text-gray-500 group-hover:text-gray-200 font-semibold">
-                        <Text>purpose</Text>
+                        <Markdown>{space.purpose}</Markdown>
                     </div>
                 </div>
                 <div>
@@ -237,7 +245,7 @@ function Discover(props: any) {
             fullWidth={true}
             fullHeight={true}
             onClose={loading.length > 0 ? undefined : props.onClose}>
-            <div className="flex flex-col overflow-y-auto max-h-full w-full pb-8 divide-y divider-gray-200">
+            <div className="flex flex-col overflow-y-auto max-h-full w-full pb-8 divide-y divider-gray-200 px-4 space-y-2">
                 {renderSpaces()}
                 {Boolean(warning) && spaces.get(warning!) && (
                     <LeaveWarning

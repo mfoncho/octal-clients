@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useDispatch } from "react-redux";
 import UserCard from "@workspace/UserCard";
-import { Avatar, Dialog, Text, UIEvent } from "@colab/ui";
+import { Avatar, Dialog, Markdown, UIEvent } from "@colab/ui";
 import {
     useMembers,
     Actions,
@@ -110,8 +110,8 @@ function About(props: IView) {
     }
     return (
         <div className="flex flex-col overflow-y-auto px-4 h-full w-full justify-between">
-            <div className="p-2 bg-slate-100 rounded-md my-4">
-                <Text>{props.space.purpose}</Text>
+            <div className="p-2 bg-slate-100 rounded-md my-4 text-base">
+                <Markdown>{props.space.purpose}</Markdown>
             </div>
             {props.space.is_public && (
                 <div className="flex flex-row justify-end px-4 pb-8 pt-4">

@@ -15,6 +15,7 @@ export interface UpdateSpaceRequest {
     space_id: string;
     params: {
         name?: string;
+        purpose?: string;
         type?: "private" | "public";
     };
 }
@@ -93,7 +94,6 @@ export default class SpaceClient extends BaseClient {
         const { data } = await this.endpoint.post(path, params);
         return data;
     }
-
 
     async updateSpace(
         request: UpdateSpaceRequest,
