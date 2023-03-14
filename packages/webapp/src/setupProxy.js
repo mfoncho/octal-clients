@@ -1,6 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
-const HOST = "192.168.1.2:4000";
+const HOST = "127.0.0.1:4000";
 
 const config = {
     target: `http://${HOST}`,
