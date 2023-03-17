@@ -16,30 +16,31 @@ export default React.memo<ISection>(function Section({
 }) {
     const location = useLocation();
     if (props.path) {
+        const inSection = location.pathname === props.path;
         return (
             <Link
                 to={props.path}
                 className={cls(
-                    "flex flex-row justify-between my-0.5 items-center py-1 px-2 font-semibold",
-                    {
-                        ["text-primary-200 hover:bg-primary-800"]:
-                            location.pathname !== props.path,
-                        ["bg-primary-500 text-white"]:
-                            location.pathname == props.path,
-                    }
+                    "flex flex-row justify-between mx-4 my items-center p-2 font-semibold rounded-md border border-transparent hover:border-slate-200 dark:hover:border-slate-700",
+                    
+                    inSection ? "bg-primary-500 text-white":"text-black hover:bg-slate-200 dark:text-gray-200 dark:hover:text-gray-800"
                 )}>
                 <div className="flex flex-row items-center">
-                    <Icon className="w-6 h-6" />
-                    <span className="pl-3 pr-1 text-sm">{name}</span>
+                    <div className="px-3">
+                        <Icon className="w-6 h-6" />
+                    </div>
+                    <span className="text-sm">{name}</span>
                 </div>
             </Link>
         );
     }
     return (
-        <div className="flex flex-row justify-between my-0.5 items-center rounded-md py-1 px-2 hover:bg-primary-50 font-semibold text-gray-700">
+        <div className="flex flex-row justify-between mx-4 p-2 items-center rounded-md hover:bg-slate-300 font-semibold text-gray-700">
             <div className="flex flex-row items-center">
-                <Icon className="w-6 h-6 text-gray-500" />
-                <span className="pl-3 pr-1 text-sm">{name}</span>
+                <div className="px-3">
+                    <Icon className="w-6 h-6 text-gray-500" />
+                </div>
+                <span className="text-sm">{name}</span>
             </div>
         </div>
     );

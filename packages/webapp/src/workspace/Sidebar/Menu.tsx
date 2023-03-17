@@ -141,7 +141,7 @@ export default React.memo(() => {
                 className="group"
                 variant="icon"
                 color="clear">
-                <Icons.Menu.Bugger className="text-white group-hover:text-gray-600" />
+                <Icons.Menu.Bugger className="text-gray-400 group-hover:text-gray-700 dark:text-gray-200 dark:group-hover:text-black" />
             </Button>
             <Menu
                 open={Boolean(menu)}

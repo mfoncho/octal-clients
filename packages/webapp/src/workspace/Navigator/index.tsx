@@ -32,14 +32,14 @@ export default React.memo(() => {
             <Scrollbars autoHide className="flex flex-col">
                 <div className="flex flex-col overflow-hidden space-y-1">
                     {grouped
-                        .get("direct", defaultSpaces)
+                        .get("general", defaultSpaces)
                         .toList()
                         .sort(sortSpaces)
                         .map(renderSpaces)}
                 </div>
-                <div className="flex flex-col pb-14 overflow-hidden">
+                <div className="flex flex-col pb-14 overflow-hidden space-y-1">
                     {grouped
-                        .get("general", defaultSpaces)
+                        .get("direct", defaultSpaces)
                         .toList()
                         .sort(sortSpaces)
                         .map(renderSpaces)}

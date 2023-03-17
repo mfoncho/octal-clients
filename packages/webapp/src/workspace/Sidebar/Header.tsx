@@ -26,16 +26,16 @@ export default React.memo(function Header() {
     const logo = workspace.get("logo");
     const name = workspace.get("name", "")!;
     return (
-        <div className="flex flex-row items-center overflow-hidden p-4">
+        <div className="flex flex-row items-center overflow-hidden px-4 h-14 sm:h-20 border-b border-slate-200 dark:border-slate-700">
             {logo ? (
                 <Logo src={logo} alt={name} />
             ) : (
-                <Colab className="w-10 h-10 text-white" />
+                <Colab className="w-10 h-10 text-primary-500" />
             )}
             <div className="flex-1 flex flex-col px-2">
                 <Link
                     to="/spaces"
-                    className="text-lg font-bold text-primary-200">
+                    className="text-lg font-bold text-black dark:text-white">
                     {name}
                 </Link>
                 <Viewer />

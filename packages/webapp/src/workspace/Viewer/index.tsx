@@ -26,7 +26,7 @@ export default React.memo(() => {
         <button
             onClick={dialog.opener("status")}
             className="flex flex-row items-center">
-            <span className="text-sm font-semibold text-primary-100 pr-2 ">
+            <span className="text-sm font-semibold text-gray-700 pr-2 dark:text-gray-100">
                 {user.username}
             </span>
             <Status icon={user.status.icon} text={user.status.text} />
