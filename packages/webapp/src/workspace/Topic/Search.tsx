@@ -143,18 +143,18 @@ export default Dialog.create<ISearch>((props) => {
             onClose={props.onClose}
             maxWidth="md"
             fullWidth={true}
-            className="h-5/6"
+            className="h-5/6 dark:bg-slate-800"
             fullScreen={screen.mobile}>
-            <div className="flex p-4 flex-row justify-between overflow-hidden space-x-4">
-                <div className="w-2/5 flex-row overflow-hidden">
-                    <div className="relative border border-gray-400 items-center max-w-full overflow-hidden rounded-md shadow">
+            <div className="flex p-4 flex-row justify-between space-x-4">
+                <div className="w-2/5 flex-row">
+                    <div className="relative border border-gray-400 items-center max-w-full rounded-md shadow">
                         <Textarea
                             placeholder="Quick search"
-                            className="pl-9 w-full max-w-full font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700 focus:ring-primary-500 ring-gray-400 ring-2 rounded py-1 px-2 text-base"
+                            className="pl-9 w-full max-w-full font-semibold outline-none placeholder:text-gray-400 dark:placeholder:text-slate-400 bg-transparent text-gray-700 dark:text-slate-100 focus:ring-primary-500 ring-slate-400 ring-1 rounded py-1 px-2 text-base"
                             {...input.props}
                         />
                         <div className="px-2 absolute top-1 w-9 h-9">
-                            <Icons.Search className="text-gray-500" />
+                            <Icons.Search className="text-slate-500" />
                         </div>
                     </div>
                 </div>
@@ -164,9 +164,9 @@ export default Dialog.create<ISearch>((props) => {
                         ref={usersRef}
                         className="flex flex-1 flex-row items-center space-x-2"
                         onClick={dialog.opener("users")}>
-                        <div className="flex -space-x-2 overflow-hidden">
-                            <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-50 ring-2 ring-white">
-                                <Icons.Users className="text-white w-4 h-4" />
+                        <div className="flex -space-x-2 overflow-x-hidden p-1">
+                            <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-50 ring-1 ring-white">
+                                <Icons.Users className="text-white dark:text-slate-600 w-4 h-4" />
                             </div>
                             {filter.users.slice(0, 4).map((id, index) => (
                                 <UserAvatar
@@ -174,7 +174,7 @@ export default Dialog.create<ISearch>((props) => {
                                     key={id}
                                     tooltip={true}
                                     className={clx(
-                                        "inline-block w-8 h-8 rounded-full ring-2 ring-white ",
+                                        "inline-block w-8 h-8 rounded-full ring-1 ring-white ",
                                         {
                                             "z-[49]": index == 0,
                                             "z-[48]": index == 1,
@@ -187,7 +187,7 @@ export default Dialog.create<ISearch>((props) => {
                             ))}
 
                             {filter.users.size > 4 && (
-                                <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-0 ring-2 ring-white">
+                                <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-0 ring-1 ring-white">
                                     <Icons.Plus className="text-white w-4 h-4" />
                                 </div>
                             )}
@@ -196,7 +196,7 @@ export default Dialog.create<ISearch>((props) => {
                     <button
                         ref={fromRef}
                         onClick={dialog.opener("since")}
-                        className="flex flex-row items-center rounded-md bg-slate-100 hover:bg-slate-200 px-2 text-gray-500 space-x-2">
+                        className="flex flex-row items-center rounded-md px-2 text-gray-500 space-x-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300">
                         <Icons.Calendar.Day className="" />
                         {Boolean(filter.since) ? (
                             <span className="text-sm font-bold">
@@ -214,7 +214,7 @@ export default Dialog.create<ISearch>((props) => {
                     <button
                         ref={uptoRef}
                         onClick={dialog.opener("until")}
-                        className="flex flex-row items-center text-gray-500 rounded-md bg-slate-100 hover:bg-slate-200 px-2 space-x-2">
+                        className="flex flex-row items-center rounded-md px-2 text-gray-500 space-x-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300">
                         <Icons.Calendar.Day className="" />
                         {Boolean(filter.until) ? (
                             <span className="text-sm font-bold">
@@ -227,7 +227,7 @@ export default Dialog.create<ISearch>((props) => {
                         )}
                     </button>
                     <Button variant="icon" onClick={props.onClose}>
-                        <Icons.Close className="text-gray-500" />
+                        <Icons.Close className="text-slate-500" />
                     </Button>
                 </div>
             </div>
