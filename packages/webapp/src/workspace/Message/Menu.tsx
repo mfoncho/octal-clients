@@ -88,6 +88,12 @@ export default React.memo<IMenu>(({ open, ...props }) => {
 
     const [expanded, setExpanded] = useState<boolean>(false);
 
+    React.useEffect(()=>{
+        if(expanded && !open){
+            setExpanded(open);
+        }
+    },[open])
+
     function handleClosePopover() {
         setPopup(PopupType.CLOSE);
     }
@@ -119,7 +125,7 @@ export default React.memo<IMenu>(({ open, ...props }) => {
                 placement="top">
                 <button
                     onClick={btn.onClick}
-                    className="flex items-center p-1 rounded-md my-0.5 text-gray-600 justify-center hover:bg-slate-200">
+                    className="flex items-center p-1 rounded-md my-0.5 text-gray-600 dark:text-slate-300 justify-center hover:bg-slate-200 dark:hover:bg-slate-500">
                     <Icon className="w-4 h-4" />
                 </button>
             </Tooltip>
@@ -191,7 +197,7 @@ export default React.memo<IMenu>(({ open, ...props }) => {
     const collapsable = buttons.length > present;
 
     return (
-        <div className="absolute invisible group-hover:visible bg-white rounded-t-md -top-6 right-4 flex flex-row items-center border border-gray-100 first-child:rounded-l-md last-child:rounded-r-md bg-slate-100 space-x-1">
+        <div className="absolute invisible group-hover:visible bg-white rounded-t-md -top-6 right-4 flex flex-row items-center border border-gray-100 dark:border-slate-600 first-child:rounded-l-md last-child:rounded-r-md bg-slate-100 dark:bg-slate-600 space-x-1 px-0.5">
             {buttons
                 .slice(0, expanded ? buttons.length : present)
                 .map(renderButton)}
@@ -199,7 +205,7 @@ export default React.memo<IMenu>(({ open, ...props }) => {
             {collapsable && (
                 <button
                     aria-label="Show more"
-                    className="p-1 text-gray-600 flex items-center justify-center hover:bg-slate-200 rounded-md my-0.5 "
+                    className="p-1 text-gray-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 rounded-md my-0.5 dark:hover:bg-slate-500"
                     onClick={() => setExpanded(!expanded)}>
                     <Icons.Expand.Up
                         className={

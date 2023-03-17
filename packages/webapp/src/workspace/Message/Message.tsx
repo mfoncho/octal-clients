@@ -70,23 +70,23 @@ export default React.memo<IMessage>(({ message, ...props }) => {
             onMouseOver={handleHovering}
             onMouseLeave={handleNotHovering}
             className={clx(
-                "flex flex-col px-4 relative group hover:bg-gray-100",
+                "flex flex-col relative group hover:bg-gray-100 dark:hover:bg-slate-600",
                 props.extra && "pt-1",
                 props.selected && "bg-primary-50"
             )}>
             {message.reply_id && <Reply id={message.reply_id} />}
             <div className="flex flex-row">
-                <div className="flex flex-none justify-center flex-row w-16">
+                <div className="flex flex-none flex-row w-16 justify-end">
                     {props.extra ? (
                         <img
                             role="button"
                             alt={author.name}
-                            src={author.avatar_url}
+                            src={"https://placehold.co/600x400@3x.png"}
                             className="rounded-full w-[40px] h-[40px] my-1"
                             onClick={handleOpenCard}
                         />
                     ) : (
-                        <span className="group-hover:visible select-none invisible text-xs pt-1 font-semibold text-gray-500">
+                        <span className={clx("group-hover:visible select-none invisible text-xs pt-1 font-semibold text-gray-500 dark:text-gray-400", message.pinned && "pt-5")}>
                             {moment(message.timestamp).format("LT")}
                         </span>
                     )}
@@ -94,16 +94,17 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
                 <div className="flex flex-grow flex-col">
                     {props.extra && (
-                        <div className="flex flex-row items-center">
+                        <div className="flex flex-row items-center py-1.5">
+                            <div className="w-4"/>
                             <button
                                 onClick={handleOpenCard}
-                                className="text-base font-bold">
+                                className="text-base font-semibold text-gray-800 dark:text-gray-100">
                                 {author.username}
                             </button>
                             <span className="px-2 font-bold text-gray-500">
                                 ·
                             </span>
-                            <span className="text-xs select-none pt-1 font-semibold text-gray-500">
+                            <span className="text-xs select-none pt-1 font-semibold text-gray-500 dark:text-gray-400">
                                 {moment(message.timestamp).format(
                                     props.tsformat
                                 )}
@@ -111,47 +112,53 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                         </div>
                     )}
 
-                    <div className="flex flex-col" ref={anchor}>
-                        <div className="flex flex-row text-gray-600 space-x-2">
-                            {message.pinned && (
-                                <Icons.Pin className="h-2.5 w-2.5" />
-                            )}
+                    {message.pinned && (
+                    <div className="flex flex-row pt-1">
+                            <div className="w-4"/>
+                        <Icons.Pin className="h-2.5 w-2.5 text-gray-600 dark:text-slate-200" />
+                    </div>
+                    )}
+                    <div className="flex flex-row">
+
+                        <div className="w-4 justify-center pt-2 flex flex-row text-gray-600 space-x-2 overflow-hidden">
                             {Boolean(actions.bookmark) && (
-                                <Icons.Bookmark className="h-2.5 w-2.5" />
+                                <Icons.Bookmark className="h-2.5 w-2.5 text-gray-600 dark:text-slate-200" />
                             )}
                         </div>
-                        {emoji.test(message.content) ? (
-                            <div className="text-6xl">
-                                <Text>{message.content}</Text>
-                            </div>
-                        ) : (
-                            message.content.length > 0 && (
-                                <div className="text-msg">
-                                    <Markdown>{message.parsed}</Markdown>
+                        <div className="flex flex-1 flex-col pr-8" ref={anchor}>
+                            {emoji.test(message.content) ? (
+                                <div className="text-6xl">
+                                    <Text>{message.content}</Text>
                                 </div>
-                            )
+                            ) : (
+                                message.content.length > 0 && (
+                                    <div className="text-msg dark:text-gray-100">
+                                        <Markdown>{message.parsed}</Markdown>
+                                    </div>
+                                )
+                            )}
+                        </div>
+
+                        {message.attachment && (
+                            <Attachment file={message.attachment} />
                         )}
+
+                        <div className="flex flex-row flex-wrap ">
+                            {message.reactions.map((reaction) => (
+                                <Reaction
+                                    key={reaction.reaction}
+                                    name={reaction.reaction}
+                                    count={reaction.users.size}
+                                    highlight={reaction.users.includes(
+                                        props.authid
+                                    )}
+                                    onClick={makeReactionClickHandler(reaction)}
+                                />
+                            ))}
+                        </div>
+
+                        {message.last_reply && <ReplyButton message={message} />}
                     </div>
-
-                    {message.attachment && (
-                        <Attachment file={message.attachment} />
-                    )}
-
-                    <div className="flex flex-row flex-wrap ">
-                        {message.reactions.map((reaction) => (
-                            <Reaction
-                                key={reaction.reaction}
-                                name={reaction.reaction}
-                                count={reaction.users.size}
-                                highlight={reaction.users.includes(
-                                    props.authid
-                                )}
-                                onClick={makeReactionClickHandler(reaction)}
-                            />
-                        ))}
-                    </div>
-
-                    {message.last_reply && <ReplyButton message={message} />}
                 </div>
 
                 <Menu
