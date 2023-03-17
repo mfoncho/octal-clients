@@ -125,39 +125,41 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                                 <Icons.Bookmark className="h-2.5 w-2.5 text-gray-600 dark:text-slate-200" />
                             )}
                         </div>
-                        <div className="flex flex-1 flex-col pr-8" ref={anchor}>
-                            {emoji.test(message.content) ? (
-                                <div className="text-6xl">
-                                    <Text>{message.content}</Text>
-                                </div>
-                            ) : (
-                                message.content.length > 0 && (
-                                    <div className="text-msg dark:text-gray-100">
-                                        <Markdown>{message.parsed}</Markdown>
+                        <div className="flex flex-grow flex-col">
+                            <div className="flex flex-1 flex-col pr-8" ref={anchor}>
+                                {emoji.test(message.content) ? (
+                                    <div className="text-6xl">
+                                        <Text>{message.content}</Text>
                                     </div>
-                                )
+                                ) : (
+                                    message.content.length > 0 && (
+                                        <div className="text-msg dark:text-gray-100">
+                                            <Markdown>{message.parsed}</Markdown>
+                                        </div>
+                                    )
+                                )}
+                            </div>
+
+                            {message.attachment && (
+                                <Attachment file={message.attachment} />
                             )}
+
+                            <div className="flex flex-row flex-wrap ">
+                                {message.reactions.map((reaction) => (
+                                    <Reaction
+                                        key={reaction.reaction}
+                                        name={reaction.reaction}
+                                        count={reaction.users.size}
+                                        highlight={reaction.users.includes(
+                                            props.authid
+                                        )}
+                                        onClick={makeReactionClickHandler(reaction)}
+                                    />
+                                ))}
+                            </div>
+
+                            {message.last_reply && <ReplyButton message={message} />}
                         </div>
-
-                        {message.attachment && (
-                            <Attachment file={message.attachment} />
-                        )}
-
-                        <div className="flex flex-row flex-wrap ">
-                            {message.reactions.map((reaction) => (
-                                <Reaction
-                                    key={reaction.reaction}
-                                    name={reaction.reaction}
-                                    count={reaction.users.size}
-                                    highlight={reaction.users.includes(
-                                        props.authid
-                                    )}
-                                    onClick={makeReactionClickHandler(reaction)}
-                                />
-                            ))}
-                        </div>
-
-                        {message.last_reply && <ReplyButton message={message} />}
                     </div>
                 </div>
 
