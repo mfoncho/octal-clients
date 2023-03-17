@@ -93,8 +93,8 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
             let date = moment(message.timestamp);
             block.push(
                 <div
-                    id={date.format("DD-MM-YYYY")}
                     key="divider"
+                    data-thread-divider={date.format("DD-MM-YYYY")}
                     className="pt-2 flex flex-row justify-between items-center px-2">
                     <div className="bg-slate-200 h-px flex-grow rounded" />
                     <span className="text-gray-800 bg-slate-200 text-xs font-bold px-4 rounded-xl">
