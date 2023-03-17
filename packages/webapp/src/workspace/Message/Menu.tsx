@@ -90,7 +90,7 @@ export default React.memo<IMenu>(({ open, ...props }) => {
 
     React.useEffect(()=>{
         if(expanded && !open){
-            setExpanded(open);
+            setExpanded(Boolean(open));
         }
     },[open])
 
