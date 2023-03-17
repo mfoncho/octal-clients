@@ -5,6 +5,7 @@ import { useScreen, useNavigatorDrawer } from "src/hooks";
 import Drawer from "@material-ui/core/Drawer";
 
 interface IMenu {
+    className?: string;
     children: React.ReactNode | React.ReactNode[];
 }
 
@@ -16,14 +17,14 @@ const Menu = React.memo<IMenu>((props) => {
     const screen = useScreen();
     if (screen.mobile) {
         return (
-            <div className="flex-1 flex flex-col w-72 bg-primary-700">
+            <div className="flex-1 flex flex-col w-72 border-r border-slate-200 bg-gray-100 dark:bg-slate-800">
                 <Header />
                 <div className="flex flex-grow flex-col">{props.children}</div>
             </div>
         );
     }
     return (
-        <div className="flex-zeros-auto flex-col w-72 bg-primary-700">
+        <div className="flex-zeros-auto flex-col w-72 border-r border-slate-200 bg-gray-100 dark:bg-slate-800">
             <Header />
             <div className="flex flex-grow flex-col">{props.children}</div>
         </div>

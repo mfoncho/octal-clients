@@ -8,11 +8,11 @@ export default React.memo(function CreateSpaceBtn() {
         <React.Fragment>
             <button
                 onClick={() => setOpen(true)}
-                className="group flex flex-row items-center py-1 px-2 space-x-3 hover:bg-primary-800 w-full">
-                <div className="flex flex-row justify-center my-0.5 items-center rounded-md py-0.5 px-0.5 font-semibold text-white bg-primary-500">
-                    <Icons.Plus className="w-5 h-5" />
+                className="group flex flex-row items-center mx-4 p-2 rounded-md hover:bg-slate-200 border border-transparent hover:border-slate-200 hover:shadow-md">
+                <div className="flex flex-row justify-center items-center px-3 group-hover:text-gray-600 dark:text-gray-200">
+                    <Icons.Plus className="w-6 h-6" />
                 </div>
-                <div className="text-sm font-bold text-primary-200 group-hover:text-white">
+                <div className="text-sm font-semibold text-black dark:text-gray-200 group-hover:text-gray-600">
                     Add Space
                 </div>
             </button>

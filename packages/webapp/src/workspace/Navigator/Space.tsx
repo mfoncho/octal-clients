@@ -152,6 +152,8 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
     const [hovering, setHovering] = useState<boolean>(false);
 
+    const inSpace = params.space_id === space.id;
+
     useEffect(() => {
         let menu: IMenuItem[] = [];
         let creators: IMenuItem[] = [];
@@ -230,21 +232,26 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         <React.Fragment>
             <Link
                 to={path}
-                className="group flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded overflow-hidden h-8 justify-between"
+                className={clx("group flex flex-row p-2 items-center rounded-lg overflow-hidden justify-between mx-4", inSpace ? "bg-primary-500": "hover:bg-slate-200")}
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
-                <p
-                    role="button"
-                    className="text-xs font-semibold truncate text-primary-200">
-                    <Text>{space.name.toUpperCase()}</Text>
-                </p>
+                <div className={clx("flex flex-row items-center overflow-hidden", inSpace ? "text-white" : "text-black dark:text-gray-200 group-hover:text-gray-800")}>
+                    <div className="px-4">
+                        <Icons.Space className="w-5 h-5"/>
+                    </div>
+                    <p
+                        role="button"
+                        className={clx("text-base font-medium truncate")}>
+                        <Text>{space.name}</Text>
+                    </p>
+                </div>
                 <div className="flex flex-row items-center hidden group-hover:flex">
                     {menu.map((item) => (
                         <button
                             key={item.name}
                             ref={menuRef}
                             className={clx(
-                                "flex justify-center items-center p-1 text-white w-6 h-6"
+                                "flex justify-center items-center p-1 text-gray-400 w-6 h-6 hover:text-gray-600"
                             )}
                             onClick={dialog.opener(item.menu)}>
                             {item.icon}
