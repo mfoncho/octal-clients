@@ -8,6 +8,20 @@ interface ListLike {
     skip(val: number): ListLike;
 }
 
+export class ThreadSearchFilter extends Record({
+    since: "",
+    until: "",
+    search: "",
+    users: List<string>(),
+}) {
+    updateFilter(filter: string, value: string | string[] | List<string>) {
+        if (Array.isArray(value)) {
+            value = List(value);
+        }
+        return this.set(filter as any, value);
+    }
+}
+
 export class ConversationLoading extends Record({
     top: false,
     bottom: false,
@@ -118,6 +132,7 @@ export class ThreadRecord
         id: "0" as Id,
         type: "" as ThreadType,
         init: false,
+        name: "",
         is_active: false,
         type_id: "",
         channel: null as null | Channel,

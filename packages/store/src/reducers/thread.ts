@@ -12,6 +12,7 @@ import {
     ThreadRecord,
     MessageRecord,
     ChatMessage,
+    ThreadSearchFilter,
     UsersReactionRecord,
 } from "../records";
 import { Id, Timestamped, Unique } from "../types";
@@ -29,6 +30,7 @@ export class Conversations extends Record(
         ispaces: Map<string, List<string>>(),
         threads: Map<Id, ThreadRecord>(),
         ithreads: Map<string, List<string>>(),
+        search: Map<string, ThreadSearchFilter>(),
         messages: Map<Id, MessageRecord>(),
     },
     "threads"
@@ -49,6 +51,21 @@ export class Conversations extends Record(
         return this.messages.get(id);
     }
 
+    getSearchFilter(id: string): ThreadSearchFilter {
+        return this.search.get(id, new ThreadSearchFilter());
+    }
+
+    updateFilter(payload: ThreadActions.ThreadSearchFilterUpdatedPayload) {
+        const thread = this.getThread(payload.thread_id);
+        if (thread) {
+            const filter = this.getSearchFilter(payload.thread_id);
+            return this.setIn(
+                ["search", payload.thread_id],
+                filter.updateFilter(payload.type, payload.value)
+            );
+        }
+        return this;
+    }
     updateDraft(payload: ThreadActions.ThreadDraftUpdatedPayload) {
         if (this.threads.has(payload.thread_id))
             return this.updateIn(["threads", payload.thread_id], (thread) =>
@@ -408,6 +425,13 @@ export const reducers = {
             return store.storeThread(thread.setChannel(payload.channel));
         }
         return store;
+    },
+
+    [Actions.THREAD_SEARCH_FILTER_UPDATED]: (
+        store: Conversations,
+        { payload }: ThreadActions.ThreadSearchFilterUpdatedAction
+    ) => {
+        return store.updateFilter(payload);
     },
 };
 

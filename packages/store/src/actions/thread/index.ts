@@ -5,7 +5,12 @@ import type { Action, IOAction } from "../../types";
 import { createAction, createIOAction } from "../../action";
 import { NormalizedMessage } from "../../schemas";
 import {
+    SEARCH_THREAD,
+    DELETE_THREAD,
+    CREATE_THREAD,
+    RENAME_THREAD,
     THREAD_CONNECTED,
+    THREAD_SEARCH_RESULT,
     THREAD_DRAFT_REPLY_SET,
     THREAD_PAGE_UPDATED,
     CONVERSATION_LOADED,
@@ -43,10 +48,52 @@ import {
     MESSAGE_UPDATED,
     MESSAGE_DELETED,
     CONCAT_CONVERSATION,
+    THREAD_SEARCH_FILTER_UPDATED,
+    ARCHIVE_THREAD,
+    UNARCHIVE_THREAD,
+    THREAD_ARCHIVED,
+    THREAD_UNARCHIVED,
 } from "./types";
 
 export * from "./types";
 
+export interface CreateThreadPayload {
+    space_id: string;
+    params: {
+        name: string;
+    };
+}
+
+export interface RenameThreadPayload extends CreateThreadPayload {
+    thread_id: string;
+}
+
+export interface SearchThreadPayload {
+    space_id: string;
+    thread_id: string;
+    params: {
+        page?: number;
+        query: string;
+        users?: string[];
+        before?: string;
+        after?: string;
+    };
+}
+
+export interface ArchiveThreadPayload {
+    space_id: string;
+    thread_id: string;
+}
+
+export interface UnarchiveThreadPayload {
+    thread_id: string;
+    space_id: string;
+}
+
+export interface DeleteThreadPayload {
+    thread_id: string;
+    space_id: string;
+}
 export interface ThreadDraftReplySetPayload {
     thread_id: string;
     reply_id: string;
@@ -257,6 +304,58 @@ export interface GetThreadPayload {
     space_id: string;
 }
 
+export interface ThreadSearchFilterUpdatedPayload {
+    thread_id: string;
+    type: string;
+    value: string | string[];
+}
+
+export type CreateThreadAction = IOAction<
+    CREATE_THREAD,
+    CreateThreadPayload,
+    io.Thread
+>;
+
+export type SearchThreadAction = IOAction<
+    SEARCH_THREAD,
+    SearchThreadPayload,
+    io.TopicSearchResult
+>;
+
+export type ThreadSearchResultAction = Action<
+    THREAD_SEARCH_RESULT,
+    io.TopicSearchResult & SearchThreadPayload
+>;
+
+export type RenameThreadAction = IOAction<
+    RENAME_THREAD,
+    RenameThreadPayload,
+    io.Thread
+>;
+
+export type DeleteThreadAction = IOAction<
+    DELETE_THREAD,
+    DeleteThreadPayload,
+    any
+>;
+export type ArchiveThreadAction = IOAction<
+    ARCHIVE_THREAD,
+    ArchiveThreadPayload,
+    io.Thread
+>;
+
+export type UnarchiveThreadAction = IOAction<
+    UNARCHIVE_THREAD,
+    UnarchiveThreadPayload,
+    io.Thread
+>;
+
+export type ThreadArchivedAction = Action<THREAD_ARCHIVED, io.Thread>;
+export type ThreadUnarchivedAction = Action<THREAD_UNARCHIVED, io.Thread>;
+export type ThreadSearchFilterUpdatedAction = Action<
+    THREAD_SEARCH_FILTER_UPDATED,
+    ThreadSearchFilterUpdatedPayload
+>;
 export type ThreadDraftReplySetAction = Action<
     THREAD_DRAFT_REPLY_SET,
     ThreadDraftReplySetPayload
@@ -626,4 +725,58 @@ export function updateThreadPage(
     params: ThreadPageUpdatedPayload["params"]
 ): ThreadPageUpdatedAction {
     return createAction(THREAD_PAGE_UPDATED, { thread_id: id, params });
+}
+
+export function updateThreadSearchFilter(
+    thread_id: string,
+    type: string,
+    value: string | string[]
+): ThreadSearchFilterUpdatedAction {
+    return createAction(THREAD_SEARCH_FILTER_UPDATED, {
+        thread_id,
+        type,
+        value,
+    });
+}
+
+export function createThread(payload: CreateThreadPayload): CreateThreadAction {
+    return createIOAction(CREATE_THREAD, payload);
+}
+
+export function renameThread(payload: RenameThreadPayload): RenameThreadAction {
+    return createIOAction(RENAME_THREAD, payload);
+}
+
+export function archiveThread(
+    payload: ArchiveThreadPayload
+): ArchiveThreadAction {
+    return createIOAction(ARCHIVE_THREAD, payload);
+}
+
+export function unarchiveThread(
+    payload: UnarchiveThreadPayload
+): UnarchiveThreadAction {
+    return createIOAction(UNARCHIVE_THREAD, payload);
+}
+
+export function threadUnarchived(payload: io.Thread): ThreadUnarchivedAction {
+    return createIOAction(THREAD_UNARCHIVED, payload);
+}
+
+export function threadArchived(payload: io.Thread): ThreadArchivedAction {
+    return createIOAction(THREAD_ARCHIVED, payload);
+}
+
+export function deleteThread(payload: DeleteThreadPayload): DeleteThreadAction {
+    return createIOAction(DELETE_THREAD, payload);
+}
+
+export function searchThread(payload: SearchThreadPayload): SearchThreadAction {
+    return createIOAction<SEARCH_THREAD, any>(SEARCH_THREAD, payload);
+}
+
+export function threadSearchResult(
+    payload: io.TopicSearchResult & SearchThreadPayload
+): ThreadSearchResultAction {
+    return createAction(THREAD_SEARCH_RESULT, payload);
 }

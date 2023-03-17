@@ -302,6 +302,15 @@ export function useThread(id: string) {
     return useSelector(selector);
 }
 
+export function useThreadSearchFilter(id: string) {
+    const selector = useCallback(
+        ({ threads }: State) => {
+            return threads.getSearchFilter(id);
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
 export function useConfig() {
     return useSelector(selectors.config);
 }
