@@ -72,7 +72,7 @@ export default React.memo(function Layout() {
                     ))}
                 </Routes>
             </Sidebar>
-            <main className="flex-grow flex overflow-hidden flex-row">
+            <main className="flex-grow flex overflow-hidden flex-row dark:bg-slate-700">
                 <Routes>
                     <Route
                         path="auth/*"

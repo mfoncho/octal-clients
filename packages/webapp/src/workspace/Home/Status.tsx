@@ -8,11 +8,9 @@ export default React.memo(function Status() {
     const user = useUser();
     return (
         <React.Fragment>
-            <button
-                onClick={() => setDialog(!dialog)}
-                className="p-2 border-2 border-gray-300 hover:bg-gray-200 bg-gray-100 rounded-md">
+            <button onClick={() => setDialog(!dialog)}>
                 {user.status ? (
-                    <span>
+                    <span className="font-bold text-gray-800 dark:text-gray-200">
                         <Text>{user.status.toString()}</Text>
                     </span>
                 ) : (
