@@ -67,11 +67,19 @@ const Msg = React.memo<{ id: string; extra: boolean; authid: string }>(
 
 Msg.displayName = "Msg";
 
+const dayfmt = "dddd MMMM Do YYYY"
+
+const Today = "Today";
+const Yesterday = "Yesterday";
+
 export const Messages = React.memo<IConversation>(({ messages, authid }) => {
     let sameday = false;
     let sameauthor = false;
 
     let previous: IChatMsg;
+
+    let today = moment().format(dayfmt);
+    let ystdy = moment().subtract(1, "day").format(dayfmt);
 
     function renderMessage(message: IChatMsg) {
         let block: JSX.Element[] = [];
@@ -91,16 +99,19 @@ export const Messages = React.memo<IConversation>(({ messages, authid }) => {
 
         if (!sameday) {
             let date = moment(message.timestamp);
+            let msgday = date.format(dayfmt);
+            const isYstdy = ystdy === msgday;
+            const isToday = today === msgday;
             block.push(
                 <div
                     key="divider"
                     data-thread-divider={date.format("DD-MM-YYYY")}
                     className="pt-2 flex flex-row justify-between items-center px-2">
-                    <div className="bg-slate-200 h-px flex-grow rounded" />
-                    <span className="text-gray-800 bg-slate-200 text-xs font-bold px-4 rounded-xl">
-                        {date.format("ll")}
+                    <div className="bg-slate-200 dark:bg-slate-500 h-px flex-grow rounded" />
+                    <span className="text-gray-500 dark:text-slate-400 text-xs font-bold px-4">
+                        {isToday ? Today : (isYstdy ? Yesterday : date.format("ll"))}
                     </span>
-                    <div className="bg-slate-200 h-px flex-grow rounded" />
+                    <div className="bg-slate-200 dark:bg-slate-500 h-px flex-grow rounded" />
                 </div>
             );
         }
