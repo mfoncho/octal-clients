@@ -45,26 +45,23 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
             tabIndex={-1}
             anchorEl={props.anchorEl}
             onClickAway={props.onClickAway}
-            className="z-10 flex w-48 flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 p-3 bg-white shadow-lg overflow-x-hidden overflow-y-auto">
+            className="z-10 flex w-64 flex-col rounded-md ring-1 ring-gray-800 ring-opacity-5 max-h-56 p-3 bg-white dark:bg-slate-800 shadow-lg overflow-x-hidden overflow-y-auto">
             <div className="flex flex-row justify-center pb-3">
-                <div className="flex flex-row items-center justify-end space-x-2">
-                    <Button
-                        variant="icon"
-                        color="clear"
+                <div className="flex flex-row items-center justify-end space-x-2 text-gray-800 dark:text-gray-200">
+                    <button
+                        className="rounded-md p-2 hover:bg-slate-200 dark:hover:bg-slate-600"
                         onClick={() => props.setYear(props.year - 1)}>
                         <Icons.Chevron />
-                    </Button>
+                    </button>
                     <span className="p-2 font-semibold">{props.year}</span>
-                    <Button
-                        variant="icon"
-                        color="clear"
-                        onClick={() => props.setYear(props.year + 1)}
-                        className="rotate-180">
-                        <Icons.Chevron />
-                    </Button>
+                    <button
+                        className="rounded-md p-2 hover:bg-slate-200 dark:hover:bg-slate-600"
+                        onClick={() => props.setYear(props.year + 1)}>
+                        <Icons.Chevron className="rotate-180" />
+                    </button>
                 </div>
             </div>
-            <div className="grid grid-col-3 sm:grid-cols-4 gap-3">
+            <div className="grid grid-col-3 sm:grid-cols-4 gap-x-5 gap-y-3">
                 {Array(12)
                     .fill(0)
                     .map((_month, index) => (
@@ -72,15 +69,15 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
                             key={String(index)}
                             onClick={() => props.setMonth(index)}
                             className={clx(
-                                "flex flex-row justify-center items-center p-2  rounded-lg",
+                                "flex flex-row justify-center items-center p-2 rounded-lg",
                                 props.month === index
                                     ? "text-white bg-primary-500"
-                                    : "text-gray-700 bg-gray-100"
+                                    : "text-gray-700 hover:bg-slate-200 dark:hover:bg-slate-600 dark:text-gray-200"
                             )}>
                             <span className="text-xs font-semibold p-px">
                                 {moment(date)
                                     .add(index, "months")
-                                    .format("MMM")}
+                                    .format("MMM").toUpperCase()}
                             </span>
                         </button>
                     ))}
@@ -190,14 +187,14 @@ export default React.memo(function Main() {
         return (
             <div className="flex flex-col overflow-hidden">
                 <button
-                    className="py-1 px-2 hover:bg-gray-200"
+                    className="py-1 px-2 hover:bg-gray-200 dark:hover:bg-slate-800"
                     onClick={() => actions.setDay(day > -1 ? -1 : dayi)}>
                     <div
                         className={clx(
                             "flex flex-row justify-center items-center text-xs font-semibold rounded-full w-5 h-5",
                             isToday(date)
                                 ? "text-white bg-primary-500"
-                                : "text-gray-700"
+                                : "text-gray-700 dark:text-gray-200"
                         )}>
                         <span>{date.getDate()}</span>
                     </div>
@@ -214,7 +211,7 @@ export default React.memo(function Main() {
             <div className="flex-1 flex flex-row overflow-hidden">
                 <button
                     onClick={() => actions.setWeek(week > -1 ? -1 : weeki)}
-                    className="w-3 flex flex-col justify-center items-center hover:bg-gray-200 p-px">
+                    className="w-3 flex flex-col justify-center items-center hover:bg-gray-200 p-px text-gray-800 dark:text-gray-200 font-bold">
                     {week > -1 ? "-" : "+"}
                 </button>
                 <div
@@ -267,12 +264,12 @@ export default React.memo(function Main() {
                 : () => setPicker(true);
         return (
             <div className="flex flex-row justify-between items-center px-8 py-4">
-                <Button
+                <button
                     ref={pickerRef}
                     onClick={onClick}
-                    className="font-bold text-lg text-gray-700">
+                    className="font-bold text-lg text-gray-700 dark:text-gray-200 px-2 py rounded-md hover:bg-slate-200 dark:hover:bg-slate-500">
                     {label}
-                </Button>
+                </button>
                 {renderActions()}
             </div>
         );
@@ -285,7 +282,7 @@ export default React.memo(function Main() {
             <div className="flex flex-row items-center">
                 <button
                     onClick={() => actions.setMonth()}
-                    className="w-3 flex flex-col justify-center items-center hover:bg-gray-200 px-px">
+                    className="w-3 flex flex-col justify-center items-center hover:bg-gray-200 text-gray-800 dark:text-gray-200 font-bold px-px">
                     {week > -1 ? "+" : "-"}
                 </button>
                 <div
@@ -308,7 +305,7 @@ export default React.memo(function Main() {
                         .map((index) => (
                             <div
                                 key={String(index)}
-                                className="flex text-sm font-semibold px-2 flex-col overflow-hidden">
+                                className="flex text-sm font-semibold px-2 flex-col overflow-hidden text-gray-800 dark:text-gray-200">
                                 {moment(date).add(index, "days").format("ddd")}
                             </div>
                         ))}
