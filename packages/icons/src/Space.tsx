@@ -1,1 +1,1 @@
-export { MdGroupWork as default } from "react-icons/md";
+export { FaHashtag as default } from "react-icons/fa";
