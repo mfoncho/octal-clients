@@ -95,14 +95,14 @@ export const Menu = Popper.create<HTMLDivElement, IMenu>((props) => {
             as="div"
             open={props.open}
             placement="bottom-end"
-            className="flex z-10 flex-col min-w-[220px] shadow-md rounded-md border border-gray-200 bg-white p-2 shadow-md"
+            className="flex z-10 flex-col min-w-[220px] shadow-md rounded-lg border border-gray-200 bg-white dark:bg-slate-900 dark:border-slate-700 p-2 shadow-md"
             anchorEl={props.anchorEl}
             onHoverAway={props.onHoverAway}
             onClickAway={props.onClickAway}>
             {props.options.map((option) => (
                 <div
                     role="button"
-                    className="rounded-md px-4 py-2 text-base text-gray-700 hover:bg-gray-100 flex flex-row items-center justify-between"
+                    className="rounded-md px-4 py-2 text-base text-gray-700 hover:bg-gray-100 dark:hover:bg-slate-800 dark:text-slate-300 dark:hover:text-white flex flex-row items-center justify-between "
                     key={option.name}
                     onClick={hanleSelect(option.name)}>
                     <span className="font-semibold text-sm">{option.name}</span>
@@ -113,7 +113,7 @@ export const Menu = Popper.create<HTMLDivElement, IMenu>((props) => {
             {auth.get("id") === workspace.get("admin_id") && (
                 <Link
                     to="/console"
-                    className="rounded-md px-4 py-2 text-base text-gray-700 hover:bg-gray-100 flex flex-row items-center justify-between">
+                    className="rounded-md px-4 py-2 text-base text-gray-700 hover:bg-gray-100 dark:hover:bg-slate-800 dark:text-slate-300 dark:hover:text-white flex flex-row items-center justify-between">
                     <span className="font-semibold text-sm">Console</span>
                 </Link>
             )}
