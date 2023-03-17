@@ -256,10 +256,10 @@ export function useNavigator() {
         navigate(path);
     }, []);
 
-    const openTopic = useCallback(
+    const openThread = useCallback(
         (params: { id: string; space_id: string }) => {
-            const path = generatePath(paths.workspace.topic, {
-                topic_id: params.id,
+            const path = generatePath(paths.workspace.thread, {
+                thread_id: params.id,
                 space_id: params.space_id,
             });
             navigate(path);
@@ -290,7 +290,7 @@ export function useNavigator() {
         }
     }, []);
 
-    return { openCard, openTopic, openSpace, openBoard, openHome };
+    return { openCard, openThread, openSpace, openBoard, openHome };
 }
 
 export function useCurPrev<T, P>(value: T) {

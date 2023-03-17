@@ -27,7 +27,7 @@ export default Dialog.create<IDialog>((props) => {
                 name: name.value,
             })
             .then((topic) => {
-                navigator.openTopic(topic);
+                navigator.openThread(topic);
                 props.onClose(e);
             })
             .catch(() => {

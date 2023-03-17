@@ -3,8 +3,8 @@ const chat = `/chat/:space_id`;
 const space = `${spaces}/:space_id`;
 const board = `${space}/boards/:board_id`;
 const card = `${board}/:card_id`;
-const topic = `${space}/topics/:topic_id`;
-const thread = `${space}/topics/:topic_id`;
+//const topic = `${space}/threads/:topic_id`;
+const thread = `${space}/threads/:thread_id`;
 
 const paths = {
     chat,
@@ -13,7 +13,7 @@ const paths = {
     board,
     card,
     thread,
-    topic,
+    //topic,
 };
 
 export type Path = keyof typeof paths;

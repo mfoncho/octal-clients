@@ -146,6 +146,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     const boards = useSpaceBoardsIndex(space.id);
 
     const topics = useSpaceTopicsIndex(space.id);
+    const path = generatePath(paths.space, { space_id: space.id });
 
     const [expaned, setExpaned] = useState<boolean>(true);
 
@@ -227,13 +228,13 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
     return (
         <React.Fragment>
-            <div
+            <Link
+                to={path}
                 className="group flex flex-row pt-1 mt-5 pb-1 px-2 items-center rounded overflow-hidden h-8 justify-between"
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
                 <p
                     role="button"
-                    onClick={dialog.opener("space")}
                     className="text-xs font-semibold truncate text-primary-200">
                     <Text>{space.name.toUpperCase()}</Text>
                 </p>
@@ -250,7 +251,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                         </button>
                     ))}
                 </div>
-            </div>
+            </Link>
             {creators.length > 0 && (
                 <Menu
                     options={creators}

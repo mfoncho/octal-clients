@@ -1,28 +1,26 @@
 import React, { useState } from "react";
 import * as Icons from "@colab/icons";
 import { Dialog, Text, Button, Textarea } from "@colab/ui";
-import { TopicRecord } from "@colab/store/lib/records";
+import { ThreadRecord } from "@colab/store";
 import { useInput } from "src/utils";
 import { useActions } from "./hooks";
 
 interface IRenameTopicDialog {
-    topic: TopicRecord;
+    thread: ThreadRecord;
 }
 
 export default Dialog.create<IRenameTopicDialog>((props) => {
-    const actions = useActions(props.topic);
+    const actions = useActions(props.thread);
     const [loading, setLoading] = useState(false);
 
-    const name = useInput(props.topic.name);
+    const name = useInput(props.thread.name);
 
     function handleRenameTopic(e: React.MouseEvent) {
+        const value = name.value.trim();
         e.stopPropagation();
         e.preventDefault();
         setLoading(true);
-        actions
-            .updateTopic({
-                name: name.value.trim(),
-            })
+        actions.renameThread(value)
             .then(() => {
                 props.onClose(e);
             })
@@ -62,7 +60,8 @@ export default Dialog.create<IRenameTopicDialog>((props) => {
             <Dialog.Actions className="rounded-b-lg">
                 <Button
                     disabled={
-                        name.value.trim() === props.topic.name.trim() || loading
+                        name.value.trim() === props.thread.name.trim() ||
+                        loading
                     }
                     onClick={handleRenameTopic}
                     color="primary">

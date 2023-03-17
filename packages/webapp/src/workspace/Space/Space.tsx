@@ -13,7 +13,7 @@ function Redirect() {
     const space = useSpace();
 
     useEffect(() => {
-        nav.openTopic({ space_id: space.id, id: space.topic_id! });
+        nav.openThread({ space_id: space.id, id: space.thread_id! });
     }, []);
     return <></>;
 }
@@ -28,7 +28,7 @@ export default React.memo(() => {
     return (
         <Textarea.Suggestions.Context.Provider value={mentionable as any}>
             <Routes>
-                <Route path="/topics/:topic_id" element={<Topic />} />
+                <Route path="/threads/:thread_id" element={<Topic />} />
                 <Route path="/boards/:board_id" element={<Board />}>
                     <Route path=":card_id" element={<Board />} />
                 </Route>

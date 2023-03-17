@@ -1,33 +1,29 @@
 import { useCallback } from "react";
-import * as TopicActions from "@colab/store/lib/actions/topic";
+import { Actions } from "@colab/store";
 import { useDispatch } from "react-redux";
-import {
-    UpdateTopicPayload,
-    SearchTopicPayload,
-} from "@colab/store/lib/actions/topic";
 
-interface ITopic {
+interface IThread {
     id: string;
     space_id: string;
 }
 
-export function useActions(topic: ITopic) {
+interface SearchParams {
+    page?: number;
+    query: string;
+    users?: string[];
+    before?: string;
+    after?: string;
+}
+
+export function useActions(topic: IThread) {
     const dispatch = useDispatch();
 
-    const archiveTopic = useCallback(() => {
-        const action = TopicActions.archiveTopic({
-            space_id: topic.space_id,
-            topic_id: topic.id,
-        });
-        return dispatch(action);
-    }, [topic.id]);
-
-    const searchTopic = useCallback(
-        (params: SearchTopicPayload["params"]) => {
-            const action = TopicActions.searchTopic({
+    const searchThread = useCallback(
+        (params: SearchParams) => {
+            const action = Actions.Thread.searchThread({
                 params: params,
                 space_id: topic.space_id,
-                topic_id: topic.id,
+                thread_id: topic.id,
             });
             return dispatch(action);
         },
@@ -36,7 +32,7 @@ export function useActions(topic: ITopic) {
 
     const updateFilter = useCallback(
         (type: string, value: string | string[]) => {
-            const action = TopicActions.updateTopicFilter(
+            const action = Actions.Thread.updateThreadSearchFilter(
                 topic.id,
                 type,
                 value
@@ -46,19 +42,27 @@ export function useActions(topic: ITopic) {
         [topic.id]
     );
 
-    const unarchiveTopic = useCallback(() => {
-        const action = TopicActions.unarchiveTopic({
+    const archiveThread = useCallback(() => {
+        const action = Actions.Thread.archiveThread({
             space_id: topic.space_id,
-            topic_id: topic.id,
+            thread_id: topic.id,
         });
         return dispatch(action);
     }, [topic.id]);
 
-    const updateTopic = useCallback(
-        (params: Omit<UpdateTopicPayload, "space_id" | "topic_id">) => {
-            const action = TopicActions.updateTopic({
-                ...params,
-                topic_id: topic.id,
+    const unarchiveThread = useCallback(() => {
+        const action = Actions.Thread.unarchiveThread({
+            space_id: topic.space_id,
+            thread_id: topic.id,
+        });
+        return dispatch(action);
+    }, [topic.id]);
+
+    const renameThread = useCallback(
+        (name: string) => {
+            const action = Actions.Thread.renameThread({
+                params: {name},
+                thread_id: topic.id,
                 space_id: topic.space_id,
             });
             return dispatch(action);
@@ -66,20 +70,20 @@ export function useActions(topic: ITopic) {
         [topic.id]
     );
 
-    const deleteTopic = useCallback(() => {
-        const action = TopicActions.deleteTopic({
-            topic_id: topic.id,
+    const deleteThread = useCallback(() => {
+        const action = Actions.Thread.deleteThread({
+            thread_id: topic.id,
             space_id: topic.space_id,
         });
         return dispatch(action);
     }, [topic.id]);
 
     return {
-        searchTopic,
-        updateTopic,
+        searchThread,
+        renameThread,
         updateFilter,
-        deleteTopic,
-        archiveTopic,
-        unarchiveTopic,
+        deleteThread,
+        archiveThread,
+        unarchiveThread,
     };
 }

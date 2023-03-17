@@ -12,12 +12,12 @@ import { useActions } from "./hooks";
 import { Datepicker, Popper } from "@colab/ui";
 import { useDebouncedEffect } from "@colab/hooks";
 import { Dialog, Button, Textarea, UIEvent } from "@colab/ui";
-import { TopicRecord, MemberRecord } from "@colab/store";
+import { ThreadRecord, MemberRecord, useThreadSearchFilter } from "@colab/store";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import Pagination from "@mui/material/Pagination";
 
 interface ISearch {
-    topic: TopicRecord;
+    thread: ThreadRecord;
 }
 
 interface Result extends Page<io.Message> {
@@ -63,10 +63,10 @@ const defaultResult = {
 };
 
 export default Dialog.create<ISearch>((props) => {
-    const actions = useActions(props.topic);
+    const actions = useActions(props.thread);
     const dialog = Dialog.useDialog();
-    const { filter } = props.topic;
     const screen = useScreen();
+    const filter = useThreadSearchFilter(props.thread.id);
     const [page, setPage] = React.useState<number>(1);
     const input = useInput(filter.search);
     const [results, setResults] = React.useState<Result>(defaultResult);
@@ -93,7 +93,7 @@ export default Dialog.create<ISearch>((props) => {
         if (filter.users.size > 0 || filter.search.trim().length > 0) {
             const id = uuid.v1();
             actions
-                .searchTopic({
+                .searchThread({
                     page: page,
                     query: filter.search,
                     users: filter.users.toArray(),
@@ -149,7 +149,7 @@ export default Dialog.create<ISearch>((props) => {
                 <div className="w-2/5 flex-row overflow-hidden">
                     <div className="relative border border-gray-400 items-center max-w-full overflow-hidden rounded-md shadow">
                         <Textarea
-                            placeholder="Quick search topic"
+                            placeholder="Quick search"
                             className="pl-9 w-full max-w-full font-semibold outline-none placeholder:text-gray-400 bg-transparent text-gray-700 focus:ring-primary-500 ring-gray-400 ring-2 rounded py-1 px-2 text-base"
                             {...input.props}
                         />

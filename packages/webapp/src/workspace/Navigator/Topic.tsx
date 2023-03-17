@@ -5,27 +5,22 @@ import * as Icons from "@colab/icons";
 import { Text } from "@colab/ui";
 import paths from "src/paths/workspace";
 import Counter from "./Counter";
-import { useTopic } from "@colab/store";
+import { useThread } from "@colab/store";
 
 interface ITopic {
     id: string;
 }
 
 export default React.memo<ITopic>(({ id }) => {
-    const topic = useTopic(id);
+    const thread = useThread(id);
+    const params = useParams<{ thread_id: string }>();
 
-    const params = useParams<{ topic_id: string }>();
-
-    const path = generatePath(paths.topic, {
-        space_id: topic?.space_id,
-        topic_id: topic?.id,
+    const path = generatePath(paths.thread, {
+        space_id: thread?.space_id,
+        thread_id: thread?.id,
     });
 
-    const selected = params.topic_id == id;
-
-    if (topic.is_archived && !selected) {
-        return <React.Fragment />;
-    }
+    const selected = params.thread_id == id;
 
     return (
         <Link
@@ -44,9 +39,9 @@ export default React.memo<ITopic>(({ id }) => {
                         ["text-primary-200"]: !selected,
                     }
                 )}>
-                <Text>{topic!.name}</Text>
+                <Text>{thread!.name}</Text>
             </span>
-            <Counter id={topic.thread_id} />
+            <Counter id={params.thread_id!} />
         </Link>
     );
 });

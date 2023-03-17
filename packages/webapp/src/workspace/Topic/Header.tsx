@@ -1,8 +1,8 @@
 import React from "react";
 import { Dialog, Text, Button } from "@colab/ui";
 import * as Icons from "@colab/icons";
-import { useTopic, useSpacePermissions } from "@colab/store";
-import RenameTopicDialog from "./RenameTopicDialog";
+import { useSpacePermissions, useThread } from "@colab/store";
+import RenameThreadDialog from "./RenameThreadDialog";
 import SearchDialog from "./Search";
 import { useParams } from "react-router-dom";
 import { useSpace } from "../Space/hooks";
@@ -12,8 +12,8 @@ export default React.memo(() => {
     const [, navigator] = useNavigatorDrawer();
     const space = useSpace();
     const dialog = Dialog.useDialog();
-    const params = useParams<{ topic_id: string }>();
-    const topic = useTopic(params.topic_id!);
+    const params = useParams<{ thread_id: string }>();
+    const thread = useThread(params.thread_id!);
     const permissions = useSpacePermissions(space.id);
 
     if (dialog.rename && permissions.get("space.manage", false) === false)
@@ -34,7 +34,7 @@ export default React.memo(() => {
                         onClick={dialog.opener("rename")}
                         className="text-left ">
                         <p className="truncate text-lg font-bold">
-                            {topic && <Text>{topic.name}</Text>}
+                            {thread && <Text>{space.name}</Text>}
                         </p>
                     </button>
                 </div>
@@ -45,22 +45,20 @@ export default React.memo(() => {
                     onClick={dialog.opener("search")}
                     className="mx-4 text-gray-500 flex flex-grow items-center">
                     <Icons.Search />
-                    <span className="pl-4 font-semibold">
-                        Quick search topic
-                    </span>
+                    <span className="pl-4 font-semibold">Quick search</span>
                 </div>
             </div>
-            {topic && (
+            {thread && (
                 <>
-                    <RenameTopicDialog
-                        topic={topic}
+                    <RenameThreadDialog
+                        thread={thread}
                         open={dialog.rename}
                         onClose={dialog.close}
                     />
                     <SearchDialog
                         open={dialog.search}
                         onClose={dialog.close}
-                        topic={topic}
+                        thread={thread}
                     />
                 </>
             )}

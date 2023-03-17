@@ -3,29 +3,16 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Thread from "../Thread";
 import { useNavigator } from "src/hooks";
-import { useTopic } from "@colab/store";
+import { useTopic, useThread, ThreadRecord } from "@colab/store";
 
+const defaultThread = new ThreadRecord({ id: "" });
 export default React.memo(() => {
-    const nav = useNavigator();
-    const [init, setInit] = useState<boolean>(false);
-    const params = useParams<{ topic_id: string; space_id: string }>();
-    const topic = useTopic(params.topic_id!);
-
-    useEffect(() => {
-        if (!init && !Boolean(topic.id)) {
-            setInit(true);
-        }
-        if (init && topic.id !== params.topic_id) {
-            nav.openSpace({ id: params.space_id! });
-        }
-    }, [topic.id, params.topic_id]);
-
+    const params = useParams<{ thread_id: string; space_id: string }>();
+    const thread = useThread(params.thread_id!) ?? defaultThread;
     return (
         <div className="flex flex-grow flex-col">
             <Header />
-            {Boolean(topic.id) && Boolean(topic.thread_id) && (
-                <Thread id={topic.thread_id} />
-            )}
+            <Thread id={params.thread_id!} />
         </div>
     );
 });
