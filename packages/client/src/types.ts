@@ -40,10 +40,6 @@ export interface HasThread {
     thread_id: Id;
 }
 
-export interface BelongsToBoard {
-    board_id: Id;
-}
-
 export interface BelongsToSpace {
     space_id: Id;
 }
@@ -98,7 +94,7 @@ export namespace io {
     export interface CardTemplate {
         id: string;
         name: string;
-        board_id: string;
+        space_id: string;
         fields: CardFieldTemplate[];
     }
 
@@ -211,7 +207,7 @@ export namespace io {
         timestamp: string;
     }
 
-    export interface Label extends Unique, BelongsToBoard {
+    export interface Label extends Unique, BelongsToSpace {
         name: string;
         color: string;
     }
@@ -249,7 +245,7 @@ export namespace io {
         labeled_at: string;
     }
 
-    export interface Card extends Unique, BelongsToBoard {
+    export interface Card extends Unique, BelongsToSpace{
         name: string;
         user: Author;
         fields: CardField[];
@@ -260,7 +256,7 @@ export namespace io {
         archived_at?: string | null;
     }
 
-    export interface Collection extends Unique, BelongsToBoard {
+    export interface Collection extends Unique, BelongsToSpace{
         name: string;
         type: CollectionType;
         origin: boolean;
@@ -302,7 +298,7 @@ export namespace io {
         permissions: Permission[];
     }
 
-    export interface Labels extends Unique, BelongsToBoard {
+    export interface Labels extends Unique, BelongsToSpace{
         name: string;
         color: string;
         created_at: Timestamp;

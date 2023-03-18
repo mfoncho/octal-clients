@@ -2,7 +2,7 @@ import { io } from "../types";
 import BaseClient, { Params } from "../base";
 
 export interface ArchiveCollectionRequest {
-    board_id: string;
+    space_id: string;
     collection_id: string;
 }
 
@@ -11,7 +11,7 @@ export interface CreateCollectionRequest {
     type: "stack" | "queue";
     origin: boolean;
     capacity: number;
-    board_id: string;
+    space_id: string;
 }
 
 export interface UpdateCollectionRequest {
@@ -20,26 +20,26 @@ export interface UpdateCollectionRequest {
     origin?: boolean;
     capacity?: number;
     collection_id: string;
-    board_id?: string;
+    space_id?: string;
 }
 
 export interface MoveCollectionRequest {
     index: number;
     collection_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface DeleteCollectionRequest {
     collection_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface FetchCollectionsRequest {
-    board_id: string;
+    space_id: string;
 }
 
 export interface FetchArchivedCollectionsRequest {
-    board_id: string;
+    space_id: string;
 }
 
 export default class CollectionClient extends BaseClient {
@@ -47,7 +47,7 @@ export default class CollectionClient extends BaseClient {
         request: FetchArchivedCollectionsRequest,
         params?: Params
     ): Promise<io.Collection[]> {
-        const path = `/boards/${request.board_id}/collections?archived`;
+        const path = `/spaces/${request.space_id}/collections?archived`;
         const { data } = await this.endpoint.get(path, params);
         return data;
     }
@@ -56,7 +56,7 @@ export default class CollectionClient extends BaseClient {
         request: FetchCollectionsRequest,
         params?: Params
     ): Promise<io.Collection[]> {
-        const path = `/boards/${request.board_id}/collections`;
+        const path = `/spaces/${request.space_id}/collections`;
         const { data } = await this.endpoint.get(path, params);
         return data;
     }
@@ -65,7 +65,7 @@ export default class CollectionClient extends BaseClient {
         request: CreateCollectionRequest,
         params?: Params
     ): Promise<io.Collection> {
-        const path = `/boards/${request.board_id}/collections`;
+        const path = `/spaces/${request.space_id}/collections`;
         const payload = {
             name: request.name,
             type: request.type,

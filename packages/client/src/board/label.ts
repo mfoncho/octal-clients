@@ -2,7 +2,7 @@ import { io } from "../types";
 import BaseClient, { Params } from "../base";
 
 export interface CreateLabelRequest {
-    board_id: string;
+    space_id: string;
     params: {
         name: string;
         color: string;
@@ -10,12 +10,12 @@ export interface CreateLabelRequest {
 }
 
 export interface DeleteLabelRequest {
-    board_id: string;
+    space_id: string;
     label_id: string;
 }
 
 export interface UpdateLabelRequest {
-    board_id: string;
+    space_id: string;
     label_id: string;
     params: {
         name?: string;
@@ -28,7 +28,7 @@ export default class LabelClient extends BaseClient {
         request: CreateLabelRequest,
         params?: Params
     ): Promise<io.Label> {
-        const path = `/boards/${request.board_id}/labels`;
+        const path = `/spaces/${request.space_id}/labels`;
         const { data } = await this.endpoint.post(path, request.params, params);
         return data;
     }
@@ -37,7 +37,7 @@ export default class LabelClient extends BaseClient {
         request: UpdateLabelRequest,
         params?: Params
     ): Promise<io.Label> {
-        const path = `/boards/${request.board_id}/labels/${request.label_id}`;
+        const path = `/spaces/${request.space_id}/labels/${request.label_id}`;
         const { data } = await this.endpoint.patch(
             path,
             request.params,
@@ -50,7 +50,7 @@ export default class LabelClient extends BaseClient {
         request: DeleteLabelRequest,
         params?: Params
     ): Promise<io.Label> {
-        const path = `/boards/${request.board_id}/labels/${request.label_id}`;
+        const path = `/spaces/${request.space_id}/labels/${request.label_id}`;
         const { data } = await this.endpoint.delete(path, params);
         return data;
     }
