@@ -78,6 +78,30 @@ export class SpacesStore extends Record({
     removeSpace(id: string) {
         return this.deleteIn(["entities", id]);
     }
+
+    patchLabel(payload: any) {
+        const space = this.getSpace(payload.space_id);
+        if (space) {
+            return this.putSpace(space.patchLabel(payload));
+        }
+        return this;
+    }
+
+    putLabel(payload: any) {
+        const space = this.getSpace(payload.space_id);
+        if (space) {
+            return this.putSpace(space.putLabel(payload));
+        }
+        return this;
+    }
+
+    removeLabel(payload: any) {
+        const space = this.getSpace(payload.space_id);
+        if (space) {
+            return this.putSpace(space.removeLabel(payload.id));
+        }
+        return this;
+    }
 }
 
 export const state = new SpacesStore({});
@@ -178,6 +202,33 @@ export const reducers = {
             return store.putSpace(space);
         }
         return store;
+    },
+    [Actions.LABEL_LOADED]: (
+        store: SpacesStore,
+        { payload }: Actions.LabelLoadedAction
+    ) => {
+        return store.putLabel(payload);
+    },
+
+    [Actions.LABEL_CREATED]: (
+        store: SpacesStore,
+        { payload }: Actions.LabelCreatedAction
+    ) => {
+        return store.putLabel(payload);
+    },
+
+    [Actions.LABEL_UPDATED]: (
+        store: SpacesStore,
+        { payload }: Actions.BoardLabelUpdated
+    ) => {
+        return store.patchLabel(payload);
+    },
+
+    [Actions.LABEL_DELETED]: (
+        store: SpacesStore,
+        { payload }: Actions.LabelDeletedAction
+    ) => {
+        return store.removeLabel(payload);
     },
 };
 

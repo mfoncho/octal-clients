@@ -7,6 +7,24 @@ export const SpacePermissions = Map<Permission, string | number | boolean>();
 
 export type SpacePermissions = typeof SpacePermissions;
 
+export class LabelRecord
+    extends Record({
+        id: "" as Id,
+        icon: "",
+        name: "",
+        color: "",
+        space_id: "" as Id,
+    })
+    implements Unique
+{
+    static make(payload: any) {
+        if (Record.isRecord(payload)) {
+            return payload as any as LabelRecord;
+        }
+        return new LabelRecord(payload);
+    }
+}
+
 export class SpaceRoleRecord extends Record({
     role_id: "" as Id,
     space_id: "" as Id,
@@ -56,6 +74,7 @@ export class SpaceRecord
         member_id: "" as Id,
         channel: null as null | Channel,
         roles: Map<string, SpaceRoleRecord>(),
+        labels: List<LabelRecord>(),
         joined_at: "",
         loaded: List<string>([]),
         created_at: "",
@@ -128,6 +147,34 @@ export class SpaceRecord
         return this.set("channel", channel);
     }
 
+    putLabel(payload: any) {
+        const index = this.labels.findIndex((label) => payload.id === label.id);
+        if (index === -1) {
+            return this.update("labels", (labels) =>
+                labels.push(LabelRecord.make(payload))
+            );
+        }
+        return this.updateIn(["labels", index], (label: any) =>
+            label.merge(payload)
+        );
+    }
+
+    patchLabel(payload: any) {
+        const index = this.labels.findIndex((label) => payload.id === label.id);
+        if (index === -1) return this;
+
+        return this.updateIn(["labels", index], (label: any) =>
+            label.merge(payload)
+        );
+    }
+
+    removeLabel(id: string) {
+        const index = this.labels.findIndex((label) => id === label.id);
+        if (index === -1) return this;
+        return this.update("labels", (labels) =>
+            labels.filter((label) => label.id !== id)
+        );
+    }
     toServer() {
         return {
             id: this.id,
@@ -156,6 +203,12 @@ export class SpaceRecord
         if (data.users) {
             const users = List(data.users);
             data = { ...data, users };
+        }
+        if (Array.isArray(data.labels)) {
+            let labels = List(
+                data.labels.map((label: any) => new LabelRecord(label))
+            );
+            data = { ...data, labels };
         }
         return data;
     }

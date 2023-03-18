@@ -7,7 +7,8 @@ import { CollectionRecord } from "../records";
 const positionSort = sort("index", "asc");
 
 export class CollectionsStore extends Record({
-    boards: Map<string, List<string>>(),
+    //space board
+    spaces: Map<string, List<string>>(),
     entities: Map<string, CollectionRecord>(),
 }) {
     contains(id: string) {
@@ -18,14 +19,14 @@ export class CollectionsStore extends Record({
     }
 
     getSpaceCollections(id: string) {
-        return this.boards.get(id);
+        return this.spaces.get(id);
     }
 
     removeSpaceCollections(id: string): CollectionsStore {
         return this.withMutations((store) => {
-            const boards = store.boards.get(id);
-            if (boards) {
-                boards.forEach((id) => store.removeCollection(id));
+            const spaces = store.spaces.get(id);
+            if (spaces) {
+                spaces.forEach((id) => store.removeCollection(id));
             }
         });
     }
@@ -38,12 +39,15 @@ export class CollectionsStore extends Record({
             return this.withMutations((store) => {
                 store.setIn(["entities", collection.id], collection);
 
-                // index board_id
-                let boards = store.boards.get(collection.board_id, List<string>());
-                if (!boards.includes(collection.board_id))
+                // index space_id
+                let spaces = store.spaces.get(
+                    collection.space_id,
+                    List<string>()
+                );
+                if (!spaces.includes(collection.space_id))
                     store.setIn(
-                        ["boards", collection.board_id],
-                        boards.push(collection.id)
+                        ["spaces", collection.space_id],
+                        spaces.push(collection.id)
                     );
             });
         }
@@ -56,8 +60,8 @@ export class CollectionsStore extends Record({
             const updated = collection.patch(payload);
             if (collection.index !== updated.index) {
                 return this.withMutations((store) => {
-                    store.boards
-                        .get(collection.board_id, List<string>())
+                    store.spaces
+                        .get(collection.space_id, List<string>())
                         .map((id) => this.getCollection(id)!)
                         .filter(Boolean)
                         .sort(positionSort)
@@ -84,9 +88,9 @@ export class CollectionsStore extends Record({
                 const filter = (id: string) => id !== board.id;
 
                 // index user_id
-                let boards = store.boards.get(board.board_id, List<string>());
-                if (boards.includes(board.board_id))
-                    store.setIn(["boards"], boards.filter(filter));
+                let spaces = store.spaces.get(board.space_id, List<string>());
+                if (spaces.includes(board.space_id))
+                    store.setIn(["spaces"], spaces.filter(filter));
 
                 store.deleteIn(["entities", board.id]);
             });
@@ -113,8 +117,8 @@ export const reducers = {
         return store.putCollection(payload);
     },
 
-    [Actions.BOARD_DELETED]: (store: CollectionsStore, { payload }: any) => {
-        let cids = store.boards.get(payload.id);
+    [Actions.SPACE_PURGED]: (store: CollectionsStore, { payload }: any) => {
+        let cids = store.spaces.get(payload.id);
         if (cids && !cids.isEmpty()) {
             return cids.reduce((store, id) => {
                 return store.removeCollection(id);
@@ -144,7 +148,8 @@ export const reducers = {
         { payload }: BoardActions.CollectionsUpdatedAction
     ) => {
         return payload.reduce(
-            (store: CollectionsStore, collection: any) => store.patchCollection(collection),
+            (store: CollectionsStore, collection: any) =>
+                store.patchCollection(collection),
             store
         );
     },

@@ -1,4 +1,4 @@
-import type { io, BelongsToBoard, Unique, BelongsToSpace } from "@colab/client";
+import type { io, Unique, BelongsToSpace } from "@colab/client";
 import type { Channel } from "@colab/endpoint";
 import type { Require } from "@colab/common";
 import type { Action, IOAction } from "../../types";
@@ -7,29 +7,17 @@ import { NormalizedCard, NormalizedCollection } from "../../schemas";
 import {
     BOARD_PURGED,
     LOAD_ARCHIVED_CARDS,
-    BOARD_ARCHIVED,
-    BOARD_UNARCHIVED,
-    ARCHIVE_BOARD,
-    UNARCHIVE_BOARD,
     BOARD_FILTER_UPDATED,
     BOARD_CONNECTED,
-    LOAD_BOARD,
-    LOAD_BOARDS,
     BOARD_COLLECTIONS_LOADED,
     BOARD_CARDS_LOADED,
-    BOARD_DELETED,
-    BOARDS_LOADED,
     COLLECTIONS_UPDATED,
     CARDS_UPDATED,
-    CREATE_BOARD,
-    BOARD_CREATED,
-    DELETE_BOARD,
     LABEL_DELETED,
     LABEL_CREATED,
     CREATE_LABEL,
     DELETE_LABEL,
     UPDATE_LABEL,
-    BOARD_LOADED,
     LABEL_LOADED,
     LABELS_LOADED,
     MOVE_CARD,
@@ -75,7 +63,6 @@ import {
     DELETE_COLLECTION,
     UPDATE_CARD_FIELD,
     COLLECTION_MOVED,
-    UPDATE_BOARD,
     ASSIGN_CHECKLIST,
     CHECKLIST_ASSIGNED,
     LABEL_UPDATED,
@@ -95,7 +82,6 @@ import {
     CARD_FIELD_VALUE_CREATED,
     UNASSIGN_CHECKLIST,
     CHECKLIST_UNASSIGNED,
-    BOARD_UPDATED,
     CREATE_CARD_TEMPLATE,
     DELETE_CARD_TEMPLATE,
     CARD_TEMPLATE_CREATED,
@@ -109,16 +95,16 @@ export interface BoardPurgedPayload {
 }
 
 export interface LoadCardPayload {
-    board_id?: string;
+    space_id?: string;
     card_id: string;
 }
 
 export interface LoadArchivedCardsPayload {
-    board_id: string;
+    space_id: string;
 }
 
 export interface CreateCardTemplatePayload {
-    board_id: string;
+    space_id: string;
     params: {
         name: string;
         description: string;
@@ -128,26 +114,16 @@ export interface CreateCardTemplatePayload {
 
 export interface CardTemplateDeletedPayload {
     id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface DeleteCardTemplatePayload {
-    board_id: string;
+    space_id: string;
     template_id: string;
 }
 
-export interface ArchiveBoardPayload {
-    board_id: string;
-    space_id: string;
-}
-
-export interface UnarchiveBoardPayload {
-    board_id: string;
-    space_id: string;
-}
-
 export interface BoardFilterPayload {
-    board_id: string;
+    space_id: string;
     filter: string;
     value: string | string[];
 }
@@ -178,12 +154,12 @@ export interface LoadMetadata {
 }
 
 export interface BoardCollectionsLoadedPayload {
-    board_id: string;
+    space_id: string;
     collections: NormalizedCollection[];
 }
 
 export interface BoardCardsLoadedPayload {
-    board_id: string;
+    space_id: string;
     cards: NormalizedCard[];
 }
 
@@ -275,7 +251,7 @@ export interface DeleteCardFieldValuePayload {
 }
 
 export interface CreateCardFieldPayload {
-    board_id: string;
+    space_id: string;
     card_id: string;
     params: {
         type: string;
@@ -287,7 +263,7 @@ export interface CreateCardFieldPayload {
 
 export interface UpdateCardFieldPayload {
     card_id: string;
-    board_id?: string;
+    space_id?: string;
     field_id: string;
     params: {
         name?: string;
@@ -312,48 +288,16 @@ export interface DeleteCardFieldPayload {
     field_id: string;
 }
 
-export interface CreateBoardPayload {
-    space_id: string;
-    params: {
-        name: string;
-    };
-}
-
-export interface DeleteBoardPayload {
-    board_id: string;
-    space_id: string;
-}
-
-export interface BoardDeletedPayload {
-    id: string;
-    space_id: string;
-}
-
-export interface UpdateBoardPayload {
-    board_id: string;
-    space_id: string;
-    params: {
-        name?: string;
-    };
-}
-
 export interface GetCardPayload {
-    board_id: string;
+    space_id: string;
     card_id?: string;
-}
-
-export interface ClearCardPayload {
-    id: string;
-    thread_id: string;
-    collection_id: string | null;
-    board_id: string;
 }
 
 export interface CreateCollectionPayload {
     name: string;
     origin: boolean;
     capacity: number;
-    board_id: string;
+    space_id: string;
     type: "stack" | "queue";
 }
 
@@ -361,7 +305,7 @@ export interface UpdateCollectionPayload {
     name?: string;
     origin?: boolean;
     collection_id: string;
-    board_id: string;
+    space_id: string;
     capacity?: number;
     type?: "stack" | "queue";
 }
@@ -369,38 +313,38 @@ export interface UpdateCollectionPayload {
 export interface MoveCollectionPayload {
     index: number;
     collection_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface ArchiveCollectionPayload {
     collection_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface UnarchiveCollectionPayload {
     collection_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface DeleteCollectionPayload {
-    board_id: string;
+    space_id: string;
     collection_id: string;
 }
 
 export interface FetchCardsPayload {
-    board_id: string;
+    space_id: string;
     collection_id?: string;
 }
 
 export interface FetchCollectionsPayload {
-    board_id: string;
+    space_id: string;
 }
 
 export interface MoveCardPayload {
     card_id: string;
     index?: number;
     collection_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface CardPosition {
@@ -410,7 +354,7 @@ export interface CardPosition {
 }
 
 export interface DeleteCardPayload {
-    board_id: string;
+    space_id: string;
     card_id: string;
 }
 
@@ -424,64 +368,64 @@ export interface UpdateCardPayload {
         name: string;
     };
     card_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface CreateCardPayload {
     params: {
         name: string;
     };
-    board_id: string;
+    space_id: string;
     collection_id: string;
     template_id?: string;
 }
 
 export interface ArchiveCardPayload {
     card_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface CompleteCardPayload {
     card_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface UncompleteCardPayload {
     card_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface CreateChecklistPayload {
     name: string;
     card_id: string;
     user_id: string;
-    board_id: string;
+    space_id: string;
 }
 
 export interface UpdateChecklistPayload {
     name: string;
-    board_id: string;
+    space_id: string;
     checklist_id: string;
 }
 
 export interface ReassignChecklistPayload {
     user_id: string;
-    board_id: string;
+    space_id: string;
     checklist_id: string;
 }
 
 export interface DeleteChecklistPayload {
     card_id: string;
-    board_id: string;
+    space_id: string;
     checklist_id: string;
 }
 
 export interface LoadCollectionsPayload {
-    board_id: string;
+    space_id: string;
 }
 
 export interface LoadCardsPayload {
-    board_id: string;
+    space_id: string;
 }
 
 export interface CreateLabelParams {
@@ -490,17 +434,17 @@ export interface CreateLabelParams {
 }
 
 export interface CreateLabelPayload {
-    board_id: string;
+    space_id: string;
     params: CreateLabelParams;
 }
 
 export interface DeleteLabelPayload {
-    board_id: string;
+    space_id: string;
     label_id: string;
 }
 
 export interface UpdateLabelPayload {
-    board_id: string;
+    space_id: string;
     label_id: string;
     params: {
         name?: string;
@@ -508,7 +452,7 @@ export interface UpdateLabelPayload {
     };
 }
 
-export interface RemoveChecklistPayload extends Unique { }
+export interface RemoveChecklistPayload extends Unique {}
 
 export type BoardPartial = Require<Partial<io.Board>, "id" | "space_id">;
 
@@ -522,15 +466,11 @@ export type ChecklistDeletedPayload = Require<
     "id" | "card_id"
 >;
 
-export interface UnarchiveCollectionPayload extends ArchiveCollectionPayload { }
+export interface UnarchiveCollectionPayload extends ArchiveCollectionPayload {}
 
-export type RemoveLabelPayload = Require<Partial<io.Label>, "id" | "board_id">;
+export type RemoveLabelPayload = Require<Partial<io.Label>, "id" | "space_id">;
 
 export type RemoveLabelsPayload = RemoveLabelPayload[];
-
-export type BoardArchivedAction = Action<BOARD_ARCHIVED, BoardPartial>;
-
-export type BoardUnarchivedAction = Action<BOARD_UNARCHIVED, BoardPartial>;
 
 export type BoardPurgedAction = Action<BOARD_PURGED, BoardPurgedPayload>;
 
@@ -538,6 +478,8 @@ export type BoardFilterUpdatedAction = Action<
     BOARD_FILTER_UPDATED,
     BoardFilterPayload
 >;
+
+export type CardMovedAction = Action<CARD_MOVED, CardMovedPayload>;
 
 export type LoadCardAction = IOAction<LOAD_CARD, LoadCardPayload, io.Card>;
 
@@ -595,26 +537,6 @@ export type LabelLoadedAction = Action<LABEL_LOADED, io.Label>;
 export type LabelsLoadedAction = Action<LABELS_LOADED, io.Label[]>;
 export type BoardLabelUpdated = Action<LABEL_UPDATED, io.Label>;
 
-export type ArchiveBoardAction = IOAction<
-    ARCHIVE_BOARD,
-    ArchiveBoardPayload,
-    io.Board
->;
-
-export type UnarchiveBoardAction = IOAction<
-    UNARCHIVE_BOARD,
-    UnarchiveBoardPayload,
-    io.Board
->;
-
-export type LoadBoardAction = IOAction<LOAD_BOARD, LoadBoardPayload, io.Board>;
-
-export type LoadSpaceBoardsAction = IOAction<
-    LOAD_BOARDS,
-    LoadSpaceBoardsPayload,
-    io.Board[]
->;
-
 export type CreateLabelAction = IOAction<
     CREATE_LABEL,
     CreateLabelPayload,
@@ -628,18 +550,6 @@ export type UpdateLabelAction = IOAction<
 >;
 
 export type DeleteLabelAction = IOAction<DELETE_LABEL, DeleteLabelPayload, any>;
-
-export type BoardLoadedAction = Action<BOARD_LOADED, io.Board>;
-
-export type BoardsLoadedAction = Action<BOARDS_LOADED, io.Board[]>;
-
-export type BoardCreatedAction = Action<BOARD_CREATED, io.Board>;
-
-export type UpdateBoardAction = IOAction<
-    UPDATE_BOARD,
-    UpdateBoardPayload,
-    io.Board
->;
 
 export type AssignChecklistAction = IOAction<
     ASSIGN_CHECKLIST,
@@ -828,16 +738,28 @@ export type CollectionCreatedAction = Action<COLLECTION_CREATED, io.Collection>;
 
 export type CollectionDeletedAction = Action<
     COLLECTION_DELETED,
-    Unique & { board_id: string }
+    Unique & { space_id: string }
 >;
 
-export type CollectionUpdatedAction = Action<COLLECTION_UPDATED, NormalizedCollection>;
+export type CollectionUpdatedAction = Action<
+    COLLECTION_UPDATED,
+    NormalizedCollection
+>;
 
-export type CollectionsUpdatedAction = Action<COLLECTIONS_UPDATED, NormalizedCollection[]>;
+export type CollectionsUpdatedAction = Action<
+    COLLECTIONS_UPDATED,
+    NormalizedCollection[]
+>;
 
-export type CollectionArchivedAction = Action<COLLECTION_ARCHIVED, io.Collection>;
+export type CollectionArchivedAction = Action<
+    COLLECTION_ARCHIVED,
+    io.Collection
+>;
 
-export type CollectionUnarchivedAction = Action<COLLECTION_UNARCHIVED, io.Collection>;
+export type CollectionUnarchivedAction = Action<
+    COLLECTION_UNARCHIVED,
+    io.Collection
+>;
 
 export type StoreCollectionsAction = Action<STORE_COLLECTIONS, io.Collection[]>;
 
@@ -858,7 +780,10 @@ export type BoardCollectionsLoadedAction = Action<
     BoardCollectionsLoadedPayload
 >;
 
-export type CollectionsReorderedAction = Action<COLLECTIONS_REORDERED, CardPosition[]>;
+export type CollectionsReorderedAction = Action<
+    COLLECTIONS_REORDERED,
+    CardPosition[]
+>;
 
 export type LoadCollectionsAction = IOAction<
     LOAD_COLLECTIONS,
@@ -903,25 +828,15 @@ export type UnarchiveCollectionAction = IOAction<
     io.Collection
 >;
 
-export type CreateBoardAction = IOAction<
-    CREATE_BOARD,
-    CreateBoardPayload,
-    io.Board
+export type CollectionMovedAction = Action<
+    COLLECTION_MOVED,
+    CollectionMovedPayload
 >;
-
-export type CardMovedAction = Action<CARD_MOVED, CardMovedPayload>;
-
-export type CollectionMovedAction = Action<COLLECTION_MOVED, CollectionMovedPayload>;
-
-export type DeleteBoardAction = IOAction<DELETE_BOARD, DeleteBoardPayload, any>;
-
-export type BoardDeletedAction = Action<BOARD_DELETED, BoardDeletedPayload>;
-
-export type BoardUpdatedAction = Action<BOARD_UPDATED, BoardPartial>;
-
 export type CardFieldCreatedAction = Action<CARD_FIELD_CREATED, io.CardField>;
 
-export function fetchCollections(payload: FetchCollectionsPayload): FetchCollectionsAction {
+export function fetchCollections(
+    payload: FetchCollectionsPayload
+): FetchCollectionsAction {
     return createIOAction<FETCH_COLLECTIONS>(FETCH_COLLECTIONS, payload);
 }
 
@@ -931,7 +846,7 @@ export function loadCard(payload: LoadCardPayload): LoadCardAction {
 
 export function loadBoardCards(payload: LoadCardsPayload): LoadCardsAction {
     let metadata: LoadMetadata = {
-        root_id: payload.board_id,
+        root_id: payload.space_id,
         type: "board",
     };
     return createIOAction<LOAD_CARDS>(LOAD_CARDS, payload, metadata);
@@ -941,10 +856,14 @@ export function loadBoardCollections(
     payload: LoadCollectionsPayload
 ): LoadCollectionsAction {
     let metadata: LoadMetadata = {
-        root_id: payload.board_id,
+        root_id: payload.space_id,
         type: "board",
     };
-    return createIOAction<LOAD_COLLECTIONS>(LOAD_COLLECTIONS, payload, metadata);
+    return createIOAction<LOAD_COLLECTIONS>(
+        LOAD_COLLECTIONS,
+        payload,
+        metadata
+    );
 }
 
 export function getCard(payload: GetCardPayload): GetCardAction {
@@ -1036,20 +955,26 @@ export function delelteCard(payload: DeleteCardPayload): DeleteCardAction {
 }
 
 export function collectionDeleted(
-    collection: Unique & BelongsToBoard
+    collection: Unique & BelongsToSpace
 ): CollectionDeletedAction {
     return createAction(COLLECTION_DELETED, collection);
 }
 
-export function collectionUnarchived(collection: io.Collection): CollectionUnarchivedAction {
+export function collectionUnarchived(
+    collection: io.Collection
+): CollectionUnarchivedAction {
     return createAction(COLLECTION_UNARCHIVED, collection);
 }
 
-export function collectionArchived(collection: io.Collection): CollectionArchivedAction {
+export function collectionArchived(
+    collection: io.Collection
+): CollectionArchivedAction {
     return createAction(COLLECTION_ARCHIVED, collection);
 }
 
-export function collectionCreated(collection: io.Collection): CollectionCreatedAction {
+export function collectionCreated(
+    collection: io.Collection
+): CollectionCreatedAction {
     return createAction(COLLECTION_CREATED, collection);
 }
 
@@ -1067,19 +992,27 @@ export function collectionsLoaded(
     return createAction(COLLECTIONS_LOADED, collections, metadata);
 }
 
-export function moveCollection(payload: MoveCollectionPayload): MoveCollectionAction {
+export function moveCollection(
+    payload: MoveCollectionPayload
+): MoveCollectionAction {
     return createIOAction<MOVE_COLLECTION>(MOVE_COLLECTION, payload);
 }
 
-export function updateCollection(payload: UpdateCollectionPayload): UpdateCollectionAction {
+export function updateCollection(
+    payload: UpdateCollectionPayload
+): UpdateCollectionAction {
     return createIOAction<UPDATE_COLLECTION>(UPDATE_COLLECTION, payload);
 }
 
-export function deleteCollection(payload: DeleteCollectionPayload): DeleteCollectionAction {
+export function deleteCollection(
+    payload: DeleteCollectionPayload
+): DeleteCollectionAction {
     return createIOAction<DELETE_COLLECTION>(DELETE_COLLECTION, payload);
 }
 
-export function collectionUpdated(payload: NormalizedCollection): CollectionUpdatedAction {
+export function collectionUpdated(
+    payload: NormalizedCollection
+): CollectionUpdatedAction {
     return createAction(COLLECTION_UPDATED, payload);
 }
 
@@ -1089,11 +1022,15 @@ export function collectionsUpdated(
     return createAction(COLLECTIONS_UPDATED, payload);
 }
 
-export function createCollection(payload: CreateCollectionPayload): CreateCollectionAction {
+export function createCollection(
+    payload: CreateCollectionPayload
+): CreateCollectionAction {
     return createIOAction<CREATE_COLLECTION>(CREATE_COLLECTION, payload);
 }
 
-export function storeCollections(payload: io.Collection[]): StoreCollectionsAction {
+export function storeCollections(
+    payload: io.Collection[]
+): StoreCollectionsAction {
     return createAction<STORE_COLLECTIONS>(STORE_COLLECTIONS, payload);
 }
 
@@ -1121,7 +1058,7 @@ export function createLabel(
     id: string,
     params: CreateLabelParams
 ): CreateLabelAction {
-    return createIOAction<CREATE_LABEL>(CREATE_LABEL, { board_id: id, params });
+    return createIOAction<CREATE_LABEL>(CREATE_LABEL, { space_id: id, params });
 }
 
 export function updateLabel(payload: UpdateLabelPayload): UpdateLabelAction {
@@ -1154,36 +1091,6 @@ export function labelsLoaded(label: io.Label[]): LabelsLoadedAction {
     return createAction(LABELS_LOADED, label);
 }
 
-// Board
-export function boardLoaded(payload: io.Board): BoardLoadedAction {
-    return createAction(BOARD_LOADED, payload);
-}
-
-export function boardsLoaded(payload: io.Board[]): BoardsLoadedAction {
-    return createAction(BOARDS_LOADED, payload);
-}
-
-export function boardUpdated(payload: BoardPartial): BoardUpdatedAction {
-    return createAction(BOARD_UPDATED, payload);
-}
-
-export function boardDeleted(payload: BoardDeletedPayload): BoardDeletedAction {
-    return createAction(BOARD_DELETED, payload);
-}
-
-export function updateBoard(payload: UpdateBoardPayload): UpdateBoardAction {
-    return createIOAction<UPDATE_BOARD>(UPDATE_BOARD, payload);
-}
-
-export function createBoard(payload: CreateBoardPayload): CreateBoardAction {
-    return createIOAction<CREATE_BOARD>(CREATE_BOARD, payload);
-}
-
-export function deleteBoard(payload: DeleteBoardPayload): DeleteBoardAction {
-    return createIOAction<DELETE_BOARD>(DELETE_BOARD, payload);
-}
-
-// Card Field
 export function createCardField(
     payload: CreateCardFieldPayload
 ): CreateCardFieldAction {
@@ -1313,7 +1220,9 @@ export function cardMoved(payload: CardMovedPayload): CardMovedAction {
     return createAction(CARD_MOVED, payload);
 }
 
-export function collectionMoved(payload: CollectionMovedPayload): CollectionMovedAction {
+export function collectionMoved(
+    payload: CollectionMovedPayload
+): CollectionMovedAction {
     return createAction(COLLECTION_MOVED, payload);
 }
 
@@ -1329,10 +1238,6 @@ export function boardConnected(
     return createAction(BOARD_CONNECTED, payload);
 }
 
-export function boardCreated(payload: io.Board): BoardCreatedAction {
-    return createAction(BOARD_CREATED, payload);
-}
-
 export function boardCollectionsLoaded(
     payload: BoardCollectionsLoadedPayload
 ): BoardCollectionsLoadedAction {
@@ -1344,38 +1249,6 @@ export function updateBoardFilter(
 ): BoardFilterUpdatedAction {
     return createAction(BOARD_FILTER_UPDATED, payload);
 }
-export function loadBoard(
-    id: string,
-    params: { [key: string]: string | number } = {}
-): LoadBoardAction {
-    return createIOAction<LOAD_BOARD>(LOAD_BOARD, { id, params });
-}
-
-export function loadSpaceBoards(
-    id: string,
-    params: { [key: string]: string | number } = {}
-): LoadSpaceBoardsAction {
-    return createIOAction<LOAD_BOARDS>(LOAD_BOARDS, { id, params });
-}
-
-export function archiveBoard(payload: ArchiveBoardPayload): ArchiveBoardAction {
-    return createIOAction<ARCHIVE_BOARD>(ARCHIVE_BOARD, payload);
-}
-
-export function unarchiveBoard(
-    payload: UnarchiveBoardPayload
-): UnarchiveBoardAction {
-    return createIOAction<UNARCHIVE_BOARD>(UNARCHIVE_BOARD, payload);
-}
-
-export function boardArchived(payload: BoardPartial): BoardArchivedAction {
-    return createAction(BOARD_ARCHIVED, payload);
-}
-
-export function boardUnarchived(payload: BoardPartial): BoardUnarchivedAction {
-    return createAction(BOARD_UNARCHIVED, payload);
-}
-
 export function purgeBoard(payload: BoardPurgedPayload): BoardPurgedAction {
     return createAction(BOARD_PURGED, payload);
 }

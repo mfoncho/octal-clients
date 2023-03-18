@@ -2,14 +2,14 @@ import { Record, Map, List } from "immutable";
 import * as Actions from "../actions/types";
 import * as AppActions from "../actions/app";
 import * as BoardActions from "../actions/board";
-import { BoardRecord } from "../records";
+import { Board } from "../records";
 
 const collections = ["cards", "collections", "archived_cards"];
 
 export class BoardsStore extends Record({
     loaded: Map<string, List<string>>(),
     spaces: Map<string, List<string>>(),
-    entities: Map<string, BoardRecord>(),
+    entities: Map<string, Board>(),
 }) {
     contains(id: string) {
         return this.entities.has(id);
@@ -23,64 +23,36 @@ export class BoardsStore extends Record({
         return this;
     }
 
-    getBoard(id: string) {
+    getSpaceBoard(id: string) {
         return this.entities.get(id);
     }
 
-    getSpaceBoards(id: string) {
-        return this.spaces.get(id);
-    }
-
-    removeSpaceBoards(id: string): BoardsStore {
+    removeSpaceBoard(id: string): BoardsStore {
         return this.withMutations((store) => {
-            const boards = store.spaces.get(id);
-            if (boards) {
-                boards.forEach((id) => store.removeBoard(id));
+            const spaces = store.spaces.get(id);
+            if (spaces) {
+                spaces.forEach((id) => store.removeBoard(id));
             }
         });
     }
 
-    patchLabel(payload: any): BoardsStore {
-        const board = this.getBoard(payload.board_id);
-        if (board) {
-            return this.putBoard(board.patchLabel(payload));
-        }
-        return this;
-    }
-
-    putLabel(payload: any): BoardsStore {
-        const board = this.getBoard(payload.board_id);
-        if (board) {
-            return this.putBoard(board.putLabel(payload));
-        }
-        return this;
-    }
-
-    removeLabel(payload: any): BoardsStore {
-        const board = this.getBoard(payload.board_id);
-        if (board) {
-            return this.putBoard(board.removeLabel(payload.id));
-        }
-        return this;
-    }
-
     putBoard(payload: any): BoardsStore {
         if (this.contains(payload.id)) {
-            if (payload instanceof BoardRecord) {
-                return this.setIn(["entities", payload.id], payload);
+            if (payload instanceof Board) {
+                return this.setIn(["entities", payload.space_id], payload);
             }
             return this;
         } else {
-            const board = BoardRecord.make(payload);
+            const board = Board.make(payload);
             return this.withMutations((store) => {
-                store.setIn(["entities", payload.id], board);
+                store.setIn(["entities", board.space_id], board);
 
                 // index space_id
-                let boards = store.spaces.get(board.space_id, List<string>());
-                if (!boards.includes(board.id))
+                let spaces = store.spaces.get(board.space_id, List<string>());
+                if (!spaces.includes(board.space_id))
                     store.setIn(
                         ["spaces", board.space_id],
-                        boards.push(board.id)
+                        spaces.push(board.space_id)
                     );
             });
         }
@@ -91,7 +63,7 @@ export class BoardsStore extends Record({
         } else {
             const board = this.entities.get(payload.id)!;
             const updated = board.patch(payload);
-            return this.setIn(["entities", board.id], updated);
+            return this.setIn(["entities", board.space_id], updated);
         }
     }
 
@@ -101,17 +73,17 @@ export class BoardsStore extends Record({
         } else {
             const board = this.entities.get(id)!;
             return this.withMutations((store) => {
-                const filter = (id: string) => id !== board.id;
+                const filter = (id: string) => id !== board.space_id;
 
                 // index user_id
-                let boards = store.spaces.get(board.space_id, List<string>());
-                if (boards.includes(board.id))
+                let spaces = store.spaces.get(board.space_id, List<string>());
+                if (spaces.includes(board.space_id))
                     store.setIn(
                         ["spaces", board.space_id],
-                        boards.filter(filter)
+                        spaces.filter(filter)
                     );
 
-                store.deleteIn(["entities", board.id]);
+                store.deleteIn(["entities", board.space_id]);
             });
         }
     }
@@ -126,10 +98,10 @@ export const reducers = {
         store: BoardsStore,
         { payload }: BoardActions.CardTemplateCreatedAction
     ) {
-        let board = store.getBoard(payload.board_id);
+        let board = store.getSpaceBoard(payload.space_id);
         if (board) {
             board = board.putTemplate(payload);
-            return store.setIn(["entities", board.id], board);
+            return store.setIn(["entities", board.space_id], board);
         }
         return store;
     },
@@ -137,10 +109,10 @@ export const reducers = {
         store: BoardsStore,
         { payload }: BoardActions.CardTemplateDeletedAction
     ) {
-        let board = store.getBoard(payload.board_id);
+        let board = store.getSpaceBoard(payload.space_id);
         if (board) {
             board = board.removeTemplate(payload);
-            return store.setIn(["entities", board.id], board);
+            return store.setIn(["entities", board.space_id], board);
         }
         return store;
     },
@@ -148,43 +120,19 @@ export const reducers = {
         store: BoardsStore,
         { payload }: BoardActions.BoardFilterUpdatedAction
     ) => {
-        let board = store.getBoard(payload.board_id);
+        let board = store.getSpaceBoard(payload.space_id);
         if (board) {
             board = board.updateFilter(payload.filter, payload.value);
-            return store.setIn(["entities", payload.board_id], board);
+            return store.setIn(["entities", payload.space_id], board);
         }
         return store;
-    },
-    [Actions.BOARD_ARCHIVED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardArchivedAction
-    ) => {
-        return store.patchBoard({ ...payload, collection_id: null });
-    },
-    [Actions.BOARD_UNARCHIVED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardArchivedAction
-    ) => {
-        return store.patchBoard(payload);
-    },
-    [Actions.BOARD_CREATED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardCreatedAction
-    ) => {
-        return store.putBoard(payload);
-    },
-    [Actions.BOARD_LOADED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardLoadedAction
-    ) => {
-        return store.putBoard(payload);
     },
 
     [Actions.COLLECTION_LOADED]: (
         store: BoardsStore,
         { payload }: AppActions.DataLoadedAction
     ) => {
-        const board = store.getBoard(payload.collection);
+        const board = store.getSpaceBoard(payload.collection);
         if (board && collections.includes(payload.type)) {
             return store.setIn(
                 ["entities", payload.collection],
@@ -194,64 +142,13 @@ export const reducers = {
         return store;
     },
 
-    [Actions.BOARDS_LOADED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardsLoadedAction
-    ) => {
-        return payload.reduce((store, board) => {
-            return store.putBoard(board);
-        }, store);
-    },
-
-    [Actions.BOARD_UPDATED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardUpdatedAction
-    ) => {
-        return store.patchBoard(payload);
-    },
-
     [Actions.SPACE_PURGED]: (store: BoardsStore, { payload }: any) => {
-        return store.removeSpaceBoards(payload.space_id);
-    },
-
-    [Actions.LABEL_LOADED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.LabelLoadedAction
-    ) => {
-        return store.putLabel(payload);
-    },
-
-    [Actions.LABEL_CREATED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.LabelCreatedAction
-    ) => {
-        return store.putLabel(payload);
-    },
-
-    [Actions.LABEL_UPDATED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardLabelUpdated
-    ) => {
-        return store.patchLabel(payload);
-    },
-
-    [Actions.LABEL_DELETED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.LabelDeletedAction
-    ) => {
-        return store.removeLabel(payload);
+        return store.removeSpaceBoard(payload.space_id);
     },
 
     [Actions.BOARD_PURGED]: (
         store: BoardsStore,
         { payload }: BoardActions.BoardPurgedAction
-    ) => {
-        return store.removeBoard(payload.id);
-    },
-
-    [Actions.BOARD_DELETED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardDeletedAction
     ) => {
         return store.removeBoard(payload.id);
     },
@@ -271,16 +168,6 @@ export const reducers = {
             return store.putLoaded(metadata.root_id, "collections");
         }
         return store;
-    },
-    [Actions.BOARD_CONNECTED]: (
-        store: BoardsStore,
-        { payload }: BoardActions.BoardConnectedAction
-    ) => {
-        let board = store.getBoard(payload.id);
-        if (board) {
-            board = board.setChannel(payload.channel);
-        }
-        return store.putBoard(board);
     },
 };
 

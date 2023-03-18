@@ -5,14 +5,14 @@ import { CardRecord } from "../records";
 
 const positionSort = sort("index", "asc");
 
-type Index = "users" | "boards" | "collections" | "dates";
+type Index = "users" | "spaces" | "collections" | "dates";
 
 export class CardsStore extends Record({
     fields: Map<string, string>(),
     loaded: Map<string, List<string>>(),
     dates: Map<string, List<string>>(),
     users: Map<string, List<string>>(),
-    boards: Map<string, List<string>>(),
+    spaces: Map<string, List<string>>(),
     collections: Map<string, List<string>>(),
     entities: Map<string, CardRecord>(),
 }) {
@@ -86,9 +86,9 @@ export class CardsStore extends Record({
     }
 
     static indexCardBoard(store: CardsStore, card: CardRecord) {
-        let boards = store.boards.get(card.board_id, List<string>());
+        let boards = store.spaces.get(card.space_id, List<string>());
         if (!boards.includes(card.id))
-            return store.setIn(["boards", card.board_id], boards.push(card.id));
+            return store.setIn(["boards", card.space_id], boards.push(card.id));
         return store;
     }
 
@@ -114,7 +114,10 @@ export class CardsStore extends Record({
                 });
 
                 // index collection_id
-                let collections = store.collections.get(card.collection_id, List<string>());
+                let collections = store.collections.get(
+                    card.collection_id,
+                    List<string>()
+                );
                 if (!collections.includes(card.id)) {
                     let indexed = collections
                         .map((id) => store.getCard(id)!)
@@ -171,7 +174,10 @@ export class CardsStore extends Record({
                                 store.setIn(["entities", card.id], card);
                                 return card.id;
                             });
-                        store.setIn(["collections", card.collection_id], indexed);
+                        store.setIn(
+                            ["collections", card.collection_id],
+                            indexed
+                        );
                     }
                 }
 
@@ -194,7 +200,10 @@ export class CardsStore extends Record({
                             return card.id;
                         });
 
-                    store.setIn(["collections", updated.collection_id], indexed);
+                    store.setIn(
+                        ["collections", updated.collection_id],
+                        indexed
+                    );
                 } else {
                     // update entry
                     store.setIn(["entities", card.id], updated);
@@ -225,11 +234,11 @@ export class CardsStore extends Record({
                     store.deleteIn(["fields", field.id]);
                 });
 
-                // indexed board_id
-                let boards = store.boards.get(card.board_id, List<string>());
+                // indexed space_id
+                let boards = store.spaces.get(card.space_id, List<string>());
                 if (boards.includes(card.id))
                     store.setIn(
-                        ["boards", card.board_id],
+                        ["boards", card.space_id],
                         boards.filter(filter)
                     );
 
@@ -271,8 +280,8 @@ export const reducers = {
             store
         );
     },
-    [Actions.BOARD_DELETED]: (store: CardsStore, { payload }: any) => {
-        let cids = store.boards.get(payload.id);
+    [Actions.SPACE_PURGED]: (store: CardsStore, { payload }: any) => {
+        let cids = store.spaces.get(payload.id);
         if (cids && !cids.isEmpty()) {
             return cids.reduce((id) => {
                 return store.removeCard({ id });

@@ -1,5 +1,5 @@
 import { Record, List, fromJS, Map } from "immutable";
-import { Unique, Positioned, BelongsToBoard } from "@colab/client";
+import { Unique, Positioned, BelongsToSpace } from "@colab/client";
 import { sort, keyStingFromDate } from "@colab/common";
 import calendar from "@colab/calendar";
 import { FileRecord } from "./workspace";
@@ -36,14 +36,14 @@ export class CardTaskValueRecord extends Record({
     card_id: "",
     field_id: "",
     created_at: "",
-}) { }
+}) {}
 
 export class CardTextValueRecord extends Record({
     id: "",
     value: "",
     field_id: "",
     created_at: "",
-}) { }
+}) {}
 
 export class CardNumberValueRecord extends Record({
     id: "",
@@ -51,7 +51,7 @@ export class CardNumberValueRecord extends Record({
     card_id: "",
     field_id: "",
     created_at: "",
-}) { }
+}) {}
 
 export class CardLabelValueRecord extends Record({
     id: "",
@@ -59,7 +59,7 @@ export class CardLabelValueRecord extends Record({
     label_id: "",
     field_id: "",
     created_at: "",
-}) { }
+}) {}
 
 export class CardUserValueRecord extends Record({
     id: "",
@@ -67,7 +67,7 @@ export class CardUserValueRecord extends Record({
     card_id: "",
     field_id: "",
     created_at: "",
-}) { }
+}) {}
 
 export class CardDatetimeValueRecord extends Record({
     id: "",
@@ -75,15 +75,15 @@ export class CardDatetimeValueRecord extends Record({
     card_id: "",
     field_id: "",
     created_at: "",
-}) { }
+}) {}
 
 export interface ICardField<
     T =
-    | CardTextValueRecord
-    | CardFileValueRecord
-    | CardLabelValueRecord
-    | CardDatetimeValueRecord
-    | CardUserValueRecord
+        | CardTextValueRecord
+        | CardFileValueRecord
+        | CardLabelValueRecord
+        | CardDatetimeValueRecord
+        | CardUserValueRecord
 > {
     id: string;
     type: string;
@@ -228,14 +228,15 @@ export class CardRecord
         thread_id: "",
         collection_id: "",
         created_at: "",
-        board_id: "",
+        space_id: "",
         dates: List<string>(),
         users: List<string>(),
         labels: List<string>(),
         assigned: List<string>(),
         archived_at: null as string | null,
     })
-    implements Unique, Positioned, BelongsToBoard {
+    implements Unique, Positioned, BelongsToSpace
+{
     constructor(data: any) {
         super(CardRecord.objectFromJS(data));
     }
@@ -412,7 +413,7 @@ export class CardRecord
         }
 
         if (data.archived || Boolean(data.archived_at)) {
-            data.collection_id = data.board_id;
+            data.collection_id = data.space_id;
         } else if (data.archived === false || data.archived_at == null) {
             data.archived_at = null;
         }

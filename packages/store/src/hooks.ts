@@ -20,14 +20,14 @@ import {
     CardTaskValueRecord,
     MemberRecord,
     TopicRecord,
-    BoardRecord,
+    Board,
     Drawer,
     DrawerRecord,
 } from "./records";
 
 const emptyarr: any = [];
 
-const defaultBoard = BoardRecord.make({});
+const defaultBoard = Board.make({});
 
 const defaultSpace = SpaceRecord.make({});
 
@@ -50,11 +50,11 @@ export class UserChecklist extends Record({
     name: "",
     created_at: "",
     card: new CardRecord({}),
-    board: new BoardRecord({}),
+    board: new Board({}),
     collection: new CollectionRecord({}),
     users: List<UserRecord>(),
     tasks: List<CardTaskValueRecord>(),
-}) { }
+}) {}
 
 export function useSpaceLoaded(id: string) {
     return useSelector(
@@ -71,7 +71,7 @@ export function useBoardLoaded(id: string) {
     return useSelector(
         useCallback(
             ({ boards }: State) => {
-                return (boards.getBoard(id) ?? defaultBoard).loaded;
+                return (boards.getSpaceBoard(id) ?? defaultBoard).loaded;
             },
             [id]
         )
@@ -201,7 +201,7 @@ export function useUserCardsIndex(id: string) {
 export function useBoardCardsIndex(id: string) {
     const selector = useCallback(
         ({ cards }: State) => {
-            return cards.boards.get(id, defaultStringList);
+            return cards.spaces.get(id, defaultStringList);
         },
         [id]
     );
@@ -211,7 +211,7 @@ export function useBoardCardsIndex(id: string) {
 export function useSpaceBoards(id: string) {
     const store = useBoardsStore();
     return useSpaceTopicsIndex(id)
-        .map((id) => store.getBoard(id)!)
+        .map((id) => store.getSpaceBoard(id)!)
         .filter(Boolean);
 }
 
@@ -263,8 +263,8 @@ export function useMembers(id?: string) {
     const select = useCallback(
         id
             ? ({ members }: State) => {
-                return members.get(id, defaultMembers);
-            }
+                  return members.get(id, defaultMembers);
+              }
             : selectors.members,
         [id]
     );
@@ -476,13 +476,13 @@ export function useSpaces() {
     return useSelector(selectors.spaces);
 }
 
-export function useDirectSpaces() { }
+export function useDirectSpaces() {}
 
 export function useBoardCollections(id: string) {
     const store = useCollectionsStore();
     const selector = useCallback(
         ({ collections }: State) => {
-            return collections.boards.get(id, defaultStringList);
+            return collections.spaces.get(id, defaultStringList);
         },
         [id]
     );
@@ -495,7 +495,7 @@ export function useBoardCards(id: string) {
     const store = useCardsStore();
     const selector = useCallback(
         ({ cards }: State) => {
-            return cards.boards.get(id, defaultStringList);
+            return cards.spaces.get(id, defaultStringList);
         },
         [id]
     );
@@ -551,7 +551,7 @@ export function useCard(id: string, defaultValue = defaultCard) {
 }
 
 export function useLabels(id: string) {
-    const { labels } = useBoard(id)!;
+    const { labels } = useSpace(id)!;
     return labels;
 }
 
@@ -581,9 +581,11 @@ export function useUserChecklists(user_id: string): List<UserChecklist> {
                                     (id) => users.getUser(id)!
                                 ),
                                 tasks: checklist.values,
-                                collection: collections.entities.get(card.collection_id),
+                                collection: collections.entities.get(
+                                    card.collection_id
+                                ),
                                 board: boards.entities.get(
-                                    card.board_id,
+                                    card.space_id,
                                     defaultBoard
                                 ),
                                 card: cards.entities.get(card_id, defaultCard),

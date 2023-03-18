@@ -3,6 +3,7 @@ import { dispatch } from "..";
 import * as Actions from "../actions/types";
 import * as AppActions from "../actions/app";
 import { CardSchema } from "../schemas";
+import * as SpaceActions from "../actions/space";
 import * as BoardActions from "../actions/board";
 import * as ThreadActions from "../actions/thread";
 import Client, { io } from "@colab/client";
@@ -61,7 +62,7 @@ function* loadBoardCards({
         )) as any as io.Card[];
 
         yield* normalizeLoad(data);
-        yield put(AppActions.dataLoaded(payload.board_id, "cards", data));
+        yield put(AppActions.dataLoaded(payload.space_id, "cards", data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -89,21 +90,17 @@ function* loadArchivedCards({
         const data = (yield Client.fetchArchivedCards(payload)) as any;
         yield* normalizeLoad(data);
         yield put(
-            AppActions.dataLoaded(
-                payload.board_id,
-                "cards.archived",
-                data
-            )
+            AppActions.dataLoaded(payload.space_id, "cards.archived", data)
         );
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
     }
 }
-function* boardLoadedLoadBoardCards({
+function* spaceLoadedLoadSpaceCards({
     payload,
-}: BoardActions.BoardLoadedAction): Iterable<any> {
-    yield put(BoardActions.loadBoardCards({ board_id: payload.id }));
+}: SpaceActions.SpaceLoadedAction): Iterable<any> {
+    yield put(BoardActions.loadBoardCards({ space_id: payload.id! }));
 }
 
 function* create({
@@ -290,7 +287,8 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_LOADED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
 
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
 
@@ -299,12 +297,6 @@ export const tasks = [
     { effect: takeEvery, type: Actions.CREATE_CARD, handler: create },
 
     { effect: takeEvery, type: Actions.LOAD_CARDS, handler: loadBoardCards },
-
-    {
-        effect: takeEvery,
-        type: Actions.BOARD_LOADED,
-        handler: boardLoadedLoadBoardCards,
-    },
 
     {
         effect: takeEvery,

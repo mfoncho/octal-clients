@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
 
 // Board actions
-export const BOARD_LOADED = "BOARD_LOADED";
-export type BOARD_LOADED = typeof BOARD_LOADED;
-
-export const LOAD_BOARD = "LOAD_BOARD";
-export type LOAD_BOARD = typeof LOAD_BOARD;
 
 export const BOARD_PURGED = "BOARD_PURGED";
 export type BOARD_PURGED = typeof BOARD_PURGED;
@@ -15,42 +10,6 @@ export type BOARD_CONNECTED = typeof BOARD_CONNECTED;
 
 export const BOARD_FILTER_UPDATED = "BOARD_FILTER_UPDATED";
 export type BOARD_FILTER_UPDATED = typeof BOARD_FILTER_UPDATED;
-
-export const LOAD_BOARDS = "LOAD_BOARDS";
-export type LOAD_BOARDS = typeof LOAD_BOARDS;
-
-export const BOARDS_LOADED = "BOARDS_LOADED";
-export type BOARDS_LOADED = typeof BOARDS_LOADED;
-
-export const BOARD_DELETED = "BOARD_DELETED";
-export type BOARD_DELETED = typeof BOARD_DELETED;
-
-export const CREATE_BOARD = "CREATE_BOARD";
-export type CREATE_BOARD = typeof CREATE_BOARD;
-
-export const BOARD_CREATED = "BOARD_CREATED";
-export type BOARD_CREATED = typeof BOARD_CREATED;
-
-export const DELETE_BOARD = "DELETE_BOARD";
-export type DELETE_BOARD = typeof DELETE_BOARD;
-
-export const UPDATE_BOARD = "UPDATE_BOARD";
-export type UPDATE_BOARD = typeof UPDATE_BOARD;
-
-export const ARCHIVE_BOARD = "ARCHIVE_BOARD";
-export type ARCHIVE_BOARD = typeof ARCHIVE_BOARD;
-
-export const UNARCHIVE_BOARD = "UNARCHIVE_BOARD";
-export type UNARCHIVE_BOARD = typeof UNARCHIVE_BOARD;
-
-export const BOARD_ARCHIVED = "BOARD_ARCHIVED";
-export type BOARD_ARCHIVED = typeof BOARD_ARCHIVED;
-
-export const BOARD_UNARCHIVED = "BOARD_UNARCHIVED";
-export type BOARD_UNARCHIVED = typeof BOARD_UNARCHIVED;
-
-export const BOARD_UPDATED = "BOARD_UPDATED";
-export type BOARD_UPDATED = typeof BOARD_UPDATED;
 
 // Collection actions
 export const GET_COLLECTION = "GET_COLLECTION";

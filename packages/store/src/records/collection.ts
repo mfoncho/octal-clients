@@ -1,5 +1,5 @@
 import { Record, Map } from "immutable";
-import { Unique, Positioned, Id, BelongsToBoard } from "@colab/client";
+import { Unique, Positioned, Id, BelongsToSpace } from "@colab/client";
 
 export class CollectionRecord
     extends Record({
@@ -9,16 +9,17 @@ export class CollectionRecord
         origin: false,
         index: 0,
         capacity: 0,
-        board_id: "" as Id,
+        space_id: "" as Id,
         archived_at: null as string | null,
     })
-    implements Unique, Positioned, BelongsToBoard {
+    implements Unique, Positioned, BelongsToSpace
+{
     patch(data: any) {
         return this.merge(CollectionRecord.objectFromJS(data));
     }
 
     getStorePath(): [Id, Id] {
-        return [this.board_id, this.id];
+        return [this.space_id, this.id];
     }
 
     static mapFromJS(data: any) {

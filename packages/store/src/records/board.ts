@@ -21,7 +21,7 @@ export class CardTemplateRecord
         name: "",
         description: "",
         fields: List<CardFieldTemplateRecord>(),
-        board_id: "" as Id,
+        space_id: "" as Id,
     })
     implements Unique
 {
@@ -47,24 +47,6 @@ export class CardTemplateRecord
     }
 }
 
-export class LabelRecord
-    extends Record({
-        id: "" as Id,
-        icon: "",
-        name: "",
-        color: "",
-        board_id: "" as Id,
-    })
-    implements Unique
-{
-    static make(payload: any) {
-        if (Record.isRecord(payload)) {
-            return payload as any as LabelRecord;
-        }
-        return new LabelRecord(payload);
-    }
-}
-
 export class BoardFilter extends Record({
     term: "",
     labels: List<string>(),
@@ -86,29 +68,19 @@ export class BoardFilter extends Record({
     }
 }
 
-export class BoardRecord
-    extends Record({
-        id: "" as Id,
-        icon: "",
-        name: "",
-        space_id: "",
-        channel: null as null | Channel,
-        loaded: List<string>([]),
-        templates: List<CardTemplateRecord>(),
-        labels: List<LabelRecord>(),
-        filter: new BoardFilter(),
-        is_archived: false,
-        created_at: "",
-        archived_at: null as string | null,
-    })
-    implements Unique
-{
+export class Board extends Record({
+    space_id: "",
+    channel: null as null | Channel,
+    loaded: List<string>([]),
+    templates: List<CardTemplateRecord>(),
+    filter: new BoardFilter(),
+}) {
     constructor(data: any) {
-        super(BoardRecord.objectFromJS(data));
+        super(Board.objectFromJS(data));
     }
 
     patch(data: any) {
-        return this.merge(BoardRecord.objectFromJS(data));
+        return this.merge(Board.objectFromJS(data));
     }
 
     addLoaded(collection: string) {
@@ -146,51 +118,16 @@ export class BoardRecord
         return this;
     }
 
-    putLabel(payload: any) {
-        const index = this.labels.findIndex((label) => payload.id === label.id);
-        if (index === -1) {
-            return this.update("labels", (labels) =>
-                labels.push(LabelRecord.make(payload))
-            );
-        }
-        return this.updateIn(["labels", index], (label: any) =>
-            label.merge(payload)
-        );
-    }
-
-    patchLabel(payload: any) {
-        const index = this.labels.findIndex((label) => payload.id === label.id);
-        if (index === -1) return this;
-
-        return this.updateIn(["labels", index], (label: any) =>
-            label.merge(payload)
-        );
-    }
-
-    removeLabel(id: string) {
-        const index = this.labels.findIndex((label) => id === label.id);
-        if (index === -1) return this;
-        return this.update("labels", (labels) =>
-            labels.filter((label) => label.id !== id)
-        );
-    }
-
     setChannel(channel: Channel) {
         return this.set("channel", channel);
     }
 
     static create(payload: any) {
-        const data = BoardRecord.objectFromJS(payload);
-        return new BoardRecord(data);
+        const data = Board.objectFromJS(payload);
+        return new Board(data);
     }
 
     static objectFromJS(data: any) {
-        if (Array.isArray(data.labels)) {
-            let labels = List(
-                data.labels.map((label: any) => new LabelRecord(label))
-            );
-            data = { ...data, labels };
-        }
         if (Array.isArray(data.templates)) {
             let templates = List(
                 data.templates.map((template: any) =>
@@ -204,8 +141,8 @@ export class BoardRecord
 
     static make(payload: any) {
         if (Record.isRecord(payload)) {
-            return payload as any as BoardRecord;
+            return payload as any as Board;
         }
-        return new BoardRecord(payload);
+        return new Board(payload);
     }
 }

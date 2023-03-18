@@ -4,6 +4,7 @@ import { dispatch } from "..";
 import { CollectionSchema } from "../schemas";
 import * as Actions from "../actions/types";
 import * as BoardActions from "../actions/board";
+import * as SpaceActions from "../actions/space";
 import * as AppActions from "../actions/app";
 
 function* normalize(payload: io.Collection | io.Collection[]): Iterable<any> {
@@ -36,10 +37,10 @@ function* fetch({
     }
 }
 
-function* boardLoadedLoadBoardCollections({
+function* loadSpaceCollection({
     payload,
-}: BoardActions.BoardLoadedAction): Iterable<any> {
-    yield put(BoardActions.loadBoardCollections({ board_id: payload.id }));
+}: SpaceActions.SpaceLoadedAction): Iterable<any> {
+    yield put(BoardActions.loadBoardCollections({ space_id: payload.id! }));
 }
 
 function* loadBoardCollections({
@@ -53,7 +54,7 @@ function* loadBoardCollections({
 
         yield* normalizeLoad(collections);
         yield put(
-            AppActions.dataLoaded(payload.board_id, "collections", collections)
+            AppActions.dataLoaded(payload.space_id, "collections", collections)
         );
 
         resolve.success(collections);
@@ -134,7 +135,7 @@ function* trash({
         const data = (yield client.deleteCollection(payload)) as any;
         const params = {
             id: payload.collection_id,
-            board_id: payload.board_id,
+            space_id: payload.space_id,
         };
         yield put(BoardActions.collectionDeleted(params));
         resolve.success(data);
@@ -184,12 +185,12 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+    { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
 
     {
         effect: takeEvery,
-        type: Actions.BOARD_LOADED,
-        handler: boardLoadedLoadBoardCollections,
+        type: Actions.SPACE_LOADED,
+        handler: loadSpaceCollection,
     },
 
     { effect: takeEvery, type: Actions.CREATE_COLLECTION, handler: create },
@@ -212,5 +213,9 @@ export const tasks = [
 
     { effect: takeEvery, type: Actions.ARCHIVE_COLLECTION, handler: archive },
 
-    { effect: takeEvery, type: Actions.UNARCHIVE_COLLECTION, handler: unarchive },
+    {
+        effect: takeEvery,
+        type: Actions.UNARCHIVE_COLLECTION,
+        handler: unarchive,
+    },
 ];
