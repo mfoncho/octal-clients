@@ -287,6 +287,11 @@ function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
 }
 
 export const tasks = [
+    {
+        effect: takeEvery,
+        type: Actions.SPACE_LOADED,
+        handler: spaceLoadedLoadSpaceCards,
+    },
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
 
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },

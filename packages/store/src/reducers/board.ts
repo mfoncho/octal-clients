@@ -1,6 +1,7 @@
 import { Record, Map, List } from "immutable";
 import * as Actions from "../actions/types";
 import * as AppActions from "../actions/app";
+import * as SpaceActions from "../actions/space";
 import * as BoardActions from "../actions/board";
 import { Board } from "../records";
 
@@ -93,6 +94,12 @@ export const state = new BoardsStore();
 export const reducers = {
     [Actions.LOGGED_OUT](_store: any, _action: any) {
         return state;
+    },
+    [Actions.SPACE_LOADED](
+        store: BoardsStore,
+        { payload }: SpaceActions.SpaceLoadedAction
+    ) {
+        return store.putBoard(payload);
     },
     [Actions.CARD_TEMPLATE_CREATED](
         store: BoardsStore,

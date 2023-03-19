@@ -35,15 +35,16 @@ export class CardTemplateRecord
         return new CardTemplateRecord(payload);
     }
     static objectFromJS(data: any) {
-        if (data.fields) {
+        let object = { ...data, space_id: data.space_id };
+        if (object.fields) {
             let fields = List(
-                data.fields.map((field: any) =>
+                object.fields.map((field: any) =>
                     CardFieldTemplateRecord.make(field)
                 )
             );
-            data = { ...data, fields };
+            object = { ...object, fields };
         }
-        return data;
+        return object;
     }
 }
 
