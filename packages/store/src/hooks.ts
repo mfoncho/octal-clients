@@ -215,6 +215,16 @@ export function useSpaceBoards(id: string) {
         .filter(Boolean);
 }
 
+export function useSpaceSocket(id: string) {
+    const select = useCallback(
+        ({ spaces }: State) => {
+            return spaces.entities.get(id)?.channel;
+        },
+        [id]
+    );
+    return useSelector(select);
+}
+
 export function useSpaceTopics(id: string) {
     const store = useTopicsStore();
     return useSpaceTopicsIndex(id)
@@ -302,6 +312,17 @@ export function useThread(id: string) {
     return useSelector(selector);
 }
 
+export function useThreadSocket(id: string) {
+    const selector = useCallback(
+        ({ threads }: State) => {
+            if (threads.threads.has(id)) {
+                return threads.threads.get(id)?.channel;
+            }
+        },
+        [id]
+    );
+    return useSelector(selector);
+}
 export function useThreadSearchFilter(id: string) {
     const selector = useCallback(
         ({ threads }: State) => {
