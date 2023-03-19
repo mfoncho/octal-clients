@@ -215,7 +215,7 @@ export function useSpaceBoards(id: string) {
         .filter(Boolean);
 }
 
-export function useSpaceSocket(id: string) {
+export function useSpaceChannel(id: string) {
     const select = useCallback(
         ({ spaces }: State) => {
             return spaces.entities.get(id)?.channel;
@@ -312,7 +312,7 @@ export function useThread(id: string) {
     return useSelector(selector);
 }
 
-export function useThreadSocket(id: string) {
+export function useThreadChannel(id: string) {
     const selector = useCallback(
         ({ threads }: State) => {
             if (threads.threads.has(id)) {
