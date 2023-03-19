@@ -221,7 +221,7 @@ function* store({ payload }: any) {
     yield* load(payload);
 }
 
-function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
+function* subscribe({ payload }: SpaceActions.SpaceConnectedAction) {
     const { channel } = payload;
     channel.on("card.created", (payload: io.Card) => {
         let [card, related] = CardSchema.normalizeOne(payload);
@@ -287,7 +287,6 @@ function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.SPACE_LOADED, handler: subscribe },
     { effect: takeEvery, type: Actions.SPACE_CONNECTED, handler: subscribe },
 
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
