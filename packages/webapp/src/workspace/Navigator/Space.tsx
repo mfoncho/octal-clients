@@ -3,12 +3,10 @@ import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
 import { Text, Collapse, Dialog, Popper } from "@colab/ui";
 import TopicCreatorDialog from "../Space/CreateTopic";
-import CreateBoardDialog from "../Space/CreateBoardDialog";
 import paths from "src/paths/workspace";
 import Counter from "./Counter";
 import * as Icons from "@colab/icons";
 import Topic from "./Topic";
-import Board from "./Board";
 import SpaceSettingsDialog from "../SpaceSettingsDialog";
 import SpaceDialog from "../SpaceDialog";
 import InviteDialog from "../InviteDialog";
@@ -40,14 +38,6 @@ export interface IMenu {
 const sortTopics = (aid: string, bid: string) => {
     let a = store.getState().topics.getTopic(aid)!;
     let b = store.getState().topics.getTopic(bid)!;
-    if (a.created_at > b.created_at) return 1;
-    if (a.created_at < b.created_at) return -1;
-    return 0;
-};
-
-const sortBoards = (aid: string, bid: string) => {
-    let a = store.getState().boards.getBoard(aid)!;
-    let b = store.getState().boards.getBoard(bid)!;
     if (a.created_at > b.created_at) return 1;
     if (a.created_at < b.created_at) return -1;
     return 0;
@@ -213,15 +203,6 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         dialog.open(menu);
     }
 
-    function renderBoards() {
-        return boards
-            .sort(sortBoards)
-            .map((id) => {
-                return <Board key={id} id={id} />;
-            })
-            .toList();
-    }
-
     function renderTopics() {
         return topics.sort(sortTopics).map((id) => {
             return <Topic key={id} id={id} />;
@@ -232,12 +213,21 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         <React.Fragment>
             <Link
                 to={path}
-                className={clx("group flex flex-row p-2 items-center rounded-lg overflow-hidden justify-between mx-4", inSpace ? "bg-primary-500": "hover:bg-slate-200")}
+                className={clx(
+                    "group flex flex-row p-2 items-center rounded-lg overflow-hidden justify-between mx-4",
+                    inSpace ? "bg-primary-500" : "hover:bg-slate-200"
+                )}
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
-                <div className={clx("flex flex-row items-center overflow-hidden", inSpace ? "text-white" : "text-black dark:text-gray-200 group-hover:text-gray-800")}>
+                <div
+                    className={clx(
+                        "flex flex-row items-center overflow-hidden",
+                        inSpace
+                            ? "text-white"
+                            : "text-black dark:text-gray-200 group-hover:text-gray-800"
+                    )}>
                     <div className="px-4">
-                        <Icons.Space className="w-5 h-5"/>
+                        <Icons.Space className="w-5 h-5" />
                     </div>
                     <p
                         role="button"
@@ -268,21 +258,13 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                     onClickAway={dialog.close}
                 />
             )}
-            {renderBoards()}
             {renderTopics()}
             {permissions.get("space.manage") && (
-                <React.Fragment>
-                    <CreateBoardDialog
-                        space={space}
-                        open={dialog.board}
-                        onClose={dialog.close}
-                    />
-                    <TopicCreatorDialog
-                        space={space}
-                        open={dialog.topic}
-                        onClose={dialog.close}
-                    />
-                </React.Fragment>
+                <TopicCreatorDialog
+                    space={space}
+                    open={dialog.topic}
+                    onClose={dialog.close}
+                />
             )}
             {(permissions.get("space.manage") || authid === space.admin_id) && (
                 <SpaceSettingsDialog

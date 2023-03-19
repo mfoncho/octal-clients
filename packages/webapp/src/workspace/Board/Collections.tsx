@@ -42,7 +42,7 @@ function CreateCollection() {
                 type: "stack",
                 origin: true,
                 capacity: 10,
-                board_id: board.id,
+                space_id: board.space_id,
             });
             return dispatch(action)
                 .then(() => {
@@ -54,7 +54,7 @@ function CreateCollection() {
                     creatorRef.current?.focus();
                 });
         },
-        [board.id]
+        [board.space_id]
     );
 
     return (

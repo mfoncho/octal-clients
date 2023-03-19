@@ -10,7 +10,7 @@ import DestroyCollectionWarningDialog from "./DestroyCollectionWaringDialog";
 import { useCollectionCards } from "@colab/store";
 
 interface ICollectionsStash {
-    board: { id: string };
+    space: { id: string };
 }
 
 interface ICollection {
@@ -77,7 +77,7 @@ function Collection({ collection }: ICollection) {
     );
 }
 
-export default function CollectionsArchive(props: ICollectionsStash) {
+export default function CollectionsArchive(_props: ICollectionsStash) {
     const collections = useCollections().filter((collection) =>
         Boolean(collection.archived_at)
     );

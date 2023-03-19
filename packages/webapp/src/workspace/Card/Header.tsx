@@ -73,7 +73,7 @@ export default function Header({ card, ...props }: IHeader) {
     return (
         <div className="flex px-4  py-4 flex-row justify-between">
             <div className="relative group flex-1 flex flex-row items-start sm:items-center">
-                {owner && editing && !board.is_archived ? (
+                {owner && editing ? (
                     <Edit
                         value={card.name}
                         onSubmit={handleRename}
@@ -90,9 +90,7 @@ export default function Header({ card, ...props }: IHeader) {
                         <div className="absolute -top-1.5 -left-1.5 group-hover:visible invisible">
                             <button
                                 onClick={
-                                    owner && !board.is_archived
-                                        ? handleSetEditingMode
-                                        : undefined
+                                    owner ? handleSetEditingMode : undefined
                                 }
                                 className="hover:bg-primary-600 hover:text-white px-1  rounded-full">
                                 <Icons.Edit className="h-6 h-6" />

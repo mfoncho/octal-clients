@@ -3,7 +3,7 @@ import { Popper, Text, Textarea } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import { useNavigator } from "src/hooks";
 import { useBoard } from "../hooks";
-import { CollectionRecord, BoardRecord } from "@colab/store/lib/records";
+import { CollectionRecord, Board } from "@colab/store/lib/records";
 import { useInput } from "src/utils";
 import { useCollectionActions } from "@workspace/Board/hooks";
 
@@ -13,7 +13,7 @@ interface ICreateCardPopper {
 }
 
 interface IDropdownPopper {
-    templates: BoardRecord["templates"];
+    templates: Board["templates"];
     onSelect: (id: string) => void;
 }
 

@@ -12,25 +12,25 @@ export default React.memo(() => {
     const nav = useNavigator();
     const [init, setInit] = useState<boolean>(false);
     const [loading, setLoading] = React.useState<string[]>([]);
-    const params = useParams<{ space_id: string; board_id: string }>();
+    const params = useParams<{ space_id: string }>();
     const dispatch = useDispatch();
-    const board = useBoard(params.board_id!);
-    const loaded = useBoardLoaded(params.board_id!);
+    const board = useBoard(params.space_id!);
+    const loaded = useBoardLoaded(params.space_id!);
 
     useEffect(() => {
-        if (Boolean(board.id)) {
+        if (Boolean(board.space_id)) {
             setInit(true);
         }
-        if (init && board.id !== params.board_id) {
+        if (init && board.space_id !== params.space_id) {
             return nav.openSpace({ id: params.space_id! });
         }
-    }, [board.id, init]);
+    }, [board.space_id, init]);
 
     useEffect(() => {
         if (!init) {
             return;
         }
-        if (init && board.id !== params.board_id) {
+        if (init && board.space_id !== params.space_id) {
             return;
         }
         if (loaded.includes("collections")) {

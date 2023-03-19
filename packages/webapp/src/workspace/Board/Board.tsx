@@ -42,7 +42,7 @@ export default function Board() {
                     {
                         let action = BoardAction.moveCard({
                             card_id: id,
-                            board_id: board.id,
+                            space_id: board.space_id,
                             index: index,
                             collection_id:
                                 drop.destination.droppableId.split(":")[1],
@@ -56,7 +56,7 @@ export default function Board() {
                         let action = BoardAction.moveCollection({
                             collection_id: id,
                             index: index,
-                            board_id: board.id,
+                            space_id: board.space_id,
                         });
                         dispatch(action);
                     }
@@ -66,7 +66,7 @@ export default function Board() {
                     break;
             }
         },
-        [board.id]
+        [board.space_id]
     );
 
     return (

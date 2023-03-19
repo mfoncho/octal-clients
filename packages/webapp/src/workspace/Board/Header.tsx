@@ -1,25 +1,26 @@
 import React from "react";
 import { Button, Dialog, Text } from "@colab/ui";
 import * as Icons from "@colab/icons";
-import { useBoard, useDrawer } from "./hooks";
+import { useSpace, useDrawer } from "./hooks";
 import StashDialog from "./StashDialog";
 import { usePermissions } from "../Space";
 import Templates from "./Templates";
-import RenameBoardDialog from "./RenameBoardDialog";
 import { useNavigatorDrawer } from "src/hooks";
 
+const drawerName = "board.archive";
+
 export default React.memo(() => {
-    const board = useBoard();
+    const space = useSpace();
     const [, navbar] = useNavigatorDrawer();
-    const [drawer, drawerActions] = useDrawer(board.id);
+    const [drawer, drawerActions] = useDrawer(space.id);
     const dialog = Dialog.useDialog();
 
     const permissions = usePermissions();
 
     function handleToggleArchive() {
-        if (drawer.props.type != "archive" || !drawer.open) {
-            drawerActions.open({ type: "archive", board_id: board.id });
-        } else if (drawer.props.type == "archive" && drawer.open) {
+        if (drawer.props.type != drawerName || !drawer.open) {
+            drawerActions.open({ type: drawerName, space_id: space.id });
+        } else if (drawer.props.type == drawerName && drawer.open) {
             drawerActions.close({ type: "" });
         }
     }
@@ -48,7 +49,7 @@ export default React.memo(() => {
                         <p
                             className="px-2 truncate text-lg font-bold"
                             onClick={dialog.opener("rename")}>
-                            <Text>{board.name}</Text>
+                            <Text>{space.name}</Text>
                         </p>
                     </button>
                 </div>
@@ -63,7 +64,7 @@ export default React.memo(() => {
                         <Templates
                             onClose={dialog.close}
                             open={dialog.templates}
-                            board={board}
+                            space={space}
                         />
                     </Button>
                 )}
@@ -75,7 +76,7 @@ export default React.memo(() => {
                     <StashDialog
                         onClose={dialog.close}
                         open={dialog.stash}
-                        board={board}
+                        space={space}
                     />
                 </Button>
                 <Button
@@ -88,11 +89,6 @@ export default React.memo(() => {
                     <Icons.Archives className="w-5 h-5" />
                 </Button>
             </div>
-            <RenameBoardDialog
-                open={dialog.rename}
-                board={board}
-                onClose={dialog.close}
-            />
         </header>
     );
 });

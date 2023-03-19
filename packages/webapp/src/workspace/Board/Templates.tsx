@@ -1,12 +1,12 @@
 import React from "react";
 import * as Icons from "@colab/icons";
 import { Button, Dialog, Text } from "@colab/ui";
-import { BoardRecord } from "@colab/store";
+import { useBoard } from "@colab/store";
 import { useBoardActions } from "./hooks";
 import { usePermissions } from "../Space";
 
 interface IDialog {
-    board: BoardRecord;
+    space: { id: string };
 }
 
 export default Dialog.create<IDialog>((props) => {
@@ -15,6 +15,8 @@ export default Dialog.create<IDialog>((props) => {
     const actions = useBoardActions();
 
     const permissions = usePermissions();
+
+    const board = useBoard(props.space.id);
 
     function handleDeleteTemplate(id: string) {
         actions.deleteCardTemplate(id).finally(() => {
@@ -32,7 +34,7 @@ export default Dialog.create<IDialog>((props) => {
             fullHeight={true}
             onClose={props.onClose}>
             <div className="flex flex-col pb-8 border divide-y divider-gray-200">
-                {props.board.templates.map((template) => (
+                {board.templates.map((template) => (
                     <div
                         key={template.id}
                         className="group flex flex-col hover:bg-primary-500 px-6 py-2">

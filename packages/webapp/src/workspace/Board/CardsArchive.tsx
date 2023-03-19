@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { List } from "immutable";
 import * as Icons from "@colab/icons";
 import BoardCard from "./Card/Card";
-import { useCard, BoardRecord } from "@colab/store";
 import client, { io, Page } from "@colab/client";
 import Pagination from "@mui/material/Pagination";
 import { useDebouncedEffect } from "@colab/hooks";
 import { useNavigator, useInput } from "src/hooks";
+import { useCard, useSpaceSocket } from "@colab/store";
 
 interface ICardsArchive {
-    board: BoardRecord;
+    space: { id: string };
 }
 
 interface IArchivedCard {
@@ -65,9 +65,10 @@ const defaultPage: Page<io.Card> = {
     total_entries: 0,
 };
 
-export default function CardsArchive({ board }: ICardsArchive) {
+export default function CardsArchive({ space }: ICardsArchive) {
     const nav = useNavigator();
     const input = useInput("");
+    const socket = useSpaceSocket(space.id);
     const [name, setName] = useState(input.value);
     const [page, setPage] = useState<number>(1);
     const [results, setResults] = useState<Page<io.Card>>(defaultPage);
@@ -75,7 +76,7 @@ export default function CardsArchive({ board }: ICardsArchive) {
         const params: any = { page };
         if (Boolean(name.trim())) params.name = name.trim();
         client
-            .fetchArchivedCards({ board_id: board.id }, { params })
+            .fetchArchivedCards({ space_id: space.id }, { params })
             .then(setResults);
     }
 
@@ -84,18 +85,18 @@ export default function CardsArchive({ board }: ICardsArchive) {
     }
 
     useEffect(() => {
-        if (board.channel) {
-            let ref = board.channel.on("card.deleted", ({ id }: any) => {
+        if (socket) {
+            let ref = socket.on("card.deleted", ({ id }: any) => {
                 setResults((results) => ({
                     ...results,
                     entries: results.entries.filter((card) => card.id !== id),
                 }));
             });
             return () => {
-                if (board.channel) board.channel.off(ref);
+                socket.off(ref);
             };
         }
-    }, []);
+    }, [socket]);
 
     useDebouncedEffect(
         () => {

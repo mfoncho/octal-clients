@@ -7,7 +7,6 @@ import {
     createTopic as createSpaceTopic,
     CreateTopicPayload,
 } from "@colab/store/lib/actions/topic";
-import { createBoard as createSpaceBoard } from "@colab/store/lib/actions/board";
 import emoji from "@colab/emoji";
 import {
     SpaceRecord,
@@ -153,17 +152,6 @@ export function useActions(space: SpaceRecord) {
         [space.id]
     );
 
-    const createBoard = useCallback(
-        (params: { name: string }) => {
-            const action = createSpaceBoard({
-                params,
-                space_id: space.id,
-            });
-            return dispatch(action);
-        },
-        [space.id]
-    );
-
     const createRole = useCallback(
         (id: string) => {
             const action = RoleActions.createSpaceRole({
@@ -189,7 +177,6 @@ export function useActions(space: SpaceRecord) {
     return {
         createRole,
         deleteRole,
-        createBoard,
         createTopic,
     };
 }

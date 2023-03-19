@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { useFieldAction } from "@workspace/Board/hooks";
 import {
     CardLabelValueRecord,
     CardFieldRecord,
@@ -8,8 +7,7 @@ import {
 import Field, { IField } from "./Field";
 import * as Icons from "@colab/icons";
 import Label from "@workspace/Board/Label";
-import { useCardCapability } from "../hooks";
-import { useLabels } from "@workspace/Board";
+import { useCardCapability, useSpaceLabels, useFieldAction } from "../hooks";
 import LabelsPopper from "@workspace/Board/LabelsPopper";
 
 export interface IEdit {
@@ -29,7 +27,7 @@ export interface IUserValue {
 }
 
 export default function LabelField({ field, handle, ...props }: ILabelField) {
-    const boardlabels = useLabels();
+    const spaceLabels = useSpaceLabels();
 
     const [editing, setEditing] = useState<boolean>(false);
 
@@ -46,7 +44,7 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
         .toList()
         .toJS() as string[];
 
-    const labels = boardlabels.toMap().mapKeys((_index, val) => val.id);
+    const labels = spaceLabels.toMap().mapKeys((_index, val) => val.id);
 
     function handleToggleEditMode() {
         setEditing((editing) => !editing);

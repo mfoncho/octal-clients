@@ -7,7 +7,7 @@ import { UseCards } from "@workspace/Records";
 import moment from "moment";
 import cal from "@colab/calendar";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import CardDialog from "@workspace/CardDialog";
+import CardDialog from "@workspace/Card";
 import { useDispatch } from "react-redux";
 import {
     CardRecord,
@@ -77,7 +77,8 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
                             <span className="text-xs font-semibold p-px">
                                 {moment(date)
                                     .add(index, "months")
-                                    .format("MMM").toUpperCase()}
+                                    .format("MMM")
+                                    .toUpperCase()}
                             </span>
                         </button>
                     ))}

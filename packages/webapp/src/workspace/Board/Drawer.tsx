@@ -2,7 +2,7 @@ import React from "react";
 import View from "@workspace/View";
 import CardsArchive from "./CardsArchive";
 import MuiDrawer from "@mui/material/Drawer";
-import { useBoard } from "@colab/store";
+import { useSpace } from "@colab/store";
 import { useDrawer, IDrawer } from "./hooks";
 
 interface ISidenav {
@@ -13,11 +13,11 @@ interface ISidenav {
 
 const Drawer = React.memo<IDrawer>((props) => {
     let component = <></>;
-    const board = useBoard(props.board_id!)!;
+    const board = useSpace(props.space_id!)!;
     switch (props.type) {
         case "archive":
-            if (props.board_id) {
-                component = <CardsArchive board={board} />;
+            if (props.space_id) {
+                component = <CardsArchive space={board} />;
             }
             break;
         default:

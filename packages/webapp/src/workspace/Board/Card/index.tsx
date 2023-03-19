@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import BoardCard from "./Card";
 import { Draggable } from "react-beautiful-dnd";
-import { CardRecord, useBoard } from "@colab/store";
+import { CardRecord, useSpace } from "@colab/store";
 import { useNavigator } from "src/hooks";
 export { default as Context } from "./Context";
 export * from "./hooks";
@@ -24,7 +24,7 @@ export const Card = React.memo<ICard>(({ card, dragHandle }) => {
         navigator.openCard(card);
     }, [card.id]);
 
-    const blabel = useBoard(card.board_id)
+    const blabel = useSpace(card.space_id)
         .labels.toMap()
         .mapKeys((_index, val) => val.id);
 

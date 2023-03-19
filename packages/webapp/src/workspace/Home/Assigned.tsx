@@ -9,14 +9,14 @@ import {
     CardTaskValueRecord,
     useUserChecklists,
     CardRecord,
-    BoardRecord,
+    SpaceRecord,
     UserRecord,
     useAuthId,
 } from "@colab/store";
 
 interface ICard {
     id: string;
-    board: BoardRecord;
+    space: SpaceRecord;
     card: CardRecord;
     tasks: List<CardTaskValueRecord>;
     users: List<UserRecord>;
@@ -94,7 +94,6 @@ export default React.memo(function Assigned() {
                 let items = checklists.toList();
                 let sample = items.first()!;
                 const cardPath = generatePath(paths.workspace.card, {
-                    board_id: sample.board.id,
                     space_id: sample.board.space_id,
                     card_id: sample.card.id,
                 });
@@ -112,22 +111,25 @@ export default React.memo(function Assigned() {
                             </div>
                             <div>
                                 <span className="text-xs text-gray-500 font-semibold">
-                                    <Text>{sample.board.name}</Text>
+                                    board name
                                 </span>
                             </div>
                         </Link>
                         {items.toList().map((checklist) => {
+                            return null;
+                            /*
                             return (
                                 <Checklist
                                     users={checklist.users}
                                     tasks={checklist.tasks}
-                                    board={checklist.board}
+                                    space={checklist.space}
                                     id={checklist.id}
                                     card={checklist.card}
                                     name={checklist.name}
                                     key={checklist.id}
                                 />
                             );
+                             */
                         })}
                     </div>
                 );

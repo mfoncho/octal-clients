@@ -3,7 +3,7 @@ import { Dialog } from "@colab/ui";
 import CollectionsStash from "./CollectionsStash";
 
 interface IDialog {
-    board: { id: string; space_id: string };
+    space: { id: string };
 }
 
 export default Dialog.create<IDialog>((props) => {
@@ -15,7 +15,7 @@ export default Dialog.create<IDialog>((props) => {
             fullWidth={true}
             fullHeight={true}
             onClose={props.onClose}>
-            <CollectionsStash board={props.board} />
+            <CollectionsStash space={props.space} />
         </Dialog>
     );
 });

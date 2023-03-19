@@ -270,7 +270,6 @@ export function useNavigator() {
     const openBoard = useCallback(
         (params: { id: string; space_id: string }) => {
             const path = generatePath(paths.workspace.board, {
-                board_id: params.id,
                 space_id: params.space_id,
             });
             navigate(path);
@@ -278,13 +277,12 @@ export function useNavigator() {
         []
     );
 
-    const openCard = useCallback((params: { id: string; board_id: string }) => {
-        const board = boards.getBoard(params.board_id);
+    const openCard = useCallback((params: { id: string; space_id: string }) => {
+        const board = boards.getSpaceBoard(params.space_id);
         if (board) {
             const path = generatePath(paths.workspace.card, {
                 card_id: params.id,
                 space_id: board.space_id,
-                board_id: params.board_id,
             });
             navigate(path);
         }
