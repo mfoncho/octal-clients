@@ -6,7 +6,7 @@ import client, { io, Page } from "@colab/client";
 import Pagination from "@mui/material/Pagination";
 import { useDebouncedEffect } from "@colab/hooks";
 import { useNavigator, useInput } from "src/hooks";
-import { useCard, useSpaceSocket } from "@colab/store";
+import { useCard, useSpaceChannel } from "@colab/store";
 
 interface ICardsArchive {
     space: { id: string };
@@ -68,7 +68,7 @@ const defaultPage: Page<io.Card> = {
 export default function CardsArchive({ space }: ICardsArchive) {
     const nav = useNavigator();
     const input = useInput("");
-    const socket = useSpaceSocket(space.id);
+    const channel = useSpaceChannel(space.id);
     const [name, setName] = useState(input.value);
     const [page, setPage] = useState<number>(1);
     const [results, setResults] = useState<Page<io.Card>>(defaultPage);
@@ -85,18 +85,18 @@ export default function CardsArchive({ space }: ICardsArchive) {
     }
 
     useEffect(() => {
-        if (socket) {
-            let ref = socket.on("card.deleted", ({ id }: any) => {
+        if (channel) {
+            let ref = channel.on("card.deleted", ({ id }: any) => {
                 setResults((results) => ({
                     ...results,
                     entries: results.entries.filter((card) => card.id !== id),
                 }));
             });
             return () => {
-                socket.off(ref);
+                channel.off(ref);
             };
         }
-    }, [socket]);
+    }, [channel]);
 
     useDebouncedEffect(
         () => {

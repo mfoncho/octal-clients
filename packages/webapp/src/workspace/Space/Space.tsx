@@ -29,7 +29,7 @@ export default React.memo(() => {
         <Textarea.Suggestions.Context.Provider value={mentionable as any}>
             <Routes>
                 <Route path="/threads/:thread_id" element={<Topic />} />
-                <Route path="/boards/:space_id" element={<Board />}>
+                <Route path="board" element={<Board />}>
                     <Route path=":card_id" element={<Board />} />
                 </Route>
                 <Route path="/" element={<Redirect />} />

@@ -3,9 +3,13 @@ import { useDispatch } from "react-redux";
 import Space, { Permissions, Members, Member } from "./Context";
 import Main from "./Main";
 import { useParams } from "react-router-dom";
-import { MemberRecord } from "@colab/store/lib/records";
-import { useSpace, useMembers, useSpacePermissions } from "@colab/store";
-import { loadMembers } from "@colab/store/lib/actions/member";
+import {
+    MemberRecord,
+    useSpacePermissions,
+    useSpace,
+    useMembers,
+    Actions,
+} from "@colab/store";
 export * from "./hooks";
 
 const defaultMember = new MemberRecord({});
@@ -22,7 +26,7 @@ export const Context = React.memo<{ id: string; children?: any }>((props) => {
     useEffect(() => {
         if (space.id && members.size == 0) {
             const params = { space_id: props.id };
-            dispatch(loadMembers(params));
+            dispatch(Actions.Member.loadMembers(params));
         }
     }, [space.id ? space.id : null]);
 
