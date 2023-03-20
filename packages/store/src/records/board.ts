@@ -34,8 +34,7 @@ export class CardTemplateRecord
         }
         return new CardTemplateRecord(payload);
     }
-    static objectFromJS(data: any) {
-        let object = { ...data, space_id: data.space_id };
+    static objectFromJS(object: any) {
         if (object.fields) {
             let fields = List(
                 object.fields.map((field: any) =>
@@ -138,6 +137,10 @@ export class Board extends Record({
             data = { ...data, templates };
         }
         return data;
+    }
+
+    static makeSpaceBoard(data: any) {
+        return new Board({ ...data, space_id: data.id});
     }
 
     static make(payload: any) {

@@ -9,7 +9,6 @@ const collections = ["cards", "collections", "archived_cards"];
 
 export class BoardsStore extends Record({
     loaded: Map<string, List<string>>(),
-    spaces: Map<string, List<string>>(),
     entities: Map<string, Board>(),
 }) {
     contains(id: string) {
@@ -29,12 +28,16 @@ export class BoardsStore extends Record({
     }
 
     removeSpaceBoard(id: string): BoardsStore {
-        return this.withMutations((store) => {
-            const spaces = store.spaces.get(id);
-            if (spaces) {
-                spaces.forEach((id) => store.removeBoard(id));
-            }
-        });
+        return this.deleteIn(["entities", id]).deleteIn(["loaded", id]);
+    }
+
+    putSpaceBoard(payload: any): BoardsStore {
+        if (this.contains(payload.id)) {
+            return this;
+        } else {
+            const board = Board.makeSpaceBoard(payload);
+            return this.putBoard(board);
+        }
     }
 
     putBoard(payload: any): BoardsStore {
@@ -47,17 +50,10 @@ export class BoardsStore extends Record({
             const board = Board.make(payload);
             return this.withMutations((store) => {
                 store.setIn(["entities", board.space_id], board);
-
-                // index space_id
-                let spaces = store.spaces.get(board.space_id, List<string>());
-                if (!spaces.includes(board.space_id))
-                    store.setIn(
-                        ["spaces", board.space_id],
-                        spaces.push(board.space_id)
-                    );
             });
         }
     }
+
     patchBoard(payload: any): BoardsStore {
         if (!this.contains(payload.id)) {
             return this;
@@ -74,16 +70,6 @@ export class BoardsStore extends Record({
         } else {
             const board = this.entities.get(id)!;
             return this.withMutations((store) => {
-                const filter = (id: string) => id !== board.space_id;
-
-                // index user_id
-                let spaces = store.spaces.get(board.space_id, List<string>());
-                if (spaces.includes(board.space_id))
-                    store.setIn(
-                        ["spaces", board.space_id],
-                        spaces.filter(filter)
-                    );
-
                 store.deleteIn(["entities", board.space_id]);
             });
         }
@@ -99,7 +85,7 @@ export const reducers = {
         store: BoardsStore,
         { payload }: SpaceActions.SpaceLoadedAction
     ) {
-        return store.putBoard(payload);
+        return store.putSpaceBoard(payload);
     },
     [Actions.CARD_TEMPLATE_CREATED](
         store: BoardsStore,

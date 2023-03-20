@@ -64,18 +64,6 @@ function* subscribeSpace({
     });
 }
 
-function* spacePurged({
-    payload,
-}: SpaceActions.SpacePurgedAction): Iterable<any> {
-    const { boards } = (yield select()) as any as State;
-    const bids = boards.spaces.get(payload.space_id);
-    if (bids) {
-        for (let id of bids.toArray()) {
-            yield put(BoardActions.purgeBoard({ id }));
-        }
-    }
-}
-
 export const tasks = [
     {
         effect: takeEvery,
@@ -91,6 +79,5 @@ export const tasks = [
         effect: takeEvery,
         type: Actions.DELETE_CARD_TEMPLATE,
         handler: deleteCardTemplate,
-    },
-    { effect: takeEvery, type: Actions.SPACE_PURGED, handler: spacePurged },
+    }
 ];

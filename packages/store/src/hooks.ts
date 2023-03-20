@@ -50,7 +50,7 @@ export class UserChecklist extends Record({
     name: "",
     created_at: "",
     card: new CardRecord({}),
-    board: new Board({}),
+    space: new SpaceRecord({}),
     collection: new CollectionRecord({}),
     users: List<UserRecord>(),
     tasks: List<CardTaskValueRecord>(),
@@ -350,19 +350,6 @@ export function useBoard(id: string, defaultValue = defaultBoard) {
     return useSelector(selector);
 }
 
-export function useSpaceBoardsIndex(
-    id: string,
-    defaultValue = defaultStringList
-) {
-    const selector = useCallback(
-        ({ boards }: State) => {
-            return boards.spaces.get(id, defaultValue);
-        },
-        [id]
-    );
-    return useSelector(selector);
-}
-
 export function useUser(id?: string) {
     const selector = useCallback(
         ({ users, auth }: State) => {
@@ -579,7 +566,7 @@ export function useLabels(id: string) {
 // Naive
 export function useUserChecklists(user_id: string): List<UserChecklist> {
     const selector = useCallback(
-        ({ cards, boards, collections, users }: State) => {
+        ({ cards, spaces, collections, users }: State) => {
             return cards.users
                 .get(user_id, defaultStringList)
                 .filter((card_id) => {
@@ -605,9 +592,9 @@ export function useUserChecklists(user_id: string): List<UserChecklist> {
                                 collection: collections.entities.get(
                                     card.collection_id
                                 ),
-                                board: boards.entities.get(
+                                space: spaces.entities.get(
                                     card.space_id,
-                                    defaultBoard
+                                    defaultSpace
                                 ),
                                 card: cards.entities.get(card_id, defaultCard),
                                 created_at: checklist.created_at,
