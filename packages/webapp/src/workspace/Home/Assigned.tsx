@@ -94,7 +94,7 @@ export default React.memo(function Assigned() {
                 let items = checklists.toList();
                 let sample = items.first()!;
                 const cardPath = generatePath(paths.workspace.card, {
-                    space_id: sample.board.space_id,
+                    space_id: sample.space.id,
                     card_id: sample.card.id,
                 });
                 return (
@@ -116,8 +116,6 @@ export default React.memo(function Assigned() {
                             </div>
                         </Link>
                         {items.toList().map((checklist) => {
-                            return null;
-                            /*
                             return (
                                 <Checklist
                                     users={checklist.users}
@@ -129,7 +127,6 @@ export default React.memo(function Assigned() {
                                     key={checklist.id}
                                 />
                             );
-                             */
                         })}
                     </div>
                 );
