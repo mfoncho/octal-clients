@@ -38,7 +38,7 @@ export default React.memo<IMessage>(({ id }) => {
                             {author.username}
                         </button>
                     </div>
-                    <span className="w-fit line-clamp-1 text-msg max-h-[52px] text-ellipsis">
+                    <span className="w-fit line-clamp-1 text-msg dark:text-gray-100 max-h-[52px] text-ellipsis">
                         <Markdown>{content}</Markdown>
                     </span>
                 </div>
