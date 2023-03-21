@@ -4,14 +4,21 @@ import * as Icons from "@colab/icons";
 import { useSpace, useDrawer } from "./hooks";
 import StashDialog from "./StashDialog";
 import { usePermissions } from "../Space";
+import Header from "../Header";
 import Templates from "./Templates";
 import { useNavigatorDrawer } from "src/hooks";
+import paths from "src/paths/workspace";
+import { Link, generatePath } from "react-router-dom";
 
 const drawerName = "board.archive";
 
 export default React.memo(() => {
     const space = useSpace();
     const [, navbar] = useNavigatorDrawer();
+    const threadPath = generatePath(paths.thread, {
+        space_id: space.id,
+        thread_id: space.thread_id,
+    });
     const [drawer, drawerActions] = useDrawer(space.id);
     const dialog = Dialog.useDialog();
 
@@ -33,25 +40,18 @@ export default React.memo(() => {
         dialog.close({} as any);
 
     return (
-        <header className="flex border-b flex-none border-gray-200 flex-row items-center h-14 sm:h-20  justify-between bg-primary-50">
-            <div className="flex flex-row items-center pl-1 sm:pl-8 pr-2">
-                <Button
-                    variant="icon"
-                    color="clear"
-                    onClick={handleToggleDrawer}
-                    className="visible sm:hidden">
-                    <Icons.Menu />
-                </Button>
-                <div className="flex flex-col justify-center px-2 overflow-hidden">
-                    <button
-                        onClick={dialog.opener("rename")}
-                        className="text-left ">
-                        <p
-                            className="px-2 truncate text-lg font-bold"
-                            onClick={dialog.opener("rename")}>
-                            <Text>{space.name}</Text>
-                        </p>
-                    </button>
+        <Header className="flex flex-grow flex-row items-center justify-between">
+            <div className="flex-1 flex flex-col justify-center px-6 overflow-hidden">
+                <p className="truncate text-lg font-bold dark:text-gray-100">
+                    <Text>{space.name}</Text>
+                </p>
+                <div className="hidden sm:flex flex-row items-center">
+                    <Link
+                        to={threadPath}
+                        className="text-gray-500 dark:text-gray-400 flex flex-grow items-center">
+                        <Icons.ChatBubbles />
+                        <span className="pl-2 font-semibold">Thread</span>
+                    </Link>
                 </div>
             </div>
             <div className="flex flex-row items-center justify-end px-4">
@@ -89,6 +89,6 @@ export default React.memo(() => {
                     <Icons.Archives className="w-5 h-5" />
                 </Button>
             </div>
-        </header>
+        </Header>
     );
 });
