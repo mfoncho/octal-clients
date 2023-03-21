@@ -24,7 +24,7 @@ export default React.memo<IMessage>(({ message, onClose }) => {
     }
 
     return (
-        <div className="flex flex-row relative group bg-gray-100 rounded-t-md pr-2">
+        <div className="flex flex-row relative group bg-gray-100 dark:bg-slate-600 rounded-t-md pr-2">
             <div className="flex flex-none justify-center flex-row w-16">
                 <ReplyIcon className="w-full h-full text-primary-500" />
             </div>
@@ -32,15 +32,15 @@ export default React.memo<IMessage>(({ message, onClose }) => {
                 <div className="flex flex-row items-center justify-between">
                     <button
                         onClick={handleOpenCard}
-                        className="text-base font-bold">
+                        className="text-base font-bold dark:text-gray-100">
                         {author.username}
                     </button>
                     <button onClick={onClose}>
-                        <Icons.CloseCircleSolid className="text-gray-600" />
+                        <Icons.CloseCircleSolid className="text-gray-600 dark:text-gray-200" />
                     </button>
                 </div>
 
-                <span className="line-clamp-2 text-msg max-h-[52px] text-ellipsis overflow-hidden">
+                <span className="line-clamp-2 text-msg dark:text-gray-100 max-h-[52px] text-ellipsis overflow-hidden">
                     <Markdown>{content}</Markdown>
                 </span>
             </div>
