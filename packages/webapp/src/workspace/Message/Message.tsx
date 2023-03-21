@@ -76,7 +76,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
             )}>
             {message.reply_id && <Reply id={message.reply_id} />}
             <div className="flex flex-row">
-                <div className="flex flex-none flex-row w-16 justify-end">
+                <div className="flex flex-none flex-row w-12 sm:w-16 justify-end">
                     {props.extra ? (
                         <img
                             role="button"
@@ -86,7 +86,11 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             onClick={handleOpenCard}
                         />
                     ) : (
-                        <span className={clx("group-hover:visible select-none invisible text-xs pt-1 font-semibold text-gray-500 dark:text-gray-400", message.pinned && "pt-5")}>
+                        <span
+                            className={clx(
+                                "group-hover:visible select-none invisible text-xs pt-1 font-semibold text-gray-500 dark:text-gray-400",
+                                message.pinned && "pt-5"
+                            )}>
                             {moment(message.timestamp).format("LT")}
                         </span>
                     )}
@@ -95,7 +99,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                 <div className="flex flex-grow flex-col">
                     {props.extra && (
                         <div className="flex flex-row items-center py-1.5">
-                            <div className="w-4"/>
+                            <div className="w-4" />
                             <button
                                 onClick={handleOpenCard}
                                 className="text-base font-semibold text-gray-800 dark:text-gray-100">
@@ -113,20 +117,21 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                     )}
 
                     {message.pinned && (
-                    <div className="flex flex-row pt-1">
-                            <div className="w-4"/>
-                        <Icons.Pin className="h-2.5 w-2.5 text-gray-600 dark:text-slate-200" />
-                    </div>
+                        <div className="flex flex-row pt-1">
+                            <div className="w-4" />
+                            <Icons.Pin className="h-2.5 w-2.5 text-gray-600 dark:text-slate-200" />
+                        </div>
                     )}
                     <div className="flex flex-row">
-
-                        <div className="w-4 justify-center pt-2 flex flex-row text-gray-600 space-x-2 overflow-hidden">
+                        <div className="w-4 justify-center pt-2 text-gray-600">
                             {Boolean(actions.bookmark) && (
                                 <Icons.Bookmark className="h-2.5 w-2.5 text-gray-600 dark:text-slate-200" />
                             )}
                         </div>
-                        <div className="flex flex-grow flex-col">
-                            <div className="flex flex-1 flex-col pr-8" ref={anchor}>
+                        <div className="flex flex-1 flex-col overflow-hidden">
+                            <div
+                                className="flex flex-1 flex-col pr-8"
+                                ref={anchor}>
                                 {emoji.test(message.content) ? (
                                     <div className="text-6xl">
                                         <Text>{message.content}</Text>
@@ -134,7 +139,9 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                                 ) : (
                                     message.content.length > 0 && (
                                         <div className="text-msg dark:text-gray-100">
-                                            <Markdown>{message.parsed}</Markdown>
+                                            <Markdown>
+                                                {message.parsed}
+                                            </Markdown>
                                         </div>
                                     )
                                 )}
@@ -153,12 +160,16 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                                         highlight={reaction.users.includes(
                                             props.authid
                                         )}
-                                        onClick={makeReactionClickHandler(reaction)}
+                                        onClick={makeReactionClickHandler(
+                                            reaction
+                                        )}
                                     />
                                 ))}
                             </div>
 
-                            {message.last_reply && <ReplyButton message={message} />}
+                            {message.last_reply && (
+                                <ReplyButton message={message} />
+                            )}
                         </div>
                     </div>
                 </div>
