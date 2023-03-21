@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
-import { Text, Collapse, Dialog, Popper } from "@colab/ui";
+import { Text, Dialog, Popper } from "@colab/ui";
 import TopicCreatorDialog from "../Space/CreateTopic";
 import paths from "src/paths/workspace";
 import Counter from "./Counter";
@@ -15,7 +15,6 @@ import store, {
     useUser,
     useAuthId,
     useSpacePermissions,
-    useSpaceBoardsIndex,
     useSpaceTopicsIndex,
 } from "@colab/store";
 
@@ -132,8 +131,6 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
     const [menu, setMenu] = useState<IMenuItem[]>([]);
     const [creators, setCreators] = useState<IMenuItem[]>([]);
-
-    const boards = useSpaceBoardsIndex(space.id);
 
     const topics = useSpaceTopicsIndex(space.id);
     const path = generatePath(paths.space, { space_id: space.id });
