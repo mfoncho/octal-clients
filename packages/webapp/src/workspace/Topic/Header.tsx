@@ -32,7 +32,7 @@ export default React.memo(() => {
                         to={boardPath}
                         className="text-gray-500 dark:text-gray-400 flex flex-grow items-center">
                         <Icons.Board />
-                        <span className="pl-2 font-semibold">board</span>
+                        <span className="pl-2 font-semibold">Board</span>
                     </Link>
                 </div>
             </div>
