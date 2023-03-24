@@ -98,7 +98,7 @@ export default class CardClient extends BaseClient {
     ): Promise<io.Card[]> {
         let url: string;
         if (request.collection_id != null) {
-            url = `/spaces/${request.space_id}/collections/${request.collection_id}/cards`;
+            url = `/collections/${request.collection_id}/cards`;
         } else {
             url = `/spaces/${request.space_id}/cards`;
         }
@@ -114,7 +114,7 @@ export default class CardClient extends BaseClient {
             ...request.params,
             template_id: request.template_id,
         };
-        const url = `/spaces/${request.space_id}/collections/${request.collection_id}/cards`;
+        const url = `/collections/${request.collection_id}/cards`;
         const { data } = await this.endpoint.post(url, payload, params);
         return data;
     }
@@ -123,7 +123,7 @@ export default class CardClient extends BaseClient {
         request: ArchiveCardRequest,
         params?: Params
     ): Promise<io.Card> {
-        const url = `/spaces/${request.space_id}/cards/${request.card_id}/archive`;
+        const url = `/cards/${request.card_id}/archive`;
         const { data } = await this.endpoint.put(url, params);
         return data;
     }
@@ -139,7 +139,7 @@ export default class CardClient extends BaseClient {
         const payload = {
             index: request.index,
         };
-        const path = `/spaces/${request.space_id}/cards/${request.card_id}/move/${request.collection_id}`;
+        const path = `/cards/${request.card_id}/move/${request.collection_id}`;
         const { data } = await this.endpoint.put(path, payload, params);
         return data;
     }
