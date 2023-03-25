@@ -13,11 +13,11 @@ interface ISidenav {
 
 const Drawer = React.memo<IDrawer>((props) => {
     let component = <></>;
-    const board = useSpace(props.space_id!)!;
+    const space = useSpace(props.space_id!);
     switch (props.type) {
-        case "archive":
+        case "board.archive":
             if (props.space_id) {
-                component = <CardsArchive space={board} />;
+                component = <CardsArchive space={space} />;
             }
             break;
         default:
