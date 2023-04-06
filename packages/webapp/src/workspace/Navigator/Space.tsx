@@ -229,17 +229,26 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
 
     return (
         <React.Fragment>
-            <Link
-                to={path}
-                className={clx("group flex flex-row p-2 items-center rounded-lg overflow-hidden justify-between mx-4", inSpace ? "bg-primary-500": "hover:bg-slate-200")}
+            <div
+                className={clx(
+                    "group flex flex-row p-2 items-center rounded-lg overflow-hidden justify-between mx-4",
+                    inSpace ? "bg-primary-500" : "hover:bg-slate-200"
+                )}
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
-                <div className={clx("flex flex-row items-center overflow-hidden", inSpace ? "text-white" : "text-black dark:text-gray-200 group-hover:text-gray-800")}>
+                <div
+                    className={clx(
+                        "flex flex-row items-center overflow-hidden",
+                        inSpace
+                            ? "text-white"
+                            : "text-black dark:text-gray-200 group-hover:text-gray-800"
+                    )}>
                     <div className="px-4">
-                        <Icons.Space className="w-5 h-5"/>
+                        <Icons.Space className="w-5 h-5" />
                     </div>
                     <p
                         role="button"
+                        onClick={dialog.opener("space")}
                         className={clx("text-base font-medium truncate")}>
                         <Text>{space.name}</Text>
                     </p>
