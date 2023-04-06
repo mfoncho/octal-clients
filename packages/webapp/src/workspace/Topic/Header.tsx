@@ -2,8 +2,8 @@ import React from "react";
 import { Dialog, Text, Button } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import Header from "../Header";
-import { useSpacePermissions, useThread } from "@colab/store";
-import RenameThreadDialog from "./RenameThreadDialog";
+import { useSpacePermissions, useTopic } from "@colab/store";
+import RenameTopicDialog from "./RenameTopicDialog";
 import SearchDialog from "./Search";
 import { useParams } from "react-router-dom";
 import { useSpace } from "../Space/hooks";
@@ -25,7 +25,7 @@ export default React.memo(() => {
                     onClick={dialog.opener("rename")}
                     className="text-left ">
                     <p className="truncate text-lg font-bold dark:text-gray-200">
-                        {thread && <Text>{space.name}</Text>}
+                        {topic && <Text>{topic.name}</Text>}
                     </p>
                 </button>
             </div>
