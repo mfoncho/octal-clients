@@ -25,6 +25,11 @@ export interface ISpace {
     space: SpaceRecord;
 }
 
+export interface ISpaceItem {
+    id: string;
+    type: string;
+}
+
 export interface IMenuItem {
     icon?: React.ReactNode;
     name: string;
@@ -37,19 +42,27 @@ export interface IMenu {
     options: IMenuItem[];
 }
 
-const sortTopics = (aid: string, bid: string) => {
-    let a = store.getState().topics.getTopic(aid)!;
-    let b = store.getState().topics.getTopic(bid)!;
-    if (a.created_at > b.created_at) return 1;
-    if (a.created_at < b.created_at) return -1;
-    return 0;
-};
-
-const sortBoards = (aid: string, bid: string) => {
-    let a = store.getState().boards.getBoard(aid)!;
-    let b = store.getState().boards.getBoard(bid)!;
-    if (a.created_at > b.created_at) return 1;
-    if (a.created_at < b.created_at) return -1;
+const sortSpaceItems = (a: ISpaceItem, b: ISpaceItem) => {
+    let atimestamp = "";
+    let btimestamp = "";
+    switch (a.type) {
+        case "topic":
+            atimestamp = store.getState().topics.getTopic(a.id)!.created_at!;
+            break;
+        case "board":
+            atimestamp = store.getState().boards.getBoard(a.id)!.created_at!;
+            break;
+    }
+    switch (b.type) {
+        case "topic":
+            btimestamp = store.getState().topics.getTopic(b.id)!.created_at!;
+            break;
+        case "board":
+            btimestamp = store.getState().boards.getBoard(b.id)!.created_at!;
+            break;
+    }
+    if (atimestamp > btimestamp) return 1;
+    if (atimestamp < btimestamp) return -1;
     return 0;
 };
 
@@ -212,19 +225,18 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         dialog.open(menu);
     }
 
-    function renderBoards() {
+    function renderSpaceItems() {
         return boards
-            .sort(sortBoards)
-            .map((id) => {
-                return <Board key={id} id={id} />;
-            })
-            .toList();
-    }
-
-    function renderTopics() {
-        return topics.sort(sortTopics).map((id) => {
-            return <Topic key={id} id={id} />;
-        });
+            .map((id: string) => ({ id, type: "board" }))
+            .concat(topics.map((id: string) => ({ id, type: "topic" })))
+            .sort(sortSpaceItems)
+            .map((item: ISpaceItem) => {
+                if (item.type === "board") {
+                    return <Board key={item.id} id={item.id} />;
+                } else {
+                    return <Topic key={item.id} id={item.id} />;
+                }
+            });
     }
 
     return (
@@ -268,8 +280,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                     onClickAway={dialog.close}
                 />
             )}
-            {renderBoards()}
-            {renderTopics()}
+            {renderSpaceItems()}
             {permissions.get("space.manage") && (
                 <React.Fragment>
                     <CreateBoardDialog
@@ -304,7 +315,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                 open={dialog.space}
                 onClose={dialog.close}
             />
-            <div className="h-4"/>
+            <div className="h-4" />
         </React.Fragment>
     );
 });
