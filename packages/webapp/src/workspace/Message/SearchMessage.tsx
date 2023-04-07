@@ -41,11 +41,11 @@ const Reply = React.memo<ISearchMessage>((props) => {
                         src={author.avatar_url}
                         className="rounded-full w-[20px] h-[20px]"
                     />
-                    <button className="text-base font-bold text-primary-500 px-2">
+                    <button className="dark:text-white text-base font-bold text-primary-500 px-2">
                         {author.username}
                     </button>
                 </div>
-                <span className="w-fit line-clamp-1 text-msg max-h-[52px] text-ellipsis">
+                <span className="w-fit line-clamp-1 text-msg max-h-[52px] text-ellipsis dark:text-gray-100">
                     <Markdown>{content}</Markdown>
                 </span>
             </div>
@@ -69,7 +69,7 @@ export default React.memo<ISearchMessage>((props) => {
     return (
         <div
             className={clx(
-                "flex flex-col py-3 relative group hover:bg-gray-100 border-2 border-gray-100 rounded-md"
+                "flex flex-col py-3 relative group hover:bg-slate-200 dark:hover:bg-slate-600 border-2 border-gray-100 rounded-md"
             )}>
             {message.reply_id && props.message.reply && (
                 <Reply message={props.message.reply} />
@@ -86,16 +86,18 @@ export default React.memo<ISearchMessage>((props) => {
 
                 <div className="flex flex-grow flex-col">
                     <div className="flex flex-row items-center">
-                        <div className="text-base font-bold">
+                        <div className="dark:text-white text-base font-bold">
                             {author.username}
                         </div>
                         <span className="px-2 font-bold text-gray-500">·</span>
-                        <span className="text-xs select-none pt-1 font-semibold text-gray-500">
+                        <span className="group-hover:text-white text-xs select-none pt-1 font-semibold text-gray-500">
                             {moment(message.timestamp as any).format("ll")}
                         </span>
                     </div>
 
-                    <div className="flex flex-col" ref={anchor}>
+                    <div
+                        ref={anchor}
+                        className="flex flex-col dark:text-gray-100">
                         <div className="flex flex-row text-gray-600 space-x-2">
                             {message.pinned && (
                                 <Icons.Pin className="h-2.5 w-2.5" />
