@@ -231,36 +231,28 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
         <React.Fragment>
             <div
                 className={clx(
-                    "group flex flex-row p-2 items-center rounded-lg overflow-hidden justify-between mx-4",
-                    inSpace ? "bg-primary-500" : "hover:bg-slate-200"
+                    "group flex flex-row px-2 py-1 items-center rounded-lg overflow-hidden justify-between mx-2"
+                    //inSpace ? "bg-primary-500" : "hover:bg-slate-200"
                 )}
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
                 <div
                     className={clx(
-                        "flex flex-row items-center overflow-hidden",
-                        inSpace
-                            ? "text-white"
-                            : "text-black dark:text-gray-200 group-hover:text-gray-800"
+                        "flex flex-row items-center overflow-hidden px-4 text-black dark:text-gray-200 text-gray-500"
                     )}>
-                    <div className="px-4">
-                        <Icons.Space className="w-5 h-5" />
-                    </div>
                     <p
                         role="button"
                         onClick={dialog.opener("space")}
-                        className={clx("text-base font-medium truncate")}>
+                        className="text-base font-bold truncate">
                         <Text>{space.name}</Text>
                     </p>
                 </div>
-                <div className="flex flex-row items-center hidden group-hover:flex">
+                <div className="flex flex-row items-center space-x-1 hidden group-hover:flex">
                     {menu.map((item) => (
                         <button
-                            key={item.name}
                             ref={menuRef}
-                            className={clx(
-                                "flex justify-center items-center p-1 text-gray-400 w-6 h-6 hover:text-gray-600"
-                            )}
+                            key={item.name}
+                            className="flex justify-center items-center p-1 text-gray-500 w-6 h-6 dark:hover:text-white hover:text-gray-800 dark:hover:bg-slate-600 hover:bg-slate-300 rounded-md"
                             onClick={dialog.opener(item.menu)}>
                             {item.icon}
                         </button>
@@ -312,6 +304,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                 open={dialog.space}
                 onClose={dialog.close}
             />
+            <div className="h-4"/>
         </React.Fragment>
     );
 });

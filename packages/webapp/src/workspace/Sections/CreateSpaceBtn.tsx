@@ -8,7 +8,7 @@ export default React.memo(function CreateSpaceBtn() {
         <React.Fragment>
             <button
                 onClick={() => setOpen(true)}
-                className="group flex flex-row items-center mx-4 p-2 rounded-md hover:bg-slate-200 border border-transparent hover:border-slate-200 hover:shadow-md">
+                className="group flex flex-row items-center mx-3 p-2 rounded-lg hover:bg-slate-200 border border-transparent hover:border-slate-200 hover:shadow-md">
                 <div className="flex flex-row justify-center items-center px-3 group-hover:text-gray-600 dark:text-gray-200">
                     <Icons.Plus className="w-6 h-6" />
                 </div>

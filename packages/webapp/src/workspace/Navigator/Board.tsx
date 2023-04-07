@@ -29,19 +29,16 @@ export default React.memo<IBoard>(({ id }) => {
         <Link
             to={path}
             className={clx(
-                "flex px-2 py-1 flex-row items-center",
+                "flex px-2 py-1 flex-row items-center mx-4 rounded-lg",
                 selected
                     ? "bg-primary-500 text-white"
-                    : "text-primary-200 hover:bg-primary-800"
+                    : "text-gray-700 dark:text-primary-100 hover:text-white hover:bg-primary-500 dark:hover:bg-primary-800"
             )}>
-            <Icons.Board className={clx("w-5 h-5 mx-1")} />
+            <div className="px-2">
+                <Icons.Board className="w-5 h-5" />
+            </div>
             <span
-                className={clx(
-                    "pl-2 font-semibold text-sm flex-inline flex-grow overflow-x-hidden",
-                    {
-                        ["text-primary-200"]: !selected,
-                    }
-                )}>
+                className="pl-1 font-semibold text-sm flex-inline flex-grow overflow-x-hidden">
                 <Text>{board!.name}</Text>
             </span>
         </Link>

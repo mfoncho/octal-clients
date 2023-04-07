@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Dialog, Text } from "@colab/ui";
 import * as Icons from "@colab/icons";
+import Header from "../Header";
 import { useBoard, useDrawer } from "./hooks";
 import StashDialog from "./StashDialog";
 import { usePermissions } from "../Space";
@@ -32,28 +33,17 @@ export default React.memo(() => {
         dialog.close({} as any);
 
     return (
-        <header className="flex border-b flex-none border-gray-200 flex-row items-center h-14 sm:h-20  justify-between bg-primary-50">
-            <div className="flex flex-row items-center pl-1 sm:pl-8 pr-2">
-                <Button
-                    variant="icon"
-                    color="clear"
-                    onClick={handleToggleDrawer}
-                    className="visible sm:hidden">
-                    <Icons.Menu />
-                </Button>
-                <div className="flex flex-col justify-center px-2 overflow-hidden">
-                    <button
-                        onClick={dialog.opener("rename")}
-                        className="text-left ">
-                        <p
-                            className="px-2 truncate text-lg font-bold"
-                            onClick={dialog.opener("rename")}>
-                            <Text>{board.name}</Text>
-                        </p>
-                    </button>
-                </div>
+        <Header className="flex flex-grow flex-row items-center justify-between">
+            <div className="flex flex-col justify-center px-6 overflow-hidden">
+                <button
+                    onClick={dialog.opener("rename")}
+                    className="text-left ">
+                    <p className="truncate text-lg font-bold dark:text-gray-200">
+                        {board && <Text>{board.name}</Text>}
+                    </p>
+                </button>
             </div>
-            <div className="flex flex-row items-center justify-end px-4">
+            <div className="hidden sm:flex flex-none flex-row items-center justify-end px-4">
                 {permissions.get("board.manage") && (
                     <Button
                         variant="icon"
@@ -93,6 +83,6 @@ export default React.memo(() => {
                 board={board}
                 onClose={dialog.close}
             />
-        </header>
+        </Header>
     );
 });
