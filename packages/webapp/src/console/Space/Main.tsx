@@ -7,7 +7,7 @@ import client from "@console/client";
 import { io } from "@console/types";
 import { useNavigator } from "@console/hooks";
 import Topics from "./Topics";
-import Boards from "./Boards";
+import Catalogs from "./Catalogs";
 import Members from "./Members";
 
 interface IWarning {
@@ -83,7 +83,7 @@ export default React.memo(() => {
             icon={icon}
             title={space.name}
             className="bg-slate-200 block p-4 space-y-6 overflow-y-auto">
-            <Boards space={space} />
+            <Catalogs space={space} />
             <Topics space={space} />
             <Members space={space} updateSpace={setSpace} />
             <WarningDialog

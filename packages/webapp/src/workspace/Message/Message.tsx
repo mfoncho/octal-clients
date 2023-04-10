@@ -47,7 +47,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
     const author = useUser(message.user_id)!;
 
-    const [card, handleOpenCard] = UserCard.useCard(author?.id);
+    const [record, handleOpenRecord] = UserCard.useRecord(author?.id);
 
     const [hovering, setHovering] = useState<boolean>(false);
 
@@ -83,7 +83,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             alt={author.name}
                             src={"https://placehold.co/600x400@3x.png"}
                             className="rounded-full w-[40px] h-[40px] my-1"
-                            onClick={handleOpenCard}
+                            onClick={handleOpenRecord}
                         />
                     ) : (
                         <span
@@ -101,7 +101,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                         <div className="flex flex-row items-center py-1.5">
                             <div className="w-4" />
                             <button
-                                onClick={handleOpenCard}
+                                onClick={handleOpenRecord}
                                 className="text-base font-semibold text-gray-800 dark:text-gray-100">
                                 {author.username}
                             </button>
@@ -187,7 +187,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                     pinned={message.pinned}
                     bookmark={actions.bookmark}
                 />
-                {card}
+                {record}
             </div>
         </div>
     );

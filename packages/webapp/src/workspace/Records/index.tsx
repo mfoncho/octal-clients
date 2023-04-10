@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { List, Map } from "immutable";
-import { useCard, CardRecord } from "@colab/store";
+import { useRecord, RecordRecord } from "@colab/store";
 
 const defaultMap = Map<string, any>();
 
@@ -15,29 +15,30 @@ export interface IUseRecords<T> {
     setRecords(records: List<T>): void;
 }
 
-export const UseCard = React.memo<IUseRecord<CardRecord>>((props) => {
-    const card = useCard(props.id);
+export const UseRecord = React.memo<IUseRecord<RecordRecord>>((props) => {
+    const record = useRecord(props.id);
     useEffect(() => {
-        if (card && Boolean(card.id)) {
-            props.set(card.id, card);
+        if (record && Boolean(record.id)) {
+            props.set(record.id, record);
         } else if (props.unset) {
             props.unset(props.id);
         }
         return () => {
-            if (card && props.unset) {
+            if (record && props.unset) {
                 props.unset(props.id);
             }
         };
-    }, [card]);
+    }, [record]);
 
     return <React.Fragment />;
 });
 
-export const UseCards = React.memo<IUseRecords<CardRecord>>((props) => {
-    const [records, setRecords] = useState<Map<string, CardRecord>>(defaultMap);
+export const UseRecords = React.memo<IUseRecords<RecordRecord>>((props) => {
+    const [records, setRecords] =
+        useState<Map<string, RecordRecord>>(defaultMap);
 
     const setRecord = useCallback(
-        (id: string, record: CardRecord) => {
+        (id: string, record: RecordRecord) => {
             setRecords((records) => records.set(id, record));
         },
         [records]
@@ -59,7 +60,7 @@ export const UseCards = React.memo<IUseRecords<CardRecord>>((props) => {
     return (
         <React.Fragment>
             {props.records.map((id) => (
-                <UseCard
+                <UseRecord
                     key={id}
                     id={id}
                     set={setRecord}

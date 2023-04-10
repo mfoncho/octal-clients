@@ -12,7 +12,7 @@ import { useNavigate, generatePath } from "react-router-dom";
 import paths from "./paths";
 import { useDispatch } from "react-redux";
 import {
-    useBoardStore,
+    useCatalogStore,
     Calendar,
     useDrawer as useStoreDrawer,
     useCalendar as useStoreCalendar,
@@ -243,7 +243,7 @@ export function useNavigatorDrawer() {
 export function useNavigator() {
     const navigate = useNavigate();
 
-    const boards = useBoardStore();
+    const catalogs = useCatalogStore();
 
     function openHome() {
         navigate("/spaces");
@@ -267,10 +267,10 @@ export function useNavigator() {
         []
     );
 
-    const openBoard = useCallback(
+    const openCatalog = useCallback(
         (params: { id: string; space_id: string }) => {
-            const path = generatePath(paths.workspace.board, {
-                board_id: params.id,
+            const path = generatePath(paths.workspace.catalog, {
+                catalog_id: params.id,
                 space_id: params.space_id,
             });
             navigate(path);
@@ -278,19 +278,19 @@ export function useNavigator() {
         []
     );
 
-    const openCard = useCallback((params: { id: string; board_id: string }) => {
-        const board = boards.getBoard(params.board_id);
-        if (board) {
-            const path = generatePath(paths.workspace.card, {
-                card_id: params.id,
-                space_id: board.space_id,
-                board_id: params.board_id,
+    const openRecord = useCallback((params: { id: string; catalog_id: string }) => {
+        const catalog = catalogs.getCatalog(params.catalog_id);
+        if (catalog) {
+            const path = generatePath(paths.workspace.record, {
+                record_id: params.id,
+                space_id: catalog.space_id,
+                catalog_id: params.catalog_id,
             });
             navigate(path);
         }
     }, []);
 
-    return { openCard, openTopic, openSpace, openBoard, openHome };
+    return { openRecord, openTopic, openSpace, openCatalog, openHome };
 }
 
 export function useCurPrev<T, P>(value: T) {

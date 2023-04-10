@@ -126,9 +126,9 @@ declare module "@material-ui/core/styles/createPalette" {
 
 export type CollectionType = "stack" | "queue";
 
-export type SpaceType = "board" | "discuss" | "direct";
+export type SpaceType = "catalog" | "discuss" | "direct";
 
-export type ThreadType = "topic" | "reply" | "card" | "email";
+export type ThreadType = "topic" | "reply" | "record" | "email";
 
 export type SpaceAccess = "public" | "private";
 
@@ -255,12 +255,12 @@ export interface BelongsToUser {
     user_id: Id;
 }
 
-export interface BelongsToCard {
-    card_id: Id;
+export interface BelongsToRecord {
+    record_id: Id;
 }
 
 export interface BelongsToBard {
-    board_id: Id;
+    catalog_id: Id;
 }
 
 export interface BelongsToThread {

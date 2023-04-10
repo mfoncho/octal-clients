@@ -1,11 +1,11 @@
-export interface Timestamp extends String {}
+export interface Timestamp extends String { }
 
 export type CollectionType = "stack" | "queue";
 
 export type ThreadType =
     | "main"
     | "reply"
-    | "card"
+    | "record"
     | "topic"
     | "comment"
     | "email";
@@ -32,16 +32,16 @@ export interface BelongsToUser {
     user_id: Id;
 }
 
-export interface BelongsToCard {
-    card_id: Id;
+export interface BelongsToRecord {
+    record_id: Id;
 }
 
 export interface HasThread {
     thread_id: Id;
 }
 
-export interface BelongsToBoard {
-    board_id: Id;
+export interface BelongsToCatalog {
+    catalog_id: Id;
 }
 
 export interface BelongsToSpace {
@@ -90,20 +90,20 @@ export namespace io {
         entity_id: string;
     }
 
-    export interface CardFieldTemplate {
+    export interface RecordFieldTemplate {
         name: string;
         type: string;
     }
 
-    export interface CardTemplate {
+    export interface RecordTemplate {
         id: string;
         name: string;
-        board_id: string;
-        fields: CardFieldTemplate[];
+        catalog_id: string;
+        fields: RecordFieldTemplate[];
     }
 
     export interface Calendar {
-        cards: Card[];
+        records: Record[];
     }
 
     export interface Site {
@@ -204,55 +204,55 @@ export namespace io {
         checklist_id: string;
     }
 
-    export interface Checklist extends Unique, BelongsToCard {
+    export interface Checklist extends Unique, BelongsToRecord {
         name: string;
         tasks: Task[];
         user: Author;
         timestamp: string;
     }
 
-    export interface Label extends Unique, BelongsToBoard {
+    export interface Label extends Unique, BelongsToCatalog {
         name: string;
         color: string;
     }
 
-    export interface CardFieldValue {
+    export interface RecordFieldValue {
         id: string;
-        card_id: string;
+        record_id: string;
         field_id: string;
     }
 
-    export interface CardTextValue extends CardFieldValue {
+    export interface RecordTextValue extends RecordFieldValue {
         text: string;
     }
 
-    export interface CardUserValue extends CardFieldValue {
+    export interface RecordUserValue extends RecordFieldValue {
         user: Author;
     }
 
-    export interface CardLabelValue extends CardFieldValue {
+    export interface RecordLabelValue extends RecordFieldValue {
         label: Label;
     }
 
-    export interface CardField {
+    export interface RecordField {
         id: string;
         type: string;
         name: string;
-        card_id: string;
+        record_id: string;
         index: number;
         created_at: string;
-        values: (CardTextValue | CardUserValue | CardLabelValue)[];
+        values: (RecordTextValue | RecordUserValue | RecordLabelValue)[];
     }
 
-    export interface CardLabel extends BelongsToCard {
+    export interface RecordLabel extends BelongsToRecord {
         label_id: string;
         labeled_at: string;
     }
 
-    export interface Card extends Unique, BelongsToBoard {
+    export interface Record extends Unique, BelongsToCatalog {
         name: string;
         user: Author;
-        fields: CardField[];
+        fields: RecordField[];
         complete: boolean;
         index: number;
         collection_id: string;
@@ -260,7 +260,7 @@ export namespace io {
         archived_at?: string | null;
     }
 
-    export interface Collection extends Unique, BelongsToBoard {
+    export interface Collection extends Unique, BelongsToCatalog {
         name: string;
         type: CollectionType;
         origin: boolean;
@@ -302,13 +302,13 @@ export namespace io {
         permissions: Permission[];
     }
 
-    export interface Labels extends Unique, BelongsToBoard {
+    export interface Labels extends Unique, BelongsToCatalog {
         name: string;
         color: string;
         created_at: Timestamp;
     }
 
-    export interface Board extends Unique, BelongsToSpace {
+    export interface Catalog extends Unique, BelongsToSpace {
         name: string;
         is_archived: boolean;
         created_at: Timestamp;
@@ -324,7 +324,7 @@ export namespace io {
         archived_at: Timestamp;
     }
 
-    export interface TopicSearchResult extends Page<Message> {}
+    export interface TopicSearchResult extends Page<Message> { }
 
     export interface Space extends Unique {
         name: string;

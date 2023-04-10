@@ -3,18 +3,18 @@ import clx from "classnames";
 import Header from "./Header";
 import { List } from "immutable";
 import { Calendar, Button, Popper, Text } from "@colab/ui";
-import { UseCards } from "@workspace/Records";
+import { UseRecords } from "@workspace/Records";
 import moment from "moment";
 import cal from "@colab/calendar";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import CardDialog from "@workspace/CardDialog";
+import RecordDialog from "@workspace/RecordDialog";
 import { useDispatch } from "react-redux";
 import {
-    CardRecord,
-    CardDatetimeValueRecord,
+    RecordRecord,
+    RecordDatetimeValueRecord,
     useCalendarLoaded,
     useUser,
-    useDateCardsIndex,
+    useDateRecordsIndex,
     Actions,
 } from "@colab/store";
 import { sort, keyStingFromDate } from "@colab/common";
@@ -29,8 +29,8 @@ interface IUserAvatar {
     user: string;
 }
 
-interface ICardField {
-    card: CardRecord;
+interface IRecordField {
+    record: RecordRecord;
     value: string;
     field_id: string;
 }
@@ -77,7 +77,8 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
                             <span className="text-xs font-semibold p-px">
                                 {moment(date)
                                     .add(index, "months")
-                                    .format("MMM").toUpperCase()}
+                                    .format("MMM")
+                                    .toUpperCase()}
                             </span>
                         </button>
                     ))}
@@ -86,10 +87,10 @@ const MonthYearPicker = Popper.create<HTMLDivElement, any>((props: any) => {
     );
 });
 
-function CardField(props: ICardField) {
+function RecordField(props: IRecordField) {
     const [open, setOpen] = useState<boolean>(false);
-    const card = props.card;
-    const field = card.getField(props.field_id)!;
+    const record = props.record;
+    const field = record.getField(props.field_id)!;
     return (
         <React.Fragment>
             <div
@@ -98,15 +99,15 @@ function CardField(props: ICardField) {
                 className="flex-none flex flex-row items-center rounded-lg overflow-hidden pl-1 border border-gray-300 hover:bg-gray-200 cursor-pointer">
                 <div className="flex flex-col py-0.5 px-1 font-semibold">
                     <span className="text-sm whitespace-nowrap font-semibold text-gray-800">
-                        <Text>{card.name}</Text>
+                        <Text>{record.name}</Text>
                     </span>
                     <span className="text-xs whitespace-nowrap text-gray-600">
                         {field.name}
                     </span>
                 </div>
             </div>
-            <CardDialog
-                id={card.id}
+            <RecordDialog
+                id={record.id}
                 open={open}
                 onClose={() => setOpen(false)}
             />
@@ -114,43 +115,43 @@ function CardField(props: ICardField) {
     );
 }
 
-const FieldCards = React.memo<{ date: string }>(({ date }) => {
+const FieldRecords = React.memo<{ date: string }>(({ date }) => {
     const key = keyStingFromDate(cal.fromISOString(date));
-    const index = useDateCardsIndex(key);
-    let [cards, setCards] = useState<List<CardRecord>>(defaultList);
-    const fcards = useMemo<List<ICardField>>(() => {
-        return cards
-            .reduce((fcards, card) => {
-                card.dates.includes(date);
-                return card.fields
+    const index = useDateRecordsIndex(key);
+    let [records, setRecords] = useState<List<RecordRecord>>(defaultList);
+    const frecords = useMemo<List<IRecordField>>(() => {
+        return records
+            .reduce((frecords, record) => {
+                record.dates.includes(date);
+                return record.fields
                     .filter((field) => {
                         return (
                             dated.includes(field.type) &&
                             !field.values.isEmpty()
                         );
                     })
-                    .reduce((fcards, field) => {
-                        let val: CardDatetimeValueRecord =
+                    .reduce((frecords, field) => {
+                        let val: RecordDatetimeValueRecord =
                             field.values.first() as any;
                         let fdate = cal.fromISOString(val.value);
                         if (key == keyStingFromDate(fdate)) {
-                            return fcards.push({
-                                card,
+                            return frecords.push({
+                                record,
                                 value: val.value,
                                 field_id: field.id,
                             });
                         }
-                        return fcards;
-                    }, fcards);
+                        return frecords;
+                    }, frecords);
             }, defaultList)
             .sort(sort("value", "desc"));
-    }, [cards]);
+    }, [records]);
 
     return (
         <div className="flex-grow flex flex-col pl-1.5 pr-2 pb-8 space-y-1.5">
-            <UseCards records={index} setRecords={setCards} />
-            {fcards.map((fcard) => (
-                <CardField key={fcard.field_id} {...fcard} />
+            <UseRecords records={index} setRecords={setRecords} />
+            {frecords.map((frecord) => (
+                <RecordField key={frecord.field_id} {...frecord} />
             ))}
         </div>
     );
@@ -166,7 +167,7 @@ export default React.memo(function Main() {
     let { day, week, month, year } = calendar;
 
     useEffect(() => {
-        if (!loaded.includes("cards")) {
+        if (!loaded.includes("records")) {
             dispatch(Actions.Calendar.loadCalendar());
         }
     });
@@ -200,7 +201,7 @@ export default React.memo(function Main() {
                     </div>
                 </button>
                 <PerfectScrollbar className="flex-1 flex flex-col overflow-x-hidden">
-                    <FieldCards date={isodate} />
+                    <FieldRecords date={isodate} />
                 </PerfectScrollbar>
             </div>
         );

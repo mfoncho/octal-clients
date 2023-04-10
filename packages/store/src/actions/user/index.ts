@@ -49,7 +49,7 @@ export interface UserConnectedPayload {
     channel: Channel;
 }
 
-export interface UserBoardcastPayload {
+export interface UserCatalogcastPayload {
     type: string;
     payload: any;
     metadata?: any;
@@ -152,7 +152,7 @@ export type UserAssignedAction = Action<USER_ASSIGNED, AssignedPayload>;
 
 export type UserUnassignedAction = Action<USER_UNASSIGNED, AssignedPayload>;
 
-export type UserBroadcastAction = Action<USER_BROADCAST, UserBoardcastPayload>;
+export type UserBroadcastAction = Action<USER_BROADCAST, UserCatalogcastPayload>;
 
 export type PreferencesLoadedAction = Action<
     PREFERENCES_LOADED,
@@ -269,8 +269,8 @@ export function setUserStatus(
     });
 }
 
-export function userBoardcast(
-    payload: UserBoardcastPayload
+export function userCatalogcast(
+    payload: UserCatalogcastPayload
 ): UserBroadcastAction {
     return createAction(USER_BROADCAST, payload);
 }

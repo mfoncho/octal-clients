@@ -16,7 +16,7 @@ import {
 import * as ThreadAction from "@colab/store/lib/actions/thread";
 import { useDispatch } from "react-redux";
 
-interface IUserCard {
+interface IUserRecord {
     id: string;
 }
 
@@ -61,7 +61,7 @@ const DirectMessageForm = React.memo<{
     );
 });
 
-const Card = Dialog.create<IUserCard>((props) => {
+const Record = Dialog.create<IUserRecord>((props) => {
     const viewer = useViewer();
     const roles = useRoles();
     const user = useProfile(props.id)!;
@@ -180,7 +180,7 @@ type HandleCb = (e: React.MouseEvent<HTMLElement>) => void;
 
 type AnchorSetState = React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 
-function useCard(
+function useRecord(
     id: string | null | undefined
 ): [React.ReactNode, HandleCb, AnchorSetState] {
     const [anchor, setAnchor] = React.useState<HTMLElement | null>(null);
@@ -195,7 +195,7 @@ function useCard(
 
     if (anchor && id) {
         node = (
-            <Card
+            <Record
                 id={id}
                 open={Boolean(anchor) && Boolean(id)}
                 onClose={() => setAnchor(null)}
@@ -205,10 +205,10 @@ function useCard(
     return [node, handle, setAnchor];
 }
 
-type CardType = typeof Card & {
-    useCard: typeof useCard;
+type RecordType = typeof Record & {
+    useRecord: typeof useRecord;
 };
 
-(Card as CardType).useCard = useCard;
+(Record as RecordType).useRecord = useRecord;
 
-export default Card as CardType;
+export default Record as RecordType;

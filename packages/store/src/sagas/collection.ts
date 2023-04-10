@@ -3,7 +3,7 @@ import client, { io } from "@colab/client";
 import { dispatch } from "..";
 import { CollectionSchema } from "../schemas";
 import * as Actions from "../actions/types";
-import * as BoardActions from "../actions/board";
+import * as CatalogActions from "../actions/catalog";
 import * as AppActions from "../actions/app";
 
 function* normalize(payload: io.Collection | io.Collection[]): Iterable<any> {
@@ -14,7 +14,7 @@ function* normalize(payload: io.Collection | io.Collection[]): Iterable<any> {
 
 function* load(collections: any): Iterable<any> {
     let actions = collections.map((collection: any) => {
-        return put(BoardActions.collectionLoaded(collection));
+        return put(CatalogActions.collectionLoaded(collection));
     });
     yield all(actions);
 }
@@ -27,7 +27,7 @@ function* normalizeLoad(collections: io.Collection[]): Iterable<any> {
 function* fetch({
     payload,
     resolve,
-}: BoardActions.FetchCollectionsAction): Iterable<any> {
+}: CatalogActions.FetchCollectionsAction): Iterable<any> {
     try {
         const data = (yield client.fetchCollections(payload)) as any;
         resolve.success(data);
@@ -36,24 +36,24 @@ function* fetch({
     }
 }
 
-function* boardLoadedLoadBoardCollections({
+function* catalogLoadedLoadCatalogCollections({
     payload,
-}: BoardActions.BoardLoadedAction): Iterable<any> {
-    yield put(BoardActions.loadBoardCollections({ board_id: payload.id }));
+}: CatalogActions.CatalogLoadedAction): Iterable<any> {
+    yield put(CatalogActions.loadCatalogCollections({ catalog_id: payload.id }));
 }
 
-function* loadBoardCollections({
+function* loadCatalogCollections({
     payload,
     resolve,
-}: BoardActions.LoadCollectionsAction): Iterable<any> {
+}: CatalogActions.LoadCollectionsAction): Iterable<any> {
     try {
-        const task = yield put(BoardActions.fetchCollections(payload));
+        const task = yield put(CatalogActions.fetchCollections(payload));
 
         const collections = (yield task) as any;
 
         yield* normalizeLoad(collections);
         yield put(
-            AppActions.dataLoaded(payload.board_id, "collections", collections)
+            AppActions.dataLoaded(payload.catalog_id, "collections", collections)
         );
 
         resolve.success(collections);
@@ -65,10 +65,10 @@ function* loadBoardCollections({
 function* move({
     payload,
     resolve,
-}: BoardActions.MoveCollectionAction): Iterable<any> {
+}: CatalogActions.MoveCollectionAction): Iterable<any> {
     try {
         yield put(
-            BoardActions.collectionMoved({
+            CatalogActions.collectionMoved({
                 id: payload.collection_id,
                 index: payload.index,
             })
@@ -90,10 +90,10 @@ function* related({ payload }: AppActions.RelatedLoadedAction): Iterable<any> {
 function* archive({
     payload,
     resolve,
-}: BoardActions.ArchiveCollectionAction): Iterable<any> {
+}: CatalogActions.ArchiveCollectionAction): Iterable<any> {
     try {
         const data = (yield client.archiveCollection(payload)) as any;
-        yield put(BoardActions.collectionArchived(data));
+        yield put(CatalogActions.collectionArchived(data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -103,10 +103,10 @@ function* archive({
 function* unarchive({
     payload,
     resolve,
-}: BoardActions.UnarchiveCollectionAction): Iterable<any> {
+}: CatalogActions.UnarchiveCollectionAction): Iterable<any> {
     try {
         const data = (yield client.unarchiveCollection(payload)) as any;
-        yield put(BoardActions.collectionUnarchived(data));
+        yield put(CatalogActions.collectionUnarchived(data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -116,10 +116,10 @@ function* unarchive({
 function* update({
     payload,
     resolve,
-}: BoardActions.UpdateCollectionAction): Iterable<any> {
+}: CatalogActions.UpdateCollectionAction): Iterable<any> {
     try {
         const data = (yield client.updateCollection(payload)) as any;
-        yield put(BoardActions.collectionUpdated(data));
+        yield put(CatalogActions.collectionUpdated(data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -129,14 +129,14 @@ function* update({
 function* trash({
     payload,
     resolve,
-}: BoardActions.DeleteCollectionAction): Iterable<any> {
+}: CatalogActions.DeleteCollectionAction): Iterable<any> {
     try {
         const data = (yield client.deleteCollection(payload)) as any;
         const params = {
             id: payload.collection_id,
-            board_id: payload.board_id,
+            catalog_id: payload.catalog_id,
         };
-        yield put(BoardActions.collectionDeleted(params));
+        yield put(CatalogActions.collectionDeleted(params));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
@@ -146,50 +146,50 @@ function* trash({
 function* create({
     payload,
     resolve,
-}: BoardActions.CreateCollectionAction): Iterable<any> {
+}: CatalogActions.CreateCollectionAction): Iterable<any> {
     try {
         const data = (yield client.createCollection(payload)) as any;
-        yield put(BoardActions.collectionCreated(data));
+        yield put(CatalogActions.collectionCreated(data));
         resolve.success(data);
     } catch (e) {
         resolve.error(e);
     }
 }
 
-function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
+function* subscribe({ payload }: CatalogActions.CatalogConnectedAction) {
     const { channel } = payload;
     channel.on("collection.created", (payload: io.Collection) => {
-        dispatch(BoardActions.collectionCreated(payload));
+        dispatch(CatalogActions.collectionCreated(payload));
     });
 
     channel.on("collection.updated", (payload: io.Collection) => {
-        dispatch(BoardActions.collectionUpdated(payload as any));
+        dispatch(CatalogActions.collectionUpdated(payload as any));
     });
 
     channel.on("collection.archived", (payload: io.Collection) => {
-        dispatch(BoardActions.collectionUpdated(payload as any));
+        dispatch(CatalogActions.collectionUpdated(payload as any));
     });
 
     channel.on("collection.unarchived", (payload: io.Collection) => {
-        dispatch(BoardActions.collectionUpdated(payload as any));
+        dispatch(CatalogActions.collectionUpdated(payload as any));
     });
 
     channel.on("collection.deleted", (payload: io.Collection) => {
-        dispatch(BoardActions.collectionDeleted(payload));
+        dispatch(CatalogActions.collectionDeleted(payload));
     });
 
     channel.on("collection.moved", (payload: io.Collection) => {
-        dispatch(BoardActions.collectionMoved(payload));
+        dispatch(CatalogActions.collectionMoved(payload));
     });
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+    { effect: takeEvery, type: Actions.CATALOG_CONNECTED, handler: subscribe },
 
     {
         effect: takeEvery,
-        type: Actions.BOARD_LOADED,
-        handler: boardLoadedLoadBoardCollections,
+        type: Actions.CATALOG_LOADED,
+        handler: catalogLoadedLoadCatalogCollections,
     },
 
     { effect: takeEvery, type: Actions.CREATE_COLLECTION, handler: create },
@@ -205,7 +205,7 @@ export const tasks = [
     {
         effect: takeEvery,
         type: Actions.LOAD_COLLECTIONS,
-        handler: loadBoardCollections,
+        handler: loadCatalogCollections,
     },
 
     { effect: takeEvery, type: Actions.MOVE_COLLECTION, handler: move },

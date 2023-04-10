@@ -12,28 +12,28 @@ import {
     Presence,
     Calendar,
     Preference,
-    CardRecord,
+    RecordRecord,
     CollectionRecord,
     ThreadRecord,
     UserRecord,
     SpaceRecord,
-    CardTaskValueRecord,
+    RecordTaskValueRecord,
     MemberRecord,
     TopicRecord,
-    BoardRecord,
+    CatalogRecord,
     Drawer,
     DrawerRecord,
 } from "./records";
 
 const emptyarr: any = [];
 
-const defaultBoard = BoardRecord.make({});
+const defaultCatalog = CatalogRecord.make({});
 
 const defaultSpace = SpaceRecord.make({});
 
 const defaultTopic = TopicRecord.make({});
 
-const defaultCard = CardRecord.make({});
+const defaultRecord = RecordRecord.make({});
 
 const defaultCollection = CollectionRecord.make({});
 
@@ -49,11 +49,11 @@ export class UserChecklist extends Record({
     id: "",
     name: "",
     created_at: "",
-    card: new CardRecord({}),
-    board: new BoardRecord({}),
+    record: new RecordRecord({}),
+    catalog: new CatalogRecord({}),
     collection: new CollectionRecord({}),
     users: List<UserRecord>(),
-    tasks: List<CardTaskValueRecord>(),
+    tasks: List<RecordTaskValueRecord>(),
 }) { }
 
 export function useSpaceLoaded(id: string) {
@@ -67,11 +67,11 @@ export function useSpaceLoaded(id: string) {
     );
 }
 
-export function useBoardLoaded(id: string) {
+export function useCatalogLoaded(id: string) {
     return useSelector(
         useCallback(
-            ({ boards }: State) => {
-                return (boards.getBoard(id) ?? defaultBoard).loaded;
+            ({ catalogs }: State) => {
+                return (catalogs.getCatalog(id) ?? defaultCatalog).loaded;
             },
             [id]
         )
@@ -129,16 +129,16 @@ export function useTopicsStore() {
     return useSelector(selectors.topics);
 }
 
-export function useCardsStore() {
-    return useSelector(selectors.cards);
+export function useRecordsStore() {
+    return useSelector(selectors.records);
 }
 
 export function useCollectionsStore() {
     return useSelector(selectors.collections);
 }
 
-export function useBoardsStore() {
-    return useSelector(selectors.boards);
+export function useCatalogsStore() {
+    return useSelector(selectors.catalogs);
 }
 
 export function usePreferences() {
@@ -168,19 +168,19 @@ export function useSpaceTopicsIndex(
     return useSelector(selector);
 }
 
-export function useCollectionCardsIndex(id: string) {
+export function useCollectionRecordsIndex(id: string) {
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.collections.get(id, defaultStringList);
+        ({ records }: State) => {
+            return records.collections.get(id, defaultStringList);
         },
         [id]
     );
     return useSelector(selector);
 }
 
-export function useDateCardsIndex(date: string) {
+export function useDateRecordsIndex(date: string) {
     const selector = useCallback(
-        ({ cards: store }: State) => {
+        ({ records: store }: State) => {
             return store.dates.get(date, defaultStringList);
         },
         [date]
@@ -188,30 +188,30 @@ export function useDateCardsIndex(date: string) {
     return useSelector(selector);
 }
 
-export function useUserCardsIndex(id: string) {
+export function useUserRecordsIndex(id: string) {
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.users.get(id, defaultStringList);
+        ({ records }: State) => {
+            return records.users.get(id, defaultStringList);
         },
         [id]
     );
     return useSelector(selector);
 }
 
-export function useBoardCardsIndex(id: string) {
+export function useCatalogRecordsIndex(id: string) {
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.boards.get(id, defaultStringList);
+        ({ records }: State) => {
+            return records.catalogs.get(id, defaultStringList);
         },
         [id]
     );
     return useSelector(selector);
 }
 
-export function useSpaceBoards(id: string) {
-    const store = useBoardsStore();
+export function useSpaceCatalogs(id: string) {
+    const store = useCatalogsStore();
     return useSpaceTopicsIndex(id)
-        .map((id) => store.getBoard(id)!)
+        .map((id) => store.getCatalog(id)!)
         .filter(Boolean);
 }
 
@@ -315,27 +315,27 @@ export function useConfig() {
     return useSelector(selectors.config);
 }
 
-export function useBoardStore() {
-    return useSelector(selectors.boards);
+export function useCatalogStore() {
+    return useSelector(selectors.catalogs);
 }
 
-export function useBoard(id: string, defaultValue = defaultBoard) {
+export function useCatalog(id: string, defaultValue = defaultCatalog) {
     const selector = useCallback(
-        ({ boards }: State) => {
-            return boards.entities.get(id, defaultValue);
+        ({ catalogs }: State) => {
+            return catalogs.entities.get(id, defaultValue);
         },
         [id]
     );
     return useSelector(selector);
 }
 
-export function useSpaceBoardsIndex(
+export function useSpaceCatalogsIndex(
     id: string,
     defaultValue = defaultStringList
 ) {
     const selector = useCallback(
-        ({ boards }: State) => {
-            return boards.spaces.get(id, defaultValue);
+        ({ catalogs }: State) => {
+            return catalogs.spaces.get(id, defaultValue);
         },
         [id]
     );
@@ -478,11 +478,11 @@ export function useSpaces() {
 
 export function useDirectSpaces() { }
 
-export function useBoardCollections(id: string) {
+export function useCatalogCollections(id: string) {
     const store = useCollectionsStore();
     const selector = useCallback(
         ({ collections }: State) => {
-            return collections.boards.get(id, defaultStringList);
+            return collections.catalogs.get(id, defaultStringList);
         },
         [id]
     );
@@ -491,42 +491,42 @@ export function useBoardCollections(id: string) {
         .filter(Boolean);
 }
 
-export function useBoardCards(id: string) {
-    const store = useCardsStore();
+export function useCatalogRecords(id: string) {
+    const store = useRecordsStore();
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.boards.get(id, defaultStringList);
+        ({ records }: State) => {
+            return records.catalogs.get(id, defaultStringList);
         },
         [id]
     );
     return useSelector(selector)
-        .map((id) => store.getCard(id)!)
+        .map((id) => store.getRecord(id)!)
         .filter(Boolean);
 }
 
-export function useUserCards(id: string) {
-    const store = useCardsStore();
+export function useUserRecords(id: string) {
+    const store = useRecordsStore();
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.users.get(id, defaultStringList);
+        ({ records }: State) => {
+            return records.users.get(id, defaultStringList);
         },
         [id]
     );
     return useSelector(selector)
-        .map((id) => store.getCard(id)!)
+        .map((id) => store.getRecord(id)!)
         .filter(Boolean);
 }
 
-export function useCollectionCards(id: string) {
-    const store = useCardsStore();
+export function useCollectionRecords(id: string) {
+    const store = useRecordsStore();
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.collections.get(id, defaultStringList);
+        ({ records }: State) => {
+            return records.collections.get(id, defaultStringList);
         },
         [id]
     );
     return useSelector(selector)
-        .map((id) => store.getCard(id)!)
+        .map((id) => store.getRecord(id)!)
         .filter(Boolean);
 }
 
@@ -540,34 +540,34 @@ export function useCollection(id: string, defaultValue = defaultCollection) {
     return useSelector(selector);
 }
 
-export function useCard(id: string, defaultValue = defaultCard) {
+export function useRecord(id: string, defaultValue = defaultRecord) {
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.entities.get(id, defaultValue);
+        ({ records }: State) => {
+            return records.entities.get(id, defaultValue);
         },
         [id]
     );
-    return useSelector(selector) as CardRecord | null;
+    return useSelector(selector) as RecordRecord | null;
 }
 
 export function useLabels(id: string) {
-    const { labels } = useBoard(id)!;
+    const { labels } = useCatalog(id)!;
     return labels;
 }
 
 // Naive
 export function useUserChecklists(user_id: string): List<UserChecklist> {
     const selector = useCallback(
-        ({ cards, boards, collections, users }: State) => {
-            return cards.users
+        ({ records, catalogs, collections, users }: State) => {
+            return records.users
                 .get(user_id, defaultStringList)
-                .filter((card_id) => {
-                    let card = cards.entities.get(card_id, defaultCard);
-                    return !card.archived && card.assigned.includes(user_id);
+                .filter((record_id) => {
+                    let record = records.entities.get(record_id, defaultRecord);
+                    return !record.archived && record.assigned.includes(user_id);
                 })
-                .reduce((acc, card_id) => {
-                    let card = cards.entities.get(card_id)!;
-                    let checklists = card.fields
+                .reduce((acc, record_id) => {
+                    let record = records.entities.get(record_id)!;
+                    let checklists = record.fields
                         .filter(
                             (field) =>
                                 field.type === "checklist" &&
@@ -581,12 +581,12 @@ export function useUserChecklists(user_id: string): List<UserChecklist> {
                                     (id) => users.getUser(id)!
                                 ),
                                 tasks: checklist.values,
-                                collection: collections.entities.get(card.collection_id),
-                                board: boards.entities.get(
-                                    card.board_id,
-                                    defaultBoard
+                                collection: collections.entities.get(record.collection_id),
+                                catalog: catalogs.entities.get(
+                                    record.catalog_id,
+                                    defaultCatalog
                                 ),
-                                card: cards.entities.get(card_id, defaultCard),
+                                record: records.entities.get(record_id, defaultRecord),
                                 created_at: checklist.created_at,
                             };
                             return new UserChecklist(payload as any);
@@ -599,14 +599,14 @@ export function useUserChecklists(user_id: string): List<UserChecklist> {
     return useSelector(selector);
 }
 
-export function useUserAssignedCardsIndex(user_id: string) {
+export function useUserAssignedRecordsIndex(user_id: string) {
     const selector = useCallback(
-        ({ cards }: State) => {
-            return cards.users
+        ({ records }: State) => {
+            return records.users
                 .get(user_id, defaultStringList)
-                .filter((card_id) => {
-                    let card = cards.entities.get(card_id, defaultCard);
-                    return !card.archived && card.assigned.includes(user_id);
+                .filter((record_id) => {
+                    let record = records.entities.get(record_id, defaultRecord);
+                    return !record.archived && record.assigned.includes(user_id);
                 })
                 .sort()
                 .join(",");
@@ -616,9 +616,9 @@ export function useUserAssignedCardsIndex(user_id: string) {
     return useSelector(selector).split(",").filter(Boolean);
 }
 
-export function useUserInvolvedCardsIndex(id: string) {
+export function useUserInvolvedRecordsIndex(id: string) {
     const selector = useCallback(
-        ({ cards: store }: State) => {
+        ({ records: store }: State) => {
             return store.users.get(id, defaultStringList);
         },
         [id]
@@ -626,8 +626,8 @@ export function useUserInvolvedCardsIndex(id: string) {
     return useSelector(selector);
 }
 
-export function useBoardFilter(id: string) {
-    return useBoard(id).filter;
+export function useCatalogFilter(id: string) {
+    return useCatalog(id).filter;
 }
 
 export function useCalendarLoaded() {

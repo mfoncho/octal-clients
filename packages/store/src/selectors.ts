@@ -20,12 +20,12 @@ export function preferences({ preferences }: State) {
     return preferences;
 }
 
-export function boards({ boards }: State) {
-    return boards;
+export function catalogs({ catalogs }: State) {
+    return catalogs;
 }
 
-export function cards({ cards }: State) {
-    return cards;
+export function records({ records }: State) {
+    return records;
 }
 
 export function collections({ collections }: State) {
@@ -80,10 +80,10 @@ export default {
     users,
     space,
     roles,
-    cards,
+    records,
     config,
     spaces,
-    boards,
+    catalogs,
     topics,
     threads,
     collections,

@@ -10,7 +10,7 @@ export interface IUsername {
 export default function Username({ id }: IUsername) {
     const name = useName(id);
     const ref = React.useRef<HTMLSpanElement | null>(null);
-    const [card, clickHander] = UserCard.useCard(id);
+    const [record, clickHander] = UserCard.useRecord(id);
 
     function handleClick(e: any) {
         if (ref.current == e.target) {
@@ -24,7 +24,7 @@ export default function Username({ id }: IUsername) {
             onClick={handleClick}
             className="px-1 pb-0.5 my-0.5 bg-primary-500 text-white rounded-full font-semibold text-sm">
             @<Text>{name ? name.name : "none"}</Text>
-            {card}
+            {record}
         </span>
     );
 }

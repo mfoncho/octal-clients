@@ -4,7 +4,7 @@ import { Markdown } from "@colab/ui";
 import { useUser } from "@colab/store";
 
 import ReplyIcon from "@material-ui/icons/Reply";
-import UserCard from "@workspace/UserCard";
+import UserRecord from "@workspace/UserCard";
 import { MessageRecord } from "@colab/store/lib/records";
 
 export interface IMessage {
@@ -15,7 +15,7 @@ export interface IMessage {
 export default React.memo<IMessage>(({ message, onClose }) => {
     const author = useUser(message.user_id)!;
 
-    const [card, handleOpenCard] = UserCard.useCard(author?.id);
+    const [record, handleOpenRecord] = UserRecord.useRecord(author?.id);
 
     let content = message.parsed;
 
@@ -31,7 +31,7 @@ export default React.memo<IMessage>(({ message, onClose }) => {
             <div className="flex flex-grow flex-col">
                 <div className="flex flex-row items-center justify-between">
                     <button
-                        onClick={handleOpenCard}
+                        onClick={handleOpenRecord}
                         className="text-base font-bold dark:text-gray-100">
                         {author.username}
                     </button>
@@ -44,7 +44,7 @@ export default React.memo<IMessage>(({ message, onClose }) => {
                     <Markdown>{content}</Markdown>
                 </span>
             </div>
-            {card}
+            {record}
         </div>
     );
 });

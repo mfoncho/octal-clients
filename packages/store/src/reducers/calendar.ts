@@ -1,7 +1,7 @@
 import { Record, Map, List } from "immutable";
 import { Calendar, ICalendar } from "../records";
 import * as Actions from "../actions/types";
-import * as BoardActions from "../actions/board";
+import * as CatalogActions from "../actions/catalog";
 import * as CalendarActions from "../actions/calendar";
 
 export class CalendarStore extends Record({
@@ -46,12 +46,12 @@ export const reducers = {
         return store.putCalendar(payload as any);
     },
 
-    [Actions.CARDS_LOADED]: (
+    [Actions.RECORDS_LOADED]: (
         store: CalendarStore,
-        { metadata }: BoardActions.CardsLoadedAction
+        { metadata }: CatalogActions.RecordsLoadedAction
     ) => {
         if (metadata && metadata.type == "calendar") {
-            return store.putLoaded("cards");
+            return store.putLoaded("records");
         }
         return store;
     },

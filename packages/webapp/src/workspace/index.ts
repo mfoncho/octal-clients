@@ -7,7 +7,7 @@ export { default as SpaceSettingsDialog } from "./SpaceSettingsDialog";
 export { default as Thread } from "./Thread";
 export { default as Topic } from "./Topic";
 export { default as Message } from "./Message";
-export { default as UserCard } from "./UserCard";
+export { default as UserRecord } from "./UserCard";
 export { default as Navigator } from "./Navigator";
 export { default as Pane } from "./Pane";
 export { default as Sidebar } from "./Sidebar";

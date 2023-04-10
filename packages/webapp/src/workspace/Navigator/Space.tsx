@@ -3,12 +3,12 @@ import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
 import { Text, Collapse, Dialog, Popper } from "@colab/ui";
 import TopicCreatorDialog from "../Space/CreateTopic";
-import CreateBoardDialog from "../Space/CreateBoardDialog";
+import CreateCatalogDialog from "../Space/CreateCatalogDialog";
 import paths from "src/paths/workspace";
 import Counter from "./Counter";
 import * as Icons from "@colab/icons";
 import Topic from "./Topic";
-import Board from "./Board";
+import Catalog from "./Catalog";
 import SpaceSettingsDialog from "../SpaceSettingsDialog";
 import SpaceDialog from "../SpaceDialog";
 import InviteDialog from "../InviteDialog";
@@ -17,7 +17,7 @@ import store, {
     useUser,
     useAuthId,
     useSpacePermissions,
-    useSpaceBoardsIndex,
+    useSpaceCatalogsIndex,
     useSpaceTopicsIndex,
 } from "@colab/store";
 
@@ -49,16 +49,18 @@ const sortSpaceItems = (a: ISpaceItem, b: ISpaceItem) => {
         case "topic":
             atimestamp = store.getState().topics.getTopic(a.id)!.created_at!;
             break;
-        case "board":
-            atimestamp = store.getState().boards.getBoard(a.id)!.created_at!;
+        case "catalog":
+            atimestamp = store.getState().catalogs.getCatalog(a.id)!
+                .created_at!;
             break;
     }
     switch (b.type) {
         case "topic":
             btimestamp = store.getState().topics.getTopic(b.id)!.created_at!;
             break;
-        case "board":
-            btimestamp = store.getState().boards.getBoard(b.id)!.created_at!;
+        case "catalog":
+            btimestamp = store.getState().catalogs.getCatalog(b.id)!
+                .created_at!;
             break;
     }
     if (atimestamp > btimestamp) return 1;
@@ -156,7 +158,7 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     const [menu, setMenu] = useState<IMenuItem[]>([]);
     const [creators, setCreators] = useState<IMenuItem[]>([]);
 
-    const boards = useSpaceBoardsIndex(space.id);
+    const catalogs = useSpaceCatalogsIndex(space.id);
 
     const topics = useSpaceTopicsIndex(space.id);
 
@@ -176,8 +178,8 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                 icon: <Icons.Plus />,
             });
             creators.push({
-                menu: "board",
-                name: "Board",
+                menu: "catalog",
+                name: "Catalog",
                 icon: <Icons.Board />,
                 action: <Icons.Plus />,
             });
@@ -226,13 +228,13 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     }
 
     function renderSpaceItems() {
-        return boards
-            .map((id: string) => ({ id, type: "board" }))
+        return catalogs
+            .map((id: string) => ({ id, type: "catalog" }))
             .concat(topics.map((id: string) => ({ id, type: "topic" })))
             .sort(sortSpaceItems)
             .map((item: ISpaceItem) => {
-                if (item.type === "board") {
-                    return <Board key={item.id} id={item.id} />;
+                if (item.type === "catalog") {
+                    return <Catalog key={item.id} id={item.id} />;
                 } else {
                     return <Topic key={item.id} id={item.id} />;
                 }
@@ -283,9 +285,9 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
             {renderSpaceItems()}
             {permissions.get("space.manage") && (
                 <React.Fragment>
-                    <CreateBoardDialog
+                    <CreateCatalogDialog
                         space={space}
-                        open={dialog.board}
+                        open={dialog.catalog}
                         onClose={dialog.close}
                     />
                     <TopicCreatorDialog

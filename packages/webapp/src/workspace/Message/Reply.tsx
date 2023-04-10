@@ -1,5 +1,5 @@
 import React from "react";
-import UserCard from "@workspace/UserCard";
+import UserRecord from "@workspace/UserCard";
 import { Markdown } from "@colab/ui";
 import { useUser, useMessage } from "@colab/store";
 
@@ -10,7 +10,7 @@ export interface IMessage {
 export default React.memo<IMessage>(({ id }) => {
     const message = useMessage(id);
     const author = useUser(message?.user_id)!;
-    const [card, handleOpenCard] = UserCard.useCard(message?.user_id);
+    const [record, handleOpenRecord] = UserRecord.useRecord(message?.user_id);
 
     if (message) {
         let content = message.parsed;
@@ -27,7 +27,7 @@ export default React.memo<IMessage>(({ id }) => {
                 <div className="flex flex-row items-center space-x-1">
                     <div
                         role="button"
-                        onClick={handleOpenCard}
+                        onClick={handleOpenRecord}
                         className="w-max flex flex-row items-center justify-between">
                         <img
                             alt={author.name}
@@ -42,7 +42,7 @@ export default React.memo<IMessage>(({ id }) => {
                         <Markdown>{content}</Markdown>
                     </span>
                 </div>
-                {card}
+                {record}
             </div>
         );
     }

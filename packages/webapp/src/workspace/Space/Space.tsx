@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Textarea } from "@colab/ui";
 import Chat from "../Chat";
-import Board from "../Board";
+import Catalog from "../Catalog";
 import Topic from "../Topic";
 import { useSpace, useSuggestable } from "./hooks";
 import { useNavigator } from "src/hooks";
@@ -29,8 +29,8 @@ export default React.memo(() => {
         <Textarea.Suggestions.Context.Provider value={mentionable as any}>
             <Routes>
                 <Route path="/topics/:topic_id" element={<Topic />} />
-                <Route path="/boards/:board_id" element={<Board />}>
-                    <Route path=":card_id" element={<Board />} />
+                <Route path="/catalogs/:catalog_id" element={<Catalog />}>
+                    <Route path=":record_id" element={<Catalog />} />
                 </Route>
                 <Route path="/" element={<Redirect />} />
             </Routes>

@@ -1,5 +1,5 @@
 export * from "./calendar/types";
-export * from "./board/types";
+export * from "./catalog/types";
 export * from "./drawer/types";
 export * from "./topic/types";
 export * from "./user/types";

@@ -17,7 +17,7 @@ import truncate from "lodash/truncate";
 import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
-    card: {
+    record: {
         maxWidth: 400,
         minWidth: 344,
     },
@@ -138,7 +138,7 @@ export default React.forwardRef((props: any, ref: any) => {
     }
 
     return (
-        <Card className={classes.card} ref={ref}>
+        <Card className={classes.record} ref={ref}>
             <CardActions classes={{ root: classes.header }}>
                 <div>
                     <Avatar

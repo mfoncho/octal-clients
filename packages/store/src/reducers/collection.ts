@@ -1,5 +1,5 @@
 import { Record, List, Map } from "immutable";
-import * as BoardActions from "../actions/board";
+import * as CatalogActions from "../actions/catalog";
 import { sort } from "@colab/common";
 import * as Actions from "../actions/types";
 import { CollectionRecord } from "../records";
@@ -7,7 +7,7 @@ import { CollectionRecord } from "../records";
 const positionSort = sort("index", "asc");
 
 export class CollectionsStore extends Record({
-    boards: Map<string, List<string>>(),
+    catalogs: Map<string, List<string>>(),
     entities: Map<string, CollectionRecord>(),
 }) {
     contains(id: string) {
@@ -18,14 +18,14 @@ export class CollectionsStore extends Record({
     }
 
     getSpaceCollections(id: string) {
-        return this.boards.get(id);
+        return this.catalogs.get(id);
     }
 
     removeSpaceCollections(id: string): CollectionsStore {
         return this.withMutations((store) => {
-            const boards = store.boards.get(id);
-            if (boards) {
-                boards.forEach((id) => store.removeCollection(id));
+            const catalogs = store.catalogs.get(id);
+            if (catalogs) {
+                catalogs.forEach((id) => store.removeCollection(id));
             }
         });
     }
@@ -38,12 +38,12 @@ export class CollectionsStore extends Record({
             return this.withMutations((store) => {
                 store.setIn(["entities", collection.id], collection);
 
-                // index board_id
-                let boards = store.boards.get(collection.board_id, List<string>());
-                if (!boards.includes(collection.board_id))
+                // index catalog_id
+                let catalogs = store.catalogs.get(collection.catalog_id, List<string>());
+                if (!catalogs.includes(collection.catalog_id))
                     store.setIn(
-                        ["boards", collection.board_id],
-                        boards.push(collection.id)
+                        ["catalogs", collection.catalog_id],
+                        catalogs.push(collection.id)
                     );
             });
         }
@@ -56,8 +56,8 @@ export class CollectionsStore extends Record({
             const updated = collection.patch(payload);
             if (collection.index !== updated.index) {
                 return this.withMutations((store) => {
-                    store.boards
-                        .get(collection.board_id, List<string>())
+                    store.catalogs
+                        .get(collection.catalog_id, List<string>())
                         .map((id) => this.getCollection(id)!)
                         .filter(Boolean)
                         .sort(positionSort)
@@ -79,16 +79,16 @@ export class CollectionsStore extends Record({
         if (!this.contains(id)) {
             return this;
         } else {
-            const board = this.entities.get(id)!;
+            const catalog = this.entities.get(id)!;
             return this.withMutations((store) => {
-                const filter = (id: string) => id !== board.id;
+                const filter = (id: string) => id !== catalog.id;
 
                 // index user_id
-                let boards = store.boards.get(board.board_id, List<string>());
-                if (boards.includes(board.board_id))
-                    store.setIn(["boards"], boards.filter(filter));
+                let catalogs = store.catalogs.get(catalog.catalog_id, List<string>());
+                if (catalogs.includes(catalog.catalog_id))
+                    store.setIn(["catalogs"], catalogs.filter(filter));
 
-                store.deleteIn(["entities", board.id]);
+                store.deleteIn(["entities", catalog.id]);
             });
         }
     }
@@ -102,19 +102,19 @@ export const reducers = {
     },
     [Actions.COLLECTION_CREATED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionCreatedAction
+        { payload }: CatalogActions.CollectionCreatedAction
     ) => {
         return store.putCollection(payload);
     },
     [Actions.COLLECTION_LOADED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionLoadedAction
+        { payload }: CatalogActions.CollectionLoadedAction
     ) => {
         return store.putCollection(payload);
     },
 
-    [Actions.BOARD_DELETED]: (store: CollectionsStore, { payload }: any) => {
-        let cids = store.boards.get(payload.id);
+    [Actions.CATALOG_DELETED]: (store: CollectionsStore, { payload }: any) => {
+        let cids = store.catalogs.get(payload.id);
         if (cids && !cids.isEmpty()) {
             return cids.reduce((store, id) => {
                 return store.removeCollection(id);
@@ -125,7 +125,7 @@ export const reducers = {
 
     [Actions.COLLECTIONS_LOADED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionsLoadedAction
+        { payload }: CatalogActions.CollectionsLoadedAction
     ) => {
         return payload.reduce(
             (store, payload) => store.putCollection(payload),
@@ -135,13 +135,13 @@ export const reducers = {
 
     [Actions.COLLECTION_UPDATED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionUpdatedAction
+        { payload }: CatalogActions.CollectionUpdatedAction
     ) => {
         return store.patchCollection(payload);
     },
     [Actions.COLLECTIONS_UPDATED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionsUpdatedAction
+        { payload }: CatalogActions.CollectionsUpdatedAction
     ) => {
         return payload.reduce(
             (store: CollectionsStore, collection: any) => store.patchCollection(collection),
@@ -151,7 +151,7 @@ export const reducers = {
 
     [Actions.COLLECTIONS_REORDERED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionsReorderedAction
+        { payload }: CatalogActions.CollectionsReorderedAction
     ) => {
         return payload.reduce((store, col) => {
             return store.patchCollection(col);
@@ -160,27 +160,27 @@ export const reducers = {
 
     [Actions.COLLECTION_MOVED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionMovedAction
+        { payload }: CatalogActions.CollectionMovedAction
     ) => {
         return store.patchCollection(payload);
     },
 
     [Actions.COLLECTION_ARCHIVED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionUpdatedAction
+        { payload }: CatalogActions.CollectionUpdatedAction
     ) => {
         return store.patchCollection(payload);
     },
 
     [Actions.COLLECTION_UNARCHIVED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionUpdatedAction
+        { payload }: CatalogActions.CollectionUpdatedAction
     ) => {
         return store.patchCollection(payload);
     },
     [Actions.COLLECTION_DELETED]: (
         store: CollectionsStore,
-        { payload }: BoardActions.CollectionDeletedAction
+        { payload }: CatalogActions.CollectionDeletedAction
     ) => {
         return store.removeCollection(payload.id);
     },

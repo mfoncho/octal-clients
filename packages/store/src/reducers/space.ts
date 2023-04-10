@@ -3,7 +3,7 @@ import { SpaceRecord } from "../records";
 import * as AppActions from "../actions/app";
 import * as Actions from "../actions";
 
-const collections = ["topics", "boards", "members"];
+const collections = ["topics", "catalogs", "members"];
 
 export class SpacesStore extends Record({
     entities: Map<string, SpaceRecord>(),

@@ -12,7 +12,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import GeneralManager from "./General";
 import RolesPermissionsManager from "./Roles";
 import InviationsManager from "./Invitations";
-import BoardsManager from "./Boards";
+import CatalogsManager from "./Catalogs";
 import MembersManager from "./Members";
 import ShutdownManager from "./Shutdown";
 import TopicsManager from "./Topics";
@@ -37,7 +37,7 @@ interface ManagerModule {
 const managers: ManagerModule[] = [
     GeneralManager,
     MembersManager,
-    BoardsManager,
+    CatalogsManager,
     TopicsManager,
     InviationsManager,
     RolesPermissionsManager,

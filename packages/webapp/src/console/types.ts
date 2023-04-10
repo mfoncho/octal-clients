@@ -16,9 +16,9 @@ export namespace io {
         spaces: number;
         messages: number;
         tasks: number;
-        cards: number;
+        records: number;
         done_tasks: number;
-        complete_cards: number;
+        complete_records: number;
     }
 
     export interface Invite {
@@ -38,11 +38,11 @@ export namespace io {
         messages: number;
     }
 
-    export interface BoardCounters {
+    export interface CatalogCounters {
         tasks: number;
-        cards: number;
+        records: number;
         done_tasks: number;
-        complete_cards: number;
+        complete_records: number;
     }
 
     export interface SiteConfig {
@@ -63,7 +63,7 @@ export namespace io {
         created_at: string;
     }
 
-    export interface Board {
+    export interface Catalog {
         id: string;
         name: string;
         space_id: string;
@@ -80,9 +80,9 @@ export namespace io {
         is_shutdown: boolean;
     }
 
-    export interface BoardSpace extends Space {
+    export interface CatalogSpace extends Space {
         topics: Topic[];
-        board: Board;
+        catalog: Catalog;
     }
 
     export interface DiscussSpace extends Space {
@@ -90,7 +90,7 @@ export namespace io {
         topic_id: string;
     }
 
-    export type ColabSpace = BoardSpace | DiscussSpace;
+    export type ColabSpace = CatalogSpace | DiscussSpace;
 
     export interface Thread {
         id: string;

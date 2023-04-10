@@ -1,9 +1,9 @@
 import { io } from "@colab/client";
 import { Relation, Schema } from "./normalizer";
 
-const cards: Relation<undefined> = Schema.hasMany("card", "cards");
+const records: Relation<undefined> = Schema.hasMany("record", "records");
 
-const boards: Relation<undefined> = Schema.hasMany("board", "boards");
+const catalogs: Relation<undefined> = Schema.hasMany("catalog", "catalogs");
 
 const topics: Relation<undefined> = Schema.hasMany("topic", "topics");
 
@@ -37,13 +37,13 @@ const reactions: Relation<"reactions", string> = Schema.mapMany(
     "reactions"
 );
 
-const card_fields: Relation<"fields", string> = Schema.mapMany(
+const record_fields: Relation<"fields", string> = Schema.mapMany(
     "field",
     "fields",
     "fields"
 );
 
-const card_field_values: Relation<"values", string> = Schema.mapMany(
+const record_field_values: Relation<"values", string> = Schema.mapMany(
     "value",
     "values",
     "values"
@@ -55,7 +55,7 @@ const users: Relation<"users", string> = Schema.belongsToMany(
     "users"
 );
 
-const BoardStruct = {};
+const CatalogStruct = {};
 
 const TopicStruct = {};
 
@@ -75,7 +75,7 @@ const ReactionStruct = {
 
 const UserStruct = {};
 
-const CardFieldValueStruct = {
+const RecordFieldValueStruct = {
     user: user,
     label: label,
 };
@@ -91,12 +91,12 @@ const MessageStruct = {
 const StatusStruct = {};
 
 const CollectionStruct = {
-    cards: cards,
+    records: records,
 };
 
-const CardStruct = {
+const RecordStruct = {
     user: user,
-    fields: card_fields,
+    fields: record_fields,
     //checklists: checklists,
 };
 
@@ -108,28 +108,28 @@ const MemberStruct = {
     user: user,
 };
 
-const CardFieldStruct = {
+const RecordFieldStruct = {
     users: users,
-    values: card_field_values,
+    values: record_field_values,
 };
 
-export const CardFieldValueSchema = Schema.create<
+export const RecordFieldValueSchema = Schema.create<
     any,
-    typeof CardFieldValueStruct,
+    typeof RecordFieldValueStruct,
     "values"
->(CardFieldValueStruct, "value", "values");
+>(RecordFieldValueStruct, "value", "values");
 
-export const CardFieldValuesSchema = Schema.create<
+export const RecordFieldValuesSchema = Schema.create<
     any,
-    typeof CardFieldValueStruct,
+    typeof RecordFieldValueStruct,
     "values"
->(CardFieldValueStruct, "values", "values");
+>(RecordFieldValueStruct, "values", "values");
 
-export const CardFieldSchema = Schema.create<
-    io.CardField,
-    typeof CardFieldStruct,
+export const RecordFieldSchema = Schema.create<
+    io.RecordField,
+    typeof RecordFieldStruct,
     "fields"
->(CardFieldStruct, "field", "fields");
+>(RecordFieldStruct, "field", "fields");
 
 export const SpaceSchema = Schema.create<
     io.Space,
@@ -155,11 +155,11 @@ export const TopicSchema = Schema.create<
     "topics"
 >(TopicStruct, "topic", "topics");
 
-export const BoardSchema = Schema.create<
-    io.Board,
-    typeof BoardStruct,
-    "boards"
->(BoardStruct, "board", "boards");
+export const CatalogSchema = Schema.create<
+    io.Catalog,
+    typeof CatalogStruct,
+    "catalogs"
+>(CatalogStruct, "catalog", "catalogs");
 
 export const LabelSchema = Schema.create<io.User, typeof LabelStruct, "labels">(
     LabelStruct,
@@ -178,10 +178,10 @@ export const ThreadSchema = Schema.create<
     "threads"
 >(ThreadStruct, "thread", "threads");
 
-export const CardSchema = Schema.create<io.Card, typeof CardStruct, "cards">(
-    CardStruct,
-    "card",
-    "cards"
+export const RecordSchema = Schema.create<io.Record, typeof RecordStruct, "records">(
+    RecordStruct,
+    "record",
+    "records"
 );
 
 export const StatusSchema = Schema.create<any, typeof StatusStruct, "statuses">(
@@ -218,7 +218,7 @@ export type NormalizedReaction = ReturnType<
     typeof ReactionSchema["normalizeOne"]
 >[0];
 
-export type NormalizedBoard = ReturnType<typeof BoardSchema["normalizeOne"]>[0];
+export type NormalizedCatalog = ReturnType<typeof CatalogSchema["normalizeOne"]>[0];
 
 export type NormalizedTopic = ReturnType<typeof TopicSchema["normalizeOne"]>[0];
 
@@ -228,7 +228,7 @@ export type NormalizedThread = ReturnType<
 
 export type NormalizedUser = ReturnType<typeof UserSchema["normalizeOne"]>[0];
 
-export type NormalizedCard = ReturnType<typeof CardSchema["normalizeOne"]>[0];
+export type NormalizedRecord = ReturnType<typeof RecordSchema["normalizeOne"]>[0];
 
 export type NormalizedChecklist = ReturnType<
     typeof ChecklistSchema["normalizeOne"]
@@ -248,22 +248,22 @@ export type NormalizedMessage = ReturnType<
     typeof MessageSchema["normalizeOne"]
 >[0];
 
-export type NormalizedCardFieldValue = ReturnType<
-    typeof CardFieldValueSchema["normalizeOne"]
+export type NormalizedRecordFieldValue = ReturnType<
+    typeof RecordFieldValueSchema["normalizeOne"]
 >[0];
 
 export type RelatedRecord<T> = Record<string, T>;
 
 export type NormalizedRelated = {
     [UserSchema.collect]?: RelatedRecord<NormalizedUser>;
-    [CardSchema.collect]?: RelatedRecord<NormalizedCard>;
+    [RecordSchema.collect]?: RelatedRecord<NormalizedRecord>;
     [CollectionSchema.collect]?: RelatedRecord<NormalizedCollection>;
     [ThreadSchema.collect]?: RelatedRecord<NormalizedThread>;
     [MessageSchema.collect]?: RelatedRecord<NormalizedMessage>;
     [ChecklistSchema.collect]?: RelatedRecord<NormalizedChecklist>;
     [MemberSchema.collect]?: RelatedRecord<NormalizedMember>;
     [SpaceSchema.collect]?: RelatedRecord<NormalizedSpace>;
-    [BoardSchema.collect]?: RelatedRecord<NormalizedBoard>;
+    [CatalogSchema.collect]?: RelatedRecord<NormalizedCatalog>;
     [TopicSchema.collect]?: RelatedRecord<NormalizedTopic>;
-    [CardFieldValueSchema.collect]?: RelatedRecord<NormalizedCardFieldValue>;
+    [RecordFieldValueSchema.collect]?: RelatedRecord<NormalizedRecordFieldValue>;
 };

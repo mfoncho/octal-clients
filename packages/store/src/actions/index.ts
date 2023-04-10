@@ -1,5 +1,5 @@
 import * as Calendar from "./calendar";
-import * as Board from "./board";
+import * as Catalog from "./catalog";
 import * as Drawer from "./drawer";
 import * as Topic from "./topic";
 import * as User from "./user";
@@ -11,7 +11,7 @@ import * as Thread from "./thread";
 import * as Bookmark from "./bookmark";
 
 export * from "./calendar";
-export * from "./board";
+export * from "./catalog";
 export * from "./drawer";
 export * from "./topic";
 export * from "./user";
@@ -24,7 +24,7 @@ export * from "./bookmark";
 
 export default {
     Calendar,
-    Board,
+    Catalog,
     Drawer,
     Topic,
     User,

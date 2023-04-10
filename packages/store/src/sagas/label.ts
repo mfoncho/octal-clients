@@ -2,17 +2,17 @@ import { put, takeEvery } from "redux-saga/effects";
 import { dispatch } from "..";
 import { io } from "@colab/client";
 import * as Actions from "../actions/types";
-import * as BoardActions from "../actions/board";
+import * as CatalogActions from "../actions/catalog";
 
 import Client from "@colab/client";
 
 function* create({
     payload,
     resolve: meta,
-}: BoardActions.CreateLabelAction): Iterable<any> {
+}: CatalogActions.CreateLabelAction): Iterable<any> {
     try {
         const data = (yield Client.createLabel(payload)) as any;
-        yield put(BoardActions.labelCreated(data));
+        yield put(CatalogActions.labelCreated(data));
         meta.success(data);
     } catch (e) {
         meta.error(e);
@@ -22,14 +22,14 @@ function* create({
 function* destroy({
     payload,
     resolve: meta,
-}: BoardActions.DeleteLabelAction): Iterable<any> {
+}: CatalogActions.DeleteLabelAction): Iterable<any> {
     try {
         const data = (yield Client.deleteLabel(payload)) as any;
         const param = {
             id: payload.label_id,
-            board_id: payload.board_id,
+            catalog_id: payload.catalog_id,
         };
-        yield put(BoardActions.labelDeleted(param as any));
+        yield put(CatalogActions.labelDeleted(param as any));
         meta.success(data);
     } catch (e) {
         meta.error(e);
@@ -39,32 +39,32 @@ function* destroy({
 function* update({
     payload,
     resolve: meta,
-}: BoardActions.UpdateLabelAction): Iterable<any> {
+}: CatalogActions.UpdateLabelAction): Iterable<any> {
     try {
         const data = (yield Client.updateLabel(payload)) as any;
-        yield put(BoardActions.boardLabelUpdated(data));
+        yield put(CatalogActions.catalogLabelUpdated(data));
         meta.success(data);
     } catch (e) {
         meta.error(e);
     }
 }
-function* subscribe({ payload }: BoardActions.BoardConnectedAction) {
+function* subscribe({ payload }: CatalogActions.CatalogConnectedAction) {
     const { channel } = payload;
     channel.on("label.created", (payload: io.Label) => {
-        dispatch(BoardActions.labelCreated(payload));
+        dispatch(CatalogActions.labelCreated(payload));
     });
 
     channel.on("label.updated", (payload: io.Label) => {
-        dispatch(BoardActions.boardLabelUpdated(payload));
+        dispatch(CatalogActions.catalogLabelUpdated(payload));
     });
 
     channel.on("label.deleted", (payload: io.Label) => {
-        dispatch(BoardActions.labelDeleted(payload as any));
+        dispatch(CatalogActions.labelDeleted(payload as any));
     });
 }
 
 export const tasks = [
-    { effect: takeEvery, type: Actions.BOARD_CONNECTED, handler: subscribe },
+    { effect: takeEvery, type: Actions.CATALOG_CONNECTED, handler: subscribe },
     { effect: takeEvery, type: Actions.CREATE_LABEL, handler: create },
     { effect: takeEvery, type: Actions.DELETE_LABEL, handler: destroy },
     { effect: takeEvery, type: Actions.UPDATE_LABEL, handler: update },

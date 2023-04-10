@@ -157,8 +157,8 @@ function* subscribe({
     });
 
     ch.subscribe()
-        .receive("ok", () => {})
-        .receive("error", () => {});
+        .receive("ok", () => { })
+        .receive("error", () => { });
 }
 
 function* broadcastDraft({
@@ -171,7 +171,7 @@ function* broadcastDraft({
             ...payload,
             params: { ...payload.params, files: undefined },
         };
-        yield put(UserActions.userBoardcast({ type, payload }));
+        yield put(UserActions.userCatalogcast({ type, payload }));
     }
 }
 

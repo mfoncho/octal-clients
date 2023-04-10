@@ -11,7 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme) => ({
-    card: {
+    record: {
         maxWidth: 400,
         minWidth: 344,
     },
@@ -45,7 +45,7 @@ export default React.forwardRef((props: any, ref) => {
     }
 
     return (
-        <Card onClick={handleDismiss} className={classes.card} ref={ref}>
+        <Card onClick={handleDismiss} className={classes.record} ref={ref}>
             <CardHeader
                 avatar={
                     <Avatar

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 //import * as Icons from "@colab/icons";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useDispatch } from "react-redux";
-import UserCard from "@workspace/UserCard";
+import UserRecord from "@workspace/UserCard";
 import { Avatar, Dialog, Markdown, UIEvent } from "@colab/ui";
 import {
     useMembers,
@@ -59,12 +59,14 @@ export const LeaveWarning = Dialog.create<ILeaveDialog>(
 
 function Member(props: IMember) {
     const user = useUser(props.member.user_id);
-    const [card, handleOpenCard] = UserCard.useCard(props.member.user_id);
+    const [record, handleOpenRecord] = UserRecord.useRecord(
+        props.member.user_id
+    );
     return (
         <div className="group flex flex-col my-1 p-1 rounded-md hover:bg-primary-500 justify-between">
             <div
                 role="button"
-                onClick={handleOpenCard}
+                onClick={handleOpenRecord}
                 className="flex flex-row">
                 <Avatar alt={user.username} src={user.avatar_url} />
                 <div className="flex flex-col px-2">
@@ -76,7 +78,7 @@ function Member(props: IMember) {
                     </span>
                 </div>
             </div>
-            {card}
+            {record}
         </div>
     );
 }

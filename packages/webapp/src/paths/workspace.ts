@@ -1,8 +1,8 @@
 const spaces = "/spaces";
 const chat = `/chat/:space_id`;
 const space = `${spaces}/:space_id`;
-const board = `${space}/boards/:board_id`;
-const card = `${board}/:card_id`;
+const catalog = `${space}/catalogs/:catalog_id`;
+const record = `${catalog}/:record_id`;
 const topic = `${space}/topics/:topic_id`;
 const thread = `${space}/topics/:topic_id`;
 
@@ -10,8 +10,8 @@ const paths = {
     chat,
     spaces,
     space,
-    board,
-    card,
+    catalog,
+    record,
     thread,
     topic,
 };

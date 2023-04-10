@@ -14,7 +14,7 @@ export interface FetchUsersRequest {
     suspended?: boolean;
 }
 
-export interface FetchSpaceBoards {
+export interface FetchSpaceCatalogs {
     space_id: string;
 }
 
@@ -102,7 +102,7 @@ export interface CrownSpaceMemberRequest {
     user_id: string;
 }
 
-export interface FetchBoardsRequest {
+export interface FetchCatalogsRequest {
     page?: number;
     name?: string;
     limit?: number | string;
@@ -133,7 +133,7 @@ export interface FetchWorkspaceSpacesRequest {
     page?: number;
     name?: string;
     archived?: boolean;
-    type?: "board" | "forum";
+    type?: "catalog" | "forum";
     access?: "public" | "private";
 }
 
@@ -141,7 +141,7 @@ export interface FetchSpacesRequest {
     page?: number;
     name?: string;
     archived?: boolean;
-    type?: "board" | "forum";
+    type?: "catalog" | "forum";
     access?: "public" | "private";
 }
 
@@ -171,7 +171,7 @@ class Client {
         return data;
     }
 
-    async fetchSpaces(params?: FetchBoardsRequest): Promise<Page<io.Space>> {
+    async fetchSpaces(params?: FetchCatalogsRequest): Promise<Page<io.Space>> {
         const { data } = await endpoint.get("/spaces", { params });
         return data;
     }
@@ -376,10 +376,10 @@ class Client {
         return data;
     }
 
-    async fetchSpaceBoards({
+    async fetchSpaceCatalogs({
         space_id,
-    }: FetchSpaceBoards): Promise<io.Board[]> {
-        const { data } = await endpoint.get(`/spaces/${space_id}/boards`);
+    }: FetchSpaceCatalogs): Promise<io.Catalog[]> {
+        const { data } = await endpoint.get(`/spaces/${space_id}/catalogs`);
         return data;
     }
 
@@ -388,8 +388,8 @@ class Client {
         return data;
     }
 
-    async getBoardCounters(): Promise<io.BoardCounters> {
-        const { data } = await endpoint.get(`/counters/boards`);
+    async getCatalogCounters(): Promise<io.CatalogCounters> {
+        const { data } = await endpoint.get(`/counters/catalogs`);
         return data;
     }
 

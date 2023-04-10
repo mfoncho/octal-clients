@@ -1,7 +1,7 @@
 import { mixin } from "@colab/common";
 import { Socket } from "@colab/endpoint";
 import AuthClient from "./auth";
-import BoardClient from "./board";
+import CatalogClient from "./catalog";
 import SpaceClient from "./space";
 import ThreadClient from "./thread";
 import TopicClient from "./topic";
@@ -42,20 +42,20 @@ class Client {
 }
 
 interface Client
-    extends BoardClient,
-        SpaceClient,
-        AuthClient,
-        SocketClient,
-        ThreadClient,
-        WorkspaceClient,
-        UserClient,
-        CalendarClient,
-        TopicClient {}
+    extends CatalogClient,
+    SpaceClient,
+    AuthClient,
+    SocketClient,
+    ThreadClient,
+    WorkspaceClient,
+    UserClient,
+    CalendarClient,
+    TopicClient { }
 
 mixin(Client, [
     TopicClient,
     AuthClient,
-    BoardClient,
+    CatalogClient,
     WorkspaceClient,
     UserClient,
     CalendarClient,

@@ -1,7 +1,7 @@
 const admin = "/admin";
 const users = `${admin}/users`;
-const cards = `${admin}/cards`;
-const card = `${cards}/:card_id`;
+const records = `${admin}/records`;
+const record = `${records}/:record_id`;
 const collections = `${admin}/collections`;
 const spaces = `${admin}/spaces`;
 const checklists = `${admin}/checklists`;
@@ -12,10 +12,10 @@ const checklist = `${checklists}/:checklist_id`;
 const workspace = `${workspaces}/:workspace_id`;
 
 const paths = {
-    card,
+    record,
     users,
     admin,
-    cards,
+    records,
     collections,
     space,
     spaces,

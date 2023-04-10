@@ -11,15 +11,15 @@ import spacesmodule from "@console/Spaces";
 const defaultWorkspaceCounters = {
     users: 0,
     tasks: 0,
-    cards: 0,
+    records: 0,
     topics: 0,
     spaces: 0,
     messages: 0,
     done_tasks: 0,
-    complete_cards: 0,
+    complete_records: 0,
 };
 
-export interface IInfoCard {
+export interface IInfoRecord {
     name: string;
     count: number;
     icon?:
@@ -29,7 +29,7 @@ export interface IInfoCard {
         | any;
 }
 
-export interface ILinkCard extends IInfoCard {
+export interface ILinkRecord extends IInfoRecord {
     name: string;
     count: number;
     path: string;
@@ -39,7 +39,7 @@ function BlankIcon(_props: any) {
     return <></>;
 }
 
-function InfoCard(props: IInfoCard) {
+function InfoRecord(props: IInfoRecord) {
     const Icon = props.icon ?? BlankIcon;
 
     return (
@@ -65,7 +65,7 @@ function InfoCard(props: IInfoCard) {
     );
 }
 
-function LinkCard(props: ILinkCard) {
+function LinkRecord(props: ILinkRecord) {
     const Icon = props.icon ?? BlankIcon;
     return (
         <Link
@@ -116,55 +116,55 @@ export default function Main() {
             .catch(getCounters);
     }
 
-    const linkCards: ILinkCard[] = [];
+    const linkRecords: ILinkRecord[] = [];
 
-    const infoCards: IInfoCard[] = [];
+    const infoRecords: IInfoRecord[] = [];
 
-    linkCards.push({
+    linkRecords.push({
         name: "Users",
         path: paths.users,
         count: counters.users,
         icon: usersmodule.icon,
     });
 
-    linkCards.push({
+    linkRecords.push({
         name: "Spaces",
         path: paths.spaces,
         count: counters.spaces,
         icon: spacesmodule.icon,
     });
 
-    infoCards.push({
+    infoRecords.push({
         name: "Topics",
         icon: Icons.Topic,
         count: counters.topics,
     });
 
-    infoCards.push({
+    infoRecords.push({
         name: "Messages",
         icon: Icons.Chat,
         count: counters.messages,
     });
 
-    infoCards.push({
-        name: "Cards",
+    infoRecords.push({
+        name: "Records",
         icon: Icons.Board,
-        count: counters.cards,
+        count: counters.records,
     });
 
-    infoCards.push({
+    infoRecords.push({
         name: "Completed",
         icon: Icons.Complete,
-        count: counters.complete_cards,
+        count: counters.complete_records,
     });
 
-    infoCards.push({
+    infoRecords.push({
         name: "Tasks",
         icon: Icons.Task,
         count: counters.tasks,
     });
 
-    infoCards.push({
+    infoRecords.push({
         name: "Done",
         icon: Icons.Task.DoneSolid,
         count: counters.done_tasks,
@@ -173,13 +173,13 @@ export default function Main() {
     return (
         <Layout className="flex flex-col p-4 bg-slate-200">
             <div className="grid grid-cols-2 gap-4 py-4">
-                {linkCards.map((lcard) => (
-                    <LinkCard key={lcard.name} {...lcard} />
+                {linkRecords.map((lrecord) => (
+                    <LinkRecord key={lrecord.name} {...lrecord} />
                 ))}
             </div>
             <div className="grid grid-cols-3 gap-4 py-4">
-                {infoCards.map((lcard) => (
-                    <InfoCard key={lcard.name} {...lcard} />
+                {infoRecords.map((lrecord) => (
+                    <InfoRecord key={lrecord.name} {...lrecord} />
                 ))}
             </div>
         </Layout>

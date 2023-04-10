@@ -6,19 +6,19 @@ import { Text, Tooltip } from "@colab/ui";
 import paths from "src/paths";
 import { Link, generatePath } from "react-router-dom";
 import {
-    CardTaskValueRecord,
+    RecordTaskValueRecord,
     useUserChecklists,
-    CardRecord,
-    BoardRecord,
+    RecordRecord,
+    CatalogRecord,
     UserRecord,
     useAuthId,
 } from "@colab/store";
 
-interface ICard {
+interface IRecord {
     id: string;
-    board: BoardRecord;
-    card: CardRecord;
-    tasks: List<CardTaskValueRecord>;
+    catalog: CatalogRecord;
+    record: RecordRecord;
+    tasks: List<RecordTaskValueRecord>;
     users: List<UserRecord>;
     name: string;
 }
@@ -53,7 +53,7 @@ export const UserAvatar = React.memo<IUserAvatar>(({ users }) => {
     );
 });
 
-function Checklist(props: ICard) {
+function Checklist(props: IRecord) {
     return (
         <div className="flex flex-col px-4 py-2">
             <div className="flex flex-row justify-between">
@@ -85,7 +85,7 @@ export default React.memo(function Assigned() {
     const id = useAuthId();
     const checklists = useUserChecklists(id).sort(createdAtSort);
     const grouped = checklists
-        .groupBy((checklist) => checklist.card.id)
+        .groupBy((checklist) => checklist.record.id)
         .toList();
     if (checklists.isEmpty()) return <div />;
     return (
@@ -93,26 +93,26 @@ export default React.memo(function Assigned() {
             {grouped.map((checklists) => {
                 let items = checklists.toList();
                 let sample = items.first()!;
-                const cardPath = generatePath(paths.workspace.card, {
-                    board_id: sample.board.id,
-                    space_id: sample.board.space_id,
-                    card_id: sample.card.id,
+                const recordPath = generatePath(paths.workspace.record, {
+                    catalog_id: sample.catalog.id,
+                    space_id: sample.catalog.space_id,
+                    record_id: sample.record.id,
                 });
                 return (
                     <div
-                        key={items.first()?.card.id}
+                        key={items.first()?.record.id}
                         className="flex flex-col divide-y-2 divide-gray-200 border-2 border-gray-200 rounded-lg overflow-hidden">
                         <Link
-                            to={cardPath}
+                            to={recordPath}
                             className="flex flex-row px-4 py-2 justify-between bg-slate-100 hover:bg-slate-200">
                             <div>
                                 <span className="font-bold text-gray-800">
-                                    <Text>{sample.card.name}</Text>
+                                    <Text>{sample.record.name}</Text>
                                 </span>
                             </div>
                             <div>
                                 <span className="text-xs text-gray-500 font-semibold">
-                                    <Text>{sample.board.name}</Text>
+                                    <Text>{sample.catalog.name}</Text>
                                 </span>
                             </div>
                         </Link>
@@ -121,9 +121,9 @@ export default React.memo(function Assigned() {
                                 <Checklist
                                     users={checklist.users}
                                     tasks={checklist.tasks}
-                                    board={checklist.board}
+                                    catalog={checklist.catalog}
                                     id={checklist.id}
-                                    card={checklist.card}
+                                    record={checklist.record}
                                     name={checklist.name}
                                     key={checklist.id}
                                 />

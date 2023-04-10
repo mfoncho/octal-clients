@@ -4,7 +4,7 @@ import app from "./app";
 import role from "./role";
 import user from "./user";
 import bookmark from "./bookmark";
-import board from "./board";
+import catalog from "./catalog";
 import topics from "./topics";
 import auth from "./auth";
 import trackers from "./trackers";
@@ -17,7 +17,7 @@ import thread from "./thread";
 import preferences from "./preferences";
 import drawer from "./drawer";
 import presence from "./presence";
-import card from "./card";
+import record from "./record";
 import space from "./space";
 import collection from "./collection";
 import workspace from "./workspace";
@@ -43,9 +43,9 @@ const RootStates = {
     route: route.state,
     bookmarks: bookmark.state,
     users: user.state,
-    cards: card.state,
+    records: record.state,
     names: names.state,
-    boards: board.state,
+    catalogs: catalog.state,
     members: member.state,
     preferences: preferences.state,
     snacks: snack.state,
@@ -104,10 +104,10 @@ const reducers = {
     preferences: createReducer(preferences.reducers, preferences.state),
     route: createReducer(route.reducers, route.state),
     users: createReducer(user.reducers, user.state),
-    cards: createReducer(card.reducers, card.state),
+    records: createReducer(record.reducers, record.state),
     trackers: createReducer(trackers.reducers, trackers.state),
     members: createReducer(member.reducers, member.state),
-    boards: createReducer(board.reducers, board.state),
+    catalogs: createReducer(catalog.reducers, catalog.state),
     topics: createReducer(topics.reducers, topics.state),
     presence: createReducer(presence.reducers, presence.state),
     drawers: createReducer(drawer.reducers, drawer.state),

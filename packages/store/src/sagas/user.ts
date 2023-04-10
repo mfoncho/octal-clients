@@ -7,10 +7,10 @@ import client, { io, Presence } from "@colab/client";
 import { UserSchema } from "../schemas";
 import { State } from "..";
 
-function* collectBoardcast(action: any): Iterable<any> {
+function* collectCatalogcast(action: any): Iterable<any> {
     if (action.metadata && action.metadata.broadcast) {
         yield put(
-            UserActions.userBoardcast({
+            UserActions.userCatalogcast({
                 ...action,
                 metadata: { ...action.metadata, broadcast: false },
             })
@@ -33,7 +33,7 @@ function* getPreferences(): Iterable<any> {
     try {
         const data = (yield client.getPreferences()) as any;
         yield put(UserActions.preferencesLoaded(data));
-    } catch (e) {}
+    } catch (e) { }
 }
 
 function* setPreference({
@@ -140,8 +140,8 @@ function* subscribe({ payload }: any): Iterable<any> {
     );
     channel
         .subscribe()
-        .receive("ok", () => {})
-        .receive("error", () => {});
+        .receive("ok", () => { })
+        .receive("error", () => { });
 }
 
 function* connected({
@@ -199,7 +199,7 @@ function* syncPresence({
 }
 
 export const tasks = [
-    { effect: takeEvery, type: "*", handler: collectBoardcast },
+    { effect: takeEvery, type: "*", handler: collectCatalogcast },
     { effect: takeEvery, type: Actions.INIT, handler: getPreferences },
     { effect: takeEvery, type: Actions.RELATED_LOADED, handler: related },
     { effect: takeEvery, type: Actions.SET_USER_PRESENCE, handler: presence },

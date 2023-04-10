@@ -6,7 +6,7 @@ import { Label } from "@colab/ui";
 import Pagination from "@material-ui/lab/Pagination";
 import { Page } from "src/types";
 import Layout from "@console/Layout";
-import client, { FetchBoardsRequest } from "@console/client";
+import client, { FetchCatalogsRequest } from "@console/client";
 import { io } from "@console/types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNavigator } from "@console/hooks";
@@ -26,7 +26,7 @@ export default React.memo(() => {
     const [page, setPage] = useState(defaultPage);
 
     useEffect(() => {
-        const params: FetchBoardsRequest = {};
+        const params: FetchCatalogsRequest = {};
         const query = new URLSearchParams(location.search);
         const page = query.has("page") ? parseInt(query.get("page") || "1") : 1;
         params.page = page;
@@ -42,7 +42,7 @@ export default React.memo(() => {
         fetchPageUsers(params);
     }, [location.search]);
 
-    function fetchPageUsers(params: FetchBoardsRequest) {
+    function fetchPageUsers(params: FetchCatalogsRequest) {
         client
             .fetchSpaces(params)
             .then((data) => {
@@ -57,9 +57,9 @@ export default React.memo(() => {
         navigate(`${location.pathname}?${query.toString()}`);
     }
 
-    function handleOpenSpace(board: io.Space) {
+    function handleOpenSpace(catalog: io.Space) {
         return () => {
-            navigator.openSpace(board);
+            navigator.openSpace(catalog);
         };
     }
 
