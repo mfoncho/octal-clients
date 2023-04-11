@@ -423,16 +423,16 @@ export function useRecordActions(record: RecordRecord) {
         [record.id]
     );
 
-    const completeRecord = useCallback(() => {
-        const action = CatalogAction.completeRecord({
+    const checkRecord = useCallback(() => {
+        const action = CatalogAction.checkRecord({
             catalog_id: record.catalog_id,
             record_id: record.id,
         });
         return dispatch(action);
     }, [record.id]);
 
-    const uncompleteRecord = useCallback(() => {
-        const action = Actions.Catalog.uncompleteRecord({
+    const uncheckRecord = useCallback(() => {
+        const action = Actions.Catalog.uncheckRecord({
             catalog_id: record.catalog_id,
             record_id: record.id,
         });
@@ -443,10 +443,10 @@ export function useRecordActions(record: RecordRecord) {
         createField,
         updateField,
         moveField,
-        uncompleteRecord,
+        uncheckRecord,
         destroyRecord,
         updateRecord,
-        completeRecord,
+        checkRecord,
         archiveRecord,
         moveRecord,
         deleteRecordField,

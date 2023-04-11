@@ -66,8 +66,8 @@ import {
     RECORD_UNARCHIVED,
     DELETE_RECORD,
     RECORD_MOVED,
-    COMPLETE_RECORD,
-    UNCOMPLETE_RECORD,
+    CHECK_RECORD,
+    UNCHECK_RECORD,
     LOAD_RECORDS,
     LOAD_RECORD,
     LOAD_COLLECTIONS,
@@ -441,12 +441,12 @@ export interface ArchiveRecordPayload {
     catalog_id: string;
 }
 
-export interface CompleteRecordPayload {
+export interface CheckRecordPayload {
     record_id: string;
     catalog_id: string;
 }
 
-export interface UncompleteRecordPayload {
+export interface UncheckRecordPayload {
     record_id: string;
     catalog_id: string;
 }
@@ -768,15 +768,15 @@ export type RecordsUpdatedAction = Action<RECORDS_UPDATED, NormalizedRecord[]>;
 
 export type RecordsReorderedAction = Action<RECORDS_REORDERED, RecordPosition[]>;
 
-export type CompleteRecordAction = IOAction<
-    COMPLETE_RECORD,
-    CompleteRecordPayload,
+export type CheckRecordAction = IOAction<
+    CHECK_RECORD,
+    CheckRecordPayload,
     Partial<io.Record>
 >;
 
-export type UncompleteRecordAction = IOAction<
-    UNCOMPLETE_RECORD,
-    CompleteRecordPayload,
+export type UncheckRecordAction = IOAction<
+    UNCHECK_RECORD,
+    CheckRecordPayload,
     Partial<io.Record>
 >;
 
@@ -955,14 +955,14 @@ export function fetchRecords(payload: FetchRecordsPayload): FetchRecordsAction {
     return createIOAction<FETCH_RECORDS>(FETCH_RECORDS, payload);
 }
 
-export function completeRecord(payload: CompleteRecordPayload): CompleteRecordAction {
-    return createIOAction<COMPLETE_RECORD>(COMPLETE_RECORD, payload);
+export function checkRecord(payload: CheckRecordPayload): CheckRecordAction {
+    return createIOAction<CHECK_RECORD>(CHECK_RECORD, payload);
 }
 
-export function uncompleteRecord(
-    payload: UncompleteRecordPayload
-): UncompleteRecordAction {
-    return createIOAction<UNCOMPLETE_RECORD>(UNCOMPLETE_RECORD, payload);
+export function uncheckRecord(
+    payload: UncheckRecordPayload
+): UncheckRecordAction {
+    return createIOAction<UNCHECK_RECORD>(UNCHECK_RECORD, payload);
 }
 
 export function recordArchived(record: io.Record): RecordArchivedAction {

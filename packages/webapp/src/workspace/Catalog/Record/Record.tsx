@@ -12,7 +12,7 @@ interface IUserAvatar {
 
 interface IRecord {
     name: string;
-    complete: boolean;
+    checked: boolean;
     checklists: List<string>;
     users:
         | List<string>
@@ -76,7 +76,7 @@ export default React.memo<IRecord>((props) => {
                 <span className="pr-2 font-semibold">
                     <Text>{props.name}</Text>
                 </span>
-                {props.complete && (
+                {props.checked && (
                     <div className="flex justify-center items-center">
                         <Icons.Complete className="text-green-500 w-5 h-5" />
                     </div>

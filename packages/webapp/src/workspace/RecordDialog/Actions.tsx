@@ -30,10 +30,10 @@ export default function Actions({ record, ...props }: IActions) {
     function handleToggleComplete(e: React.MouseEvent) {
         e.stopPropagation();
         e.preventDefault();
-        if (record.complete) {
-            actions.uncompleteRecord();
+        if (record.checked) {
+            actions.uncheckRecord();
         } else {
-            actions.completeRecord();
+            actions.checkRecord();
         }
     }
 
@@ -73,7 +73,7 @@ export default function Actions({ record, ...props }: IActions) {
                 <Button variant="icon" onClick={handleToggleComplete}>
                     <Icons.CheckedDot
                         className={
-                            record.complete ? "text-green-500" : "text-gray-500"
+                            record.checked ? "text-green-500" : "text-gray-500"
                         }
                     />
                 </Button>

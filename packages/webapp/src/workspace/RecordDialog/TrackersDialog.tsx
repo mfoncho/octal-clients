@@ -16,10 +16,10 @@ const actionName = (tracker: { event: string; target: string }) =>
 
 const trackers: ITracker[] = [
     {
-        name: "Record Complete",
-        event: "complete",
+        name: "Record Check",
+        event: "checked",
         target: "record",
-        description: "Track record complete status",
+        description: "Track record checked status",
     },
     {
         name: "Tasks Done",
@@ -40,7 +40,7 @@ const trackers: ITracker[] = [
         description: "Track record collection changes",
     },
     {
-        name: "Checklist Complete",
+        name: "Checklist Check",
         target: "record.checklist",
         event: "complete",
         // I don't really know how to word this

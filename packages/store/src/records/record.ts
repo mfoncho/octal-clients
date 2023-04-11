@@ -220,7 +220,7 @@ export class RecordRecord
     extends Record({
         id: "",
         name: "",
-        complete: false,
+        checked: false,
         fields: List<RecordFieldRecord>(),
         user_id: "",
         index: 0,

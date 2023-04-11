@@ -20,12 +20,12 @@ export interface CreateTrackerRequest {
     params: { event: string };
 }
 
-export interface CompleteRecordRequest {
+export interface CheckRecordRequest {
     record_id: string;
     catalog_id: string;
 }
 
-export interface UncompleteRecordRequest {
+export interface UncheckedRecordRequest {
     record_id: string;
     catalog_id: string;
 }
@@ -150,11 +150,11 @@ export default class RecordClient extends BaseClient {
         return data;
     }
 
-    async completeRecord(
-        request: CompleteRecordRequest,
+    async checkRecord(
+        request: CheckRecordRequest,
         params?: Params
     ): Promise<io.Record> {
-        const path = `/records/${request.record_id}/complete`;
+        const path = `/records/${request.record_id}/check`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }
@@ -168,11 +168,11 @@ export default class RecordClient extends BaseClient {
         return data;
     }
 
-    async uncompleteRecord(
-        request: UncompleteRecordRequest,
+    async uncheckRecord(
+        request: UncheckedRecordRequest,
         params?: Params
     ): Promise<io.Record> {
-        const path = `/records/${request.record_id}/uncomplete`;
+        const path = `/records/${request.record_id}/uncheck`;
         const { data } = await this.endpoint.put(path, params);
         return data;
     }

@@ -200,7 +200,7 @@ export namespace io {
 
     export interface Task extends Unique {
         name: string;
-        complete: boolean;
+        checked: boolean;
         checklist_id: string;
     }
 
@@ -253,7 +253,7 @@ export namespace io {
         name: string;
         user: Author;
         fields: RecordField[];
-        complete: boolean;
+        checked: boolean;
         index: number;
         collection_id: string;
         created_at: string;

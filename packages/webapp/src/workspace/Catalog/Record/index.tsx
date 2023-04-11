@@ -42,7 +42,7 @@ export const Record = React.memo<IRecord>(({ record, dragHandle }) => {
             name={record.name}
             users={record.users}
             labels={labels}
-            complete={record.complete}
+            checked={record.checked}
             checklists={checklists}
             dragHandle={dragHandle}
             onClick={handleOpenRecordDialog}

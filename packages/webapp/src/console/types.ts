@@ -18,7 +18,7 @@ export namespace io {
         tasks: number;
         records: number;
         done_tasks: number;
-        complete_records: number;
+        checked_records: number;
     }
 
     export interface Invite {
@@ -42,7 +42,7 @@ export namespace io {
         tasks: number;
         records: number;
         done_tasks: number;
-        complete_records: number;
+        checked_records: number;
     }
 
     export interface SiteConfig {

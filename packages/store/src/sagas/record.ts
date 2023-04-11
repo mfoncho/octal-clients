@@ -197,9 +197,9 @@ function* archive({
 function* done({
     payload,
     resolve,
-}: CatalogActions.CompleteRecordAction): Iterable<any> {
+}: CatalogActions.CheckRecordAction): Iterable<any> {
     try {
-        const data = (yield Client.completeRecord(payload)) as any;
+        const data = (yield Client.checkRecord(payload)) as any;
         yield updated(data);
         resolve.success(data);
     } catch (e) {
@@ -210,9 +210,9 @@ function* done({
 function* undone({
     payload,
     resolve,
-}: CatalogActions.CompleteRecordAction): Iterable<any> {
+}: CatalogActions.CheckRecordAction): Iterable<any> {
     try {
-        const data = (yield Client.uncompleteRecord(payload)) as any;
+        const data = (yield Client.uncheckRecord(payload)) as any;
         yield updated(data);
         resolve.success(data);
     } catch (e) {
@@ -238,11 +238,11 @@ function* subscribe({ payload }: CatalogActions.CatalogConnectedAction) {
         dispatch(CatalogActions.recordUpdated(record as any));
     });
 
-    channel.on("record.completed", (payload: io.Record) => {
+    channel.on("record.checked", (payload: io.Record) => {
         dispatch(CatalogActions.recordUpdated(payload as any));
     });
 
-    channel.on("record.uncompleted", (payload: io.Record) => {
+    channel.on("record.unchecked", (payload: io.Record) => {
         dispatch(CatalogActions.recordUpdated(payload as any));
     });
 
@@ -317,11 +317,11 @@ export const tasks = [
 
     { effect: takeEvery, type: Actions.DELETE_RECORD, handler: trash },
 
-    { effect: takeEvery, type: Actions.COMPLETE_RECORD, handler: done },
+    { effect: takeEvery, type: Actions.CHECK_RECORD, handler: done },
 
     { effect: takeEvery, type: Actions.LOAD_RECORD, handler: loadRecord },
 
-    { effect: takeEvery, type: Actions.UNCOMPLETE_RECORD, handler: undone },
+    { effect: takeEvery, type: Actions.UNCHECK_RECORD, handler: undone },
 
     { effect: takeEvery, type: Actions.ARCHIVE_RECORD, handler: archive },
 

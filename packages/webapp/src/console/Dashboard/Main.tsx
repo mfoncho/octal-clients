@@ -16,7 +16,7 @@ const defaultWorkspaceCounters = {
     spaces: 0,
     messages: 0,
     done_tasks: 0,
-    complete_records: 0,
+    checked_records: 0,
 };
 
 export interface IInfoRecord {
@@ -155,7 +155,7 @@ export default function Main() {
     infoRecords.push({
         name: "Completed",
         icon: Icons.Complete,
-        count: counters.complete_records,
+        count: counters.checked_records,
     });
 
     infoRecords.push({

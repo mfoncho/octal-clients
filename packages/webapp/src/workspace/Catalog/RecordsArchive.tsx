@@ -51,7 +51,7 @@ const Record = React.memo<IArchivedRecord>(({ record, onClick }) => {
                 labels={List(Object.values(labels))}
                 users={List<string>(Object.values(users))}
                 checklists={List(checklists)}
-                complete={record.complete}
+                checked={record.checked}
             />
         </div>
     );
