@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 
-export function useCurPrev<T, P>(value: T) {
-    const [[curr, prev], update] = useState<[T, T | P]>([value, value]);
+export function useCurPrev<T>(value: T) {
+    const [[curr, prev], update] = useState<[T, T]>([value, value]);
 
     useEffect(() => {
         update([value, curr]);

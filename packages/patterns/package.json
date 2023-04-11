@@ -18,6 +18,6 @@
     "devDependencies": {
         "@unicode/unicode-14.0.0": "^1.2.1",
         "emoji-test-regex-pattern": "^1.7.1",
-        "typescript": "^4.5.4"
+        "typescript": "^4.7.2"
     }
 }

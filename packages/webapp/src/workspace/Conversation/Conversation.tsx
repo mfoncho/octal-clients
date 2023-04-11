@@ -292,6 +292,7 @@ export default React.memo<IThread>(function ({ thread }) {
 
                 if (
                     thread.hasMoreBottom == false &&
+                    prevLastMessage &&
                     lastMessage.timestamp > prevLastMessage?.timestamp
                 ) {
                     return footer.current?.scrollIntoView();
