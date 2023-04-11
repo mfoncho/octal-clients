@@ -171,6 +171,24 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     useEffect(() => {
         let menu: IMenuItem[] = [];
         let creators: IMenuItem[] = [];
+        if (permissions.get("space.manage") || authid === space.admin_id) {
+            menu.push({
+                menu: "settings",
+                name: "Settings",
+                icon: <Icons.Settings />,
+            });
+        }
+        if (
+            permissions.get("invite.link.create") ||
+            permissions.get("invite.mail.send")
+        ) {
+            menu.push({
+                menu: "invite",
+                name: "Invite",
+                icon: <Icons.AddUser />,
+            });
+        }
+
         if (permissions.get("space.manage")) {
             menu.push({
                 menu: "menu",
@@ -188,24 +206,6 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
                 name: "Topic",
                 icon: <Icons.Topic />,
                 action: <Icons.Plus />,
-            });
-        }
-        if (
-            permissions.get("invite.link.create") ||
-            permissions.get("invite.mail.send")
-        ) {
-            menu.push({
-                menu: "invite",
-                name: "Invite",
-                icon: <Icons.AddUser />,
-            });
-        }
-
-        if (permissions.get("space.manage") || authid === space.admin_id) {
-            menu.push({
-                menu: "settings",
-                name: "Settings",
-                icon: <Icons.Settings />,
             });
         }
         setMenu(menu);
@@ -244,24 +244,19 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     return (
         <React.Fragment>
             <div
-                className={clx(
-                    "group flex flex-row px-2 py-1 items-center rounded-lg overflow-hidden justify-between mx-2"
-                    //inSpace ? "bg-primary-500" : "hover:bg-slate-200"
-                )}
+                className={"group flex flex-row px-1 h-9 items-center rounded-lg overflow-hidden justify-between"}
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
                 <div
-                    className={clx(
-                        "flex flex-row items-center overflow-hidden px-4 text-black dark:text-gray-200 text-gray-500"
-                    )}>
+                    className={"flex flex-row items-center overflow-hidden px-4 dark:text-gray-200 text-gray-500"}>
                     <p
                         role="button"
                         onClick={dialog.opener("space")}
-                        className="text-base font-bold truncate">
+                        className="text-sm font-bold truncate">
                         <Text>{space.name}</Text>
                     </p>
                 </div>
-                <div className="flex flex-row items-center space-x-1 hidden group-hover:flex">
+                <div className="flex flex-row items-center space-x-1 hidden group-hover:flex pr-3">
                     {menu.map((item) => (
                         <button
                             ref={menuRef}
