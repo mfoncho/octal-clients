@@ -85,7 +85,7 @@ export class Schema<
         this.relations = Object.keys(this.struct);
     }
 
-    static create<T, Struct extends Structure, R extends string>(
+    static create<T extends Object, Struct extends Structure, R extends string>(
         struct: Struct,
         name: string,
         collect: R,

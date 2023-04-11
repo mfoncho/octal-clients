@@ -9,7 +9,7 @@ export class DrawerStore extends Record({
     getDrawer<T>(id: string): Drawer<T> | undefined {
         return this.drawers.get(id) as any;
     }
-    openDrawer<T = unknown>(id: string, props: T) {
+    openDrawer<T extends Object>(id: string, props: T) {
         const drawer = this.drawers.get(id, new DrawerRecord(props));
         return this.setIn(
             ["drawers", id],
@@ -17,7 +17,7 @@ export class DrawerStore extends Record({
         );
     }
 
-    closeDrawer<T = unknown>(id: string, props: T) {
+    closeDrawer<T extends Object>(id: string, props: T) {
         const drawer = this.drawers.get(id, new DrawerRecord(props));
         return this.setIn(
             ["drawers", id],
@@ -25,7 +25,7 @@ export class DrawerStore extends Record({
         );
     }
 
-    toggleDrawer<T = unknown>(id: string, props: T) {
+    toggleDrawer<T extends Object>(id: string, props: T) {
         const drawer = this.drawers.get(id, new DrawerRecord(props));
         return this.setIn(
             ["drawers", id],
@@ -42,21 +42,21 @@ export const reducers = {
     },
     [Actions.DRAWER_OPENED](
         store: DrawerStore,
-        { payload }: DrawerActions.DrawerOpenedAction<unknown>
+        { payload }: DrawerActions.DrawerOpenedAction<Object>
     ) {
         return store.openDrawer(payload.id, payload.params);
     },
 
     [Actions.DRAWER_CLOSED](
         store: DrawerStore,
-        { payload }: DrawerActions.DrawerClosedAction<unknown>
+        { payload }: DrawerActions.DrawerClosedAction<Object>
     ) {
         return store.closeDrawer(payload.id, payload.params);
     },
 
     [Actions.DRAWER_TOGGLED](
         store: DrawerStore,
-        { payload }: DrawerActions.DrawerToggledAction<unknown>
+        { payload }: DrawerActions.DrawerToggledAction<Object>
     ) {
         return store.toggleDrawer(payload.id, payload.params);
     },
