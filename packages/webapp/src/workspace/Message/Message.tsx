@@ -102,7 +102,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                             <div className="w-4" />
                             <button
                                 onClick={handleOpenRecord}
-                                className="text-base font-semibold text-gray-800 dark:text-gray-100">
+                                className="text-base font-semibold text-black dark:text-gray-100">
                                 {author.username}
                             </button>
                             <span className="px-2 font-bold text-gray-500">
