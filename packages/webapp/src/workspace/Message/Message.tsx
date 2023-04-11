@@ -98,7 +98,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
 
                 <div className="flex flex-grow flex-col">
                     {props.extra && (
-                        <div className="flex flex-row items-center py-1.5">
+                        <div className="flex flex-row items-center py-1">
                             <div className="w-4" />
                             <button
                                 onClick={handleOpenRecord}
@@ -117,7 +117,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                     )}
 
                     {message.pinned && (
-                        <div className="flex flex-row pt-1">
+                        <div className="flex flex-row">
                             <div className="w-4" />
                             <Icons.Pin className="h-2.5 w-2.5 text-gray-600 dark:text-slate-200" />
                         </div>
