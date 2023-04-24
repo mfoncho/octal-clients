@@ -60,7 +60,7 @@ export default React.memo((props: IReplyChip) => {
                 <img
                     alt={user.name}
                     className="w-5 h-5 rounded-full"
-                    src={user.avatar_url}
+                    src={user.avatar}
                 />
 
                 <span className="text-gray-600 font-semibold px-1">

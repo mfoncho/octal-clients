@@ -1,4 +1,4 @@
-export interface Timestamp extends String { }
+export interface Timestamp extends String {}
 
 export type CollectionType = "stack" | "queue";
 
@@ -171,7 +171,7 @@ export namespace io {
     export interface Author extends Unique {
         name: string;
         username: string;
-        avatar_url: string;
+        avatar: string;
     }
 
     export interface User extends Author {
@@ -324,7 +324,7 @@ export namespace io {
         archived_at: Timestamp;
     }
 
-    export interface TopicSearchResult extends Page<Message> { }
+    export interface TopicSearchResult extends Page<Message> {}
 
     export interface Space extends Unique {
         name: string;

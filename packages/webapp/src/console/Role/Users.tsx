@@ -104,7 +104,7 @@ export default function Members({ role }: IMembers) {
                         onClick={handleOpenUser(user)}>
                         <img
                             alt={user.name}
-                            src={user.avatar_url}
+                            src={user.avatar}
                             className="inline-block h-8 w-8 rounded-full"
                         />
                         <span className="px-4 text-gray-800 font-semibold text-base">

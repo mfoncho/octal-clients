@@ -28,7 +28,7 @@ export class UserRecord
             roles: List<string>([]),
             username: "",
             verified: false,
-            avatar_url: null as any as string,
+            avatar: null as any as string,
             bio: "",
             status: new UserStatusRecord(),
         },

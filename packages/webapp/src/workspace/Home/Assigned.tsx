@@ -35,7 +35,7 @@ export const UserAvatar = React.memo<IUserAvatar>(({ users }) => {
             key={user.id}
             className="inline-block rounded-full h-6 w-6 rounded-full ring-2 ring-white"
             alt={user.username}
-            src={user.avatar_url}
+            src={user.avatar}
         />
     ));
     const usernames = users.map((user) => (

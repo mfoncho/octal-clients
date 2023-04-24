@@ -14,7 +14,7 @@ export default React.memo<IUserAvatar>((props) => {
         <img
             className={props.className}
             alt={user.username}
-            src={user.avatar_url}
+            src={user.avatar}
         />
     );
     if (props.tooltip) {

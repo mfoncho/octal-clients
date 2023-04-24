@@ -119,7 +119,7 @@ export default React.memo<IProfile>(({ user, ...props }) => {
                             id={imgInputId}
                             alt={user.name}
                             className="h-32 w-32 rounded-full border border-gray-200"
-                            placeholder={user.avatar_url}
+                            placeholder={user.avatar}
                             value={avatar.value}
                             onChange={avatar.setValue}
                         />

@@ -16,12 +16,12 @@ export default React.memo<{ space: SpaceRecord }>(({ space }) => {
                     color="clear"
                     onClick={() => navigator.toggle({})}
                     className="visible sm:hidden">
-                    <Icons.Menu/>
+                    <Icons.Menu />
                 </Button>
                 <div className="flex flex-row items-center px-2 overflow-hidden space-x-2">
                     <img
                         alt={user.username}
-                        src={user.avatar_url}
+                        src={user.avatar}
                         className="rounded-full h-8 w-8 shadow"
                     />
                     <span className="truncate text-lg font-bold">

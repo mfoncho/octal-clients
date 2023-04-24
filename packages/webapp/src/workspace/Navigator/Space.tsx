@@ -129,7 +129,7 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
             )}>
             <img
                 alt={user.username}
-                src={user.avatar_url}
+                src={user.avatar}
                 className="rounded-full h-7 w-7 shadow"
             />
             <span
@@ -244,11 +244,15 @@ export const GeneralSpace = React.memo<ISpace>(({ space }) => {
     return (
         <React.Fragment>
             <div
-                className={"group flex flex-row px-1 h-9 items-center rounded-lg overflow-hidden justify-between"}
+                className={
+                    "group flex flex-row px-1 h-9 items-center rounded-lg overflow-hidden justify-between"
+                }
                 onMouseOver={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}>
                 <div
-                    className={"flex flex-row items-center overflow-hidden px-4 dark:text-gray-200 text-gray-500"}>
+                    className={
+                        "flex flex-row items-center overflow-hidden px-4 dark:text-gray-200 text-gray-500"
+                    }>
                     <p
                         role="button"
                         onClick={dialog.opener("space")}

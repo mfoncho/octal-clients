@@ -79,7 +79,7 @@ const Record = Dialog.create<IUserRecord>((props) => {
             <div className="w-full flex flex-col justify-between overflow-hidden md:w-[280px] md:h-[250px] h-[350px] relative">
                 <img
                     alt={user.username}
-                    src={user.avatar_url}
+                    src={user.avatar}
                     className={
                         "w-full h-full md:rounded-t-lg absolute object-fill"
                     }

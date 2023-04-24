@@ -16,7 +16,7 @@ interface IRecord {
     checklists: List<string>;
     users:
         | List<string>
-        | List<{ id: string; avatar_url: string; username: string }>;
+        | List<{ id: string; avatar: string; username: string }>;
     labels: List<{ id: string; name: string; color: string }>;
     dragHandle?: any;
     onClick?: (e: React.MouseEvent) => void;
@@ -36,9 +36,7 @@ export const Avatar = React.memo<{
 
 export const UserAvatar = React.memo<IUserAvatar>(({ id, className }) => {
     const user = useUser(id);
-    return (
-        <Avatar alt={user.name} src={user.avatar_url} className={className} />
-    );
+    return <Avatar alt={user.name} src={user.avatar} className={className} />;
 });
 
 interface IChecklists {
@@ -111,7 +109,7 @@ export default React.memo<IRecord>((props) => {
                                 ) : (
                                     <Avatar
                                         key={user.id}
-                                        src={user.avatar_url}
+                                        src={user.avatar}
                                         alt={user.username}
                                     />
                                 )

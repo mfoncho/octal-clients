@@ -68,7 +68,7 @@ function Member(props: IMember) {
                 role="button"
                 onClick={handleOpenRecord}
                 className="flex flex-row">
-                <Avatar alt={user.username} src={user.avatar_url} />
+                <Avatar alt={user.username} src={user.avatar} />
                 <div className="flex flex-col px-2">
                     <span className="font-bold group-hover:text-white text-gray-800 text-base">
                         {user.username}
