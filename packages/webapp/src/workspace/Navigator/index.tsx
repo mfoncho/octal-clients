@@ -30,7 +30,7 @@ export default React.memo(() => {
         <div className="flex flex-grow flex-col overflow-hidden">
             <Sections />
             <Scrollbars autoHide>
-                <div className="flex flex-col justify-between min-h-full">
+                <div className="flex flex-col min-h-full">
                     <div className="flex flex-col overflow-hidden space-y-1">
                         {grouped
                             .get("general", defaultSpaces)
@@ -38,7 +38,7 @@ export default React.memo(() => {
                             .sort(sortSpaces)
                             .map(renderSpaces)}
                     </div>
-                    <div className="flex flex-col pb-14 overflow-hidden space-y-1">
+                    <div className="flex flex-col pt-8 pb-14 overflow-hidden space-y-1">
                         {grouped
                             .get("direct", defaultSpaces)
                             .toList()
