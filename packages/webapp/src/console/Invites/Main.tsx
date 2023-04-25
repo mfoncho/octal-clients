@@ -85,7 +85,7 @@ export default React.memo(() => {
     }
 
     return (
-        <Layout className="flex flex-grow flex-col p-4 bg-slate-200">
+        <Layout className="flex flex-grow flex-col p-4">
             <div className="flex flex flex-col divide-y divide-gray-100 rounded-md overflow-hidden shadow">
                 <div className="grid grid-cols-6 py-3 text-gray-700 rounded-t-md text-xs font-semibold bg-gray-100">
                     <div className="col-span-2 px-6 overflow-hidden">

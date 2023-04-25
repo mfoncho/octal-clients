@@ -29,7 +29,7 @@ export default React.memo(() => {
     }
 
     return (
-        <Layout className="flex flex-grow flex-col p-4 bg-slate-200">
+        <Layout className="flex flex-grow flex-col p-4">
             <div className="flex flex-row py-4 justify-end items-center">
                 <Button color="primary" onClick={dialog.opener("create")}>
                     Create

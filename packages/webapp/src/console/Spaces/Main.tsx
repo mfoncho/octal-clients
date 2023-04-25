@@ -64,7 +64,7 @@ export default React.memo(() => {
     }
 
     return (
-        <Layout className="flex flex-grow flex-col p-4 bg-slate-200">
+        <Layout className="flex flex-grow flex-col p-4">
             <table className="p-2 rounded-md overflow-hidden shadow">
                 <thead className="bg-gray-50">
                     <tr>

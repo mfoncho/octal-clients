@@ -82,7 +82,7 @@ export default React.memo(() => {
         <Layout
             icon={icon}
             title={space.name}
-            className="bg-slate-200 block p-4 space-y-6 overflow-y-auto">
+            className="block p-4 space-y-6 overflow-y-auto">
             <Catalogs space={space} />
             <Topics space={space} />
             <Members space={space} updateSpace={setSpace} />

@@ -171,7 +171,7 @@ export default function Main() {
     });
 
     return (
-        <Layout className="flex flex-col p-4 bg-slate-200">
+        <Layout className="flex flex-col p-4">
             <div className="grid grid-cols-2 gap-4 py-4">
                 {linkRecords.map((lrecord) => (
                     <LinkRecord key={lrecord.name} {...lrecord} />
