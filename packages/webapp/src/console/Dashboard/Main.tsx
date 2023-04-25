@@ -50,7 +50,7 @@ function InfoRecord(props: IInfoRecord) {
                 </div>
                 <div className="flex flex-col px-4">
                     <div>
-                        <span className="font-semibold text-base text-gray-600">
+                        <span className="font-bold text-sm text-gray-500">
                             {props.name}
                         </span>
                     </div>
@@ -77,7 +77,7 @@ function LinkRecord(props: ILinkRecord) {
                 </div>
                 <div className="flex flex-col px-4">
                     <div>
-                        <span className="font-semibold text-md text-gray-600">
+                        <span className="font-bold text-sm text-gray-500">
                             {props.name}
                         </span>
                     </div>
@@ -133,27 +133,8 @@ export default function Main() {
         count: counters.spaces,
         icon: spacesmodule.icon,
     });
-
     infoRecords.push({
-        name: "Topics",
-        icon: Icons.Topic,
-        count: counters.topics,
-    });
-
-    infoRecords.push({
-        name: "Messages",
-        icon: Icons.Chat,
-        count: counters.messages,
-    });
-
-    infoRecords.push({
-        name: "Records",
-        icon: Icons.Board,
-        count: counters.records,
-    });
-
-    infoRecords.push({
-        name: "Completed",
+        name: "Checked",
         icon: Icons.Complete,
         count: counters.checked_records,
     });
