@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button, Popper, Switch } from "@colab/ui";
+import { Popper, Switch } from "@colab/ui";
 import { useCalendar } from "src/hooks";
 import moment from "moment";
 import * as Icons from "@colab/icons";
@@ -78,19 +78,23 @@ export default React.memo<IControls>((props) => {
     return (
         <React.Fragment>
             <div className="flex flex-row justify-end items-center space-x-2">
-                <Button variant="icon" onClick={() => calendarActions.setDay()}>
+                <button
+                    className="p-2 bg-white rounded-md ring-1 ring-gray-200 shadow hover:shadow-md hover:bg-primary-200"
+                    onClick={() => calendarActions.setDay()}>
                     <Icons.Calendar.Day />
-                </Button>
-                <Button variant="icon" onClick={handleMonth}>
+                </button>
+                <button
+                    className="p-2 bg-white rounded-md ring-1 ring-gray-200 shadow hover:shadow-md hover:bg-primary-200"
+                    onClick={handleMonth}>
                     <Icons.Calendar.Month />
-                </Button>
+                </button>
                 <div>
-                    <Button
-                        variant="icon"
+                    <button
+                        className="p-2 bg-white rounded-md ring-1 ring-gray-200 shadow hover:shadow-md hover:bg-primary-200"
                         ref={pickerRef}
                         onClick={handleOpenPicker}>
                         <Icons.Controls />
-                    </Button>
+                    </button>
                     <DayPicker
                         open={picker}
                         calendar={props.calendar}

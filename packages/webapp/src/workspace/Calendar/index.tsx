@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import clx from "classnames";
 import Header from "./Header";
 import { List } from "immutable";
-import { Calendar, Button, Popper, Text } from "@colab/ui";
+import { Calendar, Popper, Text } from "@colab/ui";
 import { UseRecords } from "@workspace/Records";
 import moment from "moment";
 import cal from "@colab/calendar";
@@ -13,7 +13,6 @@ import {
     RecordRecord,
     RecordDatetimeValueRecord,
     useCalendarLoaded,
-    useUser,
     useDateRecordsIndex,
     Actions,
 } from "@colab/store";
@@ -24,10 +23,6 @@ import { useCalendar } from "src/hooks";
 const defaultList = List<any>();
 
 const dated = ["datetime", "date"];
-
-interface IUserAvatar {
-    user: string;
-}
 
 interface IRecordField {
     record: RecordRecord;
@@ -182,11 +177,16 @@ export default React.memo(function Main() {
 
     function renderDay(isodate: string, dayi: number) {
         let date = cal.fromISOString(isodate);
+        const isCurrentMonth = date.getMonth() === calendar.month;
         if (!calendar.days.includes(date.getDay())) {
             return <React.Fragment />;
         }
         return (
-            <div className="flex flex-col overflow-hidden">
+            <div
+                className={clx(
+                    "flex flex-col overflow-hidden",
+                    isCurrentMonth ? "bg-white" : "bg-slate-100"
+                )}>
                 <button
                     className="py-1 px-2 hover:bg-gray-200 dark:hover:bg-slate-800"
                     onClick={() => actions.setDay(day > -1 ? -1 : dayi)}>
@@ -212,7 +212,7 @@ export default React.memo(function Main() {
             <div className="flex-1 flex flex-row overflow-hidden">
                 <button
                     onClick={() => actions.setWeek(week > -1 ? -1 : weeki)}
-                    className="w-3 flex flex-col justify-center items-center hover:bg-gray-200 p-px text-gray-800 dark:text-gray-200 font-bold">
+                    className="w-4 flex flex-col justify-center items-center hover:bg-slate-200 p-px text-gray-800 dark:text-gray-200 font-bold bg-white">
                     {week > -1 ? "-" : "+"}
                 </button>
                 <div
@@ -237,15 +237,16 @@ export default React.memo(function Main() {
     function renderActions() {
         return (
             <div className="flex flex-row items-center justify-end space-x-2">
-                <Button variant="icon" onClick={() => actions.previous()}>
+                <button
+                    className="px-3 py-2 bg-white rounded-md ring-1 ring-gray-200 shadow hover:shadow-md"
+                    onClick={() => actions.previous()}>
                     <Icons.Chevron />
-                </Button>
-                <Button
-                    variant="icon"
-                    onClick={() => actions.next()}
-                    className="rotate-180">
-                    <Icons.Chevron />
-                </Button>
+                </button>
+                <button
+                    className="px-3 py-2 bg-white rounded-md ring-1 ring-gray-200 shadow hover:shadow-md"
+                    onClick={() => actions.next()}>
+                    <Icons.Chevron className="rotate-180" />
+                </button>
             </div>
         );
     }
@@ -280,10 +281,10 @@ export default React.memo(function Main() {
         let date = new Date(1993, 7, 1);
         if (day > -1) return null;
         return (
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row bg-white">
                 <button
                     onClick={() => actions.setMonth()}
-                    className="w-3 flex flex-col justify-center items-center hover:bg-gray-200 text-gray-800 dark:text-gray-200 font-bold px-px">
+                    className="w-4 flex flex-col justify-center items-center hover:bg-slate-200 text-gray-800 dark:text-gray-200 font-bold px-px">
                     {week > -1 ? "+" : "-"}
                 </button>
                 <div
@@ -306,8 +307,12 @@ export default React.memo(function Main() {
                         .map((index) => (
                             <div
                                 key={String(index)}
-                                className="flex text-sm font-semibold px-2 flex-col overflow-hidden text-gray-800 dark:text-gray-200">
-                                {moment(date).add(index, "days").format("ddd")}
+                                className="flex text-sm font-semibold flex-col overflow-hidden text-gray-800 dark:text-gray-200 justify-center items-center py-1.5">
+                                <div>
+                                    {moment(date)
+                                        .add(index, "days")
+                                        .format("ddd")}
+                                </div>
                             </div>
                         ))}
                 </div>
@@ -320,7 +325,7 @@ export default React.memo(function Main() {
             <Header />
             {renderHeader()}
             <div className="pb-8 flex-1 flex flex-col overflow-x-hidden overflow-y-auto px-8">
-                <div className="flex-1 flex flex-col border border-gray-400 divide-y divide-gray-400 overflow-hidden">
+                <div className="flex-1 flex flex-col border border-gray-400 divide-y divide-gray-400 overflow-hidden rounded-md">
                     {renderDays()}
                     <Calendar
                         day={day}
