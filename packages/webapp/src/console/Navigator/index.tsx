@@ -74,7 +74,7 @@ const Manager = React.memo<IManager>((props) => {
 export default React.memo(() => {
     return (
         <div className="flex flex-grow flex-col overflow-hidden">
-            <div className="flex flex-col py-4 px-5 border-t border-slate-400">
+            <div className="flex flex-col py-4 px-5">
                 <span className="font-black text-gray-800 dark:text-primary-100 text-lg">
                     Console
                 </span>

@@ -21,7 +21,7 @@ export default React.memo<ILayout>((props) => {
     const Icon = module.icon;
     return (
         <div className="flex-grow flex flex-col overflow-hidden">
-            <div className="flex shadow px-4 py-2 flex-row justify-between items-center overflow-hideen">
+            <div className="flex flex-none border-b border-gray-200 dark:border-slate-600 flex-row items-center h-14 sm:h-20 flex-start sm:justify-between">
                 {screen.mobile ? (
                     <button onClick={() => drawer.toggle({})} className="mr-4">
                         <MenuIcon />
