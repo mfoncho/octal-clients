@@ -34,18 +34,18 @@ const Spiner = (props: { className: string }) => (
 
 function File(props: IFile) {
     function download() {
-        window.open(props.file.download_path, "_blank");
+        window.open(props.file.download_url, "_blank");
     }
 
     return (
         <div className="group hover:relative flex flex-row py-1 w-fit">
             <div className="flex flex-row border-2 rounded-lg border-slate-200 items-center py-1 bg-slate-100 space-x-4">
                 <div className="flex flex-row items-center space-x-1">
-                    {props.file.has_preview ? (
+                    {props.file.previewable ? (
                         <img
-                            alt={props.file.name}
-                            src={props.file.preview_path}
-                            className="text-primary-600 w-14 h-14 rounded-md mx-1"
+                            src={props.file.preview(70)!}
+                            alt={props.file.filename}
+                            className="text-primary-600 rounded-md mx-1"
                         />
                     ) : (
                         <Icons.File
@@ -56,7 +56,7 @@ function File(props: IFile) {
                     <div className="flex flex-col">
                         <div className="text-sm text-gray-600 font-semibold max-w-[14rem]">
                             <p className="text-ellipsis overflow-hidden">
-                                {props.file.name}.{props.file.ext}
+                                {props.file.filename}
                             </p>
                         </div>
                         <div className="font-light text-sm text-gray-500">

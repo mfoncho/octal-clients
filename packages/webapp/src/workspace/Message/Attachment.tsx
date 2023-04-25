@@ -1,6 +1,6 @@
 import React from "react";
-import * as Icons from "@colab/icons";
 import { Button } from "@colab/ui";
+import * as Icons from "@colab/icons";
 import { FileRecord } from "@colab/store";
 
 export interface IAttachment {
@@ -9,51 +9,44 @@ export interface IAttachment {
 
 export default function Attachment({ file }: IAttachment) {
     function download() {
-        window.open(file.download_path, "_blank");
+        window.open(file.download_url, "_blank");
     }
 
-    const info = (
-        <div className="flex flex-col max-w-[200px]">
-            <div className="text-sm text-gray-600 font-semibold">
-                <p className="text-ellipsis overflow-hidden">{file.filename}</p>
-            </div>
-            <div className="flex flex-row font-light text-sm text-gray-500 space-x-2">
-                <div>{(file.ext || "").toUpperCase()}</div>
-                <div>{file.humanSize}</div>
-            </div>
-        </div>
-    );
+    const [pwidth, pheight] = file.previewSize(120);
 
     return (
         <div className="flex flex-row py-1">
-            <div className="flex flex-col border-2 rounded-md border-slate-200 items-center bg-slate-50">
-                {file.has_preview ? (
-                    <div className="flex flex-col space-x-1 p-1">
+            <div className="flex flex-row border-2 rounded-lg border-slate-200 items-center py-1 bg-slate-100 space-x-4">
+                <div className="flex flex-row items-center space-x-1">
+                    {file.previewable ? (
                         <img
-                            alt={file.name}
-                            src={file.preview_path}
-                            style={{
-                                width: file.metadata.PreviewImageWidth,
-                                height: file.metadata.PreviewImageHeight,
-                            }}
-                            className="text-primary-600 rounded-md"
+                            src={file.preview(120)!}
+                            alt={file.filename}
+                            style={{ height: pheight, width: pwidth }}
+                            className="text-primary-600 rounded-md mx-1"
                         />
-                        {info}
-                    </div>
-                ) : (
-                    <div className="flex flex-row items-center space-x-1 p-1">
+                    ) : (
                         <Icons.File
                             ext={file.ext}
                             className="text-primary-600 w-12 h-14"
                         />
-                        {info}
+                    )}
+                    <div className="flex flex-col">
+                        <div className="text-sm text-gray-600 font-semibold max-w-[14rem]">
+                            <p className="text-ellipsis overflow-hidden">
+                                {file.filename}
+                            </p>
+                        </div>
+                        <div className="font-light text-sm text-gray-500">
+                            {file.ext?.toUpperCase()} {file.humanSize}
+                        </div>
                     </div>
-                )}
-                <button
-                    onClick={download}
-                    className="flex flex-row justify-center items-center p-2 hover:bg-slate-200 w-full rounded-b-md border-t-2 border-slate-200">
-                    <Icons.Download />
-                </button>
+                </div>
+                <div className="flex flex-col justify-center items-center p-2">
+                    <Button onClick={download} variant="icon" color="clear">
+                        <Icons.Download />
+                    </Button>
+                </div>
             </div>
         </div>
     );
