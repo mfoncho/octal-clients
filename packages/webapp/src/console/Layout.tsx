@@ -23,15 +23,15 @@ export default React.memo<ILayout>((props) => {
         <div className="flex-grow flex flex-col overflow-hidden">
             <div className="flex flex-none border-b border-gray-200 dark:border-slate-600 flex-row items-center h-14 sm:h-20 flex-start sm:justify-between">
                 {screen.mobile ? (
-                    <button onClick={() => drawer.toggle({})} className="mr-4">
+                    <button onClick={() => drawer.toggle({})} className="px-4">
                         <MenuIcon />
                     </button>
                 ) : (
-                    <button className="mr-4">
+                    <button className="px-6">
                         {props.icon ? (
                             props.icon
                         ) : (
-                            <div className="p-2 rounded-md text-gray-800">
+                            <div className="rounded-md text-gray-800">
                                 <Icon />
                             </div>
                         )}
