@@ -54,10 +54,11 @@ const Manager = React.memo<IManager>((props) => {
         <Link
             to={props.path}
             className={clx(
-                "flex flex-row px-2 py-1 items-center hover:bg-primary-800",
+                "flex flex-row px-2 py-1.5 items-center hover:bg-primary-600 mx-4 rounded-lg",
                 {
                     ["text-white bg-primary-500"]: selected,
-                    ["text-primary-200"]: !selected,
+                    ["hover:text-white dark:text-primary-200 text-gray-700"]:
+                        !selected,
                 }
             )}>
             <div className="flex items-center justify-center w-6 h-6 mx-2 rounded-md">
@@ -73,8 +74,8 @@ const Manager = React.memo<IManager>((props) => {
 export default React.memo(() => {
     return (
         <div className="flex flex-grow flex-col overflow-hidden">
-            <div className="flex flex-col py-4 px-5 border-t border-primary-400">
-                <span className="font-black text-primary-100 text-lg">
+            <div className="flex flex-col py-4 px-5 border-t border-slate-400">
+                <span className="font-black text-gray-800 dark:text-primary-100 text-lg">
                     Console
                 </span>
             </div>
@@ -82,8 +83,8 @@ export default React.memo(() => {
                 <div className="flex flex-col w-full space-y-12 bp-8">
                     {sections.map((section) => (
                         <div key={section.name} className="flex flex-col">
-                            <div className="flex flex-col py-2 px-5 border-y border-primary-400">
-                                <span className="text-xs font-bold text-primary-100">
+                            <div className="flex flex-col py-2 px-5">
+                                <span className="text-xs font-bold text-gray-800 dark:text-primary-100">
                                     {section.name}
                                 </span>
                             </div>
