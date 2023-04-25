@@ -81,7 +81,7 @@ export default React.memo<IMessage>(({ message, ...props }) => {
                         <img
                             role="button"
                             alt={author.name}
-                            src={"https://placehold.co/600x400@3x.png"}
+                            src={author.avatar}
                             className="rounded-full w-[40px] h-[40px] my-1"
                             onClick={handleOpenRecord}
                         />
