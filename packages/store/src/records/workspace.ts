@@ -2,8 +2,9 @@ import { Record } from "immutable";
 export type WorkspaceRecord = Map<string, any>;
 
 export type FileMetadata = {
-    PreviewImageWidth?: number;
-    PreviewImageHeight?: number;
+    width?: number;
+    height?: number;
+    duration?: number;
     MIMEType?: string;
     [key: string]: any;
 };
@@ -13,21 +14,35 @@ export class FileRecord extends Record({
     ext: "",
     name: "",
     size: 0,
+    url: "",
     filename: "",
     metadata: {} as FileMetadata,
     bucket_id: "",
 }) {
-    get has_preview() {
-        const { PreviewImageWidth, PreviewImageHeight } = this.metadata;
-        return Boolean(PreviewImageWidth) && Boolean(PreviewImageHeight);
+
+    get previewable(){
+        let { height, width, duration} = this.metadata;
+        if(duration !== 0 && width && height){
+            return true
+        }
+        return false;
     }
 
-    get preview_path() {
-        return `/bucket/${this.bucket_id}/${this.id}/preview.png`;
+    preview(size=100) {
+        let { height, width} = this.metadata;
+        if(width && height){
+            const [pwidth, pheight] = FileRecord.scale(width, height, size)
+            if(width <= pwidth && height <= pheight) {
+                return `${this.url}?frame=0`;
+            } else {
+                return `${this.url}?width=${pwidth}&height=${pheight}&frame=0`;
+            }
+        }
+        return null
     }
 
-    get download_path() {
-        return `/bucket/${this.bucket_id}/${this.id}/file.${this.ext}?download=true&filename=${this.filename}`;
+    get download_url() {
+        return `${this.url}?download=true&filename=${this.filename}`;
     }
 
     get humanSize() {
@@ -45,5 +60,10 @@ export class FileRecord extends Record({
             " " +
             sizes[i]
         );
+    }
+
+    static scale(width: number, height: number, max: number){
+        var ratio = Math.min(max / width, max / height);
+        return [Math.floor(width*ratio), Math.floor(height*ratio)];
     }
 }
