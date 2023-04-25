@@ -29,9 +29,9 @@ export default React.memo(() => {
     return (
         <div className="flex flex-grow flex-col overflow-hidden">
             <Sections />
-            <Scrollbars autoHide className="flex flex-col">
-                <div className="flex flex-col h-full">
-                    <div className="flex-1 flex flex-col overflow-hidden space-y-1">
+            <Scrollbars autoHide>
+                <div className="flex flex-col justify-between min-h-full">
+                    <div className="flex flex-col overflow-hidden space-y-1">
                         {grouped
                             .get("general", defaultSpaces)
                             .toList()
