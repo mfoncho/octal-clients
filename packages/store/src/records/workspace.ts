@@ -29,17 +29,30 @@ export class FileRecord extends Record({
     }
 
     preview(size=100) {
-        let { height, width} = this.metadata;
+        let {height, width} = this.metadata;
         if(width && height){
-            const [pwidth, pheight] = FileRecord.scale(width, height, size)
-            if(width <= pwidth && height <= pheight) {
+            if(width <= size && height <= size) {
                 return `${this.url}?frame=0`;
             } else {
+                const [pwidth, pheight] = this.previewSize(size)
                 return `${this.url}?width=${pwidth}&height=${pheight}&frame=0`;
             }
         }
         return null
     }
+
+    previewSize(size=100) {
+        let {height, width} = this.metadata;
+        if(width && height){
+            if(width <=size && height <= size) 
+                return [width, height];
+
+            if(width && height)
+                return FileRecord.scale(width, height, size);
+        }
+        return [0, 0];
+    }
+    
 
     get download_url() {
         return `${this.url}?download=true&filename=${this.filename}`;
