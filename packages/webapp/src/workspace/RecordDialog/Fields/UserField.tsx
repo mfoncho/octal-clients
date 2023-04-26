@@ -127,7 +127,7 @@ export default function UserField({ field, handle, ...props }: IUserField) {
                     "record.manage",
                     <button
                         ref={fieldRef}
-                        className="group p-1 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed bg-primary-50"
+                        className="group p-1 hover:bg-slate-300 rounded-lg bg-slate-200 shadow"
                         onClick={handleToggleEditMode}>
                         <Icons.AddUser className="w-6 h-6 text-gray-600" />
                     </button>
