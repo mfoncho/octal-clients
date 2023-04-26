@@ -5,7 +5,7 @@ import { io } from "@colab/client";
 import * as Icons from "@colab/icons";
 import Menu, { ActionT } from "./Menu";
 import emoji from "@colab/emoji";
-import { Markdown, Text } from "@colab/ui";
+import { Markdown, Image, Text } from "@colab/ui";
 import { MessageRecord } from "@colab/store/lib/records";
 
 export interface ISearchMessage {
@@ -36,10 +36,10 @@ const Reply = React.memo<ISearchMessage>((props) => {
                 <div
                     role="button"
                     className="w-max flex flex-row items-center justify-between">
-                    <img
+                    <Image
                         alt={author.name}
                         src={author.avatar}
-                        className="rounded-full w-[20px] h-[20px]"
+                        className="rounded-md w-[20px] h-[20px]"
                     />
                     <button className="dark:text-white text-base font-bold text-primary-500 px-2">
                         {author.username}
@@ -76,11 +76,11 @@ export default React.memo<ISearchMessage>((props) => {
             )}
             <div className="flex flex-row">
                 <div className="flex flex-none justify-center flex-row w-16">
-                    <img
+                    <Image
                         role="button"
                         alt={author.name}
                         src={author.avatar}
-                        className="rounded-full w-[40px] h-[40px]"
+                        className="rounded-xl w-[40px] h-[40px]"
                     />
                 </div>
 

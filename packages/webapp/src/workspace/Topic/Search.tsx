@@ -165,7 +165,7 @@ export default Dialog.create<ISearch>((props) => {
                         className="flex flex-1 flex-row items-center space-x-2"
                         onClick={dialog.opener("users")}>
                         <div className="flex -space-x-2 overflow-x-hidden p-1">
-                            <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-50 ring-1 ring-white">
+                            <div className="inline-block w-8 h-8 rounded-lg bg-slate-400 flex items-center justify-center z-50 ring-1 ring-white">
                                 <Icons.Users className="text-white dark:text-slate-600 w-4 h-4" />
                             </div>
                             {filter.users.slice(0, 4).map((id, index) => (
@@ -174,7 +174,7 @@ export default Dialog.create<ISearch>((props) => {
                                     key={id}
                                     tooltip={true}
                                     className={clx(
-                                        "inline-block w-8 h-8 rounded-full ring-1 ring-white ",
+                                        "inline-block w-8 h-8 rounded-lg ring-1 ring-white ",
                                         {
                                             "z-[49]": index == 0,
                                             "z-[48]": index == 1,
@@ -187,7 +187,7 @@ export default Dialog.create<ISearch>((props) => {
                             ))}
 
                             {filter.users.size > 4 && (
-                                <div className="inline-block w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center z-0 ring-1 ring-white">
+                                <div className="inline-block w-8 h-8 rounded-lg bg-slate-400 flex items-center justify-center z-0 ring-1 ring-white">
                                     <Icons.Plus className="text-white w-4 h-4" />
                                 </div>
                             )}

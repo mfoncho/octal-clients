@@ -1,6 +1,6 @@
 import React, { useState, useId } from "react";
 import * as Icons from "@colab/icons";
-import { Button } from "@colab/ui";
+import { Button, Image } from "@colab/ui";
 import { usePermissions } from "../../Space";
 import { FileRecord, RecordFileValueRecord } from "@colab/store";
 import { useRecordCapability } from "../hooks";
@@ -42,7 +42,7 @@ function File(props: IFile) {
             <div className="flex flex-row border-2 rounded-lg border-slate-200 items-center py-1 bg-slate-100 space-x-4">
                 <div className="flex flex-row items-center space-x-1">
                     {props.file.previewable ? (
-                        <img
+                        <Image
                             src={props.file.preview(70)!}
                             alt={props.file.filename}
                             className="text-primary-600 rounded-md mx-1"

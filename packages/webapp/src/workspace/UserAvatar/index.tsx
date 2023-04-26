@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip } from "@colab/ui";
+import { Tooltip, Image } from "@colab/ui";
 import { useUser } from "@colab/store";
 
 interface IUserAvatar {
@@ -11,7 +11,7 @@ interface IUserAvatar {
 export default React.memo<IUserAvatar>((props) => {
     const user = useUser(props.uid);
     const image = (
-        <img
+        <Image
             className={props.className}
             alt={user.username}
             src={user.avatar}

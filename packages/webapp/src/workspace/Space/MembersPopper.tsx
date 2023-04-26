@@ -2,7 +2,7 @@ import React from "react";
 import { MemberRecord, useUser } from "@colab/store";
 import { useMembers } from "./hooks";
 import * as Icons from "@colab/icons";
-import { Popper } from "@colab/ui";
+import { Popper, Image } from "@colab/ui";
 
 interface IMenu {
     selected?: string[];
@@ -32,11 +32,11 @@ function Member({ member, onClick, selected }: IMember) {
         <div
             onClick={handleClick}
             role="button"
-            className="hover:bg-slate-100 flex flex-row items-center p-2 group hover:bg-primary-700 justify-between">
+            className="hover:bg-slate-100 flex flex-row items-center p-2 group hover:bg-primary-700 justify-between shadow">
             <div className="flex flex-row space-x-2">
-                <img
+                <Image
                     alt={user.username}
-                    className="w-9 h-9 rounded-full"
+                    className="w-9 h-9 rounded-lg"
                     src={user.avatar}
                 />
                 <div className=" flex flex-col">

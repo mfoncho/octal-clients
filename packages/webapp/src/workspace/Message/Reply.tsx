@@ -1,6 +1,6 @@
 import React from "react";
 import UserRecord from "@workspace/UserCard";
-import { Markdown } from "@colab/ui";
+import { Markdown, Image } from "@colab/ui";
 import { useUser, useMessage } from "@colab/store";
 
 export interface IMessage {
@@ -29,10 +29,10 @@ export default React.memo<IMessage>(({ id }) => {
                         role="button"
                         onClick={handleOpenRecord}
                         className="w-max flex flex-row items-center justify-between">
-                        <img
+                        <Image
                             alt={author.name}
                             src={author.avatar}
-                            className="rounded-full w-[20px] h-[20px]"
+                            className="rounded-md w-[20px] h-[20px]"
                         />
                         <button className="text-base font-bold text-primary-500 px-2">
                             {author.username}
@@ -52,7 +52,7 @@ export default React.memo<IMessage>(({ id }) => {
                 <div className="border-l-2 border-gray-500 rounded-tl border-t-2 w-[25px] h-[10px]" />
             </div>
             <div className="flex flex-row items-center justify-between space-x-2 mr-4">
-                <div className="rounded-full bg-slate-400 w-[20px] h-[20px]" />
+                <div className="rounded-md bg-slate-400 w-[20px] h-[20px]" />
             </div>
         </div>
     );

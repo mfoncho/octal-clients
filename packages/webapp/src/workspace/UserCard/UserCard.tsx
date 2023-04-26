@@ -1,6 +1,6 @@
 import React from "react";
 import clx from "classnames";
-import { Button, Dialog, Textarea, Markdown, Flow } from "@colab/ui";
+import { Button, Dialog, Textarea, Markdown, Flow, Image } from "@colab/ui";
 import { Text } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import { useInput } from "src/utils";
@@ -77,7 +77,7 @@ const Record = Dialog.create<IUserRecord>((props) => {
             className="relative w-[280px]"
             onClose={props.onClose}>
             <div className="w-full flex flex-col justify-between overflow-hidden md:w-[280px] md:h-[250px] h-[350px] relative">
-                <img
+                <Image
                     alt={user.username}
                     src={user.avatar}
                     className={

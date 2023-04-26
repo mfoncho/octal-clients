@@ -1,7 +1,7 @@
 import React from "react";
 import { List } from "immutable";
 import * as Icons from "@colab/icons";
-import { Tooltip, Text } from "@colab/ui";
+import { Tooltip, Image, Text } from "@colab/ui";
 import Label from "@workspace/Catalog/Label";
 import { useUser } from "@colab/store";
 
@@ -27,8 +27,8 @@ export const Avatar = React.memo<{
     src: string;
     className?: string;
 }>((props) => (
-    <img
-        className={`inline-block rounded-full h-6 w-6 ring-2 ring-white`}
+    <Image
+        className={`inline-block rounded-lg h-6 w-6 ring-2 ring-white`}
         alt={props.alt}
         src={props.src}
     />

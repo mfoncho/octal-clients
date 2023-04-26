@@ -4,7 +4,7 @@ import Layout from "./Layout";
 import { SpaceManagerFilterParams } from ".";
 import UsersDialog from "../UsersDialog";
 import client, { io } from "@colab/client";
-import { Avatar, Dialog, Button } from "@colab/ui";
+import { Image, Dialog, Button } from "@colab/ui";
 import { useDispatch } from "react-redux";
 import { useInput } from "src/utils";
 import { SpaceRecord, Actions } from "@colab/store";
@@ -14,11 +14,6 @@ interface IMember {
     filter: string;
     member: io.Member;
     onDelete?: (member: io.Member) => void;
-}
-
-interface IWarning {
-    onConfirm: (e: React.MouseEvent) => void;
-    children: React.ReactNode;
 }
 
 function Row({ member, space, filter, onDelete }: IMember) {
@@ -51,7 +46,11 @@ function Row({ member, space, filter, onDelete }: IMember) {
 
     const userNode = (
         <div className="flex flex-row items-center space-x-4">
-            <Avatar alt={member.user.username} src={member.user.avatar} />
+            <Image
+                alt={member.user.username}
+                src={member.user.avatar}
+                className="w-10 h-10 rounded-xl"
+            />
             <div className="flex flex-col">
                 <span className="font-semibold text-base text-gray-800">
                     {member.user.username}

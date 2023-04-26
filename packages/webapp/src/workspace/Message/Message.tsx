@@ -7,7 +7,7 @@ import Menu, { ActionT } from "./Menu";
 import ReplyButton from "./ReplyButton";
 import Reaction from "./Reaction";
 import emoji from "@colab/emoji";
-import { Markdown, Text } from "@colab/ui";
+import { Markdown, Text, Image } from "@colab/ui";
 import UserCard from "@workspace/UserCard";
 import { useUser } from "@colab/store";
 import { useActions } from "./hooks";
@@ -78,11 +78,11 @@ export default React.memo<IMessage>(({ message, ...props }) => {
             <div className="flex flex-row">
                 <div className="flex flex-none flex-row w-12 sm:w-16 justify-end">
                     {props.extra ? (
-                        <img
+                        <Image
                             role="button"
                             alt={author.name}
                             src={author.avatar}
-                            className="rounded-full w-[40px] h-[40px] my-1"
+                            className="rounded-xl w-[42px] h-[42px] my-1"
                             onClick={handleOpenRecord}
                         />
                     ) : (

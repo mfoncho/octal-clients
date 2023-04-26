@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@colab/ui";
+import { Button, Image } from "@colab/ui";
 import * as Icons from "@colab/icons";
 import { FileRecord } from "@colab/store";
 
@@ -19,7 +19,7 @@ export default function Attachment({ file }: IAttachment) {
             <div className="flex flex-row border-2 rounded-lg border-slate-200 items-center py-1 bg-slate-100 space-x-4">
                 <div className="flex flex-row items-center space-x-1">
                     {file.previewable ? (
-                        <img
+                        <Image
                             src={file.preview(120)!}
                             alt={file.filename}
                             style={{ height: pheight, width: pwidth }}

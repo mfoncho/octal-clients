@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, Avatar } from "@colab/ui";
+import { Dialog, Image } from "@colab/ui";
 import client from "@colab/client";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useInput } from "src/utils";
@@ -69,11 +69,12 @@ export default Dialog.create<IUsersDialog>(({ selected = [], ...props }) => {
                                     props.onSelect &&
                                     (() => props.onSelect!(user.id))
                                 }
-                                className="group flex flex-row my-1 p-1 rounded-md hover:bg-primary-500 justify-between items-center">
+                                className="group flex flex-row my-1 p-1 rounded-xl hover:bg-primary-500 justify-between items-center">
                                 <div className="flex flex-row">
-                                    <Avatar
+                                    <Image
                                         alt={user.username}
                                         src={user.avatar}
+                                        className="w-10 h-10 rounded-xl"
                                     />
                                     <div className="flex flex-col px-2">
                                         <span className="font-bold group-hover:text-white text-gray-800 text-base">

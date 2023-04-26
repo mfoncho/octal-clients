@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import * as Icons from "@colab/icons";
+import { Image } from "@colab/ui";
 import MembersPopper from "@workspace/Space/MembersPopper";
 import { useFieldAction } from "@workspace/Catalog/hooks";
 import {
@@ -41,10 +42,10 @@ function UserValue({ value, onClose }: IUserValue) {
         setDisabled(true);
     }
     return (
-        <div className="group hover:relative flex flex-row p-2 rounded-lg bg-slate-100 items-center">
-            <img
+        <div className="group hover:relative flex flex-row p-px rounded-md bg-slate-100 items-center">
+            <Image
                 alt={user.username}
-                className="h-6 w-6 rounded-full"
+                className="h-8 w-8 rounded-l-md"
                 src={user.avatar}
             />
             <div className="px-2">

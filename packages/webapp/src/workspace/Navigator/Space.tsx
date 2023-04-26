@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import clx from "classnames";
 import { Link, generatePath, useParams } from "react-router-dom";
-import { Text, Collapse, Dialog, Popper } from "@colab/ui";
+import { Text, Collapse, Image, Dialog, Popper } from "@colab/ui";
 import TopicCreatorDialog from "../Space/CreateTopic";
 import CreateCatalogDialog from "../Space/CreateCatalogDialog";
 import paths from "src/paths/workspace";
@@ -127,7 +127,7 @@ export const DirectSpace = React.memo<ISpace>(({ space }) => {
                 "flex flex-row items-center h-8 py-2 mx-4 px-4 rounded-lg group",
                 selected ? "bg-primary-500" : "hover:bg-primary-600"
             )}>
-            <img
+            <Image
                 alt={user.username}
                 src={user.avatar}
                 className="rounded-full h-6 w-6 shadow"

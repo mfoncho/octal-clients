@@ -1,5 +1,6 @@
 import React, { HTMLAttributes } from "react";
 import clx from "classnames";
+import { Image } from "@colab/ui";
 import { useUser } from "@colab/store";
 
 export interface IUserItem extends HTMLAttributes<HTMLDivElement> {
@@ -23,7 +24,7 @@ export default function UserItem({
                     className
                 )}
                 {...props}>
-                <img
+                <Image
                     alt={user.username}
                     className="inline-block mx-3 h-8 w-8 rounded-full bg-primary-500"
                     src={user.avatar}
