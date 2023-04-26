@@ -49,11 +49,11 @@ export default React.forwardRef<HTMLImageElement, IImage>(
         }
         return (
             <div
+                {...spread}
                 className={clx(
                     "animate-pulse overflow-hidden",
                     spread.className
-                )}
-                style={spread.style}>
+                )}>
                 <div
                     className="bg-slate-300 w-full h-full shadow-sm"
                     style={spread.style}
