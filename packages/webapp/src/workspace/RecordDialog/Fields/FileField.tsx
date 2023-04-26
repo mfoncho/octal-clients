@@ -148,7 +148,7 @@ export default function FileField({ field, handle, ...props }: IField) {
                         <label
                             role="button"
                             htmlFor={id}
-                            className="group px-2 py-4 hover:bg-slate-200 rounded-xl border-2 border-slate-300 border-dashed justify-center items-center flex flex-1 bg-primary-50">
+                            className="group px-2 py-4 hover:bg-slate-200 rounded-xl border-2 border-slate-300 border-dashed justify-center items-center flex flex-1 bg-slate-100">
                             {uploading ? (
                                 <Spiner className="animate-spin text-primary-700 w-6 h-6" />
                             ) : (
