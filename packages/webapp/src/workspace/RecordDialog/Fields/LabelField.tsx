@@ -100,7 +100,7 @@ export default function LabelField({ field, handle, ...props }: ILabelField) {
                     "record.manage",
                     <button
                         ref={fieldRef}
-                        className="group py-1 px-2 hover:bg-slate-200 rounded-xl border-2 border-gray-300 border-dashed bg-primary-50"
+                        className="group py-1.5 px-2 hover:bg-slate-300 rounded-lg bg-slate-200 shadow"
                         onClick={handleToggleEditMode}>
                         <Icons.Field.Label className="text-gray-600" />
                     </button>

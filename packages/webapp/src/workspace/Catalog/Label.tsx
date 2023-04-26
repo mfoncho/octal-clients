@@ -21,7 +21,7 @@ export default function Label(props: ILabel) {
     }
     return (
         <div
-            className="group hover:relative flex flex-row px-1 items-center rounded-xl max-h-7 h-7"
+            className="group hover:relative flex flex-row px-1 items-center rounded-lg shadow max-h-7 h-7"
             style={{ backgroundColor: `${props.color}30` }}>
             <span className="px-1 font-semibold text-sm py-1 text-gray-800">
                 <Text>{props.name}</Text>
