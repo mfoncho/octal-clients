@@ -2,7 +2,7 @@ import React from "react";
 import { List } from "immutable";
 import * as Icons from "@colab/icons";
 import { sort } from "@colab/common";
-import { Text, Tooltip } from "@colab/ui";
+import { Text, Image, Tooltip } from "@colab/ui";
 import paths from "src/paths";
 import { Link, generatePath } from "react-router-dom";
 import {
@@ -31,9 +31,9 @@ const createdAtSort = sort("created_at", "desc");
 
 export const UserAvatar = React.memo<IUserAvatar>(({ users }) => {
     const avatars = users.map((user) => (
-        <img
+        <Image
             key={user.id}
-            className="inline-block rounded-full h-6 w-6 rounded-full ring-2 ring-white"
+            className="inline-block rounded-lg h-6 w-6 rounded-full ring-2 ring-white"
             alt={user.username}
             src={user.avatar}
         />
