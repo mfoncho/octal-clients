@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Label } from "@colab/ui";
+import { Label, Image } from "@colab/ui";
 import Pagination from "@material-ui/lab/Pagination";
 import { Page } from "src/types";
 import Layout from "@console/Layout";
@@ -95,10 +95,10 @@ export default React.memo(() => {
                             onClick={handleOpenUser(user)}>
                             <td className="px-6 py-3">
                                 <div className="flex flex-row items-center">
-                                    <img
+                                    <Image
                                         alt={user.name}
                                         src={user.avatar}
-                                        className="inline-block h-8 w-8 rounded-full"
+                                        className="inline-block h-8 w-8 rounded-lg"
                                     />
                                     <div className="flex flex-col">
                                         <span className="px-4 font-bold">

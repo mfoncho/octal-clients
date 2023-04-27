@@ -1,7 +1,7 @@
 import React from "react";
 import * as Icons from "@colab/icons";
 import { io } from "@console/types";
-import { Dialog, Button } from "@colab/ui";
+import { Dialog, Button, Image } from "@colab/ui";
 import { useNavigator } from "@console/hooks";
 import moment from "moment";
 import client from "@console/client";
@@ -102,10 +102,10 @@ export default function Members({ role }: IMembers) {
                     <div
                         className="flex flex-row items-center"
                         onClick={handleOpenUser(user)}>
-                        <img
+                        <Image
                             alt={user.name}
                             src={user.avatar}
-                            className="inline-block h-8 w-8 rounded-full"
+                            className="inline-block h-8 w-8 rounded-lg"
                         />
                         <span className="px-4 text-gray-800 font-semibold text-base">
                             {user.username}
