@@ -11,6 +11,7 @@ export interface IFile {
     file: FileRecord;
     onClose?: () => void;
 }
+const previewSize = 70;
 
 const Spiner = (props: { className: string }) => (
     <svg
@@ -37,13 +38,16 @@ function File(props: IFile) {
         window.open(props.file.download_url, "_blank");
     }
 
+    const [pwidth, pheight] = props.file.previewSize(previewSize);
+
     return (
         <div className="group hover:relative flex flex-row py-1 w-fit">
             <div className="flex flex-row border-2 rounded-lg border-slate-200 items-center py-1 bg-slate-100 space-x-4">
                 <div className="flex flex-row items-center space-x-1">
                     {props.file.previewable ? (
                         <Image
-                            src={props.file.preview(70)!}
+                            style={{ height: pheight, width: pwidth }}
+                            src={props.file.preview(previewSize)!}
                             alt={props.file.filename}
                             className="text-primary-600 rounded-md mx-1"
                         />
